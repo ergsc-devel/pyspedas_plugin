@@ -1,5 +1,6 @@
 
 from pyspedas.erg.load import load
+from pytplot import options
 
 def pwe_ofa(trange=['2017-04-01', '2017-04-02'],
         datatype='spec', 
@@ -63,7 +64,34 @@ def pwe_ofa(trange=['2017-04-01', '2017-04-02'],
         List of tplot variables created.
 
     """
-    return load(instrument='pwe_ofa', trange=trange, level=level, datatype=datatype, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
+    loaded_data = load(instrument='pwe_ofa', trange=trange, level=level, datatype=datatype, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
+    
+    # スペクトル出力に変更
+    options('erg_pwe_ofa_'+level+'_E_spectra_132'+suffix,  'Spec', 1)
+    options('erg_pwe_ofa_'+level+'_B_spectra_132'+suffix,  'Spec', 1)
+
+    # y軸を対数軸に変更
+    options('erg_pwe_ofa_'+level+'_E_spectra_132'+suffix,  'ylog', 1)
+    options('erg_pwe_ofa_'+level+'_B_spectra_132'+suffix,  'ylog', 1)
+    
+    # y軸の範囲を設定
+    options('erg_pwe_ofa_'+level+'_E_spectra_132'+suffix,  'yrange', [0., 10.])
+    options('erg_pwe_ofa_'+level+'_B_spectra_132'+suffix,  'yrange', [0., 11.])
+    
+    # z軸を対数軸に変更
+    options('erg_pwe_ofa_'+level+'_E_spectra_132'+suffix,  'zlog', 1)
+    options('erg_pwe_ofa_'+level+'_B_spectra_132'+suffix,  'zlog', 1)
+    
+    # z軸の範囲を指定
+    options('erg_pwe_ofa_'+level+'_E_spectra_132'+suffix,  'zrange', [1.0e-08, 1.0e-02])
+    options('erg_pwe_ofa_'+level+'_B_spectra_132'+suffix,  'zrange', [1.0e-04, 1.0e+02])
+    
+    # カラーマップ表示形式を変更
+    options('erg_pwe_ofa_'+level+'_E_spectra_132'+suffix,  'Colormap', 'jet')
+    options('erg_pwe_ofa_'+level+'_B_spectra_132'+suffix,  'Colormap', 'jet')
+    
+    
+    return loaded_data
 
 def pwe_efd(trange=['2017-04-01', '2017-04-02'],
         datatype='E_spin', 
