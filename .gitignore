@@ -21,4 +21,5 @@ tmp
 *.cdf
 .DS_Store
 .vscode/
+.ipynb_checkpoints
 
