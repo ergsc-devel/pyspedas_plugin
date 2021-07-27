@@ -1,4 +1,3 @@
-
 import numpy as np
 from pyspedas.erg.load import load
 from pytplot import options, clip, ylim, get_data
@@ -79,6 +78,20 @@ def mgf(trange=['2017-03-27', '2017-03-28'],
     clip('erg_mgf_'+level+'_mag_'+datatype+'_gse'+suffix, -1e+6, 1e6)
     clip('erg_mgf_'+level+'_mag_'+datatype+'_gsm'+suffix, -1e+6, 1e6)
     clip('erg_mgf_'+level+'_mag_'+datatype+'_sm'+suffix, -1e+6, 1e6)
+     
+        # 坂井 追加 20210726↓
+    
+    clip('erg_mgf_'+level+'_magt_'+datatype+suffix, -1e+6, 1e6)
+    
+    clip('erg_mgf_'+level+'_rmsd_'+datatype+'_dsi'+suffix, 0., 200.)
+    clip('erg_mgf_'+level+'_rmsd_'+datatype+'_gse'+suffix, 0., 200.)
+    clip('erg_mgf_'+level+'_rmsd_'+datatype+'_gsm'+suffix, 0., 200.)
+    clip('erg_mgf_'+level+'_rmsd_'+datatype+'_sm'+suffix, 0., 200.)
+    
+    clip('erg_mgf_'+level+'_rmsd_'+datatype+suffix, 0., 80.)
+    
+    
+        # 坂井 追加 20210726↑
 
     # set yrange
     times, bdata = get_data('erg_mgf_'+level+'_mag_'+datatype+'_dsi'+suffix)
@@ -89,17 +102,71 @@ def mgf(trange=['2017-03-27', '2017-03-28'],
     ylim('erg_mgf_'+level+'_mag_'+datatype+'_gsm'+suffix, np.nanmin(bdata), np.nanmax(bdata))
     times, bdata = get_data('erg_mgf_'+level+'_mag_'+datatype+'_sm'+suffix)
     ylim('erg_mgf_'+level+'_mag_'+datatype+'_sm'+suffix, np.nanmin(bdata), np.nanmax(bdata))
+    
+        # 坂井 追加 20210726↓
 
+    times, bdata = get_data('erg_mgf_'+level+'_magt_'+datatype+suffix)
+    ylim('erg_mgf_'+level+'_magt_'+datatype+suffix, np.nanmin(bdata), np.nanmax(bdata))
+    
+    times, bdata = get_data('erg_mgf_'+level+'_rmsd_'+datatype+suffix,)
+    ylim('erg_mgf_'+level+'_rmsd_'+datatype+suffix, np.nanmin(bdata), np.nanmax(bdata))
+    
+    times, bdata = get_data('erg_mgf_'+level+'_rmsd_'+datatype+'_dsi'+suffix)
+    ylim('erg_mgf_'+level+'_rmsd_'+datatype+'_dsi'+suffix, np.nanmin(bdata), np.nanmax(bdata))
+    times, bdata = get_data('erg_mgf_'+level+'_rmsd_'+datatype+'_gse'+suffix)
+    ylim('erg_mgf_'+level+'_rmsd_'+datatype+'_gse'+suffix, np.nanmin(bdata), np.nanmax(bdata))
+    times, bdata = get_data('erg_mgf_'+level+'_rmsd_'+datatype+'_gsm'+suffix)
+    ylim('erg_mgf_'+level+'_rmsd_'+datatype+'_gsm'+suffix, np.nanmin(bdata), np.nanmax(bdata))
+    times, bdata = get_data('erg_mgf_'+level+'_rmsd_'+datatype+'_sm'+suffix)
+    ylim('erg_mgf_'+level+'_rmsd_'+datatype+'_sm'+suffix, np.nanmin(bdata), np.nanmax(bdata))
+    
+    times, bdata = get_data('erg_mgf_'+level+'_rmsd_'+datatype+suffix)
+    ylim('erg_mgf_'+level+'_rmsd_'+datatype+suffix, np.nanmin(bdata), np.nanmax(bdata))
+    
+    times, bdata = get_data('erg_mgf_'+level+'_quality_'+datatype+suffix)
+    ylim('erg_mgf_'+level+'_quality_'+datatype+suffix, np.nanmin(bdata), np.nanmax(bdata))
+    times, bdata = get_data('erg_mgf_'+level+'_quality_'+datatype+'_gc'+suffix)
+    ylim('erg_mgf_'+level+'_quality_'+datatype+'_gc'+suffix, np.nanmin(bdata), np.nanmax(bdata))
+        # 坂井 追加 20210726↑
+    
+    
     # set labels
     options('erg_mgf_'+level+'_mag_'+datatype+'_dsi'+suffix, 'legend_names', ['Bx', 'By', 'Bz'])
     options('erg_mgf_'+level+'_mag_'+datatype+'_gse'+suffix, 'legend_names', ['Bx', 'By', 'Bz'])
     options('erg_mgf_'+level+'_mag_'+datatype+'_gsm'+suffix, 'legend_names', ['Bx', 'By', 'Bz'])
     options('erg_mgf_'+level+'_mag_'+datatype+'_sm'+suffix, 'legend_names', ['Bx', 'By', 'Bz'])
+    
+        # 坂井 追加 20210726↓
+    options('erg_mgf_'+level+'_rmsd_'+datatype+'_dsi'+suffix, 'legend_names', ['Bx', 'By', 'Bz'])
+    options('erg_mgf_'+level+'_rmsd_'+datatype+'_gse'+suffix, 'legend_names', ['Bx', 'By', 'Bz'])
+    options('erg_mgf_'+level+'_rmsd_'+datatype+'_gsm'+suffix, 'legend_names', ['Bx', 'By', 'Bz'])
+    options('erg_mgf_'+level+'_rmsd_'+datatype+'_sm'+suffix, 'legend_names', ['Bx', 'By', 'Bz'])
+    
+    options('erg_mgf_'+level+'_igrf_'+datatype+'_dsi'+suffix, 'legend_names', ['Bx', 'By', 'Bz'])
+    options('erg_mgf_'+level+'_igrf_'+datatype+'_gse'+suffix, 'legend_names', ['Bx', 'By', 'Bz'])
+    options('erg_mgf_'+level+'_igrf_'+datatype+'_gsm'+suffix, 'legend_names', ['Bx', 'By', 'Bz'])
+    options('erg_mgf_'+level+'_igrf_'+datatype+'_sm'+suffix, 'legend_names', ['Bx', 'By', 'Bz'])
+        # 坂井 追加 20210726↑
 
     # set color of the labels
     options('erg_mgf_'+level+'_mag_'+datatype+'_dsi'+suffix, 'Color', ['b', 'g', 'r'])
     options('erg_mgf_'+level+'_mag_'+datatype+'_gse'+suffix, 'Color', ['b', 'g', 'r'])
     options('erg_mgf_'+level+'_mag_'+datatype+'_gsm'+suffix, 'Color', ['b', 'g', 'r'])
     options('erg_mgf_'+level+'_mag_'+datatype+'_sm'+suffix, 'Color', ['b', 'g', 'r'])
-
+    
+    
+        # 坂井 追加 20210726↓
+    options('erg_mgf_'+level+'_rmsd_'+datatype+'_dsi'+suffix, 'Color', ['b', 'g', 'r'])
+    options('erg_mgf_'+level+'_rmsd_'+datatype+'_gse'+suffix, 'Color', ['b', 'g', 'r'])
+    options('erg_mgf_'+level+'_rmsd_'+datatype+'_gsm'+suffix, 'Color', ['b', 'g', 'r'])
+    options('erg_mgf_'+level+'_rmsd_'+datatype+'_sm'+suffix, 'Color', ['b', 'g', 'r'])
+    
+    options('erg_mgf_'+level+'_quality_'+datatype+suffix, 'Color', ['r', 'g', 'b'])
+    
+    options('erg_mgf_'+level+'_igrf_'+datatype+'_dsi'+suffix, 'Color', ['b', 'g', 'r'])
+    options('erg_mgf_'+level+'_igrf_'+datatype+'_gse'+suffix, 'Color', ['b', 'g', 'r'])
+    options('erg_mgf_'+level+'_igrf_'+datatype+'_gsm'+suffix, 'Color', ['b', 'g', 'r'])
+    options('erg_mgf_'+level+'_igrf_'+datatype+'_sm'+suffix, 'Color', ['b', 'g', 'r'])
+        # 坂井 追加 20210726↑
+    
     return loaded_data
