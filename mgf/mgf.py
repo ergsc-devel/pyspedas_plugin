@@ -78,8 +78,6 @@ def mgf(trange=['2017-03-27', '2017-03-28'],
     clip('erg_mgf_'+level+'_mag_'+datatype+'_gse'+suffix, -1e+6, 1e6)
     clip('erg_mgf_'+level+'_mag_'+datatype+'_gsm'+suffix, -1e+6, 1e6)
     clip('erg_mgf_'+level+'_mag_'+datatype+'_sm'+suffix, -1e+6, 1e6)
-     
-        # 坂井 追加 20210726↓
     
     clip('erg_mgf_'+level+'_magt_'+datatype+suffix, -1e+6, 1e6)
     
