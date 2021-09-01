@@ -12,7 +12,7 @@ def hep(trange=['2017-03-27', '2017-03-28'],
         varformat=None,
         varnames=[],
         downloadonly=False,
-        notplot=True, # to avoid failure of creation plot variables (at store_data.py) of hep 
+        notplot=False,
         no_update=False,
         uname=None,
         passwd=None,
@@ -67,6 +67,9 @@ def hep(trange=['2017-03-27', '2017-03-28'],
 
     """
     
+    if level == 'l2':
+        notplot=True # to avoid failure of creation plot variables (at store_data.py) of hep 
+
     loaded_data = load(instrument='hep', trange=trange, level=level, datatype=datatype, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
 
     
@@ -97,46 +100,48 @@ def hep(trange=['2017-03-27', '2017-03-28'],
 
 
     if type(loaded_data) is dict:
-        tplot_variables = []
-        v_vars_min = loaded_data['erg_hep_l2_FEDO_L']['v'][0]
-        v_vars_max = loaded_data['erg_hep_l2_FEDO_L']['v'][1]
-        v_vars = np.power(10., (np.log10(v_vars_min) + np.log10(v_vars_max)) / 2.) # log average of energy bins
-        store_data('erg_hep_l2_FEDO_L', data={'x':loaded_data['erg_hep_l2_FEDO_L']['x'], 
-                                              'y':loaded_data['erg_hep_l2_FEDO_L']['y'],
-                                              'v':v_vars})
-        tplot_variables.append('erg_hep_l2_FEDO_L')
 
-        v_vars_min = loaded_data['erg_hep_l2_FEDO_H']['v'][0]
-        v_vars_max = loaded_data['erg_hep_l2_FEDO_H']['v'][1]
-        v_vars = np.power(10., (np.log10(v_vars_min) + np.log10(v_vars_max)) / 2.) # log average of energy bins
-        store_data('erg_hep_l2_FEDO_H', data={'x':loaded_data['erg_hep_l2_FEDO_H']['x'], 
-                                              'y':loaded_data['erg_hep_l2_FEDO_H']['y'],
-                                              'v':v_vars})
-        tplot_variables.append('erg_hep_l2_FEDO_H')
-        
-        # remove minus valuse of y array
-        clip('erg_hep_l2_FEDO_L', 0., 1.0e+10)
-        clip('erg_hep_l2_FEDO_H', 0., 1.0e+10)
+        if level == 'l2':
+            tplot_variables = []
+            v_vars_min = loaded_data['erg_hep_l2_FEDO_L']['v'][0]
+            v_vars_max = loaded_data['erg_hep_l2_FEDO_L']['v'][1]
+            v_vars = np.power(10., (np.log10(v_vars_min) + np.log10(v_vars_max)) / 2.) # log average of energy bins
+            store_data('erg_hep_l2_FEDO_L', data={'x':loaded_data['erg_hep_l2_FEDO_L']['x'], 
+                                                'y':loaded_data['erg_hep_l2_FEDO_L']['y'],
+                                                'v':v_vars})
+            tplot_variables.append('erg_hep_l2_FEDO_L')
 
-        # set spectrogram plot option
-        options('erg_hep_l2_FEDO_L', 'Spec', 1)
-        options('erg_hep_l2_FEDO_H', 'Spec', 1)
+            v_vars_min = loaded_data['erg_hep_l2_FEDO_H']['v'][0]
+            v_vars_max = loaded_data['erg_hep_l2_FEDO_H']['v'][1]
+            v_vars = np.power(10., (np.log10(v_vars_min) + np.log10(v_vars_max)) / 2.) # log average of energy bins
+            store_data('erg_hep_l2_FEDO_H', data={'x':loaded_data['erg_hep_l2_FEDO_H']['x'], 
+                                                'y':loaded_data['erg_hep_l2_FEDO_H']['y'],
+                                                'v':v_vars})
+            tplot_variables.append('erg_hep_l2_FEDO_H')
+            
+            # remove minus valuse of y array
+            clip('erg_hep_l2_FEDO_L', 0., 1.0e+10)
+            clip('erg_hep_l2_FEDO_H', 0., 1.0e+10)
 
-        # set y axis to logscale
-        options('erg_hep_l2_FEDO_L', 'ylog', 1)
-        options('erg_hep_l2_FEDO_H', 'ylog', 1)
+            # set spectrogram plot option
+            options('erg_hep_l2_FEDO_L', 'Spec', 1)
+            options('erg_hep_l2_FEDO_H', 'Spec', 1)
 
-        # set yrange
-        options('erg_hep_l2_FEDO_L', 'yrange', [3.0e+01, 2.0e+03])
-        options('erg_hep_l2_FEDO_H', 'yrange', [7.0e+01, 2.0e+03])
+            # set y axis to logscale
+            options('erg_hep_l2_FEDO_L', 'ylog', 1)
+            options('erg_hep_l2_FEDO_H', 'ylog', 1)
 
-        # set z axis to logscale
-        options('erg_hep_l2_FEDO_L', 'zlog', 1)
-        options('erg_hep_l2_FEDO_H', 'zlog', 1)
+            # set yrange
+            options('erg_hep_l2_FEDO_L', 'yrange', [3.0e+01, 2.0e+03])
+            options('erg_hep_l2_FEDO_H', 'yrange', [7.0e+01, 2.0e+03])
 
-        # set zrange
-        options('erg_hep_l2_FEDO_L', 'zrange', [1.0e-15, 1.0e+06])
-        options('erg_hep_l2_FEDO_H', 'zrange', [1.0e-10, 1.0e+5])
-        return  tplot_variables
+            # set z axis to logscale
+            options('erg_hep_l2_FEDO_L', 'zlog', 1)
+            options('erg_hep_l2_FEDO_H', 'zlog', 1)
+
+            # set zrange
+            options('erg_hep_l2_FEDO_L', 'zrange', [1.0e-15, 1.0e+06])
+            options('erg_hep_l2_FEDO_H', 'zrange', [1.0e-10, 1.0e+5])
+            return  tplot_variables
         
     return loaded_data
