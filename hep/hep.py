@@ -67,7 +67,7 @@ def hep(trange=['2017-03-27', '2017-03-28'],
 
     """
     
-    if level == 'l2':
+    if level == 'l2' and datatype == 'omniflux':
         notplot=True # to avoid failure of creation plot variables (at store_data.py) of hep 
 
     loaded_data = load(instrument='hep', trange=trange, level=level, datatype=datatype, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
@@ -101,7 +101,7 @@ def hep(trange=['2017-03-27', '2017-03-28'],
 
     if type(loaded_data) is dict:
 
-        if level == 'l2':
+        if level == 'l2' and datatype == 'omniflux':
             tplot_variables = []
             v_vars_min = loaded_data['erg_hep_l2_FEDO_L']['v'][0]
             v_vars_max = loaded_data['erg_hep_l2_FEDO_L']['v'][1]
