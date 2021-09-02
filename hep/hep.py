@@ -1,7 +1,7 @@
 #from pyspedas.erg.load import load
 from load import load
 import numpy as np
-from pytplot import options, clip, ylim, store_data
+from pytplot import options, clip, ylim, zlim, store_data
 import cdflib
 
 def hep(trange=['2017-03-27', '2017-03-28'],
@@ -152,6 +152,12 @@ def hep(trange=['2017-03-27', '2017-03-28'],
             # set ysubtitle
             options('erg_hep_l2_FEDO_L' + suffix, 'ysubtitle', '[keV]')
             options('erg_hep_l2_FEDO_H' + suffix, 'ysubtitle', '[keV]')
+
+            # set ylim
+            if 'erg_hep_l2_FEDO_L' + suffix in tplot_variables:
+                ylim('erg_hep_l2_FEDO_L' + suffix, 30, 1800)
+            if 'erg_hep_l2_FEDO_H' + suffix in tplot_variables:
+                ylim('erg_hep_l2_FEDO_H' + suffix, 70, 2048)
 
             # set z axis to logscale
             options('erg_hep_l2_FEDO_L' + suffix, 'zlog', 1)
