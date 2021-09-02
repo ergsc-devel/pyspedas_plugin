@@ -103,25 +103,30 @@ def hep(trange=['2017-03-27', '2017-03-28'],
 
         if level == 'l2' and datatype == 'omniflux':
             tplot_variables = []
-            v_vars_min = loaded_data['erg_hep_l2_FEDO_L' + suffix]['v'][0]
-            v_vars_max = loaded_data['erg_hep_l2_FEDO_L' + suffix]['v'][1]
-            v_vars = np.power(10., (np.log10(v_vars_min) + np.log10(v_vars_max)) / 2.) # log average of energy bins
-            store_data('erg_hep_l2_FEDO_L' + suffix, data={'x':loaded_data['erg_hep_l2_FEDO_L' + suffix]['x'], 
-                                                'y':loaded_data['erg_hep_l2_FEDO_L' + suffix]['y'],
-                                                'v':v_vars})
-            tplot_variables.append('erg_hep_l2_FEDO_L' + suffix)
+            if 'erg_hep_l2_FEDO_L' + suffix in loaded_data:
+                v_vars_min = loaded_data['erg_hep_l2_FEDO_L' + suffix]['v'][0]
+                v_vars_max = loaded_data['erg_hep_l2_FEDO_L' + suffix]['v'][1]
+                v_vars = np.power(10., (np.log10(v_vars_min) + np.log10(v_vars_max)) / 2.) # log average of energy bins
+                store_data('erg_hep_l2_FEDO_L' + suffix, data={'x':loaded_data['erg_hep_l2_FEDO_L' + suffix]['x'], 
+                                                    'y':loaded_data['erg_hep_l2_FEDO_L' + suffix]['y'],
+                                                    'v':v_vars})
+                tplot_variables.append('erg_hep_l2_FEDO_L' + suffix)
 
-            v_vars_min = loaded_data['erg_hep_l2_FEDO_H' + suffix]['v'][0]
-            v_vars_max = loaded_data['erg_hep_l2_FEDO_H' + suffix]['v'][1]
-            v_vars = np.power(10., (np.log10(v_vars_min) + np.log10(v_vars_max)) / 2.) # log average of energy bins
-            store_data('erg_hep_l2_FEDO_H' + suffix, data={'x':loaded_data['erg_hep_l2_FEDO_H' + suffix]['x'], 
-                                                'y':loaded_data['erg_hep_l2_FEDO_H' + suffix]['y'],
-                                                'v':v_vars})
-            tplot_variables.append('erg_hep_l2_FEDO_H' + suffix)
+            if 'erg_hep_l2_FEDO_H' + suffix in loaded_data:
+                v_vars_min = loaded_data['erg_hep_l2_FEDO_H' + suffix]['v'][0]
+                v_vars_max = loaded_data['erg_hep_l2_FEDO_H' + suffix]['v'][1]
+                v_vars = np.power(10., (np.log10(v_vars_min) + np.log10(v_vars_max)) / 2.) # log average of energy bins
+                store_data('erg_hep_l2_FEDO_H' + suffix, data={'x':loaded_data['erg_hep_l2_FEDO_H' + suffix]['x'], 
+                                                    'y':loaded_data['erg_hep_l2_FEDO_H' + suffix]['y'],
+                                                    'v':v_vars})
+                tplot_variables.append('erg_hep_l2_FEDO_H' + suffix)
             
+
             # remove minus valuse of y array
-            clip('erg_hep_l2_FEDO_L' + suffix, 0., 1.0e+10)
-            clip('erg_hep_l2_FEDO_H' + suffix, 0., 1.0e+10)
+            if 'erg_hep_l2_FEDO_L' + suffix in tplot_variables:
+                clip('erg_hep_l2_FEDO_L' + suffix, 0., 1.0e+10)
+            if 'erg_hep_l2_FEDO_H' + suffix in tplot_variables:
+                clip('erg_hep_l2_FEDO_H' + suffix, 0., 1.0e+10)
 
             # set spectrogram plot option
             options('erg_hep_l2_FEDO_L' + suffix, 'Spec', 1)
