@@ -171,6 +171,16 @@ def hep(trange=['2017-03-27', '2017-03-28'],
             options('erg_hep_l2_FEDO_L' + suffix, 'ztitle', '[/cm^{2}N-str-s-keV]')
             options('erg_hep_l2_FEDO_H' + suffix, 'ztitle', '[/cm^{2}N-str-s-keV]')
 
+            # set zlim
+            if 'erg_hep_l2_FEDO_L' + suffix in tplot_variables:
+                zlim('erg_hep_l2_FEDO_L' + suffix, 1e+1, 1e+6)
+            if 'erg_hep_l2_FEDO_H' + suffix in tplot_variables:
+                zlim('erg_hep_l2_FEDO_H' + suffix, 1e+0, 1e+5)
+
+            # change colormap option
+            options('erg_hep_l2_FEDO_L' + suffix,  'Colormap', 'jet')
+            options('erg_hep_l2_FEDO_H' + suffix,  'Colormap', 'jet')
+
             return  tplot_variables
         
     return loaded_data
