@@ -161,6 +161,9 @@ def hep(trange=['2017-03-27', '2017-03-28'],
             options('erg_hep_l2_FEDO_L' + suffix, 'zrange', [1.0e-15, 1.0e+06])
             options('erg_hep_l2_FEDO_H' + suffix, 'zrange', [1.0e-10, 1.0e+5])
 
+            # set ztitle
+            options('erg_hep_l2_FEDO_L', 'ztitle', '[/cm^{2}N-str-s-keV]')
+            options('erg_hep_l2_FEDO_H', 'ztitle', '[/cm^{2}N-str-s-keV]')
 
             return  tplot_variables
         
