@@ -146,12 +146,12 @@ def hep(trange=['2017-03-27', '2017-03-28'],
             options('erg_hep_l2_FEDO_H' + suffix, 'yrange', [7.0e+01, 2.0e+03])
 
             # set ytitle
-            options('erg_hep_l2_FEDO_L', 'ytitle', 'HEP-L\nomnifluxLv2\nEnergy')
-            options('erg_hep_l2_FEDO_H', 'ytitle', 'HEP-L\nomnifluxLv2\nEnergy')
+            options('erg_hep_l2_FEDO_L' + suffix, 'ytitle', 'HEP-L\nomnifluxLv2\nEnergy')
+            options('erg_hep_l2_FEDO_H' + suffix, 'ytitle', 'HEP-L\nomnifluxLv2\nEnergy')
 
             # set ysubtitle
-            options('erg_hep_l2_FEDO_L', 'ysubtitle', '[keV]')
-            options('erg_hep_l2_FEDO_H', 'ysubtitle', '[keV]')
+            options('erg_hep_l2_FEDO_L' + suffix, 'ysubtitle', '[keV]')
+            options('erg_hep_l2_FEDO_H' + suffix, 'ysubtitle', '[keV]')
 
             # set z axis to logscale
             options('erg_hep_l2_FEDO_L' + suffix, 'zlog', 1)
@@ -162,8 +162,8 @@ def hep(trange=['2017-03-27', '2017-03-28'],
             options('erg_hep_l2_FEDO_H' + suffix, 'zrange', [1.0e-10, 1.0e+5])
 
             # set ztitle
-            options('erg_hep_l2_FEDO_L', 'ztitle', '[/cm^{2}N-str-s-keV]')
-            options('erg_hep_l2_FEDO_H', 'ztitle', '[/cm^{2}N-str-s-keV]')
+            options('erg_hep_l2_FEDO_L' + suffix, 'ztitle', '[/cm^{2}N-str-s-keV]')
+            options('erg_hep_l2_FEDO_H' + suffix, 'ztitle', '[/cm^{2}N-str-s-keV]')
 
             return  tplot_variables
         
