@@ -149,6 +149,10 @@ def hep(trange=['2017-03-27', '2017-03-28'],
             options('erg_hep_l2_FEDO_L', 'ytitle', 'HEP-L\nomnifluxLv2\nEnergy')
             options('erg_hep_l2_FEDO_H', 'ytitle', 'HEP-L\nomnifluxLv2\nEnergy')
 
+            # set ysubtitle
+            options('erg_hep_l2_FEDO_L', 'ysubtitle', '[keV]')
+            options('erg_hep_l2_FEDO_H', 'ysubtitle', '[keV]')
+
             # set z axis to logscale
             options('erg_hep_l2_FEDO_L' + suffix, 'zlog', 1)
             options('erg_hep_l2_FEDO_H' + suffix, 'zlog', 1)
