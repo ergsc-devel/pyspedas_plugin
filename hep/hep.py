@@ -193,24 +193,25 @@ def hep(trange=['2017-03-27', '2017-03-28'],
                                             'y':loaded_data['erg_hep_l3_FEDU_L' + suffix]['y'][:,i,:],
                                             'v':loaded_data['erg_hep_l3_FEDU_L' + suffix]['v2']})
                 ylim(tplot_name, 0, 180)
-                options(tplot_name, 'zlog', 1)
                 zlim(tplot_name, 1e+2, 1e+6)
-                options(tplot_name, 'spec', 1)
-                options(tplot_name, 'colormap', 'jet')
+
                 tplot_variables.append(tplot_name)
-            
+
            for i in range(loaded_data['erg_hep_l3_FEDU_H' + suffix]['y'].shape[1]):
                 tplot_name = 'erg_hep_l3_FEDU_H_paspec_ene' + str(i).zfill(2) + suffix
                 store_data(tplot_name, data={'x':loaded_data['erg_hep_l3_FEDU_H' + suffix]['x'],
                                             'y':loaded_data['erg_hep_l3_FEDU_H' + suffix]['y'][:,i,:],
                                             'v':loaded_data['erg_hep_l3_FEDU_H' + suffix]['v2']})
                 ylim(tplot_name, 0, 180)
-                options(tplot_name, 'zlog', 1)
                 zlim(tplot_name, 1e+1, 1e+4)
-                options(tplot_name, 'spec', 1)
-                options(tplot_name, 'colormap', 'jet')
                 tplot_variables.append(tplot_name)
            
+           options(tplot_variables, 'zlog', 1)
+           options(tplot_variables, 'spec', 1)
+           options(tplot_variables, 'colormap', 'jet')
+           options(tplot_variables, 'ysubtitle', '[keV]')
+           options(tplot_variables, 'ztitle', '[/keV/cm^{2}N/sr/s]')
+
            variables_dict["Tplot_names"] = tplot_variables
 
            return variables_dict
