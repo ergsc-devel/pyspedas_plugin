@@ -72,7 +72,7 @@ def hep(trange=['2017-03-27', '2017-03-28'],
 
     """
     
-    if level == 'l2' and datatype == 'omniflux':
+    if level == 'l2' and datatype == 'omniflux' or level == 'l3':
         notplot=True # to avoid failure of creation plot variables (at store_data.py) of hep 
 
     loaded_data = load(instrument='hep', trange=trange, level=level, datatype=datatype, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
@@ -182,5 +182,37 @@ def hep(trange=['2017-03-27', '2017-03-28'],
             options('erg_hep_l2_FEDO_H' + suffix,  'Colormap', 'jet')
 
             return  tplot_variables
-        
+
+        if level == 'l3': # implementation for level = 'l3'
+           variables_dict = {}
+           tplot_variables = []
+
+           for i in range(loaded_data['erg_hep_l3_FEDU_L']['y'].shape[1]):
+                tplot_name = 'erg_hep_l3_FEDU_L_paspec_ene' + str(i).zfill(2)
+                store_data(tplot_name, data={'x':loaded_data['erg_hep_l3_FEDU_L']['x'],
+                                            'y':loaded_data['erg_hep_l3_FEDU_L']['y'][:,i,:],
+                                            'v':loaded_data['erg_hep_l3_FEDU_L']['v2']})
+                ylim(tplot_name, 0, 180)
+                options(tplot_name, 'zlog', 1)
+                zlim(tplot_name, 1e+2, 1e+6)
+                options(tplot_name, 'spec', 1)
+                options(tplot_name, 'colormap', 'jet')
+                tplot_variables.append(tplot_name)
+            
+           for i in range(loaded_data['erg_hep_l3_FEDU_H']['y'].shape[1]):
+                tplot_name = 'erg_hep_l3_FEDU_H_paspec_ene' + str(i).zfill(2)
+                store_data(tplot_name, data={'x':loaded_data['erg_hep_l3_FEDU_H']['x'],
+                                            'y':loaded_data['erg_hep_l3_FEDU_H']['y'][:,i,:],
+                                            'v':loaded_data['erg_hep_l3_FEDU_H']['v2']})
+                ylim(tplot_name, 0, 180)
+                options(tplot_name, 'zlog', 1)
+                zlim(tplot_name, 1e+1, 1e+4)
+                options(tplot_name, 'spec', 1)
+                options(tplot_name, 'colormap', 'jet')
+                tplot_variables.append(tplot_name)
+           
+           variables_dict["Tplot_names"] = tplot_variables
+
+           return variables_dict
+
     return loaded_data
