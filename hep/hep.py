@@ -187,11 +187,11 @@ def hep(trange=['2017-03-27', '2017-03-28'],
            variables_dict = {}
            tplot_variables = []
 
-           for i in range(loaded_data['erg_hep_l3_FEDU_L']['y'].shape[1]):
-                tplot_name = 'erg_hep_l3_FEDU_L_paspec_ene' + str(i).zfill(2)
-                store_data(tplot_name, data={'x':loaded_data['erg_hep_l3_FEDU_L']['x'],
-                                            'y':loaded_data['erg_hep_l3_FEDU_L']['y'][:,i,:],
-                                            'v':loaded_data['erg_hep_l3_FEDU_L']['v2']})
+           for i in range(loaded_data['erg_hep_l3_FEDU_L' + suffix]['y'].shape[1]):
+                tplot_name = 'erg_hep_l3_FEDU_L_paspec_ene' + str(i).zfill(2) + suffix
+                store_data(tplot_name, data={'x':loaded_data['erg_hep_l3_FEDU_L' + suffix]['x'],
+                                            'y':loaded_data['erg_hep_l3_FEDU_L' + suffix]['y'][:,i,:],
+                                            'v':loaded_data['erg_hep_l3_FEDU_L' + suffix]['v2']})
                 ylim(tplot_name, 0, 180)
                 options(tplot_name, 'zlog', 1)
                 zlim(tplot_name, 1e+2, 1e+6)
@@ -199,11 +199,11 @@ def hep(trange=['2017-03-27', '2017-03-28'],
                 options(tplot_name, 'colormap', 'jet')
                 tplot_variables.append(tplot_name)
             
-           for i in range(loaded_data['erg_hep_l3_FEDU_H']['y'].shape[1]):
-                tplot_name = 'erg_hep_l3_FEDU_H_paspec_ene' + str(i).zfill(2)
-                store_data(tplot_name, data={'x':loaded_data['erg_hep_l3_FEDU_H']['x'],
-                                            'y':loaded_data['erg_hep_l3_FEDU_H']['y'][:,i,:],
-                                            'v':loaded_data['erg_hep_l3_FEDU_H']['v2']})
+           for i in range(loaded_data['erg_hep_l3_FEDU_H' + suffix]['y'].shape[1]):
+                tplot_name = 'erg_hep_l3_FEDU_H_paspec_ene' + str(i).zfill(2) + suffix
+                store_data(tplot_name, data={'x':loaded_data['erg_hep_l3_FEDU_H' + suffix]['x'],
+                                            'y':loaded_data['erg_hep_l3_FEDU_H' + suffix]['y'][:,i,:],
+                                            'v':loaded_data['erg_hep_l3_FEDU_H' + suffix]['v2']})
                 ylim(tplot_name, 0, 180)
                 options(tplot_name, 'zlog', 1)
                 zlim(tplot_name, 1e+1, 1e+4)
