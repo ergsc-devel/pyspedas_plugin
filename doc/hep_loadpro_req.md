@@ -63,7 +63,7 @@ erg_load_hep.pro
   - timespan, '2017-03-27' & erg_load_hep, level='l2', datatype='omniflux' 
   - tplot, [ 'erg_hep_l2_FEDO_L', 'erg_hep_l2_FEDO_H' ] 
 
-  [plot example] 
+  ![plot example](https://raw.githubusercontent.com/ergsc-devel/pyspedas_plugin/dev_requirementdoc/doc/imgs/hep_loadpro_req.png) 
 
 - erg_hep_l3_FEDU_L, erg_hep_l3_FEDU_H: NOT to be plotted as they are.
 
