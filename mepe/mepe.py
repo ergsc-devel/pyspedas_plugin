@@ -135,6 +135,7 @@ def mepe(trange=['2017-03-27', '2017-03-28'],
         # set ylim
         ylim('erg_mepe_' + level + '_FEDU' + suffix, 6., 100.)
         ylim('erg_mepe_' + level + '_FEDU_n' + suffix, 6., 100.)
+        ylim('erg_mepe_' + level + '_count_raw' + suffix, 6., 100.)
 
         # set z axis to logscale
         options('erg_mepe_' + level + '_FEDU' + suffix, 'zlog', 1)
