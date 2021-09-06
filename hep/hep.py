@@ -75,10 +75,11 @@ def hep(trange=['2017-03-27', '2017-03-28'],
 
     """
     
-    if level == 'l2' and datatype == 'omniflux' or level == 'l3':
+    if level == 'l2' and datatype == 'omniflux' or datatype == '3dflux' or level == 'l3':
         notplot=True # to avoid failure of creation plot variables (at store_data.py) of hep 
 
     loaded_data = load(instrument='hep', trange=trange, level=level, datatype=datatype, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd, version=version)
+
 
     
     if len(loaded_data) > 0 and ror:
