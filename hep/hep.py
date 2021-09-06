@@ -68,7 +68,7 @@ def hep(trange=['2017-03-27', '2017-03-28'],
             If set, print PI info and rules of the road
 
         version: str
-            Set this value to specify the version of cdf files
+            Set this value to specify the version of cdf files (such as "v01_02", "v01_03", ...)
 
     Returns:
         List of tplot variables created.
