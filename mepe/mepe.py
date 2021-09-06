@@ -127,8 +127,11 @@ def mepe(trange=['2017-03-27', '2017-03-28'],
         options('erg_mepe_' + level + '_FEEDU', 'yrange', [6., 100.])
         options('erg_mepe_' + level + '_count_raw', 'yrange', [6., 100.])
 
-        options('erg_mepe_' + level + '_FEDU', 'yrange', [6., 100.])
-        options('erg_mepe_' + level + '_FEDU_n', 'yrange', [6., 100.])
+        # set ysubtitle
+        options('erg_mepe_' + level + '_FEDU', 'ysubtitle', '[keV]')
+        options('erg_mepe_' + level + '_FEDU_n', 'ysubtitle', '[keV]')
+        options('erg_mepe_' + level + '_count_raw', 'ysubtitle', '[keV]')
+        options('erg_mepe_' + level + '_spin_phase', 'ysubtitle', '[keV]')
 
         # set z axis to logscale
         options('erg_mepe_' + level + '_FEDU', 'zlog', 1)
