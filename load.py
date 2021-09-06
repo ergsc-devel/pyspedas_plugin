@@ -21,7 +21,8 @@ def load(trange=['2017-03-27', '2017-03-28'],
          no_update=False,
          uname=None,
          passwd=None,
-         time_clip=False):
+         time_clip=False,
+         version=None):
     """
     This function is not meant to be called directly; please see the instrument specific wrappers:
         pyspedas.erg.mgf()
