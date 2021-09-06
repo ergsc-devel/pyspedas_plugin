@@ -224,7 +224,7 @@ def hep(trange=['2017-03-27', '2017-03-28'],
            options(tplot_variables, 'zlog', 1)
            options(tplot_variables, 'spec', 1)
            options(tplot_variables, 'colormap', 'jet')
-           options(tplot_variables, 'ysubtitle', '[keV]')
+           options(tplot_variables, 'ysubtitle', 'PA [deg]')
            options(tplot_variables, 'ztitle', '[/keV/cm^{2}/sr/s]')
 
            variables_dict["Tplot_names"] = tplot_variables
