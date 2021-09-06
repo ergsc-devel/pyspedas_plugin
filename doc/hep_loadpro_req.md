@@ -71,5 +71,6 @@ erg_load_hep.pro
   - timespan, '2017-03-27' & erg_load_hep, level='l3' 
   - tplot, [ 'erg_hep_l3_FEDU_L_paspec_ene01', 'erg_hep_l3_FEDU_H_paspec_ene01' ] 
 
-  [plot example]
+ ![plot example](/doc/imgs/hep_l3_fedu_lh.png)
+ 
   
