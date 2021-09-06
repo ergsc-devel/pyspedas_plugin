@@ -23,7 +23,8 @@ erg_load_mepi_nml.pro
   - sample command: timespan, '2017-03-27' & erg_load_mepi_nml, level='l2', datatype='3dflux'
 
   - spec=1, ysubtitle='[keV/q]', no_interp=1
-  - ztitle='[/s-cm!U2!N-sr-keV]'  (only for F?DU)
+  - ztitle='[/s-cm!U2!N-sr-keV/q]'  (for F?DU)
+  - ztitle='[cnt/smpl]'  (for count_raw_?)
   - ylim, 4., 190., 1
   - zlim, 0, 0, 1  (set to be auto-scaling)
   - datagap=33. 
@@ -34,7 +35,7 @@ erg_load_mepi_nml.pro
   - sample command: timespan, '2017-03-27' & erg_load_mepi_nml, level='l2', datatype='omniflux' 
 
   - spec=1, ysubtitle='[keV/q]', no_interp=1
-  - ztitle='[/s-cm!U2!N-sr-keV]'
+  - ztitle='[/s-cm!U2!N-sr-keV/q]'
   - ylim, 4., 190., 1
   - zlim, 0, 0, 1 (set to be auto-scaling)
   - datagap=33.
@@ -46,11 +47,13 @@ erg_load_mepi_nml.pro
 - erg_mepi_l2_3dflux_count_raw_{P | HE2 | HE | OPP | O | O2P}
   - NOT to be plotted as they are.
 
+
+
 - erg_mepi_l2_omniflux_{FPDO | FHE2DO | FHEDO | FOPPDO | FODO | FO2PDO}
 - erg_mepi_l2_omniflux_{FPDO_tof | FHE2DO_tof | FHEDO_tof | FOPPDO_tof | FODO_tof | FO2PDO_tof}
   - timespan, '2017-03-27' & erg_load_mepi_nml, level='l2', datatype='omniflux' 
   - tplot, ['erg_mepi_l2_omniflux_FPDO', 'erg_mepi_l2_omniflux_FPDO_tof']
 
   ![plot example](/doc/imgs/mepi_fpdo_plot.png)
-  
+
 
