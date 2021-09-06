@@ -1,7 +1,7 @@
 
 #from pyspedas.erg.load import load
 from load import load
-from pytplot import options, clip
+from pytplot import options, clip, ylim, zlim
 import cdflib
 
 def mepe(trange=['2017-03-27', '2017-03-28'],
@@ -133,9 +133,13 @@ def mepe(trange=['2017-03-27', '2017-03-28'],
         options('erg_mepe_' + level + '_count_raw' + suffix, 'ysubtitle', '[keV]')
         options('erg_mepe_' + level + '_spin_phase' + suffix, 'ysubtitle', '[keV]')
 
+        # set ylim
+        ylim('erg_mepe_' + level + '_FEDU' + suffix, 6., 100.)
+        ylim('erg_mepe_' + level + '_FEDU_n' + suffix, 6., 100.)
+
         # set z axis to logscale
         options('erg_mepe_' + level + '_FEDU' + suffix, 'zlog', 1)
-        options('erg_mepe_' + level + '_FEDU_n + suffix', 'zlog', 1)
+        options('erg_mepe_' + level + '_FEDU_n' + suffix, 'zlog', 1)
         options('erg_mepe_' + level + '_FEEDU' + suffix, 'zlog', 1)
         options('erg_mepe_' + level + '_count_raw' + suffix, 'zlog', 1)
 
