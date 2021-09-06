@@ -38,7 +38,7 @@ erg_load_lepi_nml.pro
 ## プロットコマンドとプロット例 / Plot commands and plot examples
 - erg_lepi_l3_pa_FPDU, erg_lepi_l3_pa_pabin_??(00,01..)_FPDU
   - timespan, '2017-05-01' & erg_load_lepi_nml, level='l3' 
-  - tplot, [ 'erg_lepi_l3_pa_FPDU', 'erg_lepi_l3_pa_pabin_01_FPDU' ] 
+  - tplot, ['erg_lepi_l3_pa_pabin_01_FPDU' ] 
 
  ![plot example](/doc/imgs/lepi_l3_fpdu.png)
  
