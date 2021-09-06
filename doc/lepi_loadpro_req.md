@@ -36,6 +36,10 @@ erg_load_lepi_nml.pro
   - ytickinterval=45., constant=[45., 90., 135.] 
 
 ## プロットコマンドとプロット例 / Plot commands and plot examples
+- erg_lepi_l2_FPDO (FHEDO,FODO)
+  - timespan, '2017-05-01' & erg_load_lepi_nml, level='l2'
+  - tplot, [ 'erg_lepi_l2_FPDO' ] 
+
 - erg_lepi_l3_pa_FPDU, erg_lepi_l3_pa_pabin_??(00,01..)_FPDU
   - timespan, '2017-05-01' & erg_load_lepi_nml, level='l3' 
   - tplot, ['erg_lepi_l3_pa_pabin_01_FPDU' ] 
