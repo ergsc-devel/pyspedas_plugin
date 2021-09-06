@@ -199,39 +199,57 @@ def hep(trange=['2017-03-27', '2017-03-28'],
            tplot_variables = []
 
            if 'erg_hep_l3_FEDU_L' + suffix in loaded_data:
+               # get energy [keV] array for ytitle options
                L_energy_array = np.trunc(np.sqrt(loaded_data['erg_hep_l3_FEDU_L' + suffix]['v1'][0,:]*loaded_data['erg_hep_l3_FEDU_L' + suffix]['v1'][1,:])).astype(int)
-               for i in range(loaded_data['erg_hep_l3_FEDU_L' + suffix]['y'].shape[1]):
+
+               for i in range(loaded_data['erg_hep_l3_FEDU_L' + suffix]['y'].shape[1]): # make Tplot Variables of erg_hep_l3_FEDU_L_paspec_ene?? (??: 00, 01, 02, ..., 15)
                     tplot_name = 'erg_hep_l3_FEDU_L_paspec_ene' + str(i).zfill(2) + suffix
                     store_data(tplot_name, data={'x':loaded_data['erg_hep_l3_FEDU_L' + suffix]['x'],
                                                 'y':loaded_data['erg_hep_l3_FEDU_L' + suffix]['y'][:,i,:],
                                                 'v':loaded_data['erg_hep_l3_FEDU_L' + suffix]['v2']})
+
+                    # set ylim
                     ylim(tplot_name, 0, 180)
+                    # set zlim
                     zlim(tplot_name, 1e+2, 1e+6)
+                    # set ytitle
                     options(tplot_name, 'ytitle', f'HEP-L\nEne{str(i).zfill(2)}\n{L_energy_array[i]} keV')
 
                     tplot_variables.append(tplot_name)
 
            if 'erg_hep_l3_FEDU_H' + suffix in loaded_data:
+               # get energy [keV] array for ytitle options
                H_energy_array = np.trunc(np.sqrt(loaded_data['erg_hep_l3_FEDU_H' + suffix]['v1'][0,:]*loaded_data['erg_hep_l3_FEDU_H' + suffix]['v1'][1,:])).astype(int)
-               for i in range(loaded_data['erg_hep_l3_FEDU_H' + suffix]['y'].shape[1]):
+
+               for i in range(loaded_data['erg_hep_l3_FEDU_H' + suffix]['y'].shape[1]): # make Tplot Variables of erg_hep_l3_FEDU_H_paspec_ene?? (??: 00, 01, 02, ..., 10)
                     tplot_name = 'erg_hep_l3_FEDU_H_paspec_ene' + str(i).zfill(2) + suffix
                     store_data(tplot_name, data={'x':loaded_data['erg_hep_l3_FEDU_H' + suffix]['x'],
                                                 'y':loaded_data['erg_hep_l3_FEDU_H' + suffix]['y'][:,i,:],
                                                 'v':loaded_data['erg_hep_l3_FEDU_H' + suffix]['v2']})
+                    
+                    # set ylim
                     ylim(tplot_name, 0, 180)
+                    # set zlim
                     zlim(tplot_name, 1e+1, 1e+4)
+                    # set ytitle
                     options(tplot_name, 'ytitle', f'HEP-H\nEne{str(i).zfill(2)}\n{H_energy_array[i]} keV')
 
                     tplot_variables.append(tplot_name)
            
+           
+           # set z axis to logscale
            options(tplot_variables, 'zlog', 1)
+           # set spectrogram plot option
            options(tplot_variables, 'spec', 1)
+           # change colormap option
            options(tplot_variables, 'colormap', 'jet')
+           # set ysubtitle
            options(tplot_variables, 'ysubtitle', 'PA [deg]')
+           # set ztitle
            options(tplot_variables, 'ztitle', '[/keV/cm^{2}/sr/s]')
 
            variables_dict["Tplot_names"] = tplot_variables
-           variables_dict["other_variables"] = {}
+           variables_dict["other_variables"] = {} # for Variables which cannot be Tplot Variables by pytplot.store_data()
 
            if 'erg_hep_l3_FEDU_L' + suffix in loaded_data:
                 variables_dict["other_variables"]['erg_hep_l3_FEDU_L' + suffix] = loaded_data['erg_hep_l3_FEDU_L' + suffix]
