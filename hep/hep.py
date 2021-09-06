@@ -78,33 +78,39 @@ def hep(trange=['2017-03-27', '2017-03-28'],
     if level == 'l2' and datatype == 'omniflux' or level == 'l3':
         notplot=True # to avoid failure of creation plot variables (at store_data.py) of hep 
 
-    loaded_data = load(instrument='hep', trange=trange, level=level, datatype=datatype, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
+    loaded_data = load(instrument='hep', trange=trange, level=level, datatype=datatype, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd, version=version)
 
     
     if len(loaded_data) > 0 and ror:
 
     
-        out_files = load(instrument='hep', trange=trange, level=level, datatype=datatype, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd)
+        out_files = load(instrument='hep', trange=trange, level=level, datatype=datatype, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd, version=version)
         cdf_file = cdflib.CDF(out_files[0])
-        gatt = cdf_file.globalattsget()
+        
+        try:
+            gatt = cdf_file.globalattsget()
+        except:
+            gatt = None
 
-        # --- print PI info and rules of the road
+        
+        if gatt is not None:
+            # --- print PI info and rules of the road
 
-        print(' ')
-        print('**************************************************************************')
-        print(gatt["LOGICAL_SOURCE_DESCRIPTION"])
-        print('')
-        print('PI: ', gatt['PI_NAME'])
-        print("Affiliation: "+gatt["PI_AFFILIATION"])
-        print('')
-        print('- The rules of the road (RoR) common to the ERG project:')
-        print('       https://ergsc.isee.nagoya-u.ac.jp/data_info/rules_of_the_road.shtml.en')
-        print('- RoR for HEP data: https://ergsc.isee.nagoya-u.ac.jp/mw/index.php/ErgSat/Hep')
-        if level == 'l3':
-            print('- RoR for MGF data: https://ergsc.isee.nagoya-u.ac.jp/mw/index.php/ErgSat/Mgf')
-        print('')
-        print('Contact: erg_hep_info at isee.nagoya-u.ac.jp')
-        print('**************************************************************************')
+            print(' ')
+            print('**************************************************************************')
+            print(gatt["LOGICAL_SOURCE_DESCRIPTION"])
+            print('')
+            print('PI: ', gatt['PI_NAME'])
+            print("Affiliation: "+gatt["PI_AFFILIATION"])
+            print('')
+            print('- The rules of the road (RoR) common to the ERG project:')
+            print('       https://ergsc.isee.nagoya-u.ac.jp/data_info/rules_of_the_road.shtml.en')
+            print('- RoR for HEP data: https://ergsc.isee.nagoya-u.ac.jp/mw/index.php/ErgSat/Hep')
+            if level == 'l3':
+                print('- RoR for MGF data: https://ergsc.isee.nagoya-u.ac.jp/mw/index.php/ErgSat/Mgf')
+            print('')
+            print('Contact: erg_hep_info at isee.nagoya-u.ac.jp')
+            print('**************************************************************************')
 
 
     if type(loaded_data) is dict:
