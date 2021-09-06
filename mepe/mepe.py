@@ -131,7 +131,6 @@ def mepe(trange=['2017-03-27', '2017-03-28'],
         options('erg_mepe_' + level + '_FEDU' + suffix, 'ysubtitle', '[keV]')
         options('erg_mepe_' + level + '_FEDU_n' + suffix, 'ysubtitle', '[keV]')
         options('erg_mepe_' + level + '_count_raw' + suffix, 'ysubtitle', '[keV]')
-        options('erg_mepe_' + level + '_spin_phase' + suffix, 'ysubtitle', '[keV]')
 
         # set ylim
         ylim('erg_mepe_' + level + '_FEDU' + suffix, 6., 100.)
