@@ -39,6 +39,8 @@ erg_load_lepi_nml.pro
 - erg_lepi_l2_FPDO (FHEDO,FODO)
   - timespan, '2017-05-01' & erg_load_lepi_nml, level='l2'
   - tplot, [ 'erg_lepi_l2_FPDO' ] 
+ ![plot example](/doc/imgs/lepi_l2_fpdo.png)
+
 
 - erg_lepi_l3_pa_FPDU, erg_lepi_l3_pa_pabin_??(00,01..)_FPDU
   - timespan, '2017-05-01' & erg_load_lepi_nml, level='l3' 
