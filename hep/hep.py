@@ -17,7 +17,8 @@ def hep(trange=['2017-03-27', '2017-03-28'],
         uname=None,
         passwd=None,
         time_clip=False,
-        ror=True):
+        ror=True,
+        version=None):
     """
     This function loads data from the HEP experiment from the Arase mission
     
@@ -66,6 +67,8 @@ def hep(trange=['2017-03-27', '2017-03-28'],
         ror: bool
             If set, print PI info and rules of the road
 
+        version: str
+            Set this value to specify the version of cdf files
 
     Returns:
         List of tplot variables created.
