@@ -113,6 +113,7 @@ def hep(trange=['2017-03-27', '2017-03-28'],
             print('**************************************************************************')
 
 
+
     if type(loaded_data) is dict:
 
         if level == 'l2' and datatype == 'omniflux':
@@ -196,24 +197,26 @@ def hep(trange=['2017-03-27', '2017-03-28'],
            variables_dict = {}
            tplot_variables = []
 
-           for i in range(loaded_data['erg_hep_l3_FEDU_L' + suffix]['y'].shape[1]):
-                tplot_name = 'erg_hep_l3_FEDU_L_paspec_ene' + str(i).zfill(2) + suffix
-                store_data(tplot_name, data={'x':loaded_data['erg_hep_l3_FEDU_L' + suffix]['x'],
-                                            'y':loaded_data['erg_hep_l3_FEDU_L' + suffix]['y'][:,i,:],
-                                            'v':loaded_data['erg_hep_l3_FEDU_L' + suffix]['v2']})
-                ylim(tplot_name, 0, 180)
-                zlim(tplot_name, 1e+2, 1e+6)
+           if 'erg_hep_l3_FEDU_L' + suffix in loaded_data:
+               for i in range(loaded_data['erg_hep_l3_FEDU_L' + suffix]['y'].shape[1]):
+                    tplot_name = 'erg_hep_l3_FEDU_L_paspec_ene' + str(i).zfill(2) + suffix
+                    store_data(tplot_name, data={'x':loaded_data['erg_hep_l3_FEDU_L' + suffix]['x'],
+                                                'y':loaded_data['erg_hep_l3_FEDU_L' + suffix]['y'][:,i,:],
+                                                'v':loaded_data['erg_hep_l3_FEDU_L' + suffix]['v2']})
+                    ylim(tplot_name, 0, 180)
+                    zlim(tplot_name, 1e+2, 1e+6)
 
-                tplot_variables.append(tplot_name)
+                    tplot_variables.append(tplot_name)
 
-           for i in range(loaded_data['erg_hep_l3_FEDU_H' + suffix]['y'].shape[1]):
-                tplot_name = 'erg_hep_l3_FEDU_H_paspec_ene' + str(i).zfill(2) + suffix
-                store_data(tplot_name, data={'x':loaded_data['erg_hep_l3_FEDU_H' + suffix]['x'],
-                                            'y':loaded_data['erg_hep_l3_FEDU_H' + suffix]['y'][:,i,:],
-                                            'v':loaded_data['erg_hep_l3_FEDU_H' + suffix]['v2']})
-                ylim(tplot_name, 0, 180)
-                zlim(tplot_name, 1e+1, 1e+4)
-                tplot_variables.append(tplot_name)
+           if 'erg_hep_l3_FEDU_H' + suffix in loaded_data:
+                for i in range(loaded_data['erg_hep_l3_FEDU_H' + suffix]['y'].shape[1]):
+                    tplot_name = 'erg_hep_l3_FEDU_H_paspec_ene' + str(i).zfill(2) + suffix
+                    store_data(tplot_name, data={'x':loaded_data['erg_hep_l3_FEDU_H' + suffix]['x'],
+                                                'y':loaded_data['erg_hep_l3_FEDU_H' + suffix]['y'][:,i,:],
+                                                'v':loaded_data['erg_hep_l3_FEDU_H' + suffix]['v2']})
+                    ylim(tplot_name, 0, 180)
+                    zlim(tplot_name, 1e+1, 1e+4)
+                    tplot_variables.append(tplot_name)
            
            options(tplot_variables, 'zlog', 1)
            options(tplot_variables, 'spec', 1)
@@ -223,8 +226,11 @@ def hep(trange=['2017-03-27', '2017-03-28'],
 
            variables_dict["Tplot_names"] = tplot_variables
            variables_dict["other_variables"] = {}
-           variables_dict["other_variables"]['erg_hep_l3_FEDU_L' + suffix] = loaded_data['erg_hep_l3_FEDU_L' + suffix]
-           variables_dict["other_variables"]['erg_hep_l3_FEDU_H' + suffix] = loaded_data['erg_hep_l3_FEDU_H' + suffix]
+
+           if 'erg_hep_l3_FEDU_L' + suffix in loaded_data:
+                variables_dict["other_variables"]['erg_hep_l3_FEDU_L' + suffix] = loaded_data['erg_hep_l3_FEDU_L' + suffix]
+           if 'erg_hep_l3_FEDU_H' + suffix in loaded_data:
+                variables_dict["other_variables"]['erg_hep_l3_FEDU_H' + suffix] = loaded_data['erg_hep_l3_FEDU_H' + suffix]
 
            return variables_dict
 
