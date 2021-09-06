@@ -102,6 +102,10 @@ def mepe(trange=['2017-03-27', '2017-03-28'],
         options('erg_mepe_' + level + '_FEDO' + suffix, 'ylog', 1)
         # set yrange
         options('erg_mepe_' + level + '_FEDO' + suffix, 'yrange', [6., 90.])
+        # set ysubtitle
+        options('erg_mepe_' + level + '_FEDO' + suffix, 'ysubtitle', '[keV]')
+        # set ylim
+        ylim('erg_mepe_' + level + '_FEDO' + suffix, 6., 100.)
         # set z axis to logscale
         options('erg_mepe_' + level + '_FEDO' + suffix, 'zlog', 1)
         # set zrange
