@@ -108,7 +108,7 @@ def mepe(trange=['2017-03-27', '2017-03-28'],
         options('erg_mepe_' + level + '_FEDO', 'zrange', [1.e+01, 1.e+07])
         # change colormap option
         options('erg_mepe_' + level + '_FEDO', 'Colormap', 'jet')
-    else:
+    elif datatype == '3dflux' and level == 'l2':
         # set spectrogram plot option
         options('erg_mepe_' + level + '_FEDU', 'Spec', 1)
         options('erg_mepe_' + level + '_FEDU_n', 'Spec', 1)
@@ -126,6 +126,9 @@ def mepe(trange=['2017-03-27', '2017-03-28'],
         options('erg_mepe_' + level + '_FEDU_n', 'yrange', [6., 100.])
         options('erg_mepe_' + level + '_FEEDU', 'yrange', [6., 100.])
         options('erg_mepe_' + level + '_count_raw', 'yrange', [6., 100.])
+
+        options('erg_mepe_' + level + '_FEDU', 'yrange', [6., 100.])
+        options('erg_mepe_' + level + '_FEDU_n', 'yrange', [6., 100.])
 
         # set z axis to logscale
         options('erg_mepe_' + level + '_FEDU', 'zlog', 1)
