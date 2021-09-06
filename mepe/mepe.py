@@ -110,6 +110,8 @@ def mepe(trange=['2017-03-27', '2017-03-28'],
         options('erg_mepe_' + level + '_FEDO' + suffix, 'zlog', 1)
         # set zrange
         options('erg_mepe_' + level + '_FEDO' + suffix, 'zrange', [1.e+01, 1.e+07])
+        # set ztitle
+        options('erg_mepe_' + level + '_FEDO' + suffix, 'ztitle', '[/s-cm^{2}-sr-keV]')
         # change colormap option
         options('erg_mepe_' + level + '_FEDO' + suffix, 'Colormap', 'jet')
     elif datatype == '3dflux' and level == 'l2':
