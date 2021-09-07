@@ -121,8 +121,6 @@ def mepi(trange=['2017-03-27', '2017-03-28'],
         #options('erg_mepi_' + level + '_FHEDO' + suffix, 'zrange', [7.e+00, 8.e+04])
 
         # change colormap option
-        options('erg_mepi_' + level + '_FPDO' + suffix, 'Colormap', 'jet')
-        options('erg_mepi_' + level + '_FHE2DO' + suffix, 'Colormap', 'jet')
-        options('erg_mepi_' + level + '_FHEDO' + suffix, 'Colormap', 'jet')
+        options(tplot_names_list, 'Colormap', 'jet')        
 
     return loaded_data
