@@ -13,7 +13,7 @@ def lepi(trange=['2017-07-01', '2017-07-02'],
         varformat=None,
         varnames=[],
         downloadonly=False,
-        notplot=True, # to avoid failure of creation plot variables (at store_data.py) of lepi
+        notplot=False,
         no_update=False,
         uname=None,
         passwd=None,
@@ -77,6 +77,9 @@ def lepi(trange=['2017-07-01', '2017-07-02'],
 
     """
 
+    if datatype == 'omniflux' and level == 'l2':
+        notplot=True # to avoid failure of creation plot variables (at store_data.py) of lepi
+    
     loaded_data = load(instrument='lepi', trange=trange, level=level, datatype=datatype, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd, version=version)
 
     
