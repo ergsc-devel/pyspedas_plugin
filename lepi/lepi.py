@@ -18,7 +18,8 @@ def lepi(trange=['2017-07-01', '2017-07-02'],
         uname=None,
         passwd=None,
         time_clip=False,
-        ror=True):
+        ror=True,
+        version=None):
     """
     This function loads data from the LEP-i experiment from the Arase mission
     
@@ -67,18 +68,22 @@ def lepi(trange=['2017-07-01', '2017-07-02'],
         ror: bool
             If set, print PI info and rules of the road
 
+
+        version: str
+            Set this value to specify the version of cdf files (such as "v03_00")
+
     Returns:
         List of tplot variables created.
 
     """
 
-    loaded_data = load(instrument='lepi', trange=trange, level=level, datatype=datatype, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
+    loaded_data = load(instrument='lepi', trange=trange, level=level, datatype=datatype, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd, version=version)
 
     
     if len(loaded_data) > 0 and ror:
 
     
-        out_files = load(instrument='lepi', trange=trange, level=level, datatype=datatype, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd)
+        out_files = load(instrument='lepi', trange=trange, level=level, datatype=datatype, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd, version=version)
         cdf_file = cdflib.CDF(out_files[0])
         gatt = cdf_file.globalattsget()
 
