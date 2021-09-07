@@ -16,7 +16,8 @@ def pwe_ofa(trange=['2017-04-01', '2017-04-02'],
         no_update=False,
         uname=None,
         passwd=None,
-        time_clip=False):
+        time_clip=False,
+        ror=True):
     """
     This function loads data from the PWE experiment from the Arase mission
     
@@ -62,13 +63,16 @@ def pwe_ofa(trange=['2017-04-01', '2017-04-02'],
         time_clip: bool
             Time clip the variables to exactly the range specified in the trange keyword
 
+        ror: bool
+            If set, print PI info and rules of the road
+
     Returns:
         List of tplot variables created.
 
     """
     loaded_data = load(instrument='pwe_ofa', trange=trange, level=level, datatype=datatype, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
     
-    if len(loaded_data) > 0:
+    if len(loaded_data) > 0 and ror:
 
     
         out_files = load(instrument='pwe_ofa', trange=trange, level=level, datatype=datatype, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd)
@@ -124,6 +128,7 @@ def pwe_ofa(trange=['2017-04-01', '2017-04-02'],
 
     # set ztitle
     options('erg_pwe_ofa_'+level+'_E_spectra_132'+suffix,  'ztitle', 'mV^2/m^2/Hz')
+    options('erg_pwe_ofa_'+level+'_B_spectra_132'+suffix,  'ztitle', 'pT^2/Hz')
 
     # set yrange
     #options('erg_pwe_ofa_'+level+'_E_spectra_132'+suffix,  'yrange', [0., 10.])
