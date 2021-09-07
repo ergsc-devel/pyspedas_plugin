@@ -1,7 +1,7 @@
 
 #from pyspedas.erg.load import load
 from load import load
-from pytplot import options, clip
+from pytplot import options, clip, ylim, zlim
 import cdflib
 
 def pwe_ofa(trange=['2017-04-01', '2017-04-02'],
@@ -102,17 +102,24 @@ def pwe_ofa(trange=['2017-04-01', '2017-04-02'],
     options('erg_pwe_ofa_'+level+'_E_spectra_132'+suffix,  'ylog', 1)
     options('erg_pwe_ofa_'+level+'_B_spectra_132'+suffix,  'ylog', 1)
     
+    if 'erg_pwe_ofa_'+level+'_E_spectra_132'+suffix in loaded_data:
+        # set ylim
+        ylim('erg_pwe_ofa_'+level+'_E_spectra_132'+suffix, 32e-3, 20.)
+        # set zlim
+        zlim('erg_pwe_ofa_'+level+'_E_spectra_132'+suffix, 1e-9, 1e-2)
+
+
     # set yrange
-    options('erg_pwe_ofa_'+level+'_E_spectra_132'+suffix,  'yrange', [0., 10.])
-    options('erg_pwe_ofa_'+level+'_B_spectra_132'+suffix,  'yrange', [0., 11.])
+    #options('erg_pwe_ofa_'+level+'_E_spectra_132'+suffix,  'yrange', [0., 10.])
+    #options('erg_pwe_ofa_'+level+'_B_spectra_132'+suffix,  'yrange', [0., 11.])
     
     # set z axis to logscale
     options('erg_pwe_ofa_'+level+'_E_spectra_132'+suffix,  'zlog', 1)
     options('erg_pwe_ofa_'+level+'_B_spectra_132'+suffix,  'zlog', 1)
     
     # set zrange
-    options('erg_pwe_ofa_'+level+'_E_spectra_132'+suffix,  'zrange', [1.0e-08, 1.0e-02])
-    options('erg_pwe_ofa_'+level+'_B_spectra_132'+suffix,  'zrange', [1.0e-04, 1.0e+02])
+    #options('erg_pwe_ofa_'+level+'_E_spectra_132'+suffix,  'zrange', [1.0e-08, 1.0e-02])
+    #options('erg_pwe_ofa_'+level+'_B_spectra_132'+suffix,  'zrange', [1.0e-04, 1.0e+02])
     
     # change colormap option
     options('erg_pwe_ofa_'+level+'_E_spectra_132'+suffix,  'Colormap', 'jet')
