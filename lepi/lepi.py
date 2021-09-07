@@ -108,26 +108,29 @@ def lepi(trange=['2017-07-01', '2017-07-02'],
 
     if type(loaded_data) is dict:
         tplot_variables = []
-        v_array = loaded_data['erg_lepi_l2_FPDO']['v']
-        v_array = np.where(v_array < 0. , np.nan, v_array) # change minus values to NaN
-        store_data('erg_lepi_l2_FPDO', data={'x':loaded_data['erg_lepi_l2_FPDO']['x'],
-                                            'y':loaded_data['erg_lepi_l2_FPDO']['y'],
-                                            'v':v_array})
-        tplot_variables.append('erg_lepi_l2_FPDO')
+        if 'erg_lepi_l2_FPDO' in loaded_data:
+            v_array = loaded_data['erg_lepi_l2_FPDO']['v']
+            v_array = np.where(v_array < 0. , np.nan, v_array) # change minus values to NaN
+            store_data('erg_lepi_l2_FPDO', data={'x':loaded_data['erg_lepi_l2_FPDO']['x'],
+                                                'y':loaded_data['erg_lepi_l2_FPDO']['y'],
+                                                'v':v_array})
+            tplot_variables.append('erg_lepi_l2_FPDO')
 
-        v_array = loaded_data['erg_lepi_l2_FHEDO']['v']
-        v_array = np.where(v_array < 0. , np.nan, v_array) # change minus values to NaN
-        store_data('erg_lepi_l2_FHEDO', data={'x':loaded_data['erg_lepi_l2_FHEDO']['x'],
-                                            'y':loaded_data['erg_lepi_l2_FHEDO']['y'],
-                                            'v':v_array})
-        tplot_variables.append('erg_lepi_l2_FHEDO')
+        if 'erg_lepi_l2_FHEDO' in loaded_data:
+            v_array = loaded_data['erg_lepi_l2_FHEDO']['v']
+            v_array = np.where(v_array < 0. , np.nan, v_array) # change minus values to NaN
+            store_data('erg_lepi_l2_FHEDO', data={'x':loaded_data['erg_lepi_l2_FHEDO']['x'],
+                                                'y':loaded_data['erg_lepi_l2_FHEDO']['y'],
+                                                'v':v_array})
+            tplot_variables.append('erg_lepi_l2_FHEDO')
 
-        v_array = loaded_data['erg_lepi_l2_FODO']['v']
-        v_array = np.where(v_array < 0. , np.nan, v_array) # change minus values to NaN
-        store_data('erg_lepi_l2_FODO', data={'x':loaded_data['erg_lepi_l2_FODO']['x'],
-                                            'y':loaded_data['erg_lepi_l2_FODO']['y'],
-                                            'v':v_array})
-        tplot_variables.append('erg_lepi_l2_FODO')
+        if 'erg_lepi_l2_FODO' in loaded_data:
+            v_array = loaded_data['erg_lepi_l2_FODO']['v']
+            v_array = np.where(v_array < 0. , np.nan, v_array) # change minus values to NaN
+            store_data('erg_lepi_l2_FODO', data={'x':loaded_data['erg_lepi_l2_FODO']['x'],
+                                                'y':loaded_data['erg_lepi_l2_FODO']['y'],
+                                                'v':v_array})
+            tplot_variables.append('erg_lepi_l2_FODO')
 
         # remove minus valuse of y array
         clip('erg_lepi_l2_FPDO', 0., 2.e+16)
