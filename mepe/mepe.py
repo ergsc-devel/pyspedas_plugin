@@ -130,10 +130,10 @@ def mepe(trange=['2017-03-27', '2017-03-28'],
         options('erg_mepe_' + level + '_count_raw' + suffix, 'ylog', 1)
 
         # set yrange
-        options('erg_mepe_' + level + '_FEDU' + suffix, 'yrange', [6., 100.])
-        options('erg_mepe_' + level + '_FEDU_n' + suffix, 'yrange', [6., 100.])
-        options('erg_mepe_' + level + '_FEEDU' + suffix, 'yrange', [6., 100.])
-        options('erg_mepe_' + level + '_count_raw' + suffix, 'yrange', [6., 100.])
+        #options('erg_mepe_' + level + '_FEDU' + suffix, 'yrange', [6., 100.])
+        #options('erg_mepe_' + level + '_FEDU_n' + suffix, 'yrange', [6., 100.])
+        #options('erg_mepe_' + level + '_FEEDU' + suffix, 'yrange', [6., 100.])
+        #options('erg_mepe_' + level + '_count_raw' + suffix, 'yrange', [6., 100.])
 
         # set ysubtitle
         options('erg_mepe_' + level + '_FEDU' + suffix, 'ysubtitle', '[keV]')
@@ -152,10 +152,10 @@ def mepe(trange=['2017-03-27', '2017-03-28'],
         options('erg_mepe_' + level + '_count_raw' + suffix, 'zlog', 1)
 
         # set zrange
-        options('erg_mepe_' + level + '_FEDU' + suffix, 'zrange', [1.05*1.0e+4 , 2.0*1.0e+9])
-        options('erg_mepe_' + level + '_FEDU_n' + suffix, 'zrange', [.95e+4 , 1.05e+9])
-        options('erg_mepe_' + level + '_FEEDU' + suffix, 'zrange', [6.0e+5 , 1.0e+10])
-        options('erg_mepe_' + level + '_count_raw' + suffix, 'zrange', [1.0e+0 , 1.0e+4])
+        #options('erg_mepe_' + level + '_FEDU' + suffix, 'zrange', [1.05*1.0e+4 , 2.0*1.0e+9])
+        #options('erg_mepe_' + level + '_FEDU_n' + suffix, 'zrange', [.95e+4 , 1.05e+9])
+        #options('erg_mepe_' + level + '_FEEDU' + suffix, 'zrange', [6.0e+5 , 1.0e+10])
+        #options('erg_mepe_' + level + '_count_raw' + suffix, 'zrange', [1.0e+0 , 1.0e+4])
 
         # set ztitle
         options('erg_mepe_' + level + '_FEDU' + suffix, 'ztitle', '[/s-cm^{2}-sr-keV]')
