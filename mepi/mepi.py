@@ -98,13 +98,11 @@ def mepi(trange=['2017-03-27', '2017-03-28'],
                                 'FPDO_tof', 'FHE2DO_tof', 'FHEDO_tof', 'FOPPDO_tof', 'FODO_tof', 'FO2PDO_tof']
         tplot_names_list = []
         for i in range(len(original_suffix_list)):
-            tplot_names_list.append(prefix + original_suffix_list[i])
+            tplot_names_list.append(prefix + original_suffix_list[i] + suffix)
             ylim(tplot_names_list[i], 4, 190)
 
         # set spectrogram plot option
-        options('erg_mepi_' + level + '_FPDO' + suffix, 'Spec', 1)
-        options('erg_mepi_' + level + '_FHE2DO' + suffix, 'Spec', 1)
-        options('erg_mepi_' + level + '_FHEDO' + suffix, 'Spec', 1)
+        options(tplot_names_list, 'Spec', 1)
 
         # set y axis to logscale
         options('erg_mepi_' + level + '_FPDO' + suffix, 'ylog', 1)
