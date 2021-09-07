@@ -2,7 +2,7 @@
 #from pyspedas.erg.load import load
 from load import load
 import numpy as np
-from pytplot import options, clip, ylim, store_data
+from pytplot import options, clip, ylim, zlim, store_data
 import cdflib
 
 def lepi(trange=['2017-07-01', '2017-07-02'],
@@ -153,10 +153,16 @@ def lepi(trange=['2017-07-01', '2017-07-02'],
             # set y axis to logscale
             options(tplot_variables, 'ylog', 1)
 
+            for i in range(len(tplot_variables)):
+                # set ylim
+                ylim(tplot_variables[i], 0.01, 25.0)
+                # set zlim
+                zlim(tplot_variables[i], 1e+1, 1e+9)
+
             # set yrange
-            options('erg_lepi_l2_FPDO' + suffix, 'yrange', [0.01, 20.])
-            options('erg_lepi_l2_FHEDO' + suffix, 'yrange', [0.01, 20.])
-            options('erg_lepi_l2_FODO' + suffix, 'yrange', [0.01, 20.])
+            #options('erg_lepi_l2_FPDO' + suffix, 'yrange', [0.01, 20.])
+            #options('erg_lepi_l2_FHEDO' + suffix, 'yrange', [0.01, 20.])
+            #options('erg_lepi_l2_FODO' + suffix, 'yrange', [0.01, 20.])
 
             # set ztitle
             options(tplot_variables, 'ztitle', '[/cm^2-str-s-keV]')
@@ -165,9 +171,9 @@ def lepi(trange=['2017-07-01', '2017-07-02'],
             options(tplot_variables, 'zlog', 1)
 
             # set zrange
-            options('erg_lepi_l2_FPDO' + suffix, 'zrange', [1.e+02, 1.e+09])
-            options('erg_lepi_l2_FHEDO' + suffix, 'zrange', [1.e+02, 1.e+09])
-            options('erg_lepi_l2_FODO' + suffix, 'zrange', [1.e+01, 1.e+08])
+            #options('erg_lepi_l2_FPDO' + suffix, 'zrange', [1.e+02, 1.e+09])
+            #options('erg_lepi_l2_FHEDO' + suffix, 'zrange', [1.e+02, 1.e+09])
+            #options('erg_lepi_l2_FODO' + suffix, 'zrange', [1.e+01, 1.e+08])
 
             # change colormap option
             options(tplot_variables, 'Colormap', 'jet')
