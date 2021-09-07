@@ -127,6 +127,14 @@ def mepi(trange=['2017-03-27', '2017-03-28'],
         #options('erg_mepi_' + level + '_FHEDO' + suffix, 'zrange', [7.e+00, 8.e+04])
 
         # change colormap option
-        options(tplot_names_list, 'Colormap', 'jet')        
-
+        options(tplot_names_list, 'Colormap', 'jet')
+    elif datatype == '3dflux' and level == 'l2':
+        prefix = 'erg_mepi_l2_'
+        original_suffix_list = ['FPDU', 'FHE2DU', 'FHEDU', 'FOPPDU', 'FODU', 'FO2PDU',
+                        'count_raw_P', 'count_raw_HE2', 'count_raw_HE', 'count_raw_OPP', 'count_raw_O', 'count_raw_O2P']
+        tplot_names_list = []
+        for i in range(len(original_suffix_list)):
+            tplot_names_list.append(prefix + original_suffix_list[i] + suffix)
+            ylim(tplot_names_list[i], 4, 190)
+        
     return loaded_data
