@@ -99,7 +99,9 @@ def mepi(trange=['2017-03-27', '2017-03-28'],
         tplot_names_list = []
         for i in range(len(original_suffix_list)):
             tplot_names_list.append(prefix + original_suffix_list[i] + suffix)
+            # set ylim
             ylim(tplot_names_list[i], 4, 190)
+
 
         # set spectrogram plot option
         options(tplot_names_list, 'Spec', 1)
