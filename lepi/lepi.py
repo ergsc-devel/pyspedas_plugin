@@ -156,6 +156,11 @@ def lepi(trange=['2017-07-01', '2017-07-02'],
             options('erg_lepi_l2_FHEDO' + suffix, 'yrange', [0.01, 20.])
             options('erg_lepi_l2_FODO' + suffix, 'yrange', [0.01, 20.])
 
+            # set ztitle
+            options('erg_lepi_l2_FPDO' + suffix, 'ztitle', '[/cm^2-str-s-keV]')
+            options('erg_lepi_l2_FHEDO' + suffix, 'ztitle', '[/cm^2-str-s-keV]')
+            options('erg_lepi_l2_FODO' + suffix, 'ztitle', '[/cm^2-str-s-keV]')
+
             # set z axis to logscale
             options('erg_lepi_l2_FPDO' + suffix, 'zlog', 1)
             options('erg_lepi_l2_FHEDO' + suffix, 'zlog', 1)
