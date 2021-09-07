@@ -108,6 +108,8 @@ def pwe_ofa(trange=['2017-04-01', '2017-04-02'],
         # set zlim
         zlim('erg_pwe_ofa_'+level+'_E_spectra_132'+suffix, 1e-9, 1e-2)
 
+    # set ytitle
+    options('erg_pwe_ofa_'+level+'_E_spectra_132'+suffix,  'ytitle', 'ERG PWE/OFA-SPEC (E)')
 
     # set yrange
     #options('erg_pwe_ofa_'+level+'_E_spectra_132'+suffix,  'yrange', [0., 10.])
