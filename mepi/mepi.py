@@ -91,34 +91,37 @@ def mepi(trange=['2017-03-27', '2017-03-28'],
         print('Contact: erg_mep_info at isee.nagoya-u.ac.jp')
         print('**************************************************************************')
 
-    # set spectrogram plot option
-    options('erg_mepi_' + level + '_FPDO', 'Spec', 1)
-    options('erg_mepi_' + level + '_FHE2DO', 'Spec', 1)
-    options('erg_mepi_' + level + '_FHEDO', 'Spec', 1)
 
-    # set y axis to logscale
-    options('erg_mepi_' + level + '_FPDO', 'ylog', 1)
-    options('erg_mepi_' + level + '_FHE2DO', 'ylog', 1)
-    options('erg_mepi_' + level + '_FHEDO', 'ylog', 1)
+    if datatype == 'omniflux' and level == 'l2':
 
-    # set yrange
-    options('erg_mepi_' + level + '_FPDO', 'yrange', [4., 200.])
-    options('erg_mepi_' + level + '_FHE2DO', 'yrange', [4., 200.])
-    options('erg_mepi_' + level + '_FHEDO', 'yrange', [4., 200.])
+        # set spectrogram plot option
+        options('erg_mepi_' + level + '_FPDO' + suffix, 'Spec', 1)
+        options('erg_mepi_' + level + '_FHE2DO' + suffix, 'Spec', 1)
+        options('erg_mepi_' + level + '_FHEDO' + suffix, 'Spec', 1)
 
-    # set z axis to logscale
-    options('erg_mepi_' + level + '_FPDO', 'zlog', 1)
-    options('erg_mepi_' + level + '_FHE2DO', 'zlog', 1)
-    options('erg_mepi_' + level + '_FHEDO', 'zlog', 1)
+        # set y axis to logscale
+        options('erg_mepi_' + level + '_FPDO' + suffix, 'ylog', 1)
+        options('erg_mepi_' + level + '_FHE2DO' + suffix, 'ylog', 1)
+        options('erg_mepi_' + level + '_FHEDO' + suffix, 'ylog', 1)
 
-    # set zrange
-    options('erg_mepi_' + level + '_FPDO', 'zrange', [1.e+01, 1.e+06])
-    options('erg_mepi_' + level + '_FHE2DO', 'zrange', [6.e+00, 3.e+04])
-    options('erg_mepi_' + level + '_FHEDO', 'zrange', [7.e+00, 8.e+04])
+        # set yrange
+        options('erg_mepi_' + level + '_FPDO' + suffix, 'yrange', [4., 200.])
+        options('erg_mepi_' + level + '_FHE2DO' + suffix, 'yrange', [4., 200.])
+        options('erg_mepi_' + level + '_FHEDO' + suffix, 'yrange', [4., 200.])
 
-    # change colormap option
-    options('erg_mepi_' + level + '_FPDO', 'Colormap', 'jet')
-    options('erg_mepi_' + level + '_FHE2DO', 'Colormap', 'jet')
-    options('erg_mepi_' + level + '_FHEDO', 'Colormap', 'jet')
+        # set z axis to logscale
+        options('erg_mepi_' + level + '_FPDO' + suffix, 'zlog', 1)
+        options('erg_mepi_' + level + '_FHE2DO' + suffix, 'zlog', 1)
+        options('erg_mepi_' + level + '_FHEDO' + suffix, 'zlog', 1)
+
+        # set zrange
+        options('erg_mepi_' + level + '_FPDO' + suffix, 'zrange', [1.e+01, 1.e+06])
+        options('erg_mepi_' + level + '_FHE2DO' + suffix, 'zrange', [6.e+00, 3.e+04])
+        options('erg_mepi_' + level + '_FHEDO' + suffix, 'zrange', [7.e+00, 8.e+04])
+
+        # change colormap option
+        options('erg_mepi_' + level + '_FPDO' + suffix, 'Colormap', 'jet')
+        options('erg_mepi_' + level + '_FHE2DO' + suffix, 'Colormap', 'jet')
+        options('erg_mepi_' + level + '_FHEDO' + suffix, 'Colormap', 'jet')
 
     return loaded_data
