@@ -120,6 +120,7 @@ def pwe_ofa(trange=['2017-04-01', '2017-04-02'],
 
     # set ysubtitle
     options('erg_pwe_ofa_'+level+'_E_spectra_132'+suffix,  'ysubtitle', 'frequency [kHz]')
+    options('erg_pwe_ofa_'+level+'_B_spectra_132'+suffix,  'ysubtitle', 'frequency [kHz]')
 
     # set ztitle
     options('erg_pwe_ofa_'+level+'_E_spectra_132'+suffix,  'ztitle', 'mV^2/m^2/Hz')
