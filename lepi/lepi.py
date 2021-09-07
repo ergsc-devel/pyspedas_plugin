@@ -173,4 +173,12 @@ def lepi(trange=['2017-07-01', '2017-07-02'],
 
             return tplot_variables
 
+        elif datatype == '3dflux' and level == 'l2':
+            if 'erg_lepi_l2_FPDU' + suffix in loaded_data:
+                clip('erg_lepi_l2_FPDU' + suffix, -1.0e+10, 1.0e+10)
+            if 'erg_lepi_l2_FHEDU' + suffix in loaded_data:
+                clip('erg_lepi_l2_FHEDU' + suffix, -1.0e+10, 1.0e+10)
+            if 'erg_lepi_l2_FODU' + suffix in loaded_data:
+                clip('erg_lepi_l2_FODU' + suffix, -1.0e+10, 1.0e+10)
+
     return loaded_data
