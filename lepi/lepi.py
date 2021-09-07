@@ -142,14 +142,10 @@ def lepi(trange=['2017-07-01', '2017-07-02'],
                 clip('erg_lepi_l2_FPDO' + suffix, 0., 2.e+16)
             
             # set spectrogram plot option
-            options('erg_lepi_l2_FPDO' + suffix, 'Spec', 1)
-            options('erg_lepi_l2_FHEDO' + suffix, 'Spec', 1)
-            options('erg_lepi_l2_FODO' + suffix, 'Spec', 1)
+            options(tplot_variables, 'Spec', 1)
 
             # set y axis to logscale
-            options('erg_lepi_l2_FPDO' + suffix, 'ylog', 1)
-            options('erg_lepi_l2_FHEDO' + suffix, 'ylog', 1)
-            options('erg_lepi_l2_FODO' + suffix, 'ylog', 1)
+            options(tplot_variables, 'ylog', 1)
 
             # set yrange
             options('erg_lepi_l2_FPDO' + suffix, 'yrange', [0.01, 20.])
@@ -157,14 +153,10 @@ def lepi(trange=['2017-07-01', '2017-07-02'],
             options('erg_lepi_l2_FODO' + suffix, 'yrange', [0.01, 20.])
 
             # set ztitle
-            options('erg_lepi_l2_FPDO' + suffix, 'ztitle', '[/cm^2-str-s-keV]')
-            options('erg_lepi_l2_FHEDO' + suffix, 'ztitle', '[/cm^2-str-s-keV]')
-            options('erg_lepi_l2_FODO' + suffix, 'ztitle', '[/cm^2-str-s-keV]')
+            options(tplot_variables, 'ztitle', '[/cm^2-str-s-keV]')
 
             # set z axis to logscale
-            options('erg_lepi_l2_FPDO' + suffix, 'zlog', 1)
-            options('erg_lepi_l2_FHEDO' + suffix, 'zlog', 1)
-            options('erg_lepi_l2_FODO' + suffix, 'zlog', 1)
+            options(tplot_variables, 'zlog', 1)
 
             # set zrange
             options('erg_lepi_l2_FPDO' + suffix, 'zrange', [1.e+02, 1.e+09])
@@ -172,9 +164,7 @@ def lepi(trange=['2017-07-01', '2017-07-02'],
             options('erg_lepi_l2_FODO' + suffix, 'zrange', [1.e+01, 1.e+08])
 
             # change colormap option
-            options('erg_lepi_l2_FPDO' + suffix, 'Colormap', 'jet')
-            options('erg_lepi_l2_FHEDO' + suffix, 'Colormap', 'jet')
-            options('erg_lepi_l2_FODO' + suffix, 'Colormap', 'jet')
+            options(tplot_variables, 'Colormap', 'jet')
 
             return tplot_variables
 
