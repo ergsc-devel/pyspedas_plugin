@@ -116,9 +116,9 @@ def mepi(trange=['2017-03-27', '2017-03-28'],
         options(tplot_names_list, 'zlog', 1)
 
         # set zrange
-        options('erg_mepi_' + level + '_FPDO' + suffix, 'zrange', [1.e+01, 1.e+06])
-        options('erg_mepi_' + level + '_FHE2DO' + suffix, 'zrange', [6.e+00, 3.e+04])
-        options('erg_mepi_' + level + '_FHEDO' + suffix, 'zrange', [7.e+00, 8.e+04])
+        #options('erg_mepi_' + level + '_FPDO' + suffix, 'zrange', [1.e+01, 1.e+06])
+        #options('erg_mepi_' + level + '_FHE2DO' + suffix, 'zrange', [6.e+00, 3.e+04])
+        #options('erg_mepi_' + level + '_FHEDO' + suffix, 'zrange', [7.e+00, 8.e+04])
 
         # change colormap option
         options('erg_mepi_' + level + '_FPDO' + suffix, 'Colormap', 'jet')
