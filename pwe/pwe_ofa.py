@@ -108,8 +108,17 @@ def pwe_ofa(trange=['2017-04-01', '2017-04-02'],
         # set zlim
         zlim('erg_pwe_ofa_'+level+'_E_spectra_132'+suffix, 1e-9, 1e-2)
 
+    if 'erg_pwe_ofa_'+level+'_B_spectra_132'+suffix in loaded_data:
+        # set ylim
+        ylim('erg_pwe_ofa_'+level+'_B_spectra_132'+suffix, 32e-3, 20.)
+        # set zlim
+        zlim('erg_pwe_ofa_'+level+'_B_spectra_132'+suffix, 1e-4, 1e2)
+
     # set ytitle
     options('erg_pwe_ofa_'+level+'_E_spectra_132'+suffix,  'ytitle', 'ERG PWE/OFA-SPEC (E)')
+
+    # set ysubtitle
+    options('erg_pwe_ofa_'+level+'_E_spectra_132'+suffix,  'ysubtitle', 'frequency [kHz]')
 
     # set ztitle
     options('erg_pwe_ofa_'+level+'_E_spectra_132'+suffix,  'ztitle', 'mV^2/m^2/Hz')
