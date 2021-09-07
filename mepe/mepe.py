@@ -102,6 +102,8 @@ def mepe(trange=['2017-03-27', '2017-03-28'],
         options('erg_mepe_' + level + '_FEDO' + suffix, 'ylog', 1)
         # set yrange
         #options('erg_mepe_' + level + '_FEDO' + suffix, 'yrange', [6., 90.])
+        # set ytitle
+        options('erg_mepe_' + level + '_FEDO' + suffix, 'ytitle', 'ERG\nMEP-e\nFEDO\nEnergy')
         # set ysubtitle
         options('erg_mepe_' + level + '_FEDO' + suffix, 'ysubtitle', '[keV]')
         # set ylim
@@ -110,7 +112,6 @@ def mepe(trange=['2017-03-27', '2017-03-28'],
         options('erg_mepe_' + level + '_FEDO' + suffix, 'zlog', 1)
         # set zrange
         #options('erg_mepe_' + level + '_FEDO' + suffix, 'zrange', [1.e+01, 1.e+07])
-        
         # set ztitle
         options('erg_mepe_' + level + '_FEDO' + suffix, 'ztitle', '[/s-cm^{2}-sr-keV]')
         # change colormap option
