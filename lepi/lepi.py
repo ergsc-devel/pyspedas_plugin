@@ -141,6 +141,9 @@ def lepi(trange=['2017-07-01', '2017-07-02'],
             if 'erg_lepi_l2_FPDO' + suffix in loaded_data:
                 clip('erg_lepi_l2_FPDO' + suffix, 0., 2.e+16)
             
+            # set ytitle
+            options(tplot_variables, 'ytitle', 'LEPi\nomniflux\nLv2\nEnergy')
+            
             # set spectrogram plot option
             options(tplot_variables, 'Spec', 1)
 
