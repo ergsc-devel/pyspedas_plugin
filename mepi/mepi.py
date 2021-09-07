@@ -128,6 +128,7 @@ def mepi(trange=['2017-03-27', '2017-03-28'],
 
         # change colormap option
         options(tplot_names_list, 'Colormap', 'jet')
+        
     elif datatype == '3dflux' and level == 'l2':
         prefix = 'erg_mepi_l2_'
         original_suffix_list = ['FPDU', 'FHE2DU', 'FHEDU', 'FOPPDU', 'FODU', 'FO2PDU',
@@ -137,4 +138,10 @@ def mepi(trange=['2017-03-27', '2017-03-28'],
             tplot_names_list.append(prefix + original_suffix_list[i] + suffix)
             ylim(tplot_names_list[i], 4, 190)
         
+        # set spectrogram plot option
+        options(tplot_names_list, 'Spec', 1)
+
+        # set y axis to logscale
+        options(tplot_names_list, 'ylog', 1)
+
     return loaded_data
