@@ -113,9 +113,7 @@ def mepi(trange=['2017-03-27', '2017-03-28'],
         #options('erg_mepi_' + level + '_FHEDO' + suffix, 'yrange', [4., 200.])
 
         # set z axis to logscale
-        options('erg_mepi_' + level + '_FPDO' + suffix, 'zlog', 1)
-        options('erg_mepi_' + level + '_FHE2DO' + suffix, 'zlog', 1)
-        options('erg_mepi_' + level + '_FHEDO' + suffix, 'zlog', 1)
+        options(tplot_names_list, 'zlog', 1)
 
         # set zrange
         options('erg_mepi_' + level + '_FPDO' + suffix, 'zrange', [1.e+01, 1.e+06])
