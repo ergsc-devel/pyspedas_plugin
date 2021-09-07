@@ -145,7 +145,7 @@ def lepi(trange=['2017-07-01', '2017-07-02'],
             options(tplot_variables, 'ytitle', 'LEPi\nomniflux\nLv2\nEnergy')
 
             # set ysubtitle
-            options(tplot_variables, 'ysubtitle', '[keV]')
+            options(tplot_variables, 'ysubtitle', '[keV/q]')
             
             # set spectrogram plot option
             options(tplot_variables, 'Spec', 1)
