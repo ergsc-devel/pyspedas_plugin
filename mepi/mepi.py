@@ -1,7 +1,7 @@
 
 #from pyspedas.erg.load import load
 from load import load
-from pytplot import options, clip
+from pytplot import options, clip, ylim, zlim
 import cdflib
 
 def mepi(trange=['2017-03-27', '2017-03-28'],
@@ -93,6 +93,13 @@ def mepi(trange=['2017-03-27', '2017-03-28'],
 
 
     if datatype == 'omniflux' and level == 'l2':
+        prefix = 'erg_mepi_l2_'
+        original_suffix_list = ['FPDO', 'FHE2DO', 'FHEDO', 'FOPPDO', 'FODO', 'FO2PDO',
+                                'FPDO_tof', 'FHE2DO_tof', 'FHEDO_tof', 'FOPPDO_tof', 'FODO_tof', 'FO2PDO_tof']
+        tplot_names_list = []
+        for i in range(len(original_suffix_list)):
+            tplot_names_list.append(prefix + original_suffix_list[i])
+            ylim(tplot_names_list[i], 4, 190)
 
         # set spectrogram plot option
         options('erg_mepi_' + level + '_FPDO' + suffix, 'Spec', 1)
