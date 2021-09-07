@@ -112,6 +112,9 @@ def mepi(trange=['2017-03-27', '2017-03-28'],
         #options('erg_mepi_' + level + '_FHE2DO' + suffix, 'yrange', [4., 200.])
         #options('erg_mepi_' + level + '_FHEDO' + suffix, 'yrange', [4., 200.])
 
+        # set ysubtitle
+        options(tplot_names_list, 'ysubtitle', '[keV/q]')
+
         # set z axis to logscale
         options(tplot_names_list, 'zlog', 1)
 
