@@ -107,64 +107,67 @@ def lepi(trange=['2017-07-01', '2017-07-02'],
 
 
     if type(loaded_data) is dict:
-        tplot_variables = []
-        if 'erg_lepi_l2_FPDO' in loaded_data:
-            v_array = loaded_data['erg_lepi_l2_FPDO']['v']
-            v_array = np.where(v_array < 0. , np.nan, v_array) # change minus values to NaN
-            store_data('erg_lepi_l2_FPDO', data={'x':loaded_data['erg_lepi_l2_FPDO']['x'],
-                                                'y':loaded_data['erg_lepi_l2_FPDO']['y'],
-                                                'v':v_array})
-            tplot_variables.append('erg_lepi_l2_FPDO')
 
-        if 'erg_lepi_l2_FHEDO' in loaded_data:
-            v_array = loaded_data['erg_lepi_l2_FHEDO']['v']
-            v_array = np.where(v_array < 0. , np.nan, v_array) # change minus values to NaN
-            store_data('erg_lepi_l2_FHEDO', data={'x':loaded_data['erg_lepi_l2_FHEDO']['x'],
-                                                'y':loaded_data['erg_lepi_l2_FHEDO']['y'],
-                                                'v':v_array})
-            tplot_variables.append('erg_lepi_l2_FHEDO')
+        if datatype == 'omniflux' and level == 'l2':
+            tplot_variables = []
+            if 'erg_lepi_l2_FPDO' in loaded_data:
+                v_array = loaded_data['erg_lepi_l2_FPDO']['v']
+                v_array = np.where(v_array < 0. , np.nan, v_array) # change minus values to NaN
+                store_data('erg_lepi_l2_FPDO', data={'x':loaded_data['erg_lepi_l2_FPDO']['x'],
+                                                    'y':loaded_data['erg_lepi_l2_FPDO']['y'],
+                                                    'v':v_array})
+                tplot_variables.append('erg_lepi_l2_FPDO')
 
-        if 'erg_lepi_l2_FODO' in loaded_data:
-            v_array = loaded_data['erg_lepi_l2_FODO']['v']
-            v_array = np.where(v_array < 0. , np.nan, v_array) # change minus values to NaN
-            store_data('erg_lepi_l2_FODO', data={'x':loaded_data['erg_lepi_l2_FODO']['x'],
-                                                'y':loaded_data['erg_lepi_l2_FODO']['y'],
-                                                'v':v_array})
-            tplot_variables.append('erg_lepi_l2_FODO')
+            if 'erg_lepi_l2_FHEDO' in loaded_data:
+                v_array = loaded_data['erg_lepi_l2_FHEDO']['v']
+                v_array = np.where(v_array < 0. , np.nan, v_array) # change minus values to NaN
+                store_data('erg_lepi_l2_FHEDO', data={'x':loaded_data['erg_lepi_l2_FHEDO']['x'],
+                                                    'y':loaded_data['erg_lepi_l2_FHEDO']['y'],
+                                                    'v':v_array})
+                tplot_variables.append('erg_lepi_l2_FHEDO')
 
-        # remove minus valuse of y array
-        clip('erg_lepi_l2_FPDO', 0., 2.e+16)
-        
-        # set spectrogram plot option
-        options('erg_lepi_l2_FPDO', 'Spec', 1)
-        options('erg_lepi_l2_FHEDO', 'Spec', 1)
-        options('erg_lepi_l2_FODO', 'Spec', 1)
+            if 'erg_lepi_l2_FODO' in loaded_data:
+                v_array = loaded_data['erg_lepi_l2_FODO']['v']
+                v_array = np.where(v_array < 0. , np.nan, v_array) # change minus values to NaN
+                store_data('erg_lepi_l2_FODO', data={'x':loaded_data['erg_lepi_l2_FODO']['x'],
+                                                    'y':loaded_data['erg_lepi_l2_FODO']['y'],
+                                                    'v':v_array})
+                tplot_variables.append('erg_lepi_l2_FODO')
 
-        # set y axis to logscale
-        options('erg_lepi_l2_FPDO', 'ylog', 1)
-        options('erg_lepi_l2_FHEDO', 'ylog', 1)
-        options('erg_lepi_l2_FODO', 'ylog', 1)
+            # remove minus valuse of y array
+            if 'erg_lepi_l2_FPDO' in loaded_data:
+                clip('erg_lepi_l2_FPDO', 0., 2.e+16)
+            
+            # set spectrogram plot option
+            options('erg_lepi_l2_FPDO', 'Spec', 1)
+            options('erg_lepi_l2_FHEDO', 'Spec', 1)
+            options('erg_lepi_l2_FODO', 'Spec', 1)
 
-        # set yrange
-        options('erg_lepi_l2_FPDO', 'yrange', [0.01, 20.])
-        options('erg_lepi_l2_FHEDO', 'yrange', [0.01, 20.])
-        options('erg_lepi_l2_FODO', 'yrange', [0.01, 20.])
+            # set y axis to logscale
+            options('erg_lepi_l2_FPDO', 'ylog', 1)
+            options('erg_lepi_l2_FHEDO', 'ylog', 1)
+            options('erg_lepi_l2_FODO', 'ylog', 1)
 
-        # set z axis to logscale
-        options('erg_lepi_l2_FPDO', 'zlog', 1)
-        options('erg_lepi_l2_FHEDO', 'zlog', 1)
-        options('erg_lepi_l2_FODO', 'zlog', 1)
+            # set yrange
+            options('erg_lepi_l2_FPDO', 'yrange', [0.01, 20.])
+            options('erg_lepi_l2_FHEDO', 'yrange', [0.01, 20.])
+            options('erg_lepi_l2_FODO', 'yrange', [0.01, 20.])
 
-        # set zrange
-        options('erg_lepi_l2_FPDO', 'zrange', [1.e+02, 1.e+09])
-        options('erg_lepi_l2_FHEDO', 'zrange', [1.e+02, 1.e+09])
-        options('erg_lepi_l2_FODO', 'zrange', [1.e+01, 1.e+08])
+            # set z axis to logscale
+            options('erg_lepi_l2_FPDO', 'zlog', 1)
+            options('erg_lepi_l2_FHEDO', 'zlog', 1)
+            options('erg_lepi_l2_FODO', 'zlog', 1)
 
-        # change colormap option
-        options('erg_lepi_l2_FPDO', 'Colormap', 'jet')
-        options('erg_lepi_l2_FHEDO', 'Colormap', 'jet')
-        options('erg_lepi_l2_FODO', 'Colormap', 'jet')
+            # set zrange
+            options('erg_lepi_l2_FPDO', 'zrange', [1.e+02, 1.e+09])
+            options('erg_lepi_l2_FHEDO', 'zrange', [1.e+02, 1.e+09])
+            options('erg_lepi_l2_FODO', 'zrange', [1.e+01, 1.e+08])
 
-        return tplot_variables
+            # change colormap option
+            options('erg_lepi_l2_FPDO', 'Colormap', 'jet')
+            options('erg_lepi_l2_FHEDO', 'Colormap', 'jet')
+            options('erg_lepi_l2_FODO', 'Colormap', 'jet')
+
+            return tplot_variables
 
     return loaded_data
