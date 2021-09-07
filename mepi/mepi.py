@@ -101,6 +101,11 @@ def mepi(trange=['2017-03-27', '2017-03-28'],
             tplot_names_list.append(prefix + original_suffix_list[i] + suffix)
             # set ylim
             ylim(tplot_names_list[i], 4, 190)
+            # set ytitle
+            if 'tof' in tplot_names_list[i]:
+                options(tplot_names_list[i], 'ytitle', f'ERG\nMEP-i/TOF\n{original_suffix_list[i]}\nEnergy')
+            else:
+                options(tplot_names_list[i], 'ytitle', f'ERG\nMEP-i/NML\n{original_suffix_list[i]}\nEnergy')
 
 
         # set spectrogram plot option
