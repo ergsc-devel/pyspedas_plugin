@@ -116,6 +116,7 @@ def pwe_ofa(trange=['2017-04-01', '2017-04-02'],
 
     # set ytitle
     options('erg_pwe_ofa_'+level+'_E_spectra_132'+suffix,  'ytitle', 'ERG PWE/OFA-SPEC (E)')
+    options('erg_pwe_ofa_'+level+'_B_spectra_132'+suffix,  'ytitle', 'ERG PWE/OFA-SPEC (B)')
 
     # set ysubtitle
     options('erg_pwe_ofa_'+level+'_E_spectra_132'+suffix,  'ysubtitle', 'frequency [kHz]')
