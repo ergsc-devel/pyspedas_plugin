@@ -154,4 +154,7 @@ def mepi(trange=['2017-03-27', '2017-03-28'],
         options(tplot_names_list[:6], 'ztitle', '[/s-cm^{2}-sr-keV/q]')
         options(tplot_names_list[6:], 'ztitle', '[cnt/smpl]')
 
+        # set z axis to logscale
+        options(tplot_names_list, 'zlog', 1)
+
     return loaded_data
