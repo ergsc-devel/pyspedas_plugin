@@ -183,6 +183,10 @@ def orb(trange=['2017-03-27', '2017-03-28'],
         options('erg_orb_l3_pos_lmc_t89' + suffix, 'ytitle', 'Lmc (t89)')
         options('erg_orb_l3_pos_lmc_TS04' + suffix, 'ytitle', 'Lmc (TS04)')
 
+        options('erg_orb_l3_pos_lstar_op' + suffix, 'ytitle', 'Lstar (op)')
+        options('erg_orb_l3_pos_lstar_t89' + suffix, 'ytitle', 'Lstar (t89)')
+        options('erg_orb_l3_pos_lstar_TS04' + suffix, 'ytitle', 'Lstar (TS04)')
+
         # set ysubtitle
         options('erg_orb_l3_pos_lmc_op' + suffix, 'ysubtitle', '[dimensionless]')
         options('erg_orb_l3_pos_lmc_t89' + suffix, 'ysubtitle', '[dimensionless]')
