@@ -117,6 +117,9 @@ def orb(trange=['2017-03-27', '2017-03-28'],
 
     options('erg_orb_l2_pos_blocal' + suffix, 'legend_names', ['X','Y','Z'])
 
+    options('erg_orb_l2_pos_blocal_mag' + suffix, 'legend_names', ['B(model)_at_ERG'])
+    #options('erg_orb_l2_pos_blocal_mag' + suffix, 'legend_names', ['B(model)\n_at_ERG']) # Can't break?
+
     # set color
     options('erg_orb_l2_pos_gse' + suffix, 'Color', ['b', 'g', 'r'])
     options('erg_orb_l2_pos_gsm' + suffix, 'Color', ['b', 'g', 'r'])
@@ -125,5 +128,6 @@ def orb(trange=['2017-03-27', '2017-03-28'],
     options('erg_orb_l2_pos_rmlatmlt' + suffix, 'Color', ['b', 'g', 'r'])
 
     options('erg_orb_l2_pos_blocal' + suffix, 'Color', ['b', 'g', 'r'])
+
 
     return loaded_data
