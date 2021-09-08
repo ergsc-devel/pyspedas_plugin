@@ -162,14 +162,17 @@ def orb(trange=['2017-03-27', '2017-03-28'],
     
     elif level == 'l3':
 
+        # remove -1.0e+30
+        for i in range(len(loaded_data)):
+            get_data_vars = get_data(loaded_data[i])
+            if len(get_data_vars) < 3:
+                if np.nanmin(get_data_vars[1]) < -1.0e+29:
+                    clip(loaded_data[i], -1e+6, 1e6)
+                    times, bdata = get_data(loaded_data[i])
+                    ylim(loaded_data[i], np.nanmin(bdata), np.nanmax(bdata))
+
         if model == 'op':
         
-            # remove -1.0e+30
-            if 'erg_orb_l3_pos_lmc_op' + suffix in loaded_data:
-                clip('erg_orb_l3_pos_lmc_op' + suffix, -1e+6, 1e6)
-                times, bdata = get_data('erg_orb_l3_pos_lmc_op' + suffix)
-                ylim('erg_orb_l3_pos_lmc_op' + suffix, np.nanmin(bdata), np.nanmax(bdata))
-
             # set ytitle
             options('erg_orb_l3_pos_lmc_op' + suffix, 'ytitle', 'Lmc (op)')
             options('erg_orb_l3_pos_lstar_op' + suffix, 'ytitle', 'Lstar (op)')
@@ -182,10 +185,6 @@ def orb(trange=['2017-03-27', '2017-03-28'],
                                                                         '40deg','30deg','20deg','10deg'])
 
         elif model == 't89':
-            if 'erg_orb_l3_pos_lmc_t89' + suffix in loaded_data:
-                clip('erg_orb_l3_pos_lmc_t89' + suffix, -1e+6, 1e6)
-                times, bdata = get_data('erg_orb_l3_pos_lmc_t89' + suffix)
-                ylim('erg_orb_l3_pos_lmc_t89' + suffix, np.nanmin(bdata), np.nanmax(bdata))
 
             # set ytitle
             options('erg_orb_l3_pos_lmc_t89' + suffix, 'ytitle', 'Lmc (t89)')
@@ -199,12 +198,6 @@ def orb(trange=['2017-03-27', '2017-03-28'],
                                                                             '40deg','30deg','20deg','10deg'])
 
         elif model == 'ts04':
-
-
-            if 'erg_orb_l3_pos_lmc_TS04' + suffix in loaded_data:
-                clip('erg_orb_l3_pos_lmc_TS04' + suffix, -1e+6, 1e6)
-                times, bdata = get_data('erg_orb_l3_pos_lmc_TS04' + suffix)
-                ylim('erg_orb_l3_pos_lmc_TS04' + suffix, np.nanmin(bdata), np.nanmax(bdata))
 
             # set ytitle
             options('erg_orb_l3_pos_lmc_TS04' + suffix, 'ytitle', 'Lmc (TS04)')
