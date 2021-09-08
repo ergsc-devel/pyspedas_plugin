@@ -7,6 +7,7 @@ import cdflib
 def orb(trange=['2017-03-27', '2017-03-28'],
         datatype='def',
         level='l2',
+        model="op",
         suffix='',  
         get_support_data=False, 
         varformat=None,
@@ -71,11 +72,11 @@ def orb(trange=['2017-03-27', '2017-03-28'],
 
     """
 
-    loaded_data = load(instrument='orb', trange=trange, level=level, datatype=datatype, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd, version=version)
+    loaded_data = load(instrument='orb', trange=trange, level=level, datatype=datatype, model=model,suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd, version=version)
 
     if len(loaded_data) > 0:
     
-        out_files = load(instrument='orb', trange=trange, level=level, datatype=datatype, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd,version=version)
+        out_files = load(instrument='orb', trange=trange, level=level, datatype=datatype, model=model, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd,version=version)
         cdf_file = cdflib.CDF(out_files[0])
         try:
             gatt = cdf_file.globalattsget()

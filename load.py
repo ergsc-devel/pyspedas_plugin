@@ -11,6 +11,7 @@ def load(trange=['2017-03-27', '2017-03-28'],
          datatype='8sec', 
          mode=None,
          site=None,
+         model=None,
          level='l2', 
          suffix='', 
          get_support_data=False, 
@@ -63,7 +64,10 @@ def load(trange=['2017-03-27', '2017-03-28'],
 
     elif instrument == 'orb':
         if level == 'l3':
-            pathformat = 'satellite/erg/'+instrument+'/'+level+'/opq/%Y/%m/erg_'+instrument+'_'+level+'_op_%Y%m%d_'
+            if model == 'op':
+                pathformat = 'satellite/erg/'+instrument+'/'+level+'/opq/%Y/%m/erg_'+instrument+'_'+level+'_op_%Y%m%d_'
+            else:
+                pathformat = 'satellite/erg/'+instrument+'/'+level+'/'+model+'/%Y/%m/erg_'+instrument+'_'+level+'_'+model+'_%Y%m%d_'
         elif level == 'l2':
             if datatype == 'def':
                 pathformat = 'satellite/erg/'+instrument+'/'+ datatype +'/%Y/erg_'+instrument+'_'+level+'_%Y%m%d_'
