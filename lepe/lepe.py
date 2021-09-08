@@ -104,9 +104,9 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
         print('RoR of ERG project common: https://ergsc.isee.nagoya-u.ac.jp/data_info/rules_of_the_road.shtml.en')
         if level == 'l2':
             print('RoR of LEPe L2: https://ergsc.isee.nagoya-u.ac.jp/mw/index.php/ErgSat/Lepe')
-        #if level == 'l3':
-         #   print('RoR of LEPe L3: https://ergsc.isee.nagoya-u.ac.jp/mw/index.php/ErgSat/Lepe')
-          #  print('RoR of MGF L2: https://ergsc.isee.nagoya-u.ac.jp/mw/index.php/ErgSat/Mgf')
+        if level == 'l3':
+            print('RoR of LEPe L3: https://ergsc.isee.nagoya-u.ac.jp/mw/index.php/ErgSat/Lepe')
+            print('RoR of MGF L2: https://ergsc.isee.nagoya-u.ac.jp/mw/index.php/ErgSat/Mgf')
         print('')
         print('Contact: erg_lepe_info at isee.nagoya-u.ac.jp')
         print('**************************************************************************')
