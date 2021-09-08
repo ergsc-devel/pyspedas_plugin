@@ -176,15 +176,19 @@ def orb(trange=['2017-03-27', '2017-03-28'],
             # set ytitle
             options('erg_orb_l3_pos_lmc_op' + suffix, 'ytitle', 'Lmc (op)')
             options('erg_orb_l3_pos_lstar_op' + suffix, 'ytitle', 'Lstar (op)')
+            options('erg_orb_l3_pos_I_op' + suffix, 'ytitle', 'I (op)')
 
             # set ysubtitle
             options('erg_orb_l3_pos_lmc_op' + suffix, 'ysubtitle', '[dimensionless]')
             options('erg_orb_l3_pos_lstar_op' + suffix, 'ysubtitle', '[dimensionless]')
+            options('erg_orb_l3_pos_I_op' + suffix, 'ysubtitle', '[Re]')
 
             # set ylabels
             options('erg_orb_l3_pos_lmc_op' + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg',
                                                                         '40deg','30deg','20deg','10deg'])
             options('erg_orb_l3_pos_lstar_op' + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg',
+                                                                        '40deg','30deg','20deg','10deg'])
+            options('erg_orb_l3_pos_I_op' + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg',
                                                                         '40deg','30deg','20deg','10deg'])
 
         elif model == 't89':
@@ -192,15 +196,19 @@ def orb(trange=['2017-03-27', '2017-03-28'],
             # set ytitle
             options('erg_orb_l3_pos_lmc_t89' + suffix, 'ytitle', 'Lmc (t89)')
             options('erg_orb_l3_pos_lstar_t89' + suffix, 'ytitle', 'Lstar (t89)')
+            options('erg_orb_l3_pos_I_t89' + suffix, 'ytitle', 'I (t89)')
 
             # set ysubtitle
             options('erg_orb_l3_pos_lmc_t89' + suffix, 'ysubtitle', '[dimensionless]')
             options('erg_orb_l3_pos_lstar_t89' + suffix, 'ysubtitle', '[dimensionless]')
+            options('erg_orb_l3_pos_I_t89' + suffix, 'ysubtitle', '[Re]')
 
             # set labels
             options('erg_orb_l3_pos_lmc_t89' + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg',
                                                                             '40deg','30deg','20deg','10deg'])
             options('erg_orb_l3_pos_lstar_t89' + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg',
+                                                                            '40deg','30deg','20deg','10deg'])
+            options('erg_orb_l3_pos_I_t89' + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg',
                                                                             '40deg','30deg','20deg','10deg'])
 
         elif model == 'ts04':
@@ -208,15 +216,19 @@ def orb(trange=['2017-03-27', '2017-03-28'],
             # set ytitle
             options('erg_orb_l3_pos_lmc_TS04' + suffix, 'ytitle', 'Lmc (TS04)')
             options('erg_orb_l3_pos_lstar_TS04' + suffix, 'ytitle', 'Lstar (TS04)')
+            options('erg_orb_l3_pos_I_TS04' + suffix, 'ytitle', 'I (TS04)')
 
             # set ysubtitle
             options('erg_orb_l3_pos_lmc_TS04' + suffix, 'ysubtitle', '[dimensionless]')
             options('erg_orb_l3_pos_lstar_TS04' + suffix, 'ysubtitle', '[dimensionless]')
+            options('erg_orb_l3_pos_I_TS04' + suffix, 'ysubtitle', '[Re]')
 
             # set labels
             options('erg_orb_l3_pos_lmc_TS04' + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg',
                                                                             '40deg','30deg','20deg','10deg'])
             options('erg_orb_l3_pos_lstar_TS04' + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg',
+                                                                            '40deg','30deg','20deg','10deg'])
+            options('erg_orb_l3_pos_I_TS04' + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg',
                                                                             '40deg','30deg','20deg','10deg'])
 
     return loaded_data
