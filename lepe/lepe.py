@@ -71,6 +71,9 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
         List of tplot variables created.
 
     """
+
+    suffix = '_' + datatype + suffix 
+
     if level == 'l2' and datatype == 'omniflux':
         notplot=True # to avoid failure of creation plot variables (at store_data.py) of lepe
     
