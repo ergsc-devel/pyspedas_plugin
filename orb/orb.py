@@ -1,8 +1,9 @@
 
 #from pyspedas.erg.load import load
 from load import load
-from pytplot import options, clip
+from pytplot import get_data, options, clip, ylim
 import cdflib
+import numpy as np
 
 def orb(trange=['2017-03-27', '2017-03-28'],
         datatype='def',
@@ -104,6 +105,13 @@ def orb(trange=['2017-03-27', '2017-03-28'],
 
 
     if level == 'l2' and datatype=='def':
+
+        # remove -1.0e+30
+        if 'erg_orb_l2_pos_Lm' + suffix in loaded_data:
+            clip('erg_orb_l2_pos_Lm' + suffix, -1e+6, 1e6)
+            times, bdata = get_data('erg_orb_l2_pos_Lm' + suffix)
+            ylim('erg_orb_l2_pos_Lm' + suffix, np.nanmin(bdata), np.nanmax(bdata))
+
 
         # set labels
         options('erg_orb_l2_pos_gse' + suffix, 'legend_names', ['X','Y','Z'])
