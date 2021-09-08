@@ -115,7 +115,7 @@ def orb(trange=['2017-03-27', '2017-03-28'],
     options('erg_orb_l2_pos_iono_north' + suffix, 'legend_names', ['GLAT','GLON'])
     options('erg_orb_l2_pos_iono_south' + suffix, 'legend_names', ['GLAT','GLON'])
 
-    options('erg_orb_l2_pos_blocal', 'legend_names', ['X','Y','Z'])
+    options('erg_orb_l2_pos_blocal' + suffix, 'legend_names', ['X','Y','Z'])
 
     # set color
     options('erg_orb_l2_pos_gse' + suffix, 'Color', ['b', 'g', 'r'])
@@ -123,5 +123,7 @@ def orb(trange=['2017-03-27', '2017-03-28'],
     options('erg_orb_l2_pos_sm' + suffix, 'Color', ['b', 'g', 'r'])
 
     options('erg_orb_l2_pos_rmlatmlt' + suffix, 'Color', ['b', 'g', 'r'])
+
+    options('erg_orb_l2_pos_blocal' + suffix, 'Color', ['b', 'g', 'r'])
 
     return loaded_data
