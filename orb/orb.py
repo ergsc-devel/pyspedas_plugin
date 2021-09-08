@@ -159,5 +159,27 @@ def orb(trange=['2017-03-27', '2017-03-28'],
         options('erg_orb_l2_pos_blocal_mag' + suffix, 'ylog', 1)
 
         options('erg_orb_l2_pos_beq' + suffix, 'ylog', 1)
+    
+    elif level == 'l3':
+
+        # remove -1.0e+30
+        if 'erg_orb_l3_pos_lmc_op' + suffix in loaded_data:
+            clip('erg_orb_l3_pos_lmc_op' + suffix, -1e+6, 1e6)
+            times, bdata = get_data('erg_orb_l3_pos_lmc_op' + suffix)
+            ylim('erg_orb_l3_pos_lmc_op' + suffix, np.nanmin(bdata), np.nanmax(bdata))
+
+        if 'erg_orb_l3_pos_lmc_t89' + suffix in loaded_data:
+            clip('erg_orb_l3_pos_lmc_t89' + suffix, -1e+6, 1e6)
+            times, bdata = get_data('erg_orb_l3_pos_lmc_t89' + suffix)
+            ylim('erg_orb_l3_pos_lmc_t89' + suffix, np.nanmin(bdata), np.nanmax(bdata))
+
+        if 'erg_orb_l3_pos_lmc_TS04' + suffix in loaded_data:
+            clip('erg_orb_l3_pos_lmc_TS04' + suffix, -1e+6, 1e6)
+            times, bdata = get_data('erg_orb_l3_pos_lmc_TS04' + suffix)
+            ylim('erg_orb_l3_pos_lmc_TS04' + suffix, np.nanmin(bdata), np.nanmax(bdata))
+
+        options('erg_orb_l3_pos_lmc_op' + suffix, 'ytitle', 'Lmc (op)')
+        options('erg_orb_l3_pos_lmc_t89' + suffix, 'ytitle', 'Lmc (t89)')
+        options('erg_orb_l3_pos_lmc_TS04' + suffix, 'ytitle', 'Lmc (TS04)')
 
     return loaded_data
