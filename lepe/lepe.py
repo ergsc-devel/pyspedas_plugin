@@ -13,7 +13,7 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
         varformat=None,
         varnames=[],
         downloadonly=False,
-        notplot=True, # to avoid failure of creation plot variables (at store_data.py) of lepe
+        notplot=False,
         no_update=False,
         uname=None,
         passwd=None,
@@ -67,7 +67,9 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
         List of tplot variables created.
 
     """
-
+    if level == 'l2' and datatype == 'omniflux':
+        notplot=True # to avoid failure of creation plot variables (at store_data.py) of lepe
+    
     loaded_data = load(instrument='lepe', trange=trange, level=level, datatype=datatype, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
 
     
