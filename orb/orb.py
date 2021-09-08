@@ -178,8 +178,23 @@ def orb(trange=['2017-03-27', '2017-03-28'],
             times, bdata = get_data('erg_orb_l3_pos_lmc_TS04' + suffix)
             ylim('erg_orb_l3_pos_lmc_TS04' + suffix, np.nanmin(bdata), np.nanmax(bdata))
 
+        # set ytitle
         options('erg_orb_l3_pos_lmc_op' + suffix, 'ytitle', 'Lmc (op)')
         options('erg_orb_l3_pos_lmc_t89' + suffix, 'ytitle', 'Lmc (t89)')
         options('erg_orb_l3_pos_lmc_TS04' + suffix, 'ytitle', 'Lmc (TS04)')
+
+        # set ysubtitle
+        options('erg_orb_l3_pos_lmc_op' + suffix, 'ysubtitle', '[dimensionless]')
+        options('erg_orb_l3_pos_lmc_t89' + suffix, 'ysubtitle', '[dimensionless]')
+        options('erg_orb_l3_pos_lmc_TS04' + suffix, 'ysubtitle', '[dimensionless]')
+
+        # set labels
+#        options('erg_orb_l2_pos_gse' + suffix, 'legend_names', ['X','Y','Z'])
+        options('erg_orb_l3_pos_lmc_op' + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg','40deg','30deg','20deg','10deg']
+)
+        options('erg_orb_l3_pos_lmc_t89' + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg','40deg','30deg','20deg','10deg']
+)
+        options('erg_orb_l3_pos_lmc_TS04' + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg','40deg','30deg','20deg','10deg']
+)
 
     return loaded_data
