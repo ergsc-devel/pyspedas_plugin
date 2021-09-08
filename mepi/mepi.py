@@ -170,7 +170,7 @@ def mepi(trange=['2017-03-27', '2017-03-28'],
         # set z axis to logscale
         options(tplot_names_list, 'zlog', 1)
 
-    elif type(datatype) is list:
+    elif type(datatype) is list: # for tof Variables
         if 'flux' in datatype:
             prefix = 'erg_mepi_l2_'
             original_suffix_list = ['FPDU', 'FHE2DU', 'FHEDU', 'FOPPDU', 'FODU', 'FO2PDU',
@@ -196,5 +196,16 @@ def mepi(trange=['2017-03-27', '2017-03-28'],
 
             # set z axis to logscale
             options(tplot_names_list, 'zlog', 1)
+
+        elif 'raw' in datatype:
+
+            # set spectrogram plot option
+            options(loaded_data, 'Spec', 1)
+
+            # set z axis to logscale
+            options(loaded_data, 'zlog', 1)
+
+
+        
 
     return loaded_data
