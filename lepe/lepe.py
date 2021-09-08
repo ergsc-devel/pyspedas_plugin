@@ -72,6 +72,9 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
 
     """
 
+    if level == 'l3':
+        datatype = 'pa'
+    
     suffix = '_' + datatype + suffix 
 
     if level == 'l2' and datatype == 'omniflux':
