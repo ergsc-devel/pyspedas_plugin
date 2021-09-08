@@ -115,4 +115,6 @@ def orb(trange=['2017-03-27', '2017-03-28'],
     options('erg_orb_l2_pos_gsm' + suffix, 'Color', ['b', 'g', 'r'])
     options('erg_orb_l2_pos_sm' + suffix, 'Color', ['b', 'g', 'r'])
 
+    options('erg_orb_l2_pos_rmlatmlt' + suffix, 'Color', ['b', 'g', 'r'])
+
     return loaded_data
