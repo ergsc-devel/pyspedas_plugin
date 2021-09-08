@@ -65,7 +65,10 @@ def load(trange=['2017-03-27', '2017-03-28'],
         if level == 'l3':
             pathformat = 'satellite/erg/'+instrument+'/'+level+'/opq/%Y/%m/erg_'+instrument+'_'+level+'_op_%Y%m%d_'
         elif level == 'l2':
-            pathformat = 'satellite/erg/'+instrument+'/'+ datatype +'/%Y/erg_'+instrument+'_'+level+'_%Y%m%d_'
+            if datatype == 'def':
+                pathformat = 'satellite/erg/'+instrument+'/'+ datatype +'/%Y/erg_'+instrument+'_'+level+'_%Y%m%d_'
+            else:
+                pathformat = 'satellite/erg/'+instrument+'/'+ datatype +'/%Y/erg_'+instrument+'_'+ datatype + '_'+level+'_%Y%m%d_'
 
 
         if version == None:
