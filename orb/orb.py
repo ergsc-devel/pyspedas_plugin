@@ -73,24 +73,29 @@ def orb(trange=['2017-03-27', '2017-03-28'],
     
         out_files = load(instrument='orb', trange=trange, level=level, datatype=datatype, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd)
         cdf_file = cdflib.CDF(out_files[0])
-        gatt = cdf_file.globalattsget()
+        try:
+            gatt = cdf_file.globalattsget()
+        except:
+            gatt = None
 
-        # --- print PI info and rules of the road
+        if gatt is not None:
 
-        print(' ')
-        print('**************************************************************************')
-        print(gatt["LOGICAL_SOURCE_DESCRIPTION"])
-        print('')
-        #print('Information about ERG L3 orbit')
-        print('Information about ERG orbit')
-        print('')
-        #print('PI: ', gatt['PI_NAME']) # not need?
-        #print("Affiliation: "+gatt["PI_AFFILIATION"]) # not need?
-        print('')
-        print('RoR of ERG project common: https://ergsc.isee.nagoya-u.ac.jp/data_info/rules_of_the_road.shtml.en')
-        print('')
-        print('Contact: erg-sc-core at isee.nagoya-u.ac.jp')
-        print('**************************************************************************')
+            # --- print PI info and rules of the road
+
+            print(' ')
+            print('**************************************************************************')
+            print(gatt["LOGICAL_SOURCE_DESCRIPTION"])
+            print('')
+            #print('Information about ERG L3 orbit')
+            print('Information about ERG orbit')
+            print('')
+            #print('PI: ', gatt['PI_NAME']) # not need?
+            #print("Affiliation: "+gatt["PI_AFFILIATION"]) # not need?
+            print('')
+            print('RoR of ERG project common: https://ergsc.isee.nagoya-u.ac.jp/data_info/rules_of_the_road.shtml.en')
+            print('')
+            print('Contact: erg-sc-core at isee.nagoya-u.ac.jp')
+            print('**************************************************************************')
 
 
     return loaded_data
