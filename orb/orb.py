@@ -6,7 +6,7 @@ import cdflib
 
 def orb(trange=['2017-03-27', '2017-03-28'],
         datatype='8sec', 
-        level='l3', 
+        level='l2',
         suffix='',  
         get_support_data=False, 
         varformat=None,
