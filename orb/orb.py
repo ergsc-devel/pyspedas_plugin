@@ -162,43 +162,63 @@ def orb(trange=['2017-03-27', '2017-03-28'],
     
     elif level == 'l3':
 
-        # remove -1.0e+30
-        if 'erg_orb_l3_pos_lmc_op' + suffix in loaded_data:
-            clip('erg_orb_l3_pos_lmc_op' + suffix, -1e+6, 1e6)
-            times, bdata = get_data('erg_orb_l3_pos_lmc_op' + suffix)
-            ylim('erg_orb_l3_pos_lmc_op' + suffix, np.nanmin(bdata), np.nanmax(bdata))
+        if model == 'op':
+        
+            # remove -1.0e+30
+            if 'erg_orb_l3_pos_lmc_op' + suffix in loaded_data:
+                clip('erg_orb_l3_pos_lmc_op' + suffix, -1e+6, 1e6)
+                times, bdata = get_data('erg_orb_l3_pos_lmc_op' + suffix)
+                ylim('erg_orb_l3_pos_lmc_op' + suffix, np.nanmin(bdata), np.nanmax(bdata))
 
-        if 'erg_orb_l3_pos_lmc_t89' + suffix in loaded_data:
-            clip('erg_orb_l3_pos_lmc_t89' + suffix, -1e+6, 1e6)
-            times, bdata = get_data('erg_orb_l3_pos_lmc_t89' + suffix)
-            ylim('erg_orb_l3_pos_lmc_t89' + suffix, np.nanmin(bdata), np.nanmax(bdata))
+            # set ytitle
+            options('erg_orb_l3_pos_lmc_op' + suffix, 'ytitle', 'Lmc (op)')
+            options('erg_orb_l3_pos_lstar_op' + suffix, 'ytitle', 'Lstar (op)')
 
-        if 'erg_orb_l3_pos_lmc_TS04' + suffix in loaded_data:
-            clip('erg_orb_l3_pos_lmc_TS04' + suffix, -1e+6, 1e6)
-            times, bdata = get_data('erg_orb_l3_pos_lmc_TS04' + suffix)
-            ylim('erg_orb_l3_pos_lmc_TS04' + suffix, np.nanmin(bdata), np.nanmax(bdata))
+            # set ysubtitle
+            options('erg_orb_l3_pos_lmc_op' + suffix, 'ysubtitle', '[dimensionless]')
 
-        # set ytitle
-        options('erg_orb_l3_pos_lmc_op' + suffix, 'ytitle', 'Lmc (op)')
-        options('erg_orb_l3_pos_lmc_t89' + suffix, 'ytitle', 'Lmc (t89)')
-        options('erg_orb_l3_pos_lmc_TS04' + suffix, 'ytitle', 'Lmc (TS04)')
+            # set ylabels
+            options('erg_orb_l3_pos_lmc_op' + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg',
+                                                                        '40deg','30deg','20deg','10deg'])
 
-        options('erg_orb_l3_pos_lstar_op' + suffix, 'ytitle', 'Lstar (op)')
-        options('erg_orb_l3_pos_lstar_t89' + suffix, 'ytitle', 'Lstar (t89)')
-        options('erg_orb_l3_pos_lstar_TS04' + suffix, 'ytitle', 'Lstar (TS04)')
+        elif model == 't89':
+            if 'erg_orb_l3_pos_lmc_t89' + suffix in loaded_data:
+                clip('erg_orb_l3_pos_lmc_t89' + suffix, -1e+6, 1e6)
+                times, bdata = get_data('erg_orb_l3_pos_lmc_t89' + suffix)
+                ylim('erg_orb_l3_pos_lmc_t89' + suffix, np.nanmin(bdata), np.nanmax(bdata))
 
-        # set ysubtitle
-        options('erg_orb_l3_pos_lmc_op' + suffix, 'ysubtitle', '[dimensionless]')
-        options('erg_orb_l3_pos_lmc_t89' + suffix, 'ysubtitle', '[dimensionless]')
-        options('erg_orb_l3_pos_lmc_TS04' + suffix, 'ysubtitle', '[dimensionless]')
+            # set ytitle
+            options('erg_orb_l3_pos_lmc_t89' + suffix, 'ytitle', 'Lmc (t89)')
+            options('erg_orb_l3_pos_lstar_t89' + suffix, 'ytitle', 'Lstar (t89)')
 
-        # set labels
-#        options('erg_orb_l2_pos_gse' + suffix, 'legend_names', ['X','Y','Z'])
-        options('erg_orb_l3_pos_lmc_op' + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg','40deg','30deg','20deg','10deg']
-)
-        options('erg_orb_l3_pos_lmc_t89' + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg','40deg','30deg','20deg','10deg']
-)
-        options('erg_orb_l3_pos_lmc_TS04' + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg','40deg','30deg','20deg','10deg']
-)
+            # set ysubtitle
+            options('erg_orb_l3_pos_lmc_t89' + suffix, 'ysubtitle', '[dimensionless]')
+
+            # set labels
+            options('erg_orb_l3_pos_lmc_t89' + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg',
+                                                                            '40deg','30deg','20deg','10deg'])
+
+        elif model == 'ts04':
+
+
+            if 'erg_orb_l3_pos_lmc_TS04' + suffix in loaded_data:
+                clip('erg_orb_l3_pos_lmc_TS04' + suffix, -1e+6, 1e6)
+                times, bdata = get_data('erg_orb_l3_pos_lmc_TS04' + suffix)
+                ylim('erg_orb_l3_pos_lmc_TS04' + suffix, np.nanmin(bdata), np.nanmax(bdata))
+
+            # set ytitle
+            options('erg_orb_l3_pos_lmc_TS04' + suffix, 'ytitle', 'Lmc (TS04)')
+
+            
+            options('erg_orb_l3_pos_lstar_TS04' + suffix, 'ytitle', 'Lstar (TS04)')
+
+            # set ysubtitle
+            
+            options('erg_orb_l3_pos_lmc_TS04' + suffix, 'ysubtitle', '[dimensionless]')
+
+            # set labels
+
+            options('erg_orb_l3_pos_lmc_TS04' + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg',
+                                                                            '40deg','30deg','20deg','10deg'])
 
     return loaded_data
