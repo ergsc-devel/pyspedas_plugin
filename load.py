@@ -63,9 +63,17 @@ def load(trange=['2017-03-27', '2017-03-28'],
 
     elif instrument == 'orb':
         if level == 'l3':
-            pathformat = 'satellite/erg/'+instrument+'/'+level+'/opq/%Y/%m/erg_'+instrument+'_'+level+'_op_%Y%m%d_v??.cdf'
+            pathformat = 'satellite/erg/'+instrument+'/'+level+'/opq/%Y/%m/erg_'+instrument+'_'+level+'_op_%Y%m%d_'
         elif level == 'l2':
-            pathformat = 'satellite/erg/'+instrument+'/def/%Y/erg_'+instrument+'_'+level+'_%Y%m%d_v??.cdf'
+            pathformat = 'satellite/erg/'+instrument+'/'+ datatype +'/%Y/erg_'+instrument+'_'+level+'_%Y%m%d_'
+
+
+        if version == None:
+            pathformat += 'v??.cdf'
+        else:
+            pathformat += version + '.cdf'
+
+
     elif instrument == 'lepe':
         pathformat = 'satellite/erg/'+instrument+'/'+level+'/'+datatype+'/%Y/%m/erg_'+instrument+'_'+level+'_'+datatype+'_%Y%m%d_v??_??.cdf'
     elif instrument == 'lepi':

@@ -5,7 +5,7 @@ from pytplot import options, clip
 import cdflib
 
 def orb(trange=['2017-03-27', '2017-03-28'],
-        datatype='8sec', 
+        datatype='def',
         level='l2',
         suffix='',  
         get_support_data=False, 
@@ -16,7 +16,8 @@ def orb(trange=['2017-03-27', '2017-03-28'],
         no_update=False,
         uname=None,
         passwd=None,
-        time_clip=False):
+        time_clip=False,
+        version=None):
     """
     This function loads orbit data from the Arase mission
     
@@ -62,16 +63,19 @@ def orb(trange=['2017-03-27', '2017-03-28'],
         time_clip: bool
             Time clip the variables to exactly the range specified in the trange keyword
 
+        version: str
+            Set this value to specify the version of cdf files (such as "v03")
+
     Returns:
         List of tplot variables created.
 
     """
 
-    loaded_data = load(instrument='orb', trange=trange, level=level, datatype=datatype, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
+    loaded_data = load(instrument='orb', trange=trange, level=level, datatype=datatype, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd, version=version)
 
     if len(loaded_data) > 0:
     
-        out_files = load(instrument='orb', trange=trange, level=level, datatype=datatype, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd)
+        out_files = load(instrument='orb', trange=trange, level=level, datatype=datatype, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd,version=version)
         cdf_file = cdflib.CDF(out_files[0])
         try:
             gatt = cdf_file.globalattsget()
