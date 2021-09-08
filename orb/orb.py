@@ -129,5 +129,7 @@ def orb(trange=['2017-03-27', '2017-03-28'],
 
     options('erg_orb_l2_pos_blocal' + suffix, 'Color', ['b', 'g', 'r'])
 
+    # set y axis to logscale
+    options('erg_orb_l2_pos_blocal_mag' + suffix, 'ylog', 1)
 
     return loaded_data
