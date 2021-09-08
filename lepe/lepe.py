@@ -107,29 +107,30 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
 
 
     if type(loaded_data) is dict:
-        tplot_variables = []
-        v_array = (loaded_data['erg_lepe_l2_FEDO']['v'][:,0,:] + loaded_data['erg_lepe_l2_FEDO']['v'][:,1,:])/ 2.
-        v_array = np.where(v_array < 0. , np.nan, v_array) # change minus values to NaN
-        store_data('erg_lepe_l2_FEDO', data={'x':loaded_data['erg_lepe_l2_FEDO']['x'],
-                                            'y':loaded_data['erg_lepe_l2_FEDO']['y'],
-                                            'v':v_array})
-        tplot_variables.append('erg_lepe_l2_FEDO')
+        if (level == 'l2' and datatype == 'omniflux'):
+            tplot_variables = []
+            v_array = (loaded_data['erg_lepe_l2_FEDO' + suffix]['v'][:,0,:] + loaded_data['erg_lepe_l2_FEDO' + suffix]['v'][:,1,:])/ 2.
+            v_array = np.where(v_array < 0. , np.nan, v_array) # change minus values to NaN
+            store_data('erg_lepe_l2_FEDO' + suffix, data={'x':loaded_data['erg_lepe_l2_FEDO' + suffix]['x'],
+                                                'y':loaded_data['erg_lepe_l2_FEDO' + suffix]['y'],
+                                                'v':v_array})
+            tplot_variables.append('erg_lepe_l2_FEDO' + suffix)
 
-        # change minus values to NaN in y array
-        clip('erg_lepe_l2_FEDO', 0., 2.e+16)
-        # set spectrogram plot option
-        options('erg_lepe_l2_FEDO', 'Spec', 1)
-        # set y axis to logscale
-        options('erg_lepe_l2_FEDO', 'ylog', 1)
-        # set yrange
-        options('erg_lepe_l2_FEDO', 'yrange', [10., 2.e+04])
-        # set z axis to logscale
-        options('erg_lepe_l2_FEDO', 'zlog', 1)
-        # set zrange
-        options('erg_lepe_l2_FEDO', 'zrange', [1.e-02, 1.e+06])
-        # change colormap option
-        options('erg_lepe_l2_FEDO', 'Colormap', 'jet')
+            # change minus values to NaN in y array
+            clip('erg_lepe_l2_FEDO' + suffix, 0., 2.e+16)
+            # set spectrogram plot option
+            options('erg_lepe_l2_FEDO' + suffix, 'Spec', 1)
+            # set y axis to logscale
+            options('erg_lepe_l2_FEDO' + suffix, 'ylog', 1)
+            # set yrange
+            options('erg_lepe_l2_FEDO' + suffix, 'yrange', [10., 2.e+04])
+            # set z axis to logscale
+            options('erg_lepe_l2_FEDO' + suffix, 'zlog', 1)
+            # set zrange
+            options('erg_lepe_l2_FEDO' + suffix, 'zrange', [1.e-02, 1.e+06])
+            # change colormap option
+            options('erg_lepe_l2_FEDO' + suffix, 'Colormap', 'jet')
 
-        return tplot_variables
+            return tplot_variables
 
     return loaded_data
