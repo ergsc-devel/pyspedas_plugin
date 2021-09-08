@@ -163,14 +163,38 @@ def mepi(trange=['2017-03-27', '2017-03-28'],
         # set ysubtitle
         options(tplot_names_list, 'ysubtitle', '[keV/q]')
 
-        # set ztitile
-        options(tplot_names_list, 'ysubtitle', '[keV/q]')
-
         # set ztitle
         options(tplot_names_list[:6], 'ztitle', '[/s-cm^{2}-sr-keV/q]')
         options(tplot_names_list[6:], 'ztitle', '[cnt/smpl]')
 
         # set z axis to logscale
         options(tplot_names_list, 'zlog', 1)
+
+    elif type(datatype) is list:
+        if 'flux' in datatype:
+            prefix = 'erg_mepi_l2_'
+            original_suffix_list = ['FPDU', 'FHE2DU', 'FHEDU', 'FOPPDU', 'FODU', 'FO2PDU',
+                        'count_raw_P', 'count_raw_HE2', 'count_raw_HE', 'count_raw_OPP', 'count_raw_O', 'count_raw_O2P']
+            tplot_names_list = []
+            for i in range(len(original_suffix_list)):
+                tplot_names_list.append(prefix + original_suffix_list[i] + suffix)
+                if tplot_names_list[i] in loaded_data:
+                    ylim(tplot_names_list[i], 4, 190)
+            
+            # set spectrogram plot option
+            options(tplot_names_list, 'Spec', 1)
+            
+            # set y axis to logscale
+            options(tplot_names_list, 'ylog', 1)
+
+            # set ysubtitle
+            options(tplot_names_list, 'ysubtitle', '[keV/q]')
+
+            # set ztitle
+            options(tplot_names_list[:6], 'ztitle', '[/s-cm^{2}-sr-keV/q]')
+            options(tplot_names_list[6:], 'ztitle', '[cnt/smpl]')
+
+            # set z axis to logscale
+            options(tplot_names_list, 'zlog', 1)
 
     return loaded_data
