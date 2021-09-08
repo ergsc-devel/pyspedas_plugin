@@ -134,6 +134,10 @@ def orb(trange=['2017-03-27', '2017-03-28'],
 
         options('erg_orb_l2_pos_Lm' + suffix, 'legend_names', ['90deg','60deg','30deg'])
 
+        options('erg_orb_l2_vel_gse' + suffix, 'legend_names', ['X[km/s]','Y[km/s]','Z[km/s]'])
+        options('erg_orb_l2_vel_gsm' + suffix, 'legend_names', ['X[km/s]','Y[km/s]','Z[km/s]'])
+        options('erg_orb_l2_vel_sm' + suffix, 'legend_names', ['X[km/s]','Y[km/s]','Z[km/s]'])
+
         # set color
         options('erg_orb_l2_pos_gse' + suffix, 'Color', ['b', 'g', 'r'])
         options('erg_orb_l2_pos_gsm' + suffix, 'Color', ['b', 'g', 'r'])
@@ -146,6 +150,10 @@ def orb(trange=['2017-03-27', '2017-03-28'],
         options('erg_orb_l2_pos_beq' + suffix, 'Color', ['b', 'g', 'r'])
 
         options('erg_orb_l2_pos_Lm' + suffix, 'Color', ['b', 'g', 'r'])
+
+        options('erg_orb_l2_vel_gse' + suffix, 'Color', ['b', 'g', 'r'])
+        options('erg_orb_l2_vel_gsm' + suffix, 'Color', ['b', 'g', 'r'])
+        options('erg_orb_l2_vel_sm' + suffix, 'Color', ['b', 'g', 'r'])
 
         # set y axis to logscale
         options('erg_orb_l2_pos_blocal_mag' + suffix, 'ylog', 1)
