@@ -108,6 +108,8 @@ def orb(trange=['2017-03-27', '2017-03-28'],
     options('erg_orb_l2_pos_gsm' + suffix, 'legend_names', ['X','Y','Z'])
     options('erg_orb_l2_pos_sm' + suffix, 'legend_names', ['X','Y','Z'])
 
+    options('erg_orb_l2_pos_rmlatmlt' + suffix, 'legend_names', ['Re','MLAT','MLT'])
+
     # set color
     options('erg_orb_l2_pos_gse' + suffix, 'Color', ['b', 'g', 'r'])
     options('erg_orb_l2_pos_gsm' + suffix, 'Color', ['b', 'g', 'r'])
