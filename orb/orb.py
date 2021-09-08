@@ -103,39 +103,41 @@ def orb(trange=['2017-03-27', '2017-03-28'],
             print('**************************************************************************')
 
 
-    # set labels
-    options('erg_orb_l2_pos_gse' + suffix, 'legend_names', ['X','Y','Z'])
-    options('erg_orb_l2_pos_gsm' + suffix, 'legend_names', ['X','Y','Z'])
-    options('erg_orb_l2_pos_sm' + suffix, 'legend_names', ['X','Y','Z'])
+    if level == 'l2' and datatype=='def':
 
-    options('erg_orb_l2_pos_rmlatmlt' + suffix, 'legend_names', ['Re','MLAT','MLT'])
+        # set labels
+        options('erg_orb_l2_pos_gse' + suffix, 'legend_names', ['X','Y','Z'])
+        options('erg_orb_l2_pos_gsm' + suffix, 'legend_names', ['X','Y','Z'])
+        options('erg_orb_l2_pos_sm' + suffix, 'legend_names', ['X','Y','Z'])
 
-    options('erg_orb_l2_pos_eq' + suffix, 'legend_names', ['Req','MLT'])
+        options('erg_orb_l2_pos_rmlatmlt' + suffix, 'legend_names', ['Re','MLAT','MLT'])
 
-    options('erg_orb_l2_pos_iono_north' + suffix, 'legend_names', ['GLAT','GLON'])
-    options('erg_orb_l2_pos_iono_south' + suffix, 'legend_names', ['GLAT','GLON'])
+        options('erg_orb_l2_pos_eq' + suffix, 'legend_names', ['Req','MLT'])
 
-    options('erg_orb_l2_pos_blocal' + suffix, 'legend_names', ['X','Y','Z'])
+        options('erg_orb_l2_pos_iono_north' + suffix, 'legend_names', ['GLAT','GLON'])
+        options('erg_orb_l2_pos_iono_south' + suffix, 'legend_names', ['GLAT','GLON'])
 
-    options('erg_orb_l2_pos_blocal_mag' + suffix, 'legend_names', ['B(model)_at_ERG'])
-    #options('erg_orb_l2_pos_blocal_mag' + suffix, 'legend_names', ['B(model)\n_at_ERG']) # Can't break?
+        options('erg_orb_l2_pos_blocal' + suffix, 'legend_names', ['X','Y','Z'])
 
-    options('erg_orb_l2_pos_beq' + suffix, 'legend_names', ['X','Y','Z'])
+        options('erg_orb_l2_pos_blocal_mag' + suffix, 'legend_names', ['B(model)_at_ERG'])
+        #options('erg_orb_l2_pos_blocal_mag' + suffix, 'legend_names', ['B(model)\n_at_ERG']) # Can't break?
 
-    # set color
-    options('erg_orb_l2_pos_gse' + suffix, 'Color', ['b', 'g', 'r'])
-    options('erg_orb_l2_pos_gsm' + suffix, 'Color', ['b', 'g', 'r'])
-    options('erg_orb_l2_pos_sm' + suffix, 'Color', ['b', 'g', 'r'])
+        options('erg_orb_l2_pos_beq' + suffix, 'legend_names', ['X','Y','Z'])
 
-    options('erg_orb_l2_pos_rmlatmlt' + suffix, 'Color', ['b', 'g', 'r'])
+        # set color
+        options('erg_orb_l2_pos_gse' + suffix, 'Color', ['b', 'g', 'r'])
+        options('erg_orb_l2_pos_gsm' + suffix, 'Color', ['b', 'g', 'r'])
+        options('erg_orb_l2_pos_sm' + suffix, 'Color', ['b', 'g', 'r'])
 
-    options('erg_orb_l2_pos_blocal' + suffix, 'Color', ['b', 'g', 'r'])
+        options('erg_orb_l2_pos_rmlatmlt' + suffix, 'Color', ['b', 'g', 'r'])
 
-    options('erg_orb_l2_pos_beq' + suffix, 'Color', ['b', 'g', 'r'])
+        options('erg_orb_l2_pos_blocal' + suffix, 'Color', ['b', 'g', 'r'])
 
-    # set y axis to logscale
-    options('erg_orb_l2_pos_blocal_mag' + suffix, 'ylog', 1)
+        options('erg_orb_l2_pos_beq' + suffix, 'Color', ['b', 'g', 'r'])
 
-    options('erg_orb_l2_pos_beq' + suffix, 'ylog', 1)
+        # set y axis to logscale
+        options('erg_orb_l2_pos_blocal_mag' + suffix, 'ylog', 1)
+
+        options('erg_orb_l2_pos_beq' + suffix, 'ylog', 1)
 
     return loaded_data
