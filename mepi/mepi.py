@@ -71,6 +71,11 @@ def mepi(trange=['2017-03-27', '2017-03-28'],
 
     """
 
+    if datatype == 'flux' or datatype == 'raw':
+        datatype = ['tof', datatype]
+        suffix = '_' + datatype[0] + datatype[1] + suffix
+        
+    
     loaded_data = load(instrument='mepi', trange=trange, level=level, datatype=datatype, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
 
     if len(loaded_data) > 0 and ror:
