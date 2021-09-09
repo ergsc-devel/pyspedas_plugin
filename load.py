@@ -51,16 +51,9 @@ def load(trange=['2017-03-27', '2017-03-28'],
         print('pathformat == None')
         print('pathformat == None')
         print('pathformat == None')
-        file_res=24*3600.
-        if instrument == 'mgf':
-            if datatype == '8sec':
-                pathformat = 'satellite/erg/'+instrument+'/'+level+'/'+datatype+'/%Y/%m/erg_'+instrument+'_'+level+'_'+datatype+'_%Y%m%d_v??.??.cdf'
-            else:
-                file_res=3600.
-                pathformat = 'satellite/erg/'+instrument+'/'+level+'/'+datatype+'/%Y/%m/erg_'+instrument+'_'+level+'_'+datatype+'_dsi_%Y%m%d%H_v??.??.cdf'
 
 
-        elif instrument == 'pwe_efd':
+        if instrument == 'pwe_efd':
             pathformat = 'satellite/erg/pwe/efd/'+level+'/'+datatype+'/%Y/%m/erg_'+instrument+'_'+level+'_'+datatype+'_%Y%m%d_v??_??.cdf'
 
 
