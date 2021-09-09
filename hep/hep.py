@@ -223,7 +223,7 @@ def hep(trange=['2017-03-27', '2017-03-28'],
 
 
         if level == 'l3': # implementation for level = 'l3'
-           variables_dict = {}
+
            tplot_variables = []
 
            if 'erg_hep_l3_FEDU_L' + suffix in loaded_data:
@@ -310,14 +310,6 @@ def hep(trange=['2017-03-27', '2017-03-28'],
            # set ztitle
            options(tplot_variables, 'ztitle', '[/keV/cm^{2}/sr/s]')
 
-           variables_dict["Tplot_names"] = tplot_variables
-           variables_dict["other_variables"] = {} # for Variables which cannot be Tplot Variables by pytplot.store_data()
-
-           if 'erg_hep_l3_FEDU_L' + suffix in loaded_data:
-                variables_dict["other_variables"]['erg_hep_l3_FEDU_L' + suffix] = loaded_data['erg_hep_l3_FEDU_L' + suffix]
-           if 'erg_hep_l3_FEDU_H' + suffix in loaded_data:
-                variables_dict["other_variables"]['erg_hep_l3_FEDU_H' + suffix] = loaded_data['erg_hep_l3_FEDU_H' + suffix]
-
-           return variables_dict
+           return tplot_variables
 
     return loaded_data
