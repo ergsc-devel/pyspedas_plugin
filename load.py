@@ -62,8 +62,7 @@ def load(trange=['2017-03-27', '2017-03-28'],
 
         elif instrument == 'pwe_efd':
             pathformat = 'satellite/erg/pwe/efd/'+level+'/'+datatype+'/%Y/%m/erg_'+instrument+'_'+level+'_'+datatype+'_%Y%m%d_v??_??.cdf'
-        elif instrument == 'xep':
-            pathformat = 'satellite/erg/'+instrument+'/'+level+'/'+datatype+'/%Y/%m/erg_'+instrument+'_'+level+'_'+datatype+'_%Y%m%d_v??_??.cdf'
+
 
     # find the full remote path names using the trange
     remote_names = dailynames(file_format=pathformat, trange=trange, res=file_res)
