@@ -1,7 +1,7 @@
 
 #from pyspedas.erg.load import load
 from load import load
-from pytplot import options, clip
+from pytplot import options, clip, ylim, zlim
 import cdflib
 
 def pwe_hfa(trange=['2017-04-01', '2017-04-02'],
@@ -72,7 +72,8 @@ def pwe_hfa(trange=['2017-04-01', '2017-04-02'],
 
     """
     
-    suffix = '_' + mode + suffix # to avoid duplicate Tplot Variable names in different mode argument
+    if level == 'l2':
+        suffix = '_' + mode + suffix # to avoid duplicate Tplot Variable names in different mode argument
 
     loaded_data = load(instrument='pwe_hfa', mode=mode, trange=trange, level=level, datatype=datatype, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
     
