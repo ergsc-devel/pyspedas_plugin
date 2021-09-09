@@ -72,12 +72,28 @@ def orb(trange=['2017-03-27', '2017-03-28'],
         List of tplot variables created.
 
     """
+    file_res=3600. * 24
+    prefix = 'erg_orb_'+level+'_'
+    if level == 'l3':
+        if model == 'op':
+            pathformat = 'satellite/erg/orb/'+level+'/opq/%Y/%m/erg_orb_'+level+'_op_%Y%m%d_'
+        else:
+            pathformat = 'satellite/erg/orb/'+level+'/'+model+'/%Y/%m/erg_orb_'+level+'_'+model+'_%Y%m%d_'
+    elif level == 'l2':
+        if datatype == 'def':
+            pathformat = 'satellite/erg/orb/'+ datatype +'/%Y/erg_orb_'+level+'_%Y%m%d_'
+        else:
+            pathformat = 'satellite/erg/orb/'+ datatype +'/%Y/erg_orb_'+ datatype + '_'+level+'_%Y%m%d_'
+    if version == None:
+        pathformat += 'v??.cdf'
+    else:
+        pathformat += version + '.cdf'
 
-    loaded_data = load(instrument='orb', trange=trange, level=level, datatype=datatype, model=model,suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd, version=version)
+    loaded_data = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype,file_res=file_res, prefix=prefix,suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd, version=version)
 
     if len(loaded_data) > 0:
     
-        out_files = load(instrument='orb', trange=trange, level=level, datatype=datatype, model=model, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd,version=version)
+        out_files = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype,file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd,version=version)
         cdf_file = cdflib.CDF(out_files[0])
         try:
             gatt = cdf_file.globalattsget()
