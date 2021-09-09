@@ -206,6 +206,7 @@ def hep(trange=['2017-03-27', '2017-03-28'],
                                                         loaded_data['erg_hep_l2_FEDU_L' + suffix]['v'][1,:]), # geometric mean for 'v1'
                                                         'v2':v2_array})
                tplot_variables.append('erg_hep_l2_FEDU_L' + suffix)
+               clip('erg_hep_l2_FEDU_L' + suffix, -1.0e+10, 1.0e+10)
 
            if 'erg_hep_l2_FEDU_H' + suffix in loaded_data:
 
@@ -215,6 +216,7 @@ def hep(trange=['2017-03-27', '2017-03-28'],
                                                         loaded_data['erg_hep_l2_FEDU_H' + suffix]['v'][1,:]), # geometric mean for 'v1'
                                                         'v2':v2_array})
                tplot_variables.append('erg_hep_l2_FEDU_H' + suffix)
+               clip('erg_hep_l2_FEDU_H' + suffix, -1.0e+10, 1.0e+10)
 
            return tplot_variables
 
