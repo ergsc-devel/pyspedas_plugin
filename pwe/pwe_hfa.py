@@ -140,6 +140,25 @@ def pwe_hfa(trange=['2017-04-01', '2017-04-02'],
             # set zlim
             zlim('erg_pwe_hfa_'+level+'_spectra_ev' + suffix,  1e-10, 1e-3)
 
+        if 'erg_pwe_hfa_'+level+'_spectra_bgamma' + suffix in loaded_data:
+            # set ylim
+            ylim('erg_pwe_hfa_'+level+'_spectra_bgamma' + suffix, 2.0, 200.0)
+            # set zlim
+            zlim('erg_pwe_hfa_'+level+'_spectra_bgamma' + suffix, 1e-4, 1e+2)
+
+
+        if 'erg_pwe_hfa_'+level+'_spectra_esum' + suffix in loaded_data:
+            # set ylim
+            ylim('erg_pwe_hfa_'+level+'_spectra_esum' + suffix,  2.0, 10000.0)
+            # set zlim
+            zlim('erg_pwe_hfa_'+level+'_spectra_esum' + suffix,  1e-10, 1e-3)
+
+        if 'erg_pwe_hfa_'+level+'_spectra_e_ar' + suffix in loaded_data:
+            # set ylim
+            ylim('erg_pwe_hfa_'+level+'_spectra_e_ar' + suffix,  2.0, 10000.0)
+            # set zlim
+            zlim('erg_pwe_hfa_'+level+'_spectra_e_ar' + suffix, -1, 1)
+
 
         # set y axis to logscale
         options('erg_pwe_hfa_'+level+'_spectra_eu' + suffix, 'ylog', 1)
@@ -150,6 +169,15 @@ def pwe_hfa(trange=['2017-04-01', '2017-04-02'],
         options('erg_pwe_hfa_'+level+'_spectra_el' + suffix, 'ylog', 1)
         options('erg_pwe_hfa_'+level+'_spectra_e_mix' + suffix, 'ylog', 1)
         options('erg_pwe_hfa_'+level+'_spectra_e_ar' + suffix, 'ylog', 1)
+
+        # set z axis to logscale
+        options('erg_pwe_hfa_'+level+'_spectra_eu' + suffix, 'zlog', 1)
+        options('erg_pwe_hfa_'+level+'_spectra_ev' + suffix, 'zlog', 1)
+        options('erg_pwe_hfa_'+level+'_spectra_bgamma' + suffix, 'zlog', 1)
+        options('erg_pwe_hfa_'+level+'_spectra_esum' + suffix, 'zlog', 1)
+        options('erg_pwe_hfa_'+level+'_spectra_er' + suffix, 'zlog', 1)
+        options('erg_pwe_hfa_'+level+'_spectra_el' + suffix, 'zlog', 1)
+        options('erg_pwe_hfa_'+level+'_spectra_e_mix' + suffix, 'zlog', 1)
 
         # set ytitle
         options('erg_pwe_hfa_'+level+'_spectra_eu' + suffix, 'ytitle', 'ERG PWE/HFA (EU)')
@@ -165,14 +193,6 @@ def pwe_hfa(trange=['2017-04-01', '2017-04-02'],
         options('erg_pwe_hfa_'+level+'_spectra_e_ar' + suffix, 'ysubtitle', 'frequency [Hz]')
         options('erg_pwe_hfa_'+level+'_spectra_bgamma' + suffix, 'ysubtitle', 'frequency [Hz]')
 
-        # set z axis to logscale
-        options('erg_pwe_hfa_'+level+'_spectra_eu' + suffix, 'zlog', 1)
-        options('erg_pwe_hfa_'+level+'_spectra_ev' + suffix, 'zlog', 1)
-        options('erg_pwe_hfa_'+level+'_spectra_bgamma' + suffix, 'zlog', 1)
-        options('erg_pwe_hfa_'+level+'_spectra_esum' + suffix, 'zlog', 1)
-        options('erg_pwe_hfa_'+level+'_spectra_er' + suffix, 'zlog', 1)
-        options('erg_pwe_hfa_'+level+'_spectra_el' + suffix, 'zlog', 1)
-        options('erg_pwe_hfa_'+level+'_spectra_e_mix' + suffix, 'zlog', 1)
 
 
         # set ztitle
@@ -192,24 +212,8 @@ def pwe_hfa(trange=['2017-04-01', '2017-04-02'],
         options('erg_pwe_hfa_'+level+'_spectra_e_mix' + suffix, 'Colormap', 'jet')
         options('erg_pwe_hfa_'+level+'_spectra_e_ar' + suffix, 'Colormap', 'jet')
 
-        if 'erg_pwe_hfa_'+level+'_spectra_bgamma' + suffix in loaded_data:
-            # set ylim
-            ylim('erg_pwe_hfa_'+level+'_spectra_bgamma' + suffix, 2.0, 200.0)
-            # set zlim
-            zlim('erg_pwe_hfa_'+level+'_spectra_bgamma' + suffix, 1e-4, 1e+2)
 
 
-        if 'erg_pwe_hfa_'+level+'_spectra_esum' + suffix in loaded_data:
-            # set ylim
-            ylim('erg_pwe_hfa_'+level+'_spectra_esum' + suffix,  2.0, 10000.0)
-            # set zlim
-            zlim('erg_pwe_hfa_'+level+'_spectra_esum' + suffix,  1e-10, 1e-3)
-
-        if 'erg_pwe_hfa_'+level+'_spectra_e_ar' + suffix in loaded_data:
-            # set ylim
-            ylim('erg_pwe_hfa_'+level+'_spectra_e_ar' + suffix,  2.0, 10000.0)
-            # set zlim
-            zlim('erg_pwe_hfa_'+level+'_spectra_e_ar' + suffix, -1, 1)
 
     elif level == 'l3':
 
