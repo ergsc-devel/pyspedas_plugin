@@ -80,13 +80,17 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
     if level == 'l2' and datatype == 'omniflux':
         notplot=True # to avoid failure of creation plot variables (at store_data.py) of lepe
     
-    loaded_data = load(instrument='lepe', trange=trange, level=level, datatype=datatype, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
+    file_res=3600. * 24
+    prefix = 'erg_lepe_'+level+'_'
+    pathformat = 'satellite/erg/lepe/'+level+'/'+datatype+'/%Y/%m/erg_lepe_'+level+'_'+datatype+'_%Y%m%d_v??_??.cdf'
+
+    loaded_data = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype,file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
 
     
     if len(loaded_data) > 0 and ror:
 
     
-        out_files = load(instrument='lepe', trange=trange, level=level, datatype=datatype, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd)
+        out_files = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype,file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd)
         cdf_file = cdflib.CDF(out_files[0])
         gatt = cdf_file.globalattsget()
 
