@@ -1,7 +1,7 @@
 #from pyspedas.erg.load import load
 from load import load
 import numpy as np
-from pytplot import options, clip, ylim, store_data
+from pytplot import options, clip, ylim,zlim, store_data
 import cdflib
 
 def xep(trange=['2017-06-01', '2017-06-02'],
@@ -130,6 +130,16 @@ def xep(trange=['2017-06-01', '2017-06-02'],
             options('erg_xep_l2_FEDO_SSD' + suffix, 'zrange', [1.0e-01, 1.0e+3])
             # change colormap option
             options('erg_xep_l2_FEDO_SSD' + suffix, 'Colormap', 'jet')
+
+            # set ztitle
+            options('erg_xep_l2_FEDO_SSD' + suffix, 'ztitle', '[/cm^{2}-str-s-keV]')
+            # set ytitle
+            options('erg_xep_l2_FEDO_SSD' + suffix, 'ytitle', 'XEP\nomniflux\nLv2\nEnergy')
+            # set ysubtitle
+            options('erg_xep_l2_FEDO_SSD' + suffix, 'ysubtitle', '[keV]')
+
+            ylim('erg_xep_l2_FEDO_SSD' + suffix, 4.0e+02, 4.5e+03)
+            zlim('erg_xep_l2_FEDO_SSD' + suffix, 1.0e-01, 1.0e+3)
 
             return  tplot_variables
         
