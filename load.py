@@ -83,11 +83,6 @@ def load(trange=['2017-03-27', '2017-03-28'],
 
         elif instrument == 'mepe':
             pathformat = 'satellite/erg/'+instrument+'/'+level+'/'+datatype+'/%Y/%m/erg_'+instrument+'_'+level+'_'+datatype+'_%Y%m%d_v??_??.cdf'
-        elif instrument == 'mepi':
-            if 'tof' in datatype and type(datatype) is list:
-                pathformat = 'satellite/erg/'+instrument+'/'+level+'/'+datatype[0]+'/%Y/%m/erg_'+instrument+'_'+level+'_'+datatype[0]+datatype[1]+'_%Y%m%d_v??_??.cdf'
-            else:
-                pathformat = 'satellite/erg/'+instrument+'/'+level+'/'+datatype+'/%Y/%m/erg_'+instrument+'_'+level+'_'+datatype+'_%Y%m%d_v??_??.cdf'
 
         elif instrument == 'pwe_efd':
             pathformat = 'satellite/erg/pwe/efd/'+level+'/'+datatype+'/%Y/%m/erg_'+instrument+'_'+level+'_'+datatype+'_%Y%m%d_v??_??.cdf'
