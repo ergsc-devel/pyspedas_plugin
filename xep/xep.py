@@ -12,7 +12,7 @@ def xep(trange=['2017-06-01', '2017-06-02'],
         varformat=None,
         varnames=[],
         downloadonly=False,
-        notplot=True, # to avoid failure of creation plot variables (at store_data.py) of xep
+        notplot=False,
         no_update=False,
         uname=None,
         passwd=None,
@@ -70,7 +70,8 @@ def xep(trange=['2017-06-01', '2017-06-02'],
         List of tplot variables created.
 
     """
-    
+    if datatype == 'omniflux':
+        notplot=True # to avoid failure of creation plot variables (at store_data.py) of xep
     file_res=3600. * 24
     prefix = 'erg_xep_'+level+'_'
     pathformat = 'satellite/erg/xep/'+level+'/'+datatype+'/%Y/%m/erg_xep_'+level+'_'+datatype+'_%Y%m%d_v??_??.cdf'
