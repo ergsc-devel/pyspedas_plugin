@@ -76,17 +76,25 @@ def lepi(trange=['2017-07-01', '2017-07-02'],
         List of tplot variables created.
 
     """
+    file_res=3600. * 24
+    prefix = 'erg_lepi_'+level+'_'
+
+    pathformat = 'satellite/erg/lepi/'+level+'/'+datatype+'/%Y/%m/erg_lepi_'+level+'_'+datatype+'_%Y%m%d_'
+    if version == None:
+        pathformat += 'v??_??.cdf'
+    else:
+        pathformat += version + '.cdf'
 
     if datatype == 'omniflux' and level == 'l2':
         notplot=True # to avoid failure of creation plot variables (at store_data.py) of lepi
     
-    loaded_data = load(instrument='lepi', trange=trange, level=level, datatype=datatype, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd, version=version)
 
-    
+    loaded_data = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype,file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd, version=version)
+
     if len(loaded_data) > 0 and ror:
 
     
-        out_files = load(instrument='lepi', trange=trange, level=level, datatype=datatype, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd, version=version)
+        out_files = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype,file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd, version=version)
         cdf_file = cdflib.CDF(out_files[0])
         gatt = cdf_file.globalattsget()
 
@@ -113,6 +121,7 @@ def lepi(trange=['2017-07-01', '2017-07-02'],
 
         if datatype == 'omniflux' and level == 'l2':
             tplot_variables = []
+
             if 'erg_lepi_l2_FPDO' + suffix in loaded_data:
                 v_array = loaded_data['erg_lepi_l2_FPDO' + suffix]['v']
                 v_array = np.where(v_array < 0. , np.nan, v_array) # change minus values to NaN
