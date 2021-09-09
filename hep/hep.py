@@ -264,8 +264,24 @@ def hep(trange=['2017-03-27', '2017-03-28'],
                     tplot_variables.append(tplot_name)
 
            if 'erg_hep_l3_FEDU_H' + suffix in loaded_data:
+
+               H_energy_array_ave = np.sqrt(loaded_data['erg_hep_l3_FEDU_H' + suffix]['v1'][0,:]*
+                                            loaded_data['erg_hep_l3_FEDU_H' + suffix]['v1'][1,:]) # geometric mean for 'v1'
+
                # get energy [keV] array for ytitle options
-               H_energy_array = np.trunc(np.sqrt(loaded_data['erg_hep_l3_FEDU_H' + suffix]['v1'][0,:]*loaded_data['erg_hep_l3_FEDU_H' + suffix]['v1'][1,:])).astype(int)
+               H_energy_array = np.trunc(H_energy_array_ave).astype(int)
+
+               store_data('erg_hep_l3_FEDU_H' + suffix, data={'x':loaded_data['erg_hep_l3_FEDU_H' + suffix]['x'],
+                                                  'y':loaded_data['erg_hep_l3_FEDU_H' + suffix]['y'],
+                                                  'v1':H_energy_array_ave,
+                                                  'v2':loaded_data['erg_hep_l3_FEDU_H' + suffix]['v2']})
+               # set ylim
+               ylim('erg_hep_l3_FEDU_H' + suffix, 0, 180)
+               # set zlim
+               zlim('erg_hep_l3_FEDU_H' + suffix, 1e+1, 1e+4)
+               
+               tplot_variables.append('erg_hep_l3_FEDU_H' + suffix)
+
 
                for i in range(loaded_data['erg_hep_l3_FEDU_H' + suffix]['y'].shape[1]): # make Tplot Variables of erg_hep_l3_FEDU_H_paspec_ene?? (??: 00, 01, 02, ..., 10)
                     tplot_name = 'erg_hep_l3_FEDU_H_paspec_ene' + str(i).zfill(2) + suffix
