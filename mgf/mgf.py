@@ -75,7 +75,15 @@ def mgf(trange=['2017-03-27', '2017-03-28'],
     elif datatype == '256':
         datatype = '256hz'
 
-    loaded_data = load(instrument='mgf', trange=trange, level=level, datatype=datatype, suffix=suffix, get_support_data=get_support_data, varformat=varformat, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
+    prefix = 'erg_mgf_'+level+'_'
+    if datatype == '8sec':
+        file_res=3600. * 24
+        pathformat = 'satellite/erg/mgf/'+level+'/'+datatype+'/%Y/%m/erg_mgf_'+level+'_'+datatype+'_%Y%m%d_v??.??.cdf'
+    else:
+        file_res=3600.
+        pathformat = 'satellite/erg/mgf/'+level+'/'+datatype+'/%Y/%m/erg_mgf_'+level+'_'+datatype+'_dsi_%Y%m%d%H_v??.??.cdf'
+
+    loaded_data = load(pathformat=pathformat, file_res=file_res,trange=trange, level=level, datatype=datatype, prefix=prefix, suffix=suffix, get_support_data=get_support_data, varformat=varformat, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
     
     if loaded_data is None or loaded_data == [] or notplot or downloadonly:
         return loaded_data
@@ -83,7 +91,7 @@ def mgf(trange=['2017-03-27', '2017-03-28'],
     if len(loaded_data) > 0:
     
     
-        out_files = load(instrument='mgf', trange=trange, level=level, datatype=datatype, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd)
+        out_files = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype,file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd)
         cdf_file = cdflib.CDF(out_files[0])
         gatt = cdf_file.globalattsget()
 
