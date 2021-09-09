@@ -62,11 +62,6 @@ def load(trange=['2017-03-27', '2017-03-28'],
 
         elif instrument == 'pwe_efd':
             pathformat = 'satellite/erg/pwe/efd/'+level+'/'+datatype+'/%Y/%m/erg_'+instrument+'_'+level+'_'+datatype+'_%Y%m%d_v??_??.cdf'
-        elif instrument == 'pwe_hfa':
-            if level == 'l2':
-                pathformat = 'satellite/erg/pwe/hfa/'+level+'/'+datatype+'/'+mode+'/%Y/%m/erg_'+instrument+'_'+level+'_'+datatype+'_'+mode+'_%Y%m%d_v??_??.cdf'
-            elif level == 'l3':
-                pathformat = 'satellite/erg/pwe/hfa/'+level+'/%Y/%m/erg_'+instrument+'_'+level+'_1min_%Y%m%d_v??_??.cdf'
         elif instrument == 'xep':
             pathformat = 'satellite/erg/'+instrument+'/'+level+'/'+datatype+'/%Y/%m/erg_'+instrument+'_'+level+'_'+datatype+'_%Y%m%d_v??_??.cdf'
 
