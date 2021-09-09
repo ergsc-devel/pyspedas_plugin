@@ -103,8 +103,10 @@ def pwe_hfa(trange=['2017-04-01', '2017-04-02'],
 
 
     # remove minus values in y array
-    clip('erg_pwe_hfa_'+level+'_spectra_er' + suffix, 0., 5000.)
-    clip('erg_pwe_hfa_'+level+'_spectra_el' + suffix, 0., 5000.)
+    if 'erg_pwe_hfa_'+level+'_spectra_er' + suffix in loaded_data:
+        clip('erg_pwe_hfa_'+level+'_spectra_er' + suffix, 0., 5000.)
+    if 'erg_pwe_hfa_'+level+'_spectra_el' + suffix in loaded_data:
+        clip('erg_pwe_hfa_'+level+'_spectra_el' + suffix, 0., 5000.)
 
     # set spectrogram plot option
     options('erg_pwe_hfa_'+level+'_spectra_eu' + suffix, 'Spec', 1)
