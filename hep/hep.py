@@ -194,6 +194,32 @@ def hep(trange=['2017-03-27', '2017-03-28'],
 
             return  tplot_variables
 
+        if level == 'l2' and datatype == '3dflux':
+           tplot_variables = []
+           v2_array = [i for i in range(15)]
+
+           if 'erg_hep_l2_FEDU_L' + suffix in loaded_data:
+
+               store_data('erg_hep_l2_FEDU_L' + suffix, data={'x':loaded_data['erg_hep_l2_FEDU_L' + suffix]['x'],
+                                                        'y':loaded_data['erg_hep_l2_FEDU_L' + suffix]['y'],
+                                                        'v1':np.sqrt(loaded_data['erg_hep_l2_FEDU_L' + suffix]['v'][0,:]*
+                                                        loaded_data['erg_hep_l2_FEDU_L' + suffix]['v'][1,:]), # geometric mean for 'v1'
+                                                        'v2':v2_array})
+               tplot_variables.append('erg_hep_l2_FEDU_L' + suffix)
+
+           if 'erg_hep_l2_FEDU_H' + suffix in loaded_data:
+
+               store_data('erg_hep_l2_FEDU_H' + suffix, data={'x':loaded_data['erg_hep_l2_FEDU_H' + suffix]['x'],
+                                                        'y':loaded_data['erg_hep_l2_FEDU_H' + suffix]['y'],
+                                                        'v1':np.sqrt(loaded_data['erg_hep_l2_FEDU_H' + suffix]['v'][0,:]*
+                                                        loaded_data['erg_hep_l2_FEDU_H' + suffix]['v'][1,:]), # geometric mean for 'v1'
+                                                        'v2':v2_array})
+               tplot_variables.append('erg_hep_l2_FEDU_H' + suffix)
+
+           return tplot_variables
+
+
+
         if level == 'l3': # implementation for level = 'l3'
            variables_dict = {}
            tplot_variables = []
