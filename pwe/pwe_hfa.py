@@ -115,9 +115,23 @@ def pwe_hfa(trange=['2017-04-01', '2017-04-02'],
         if 'erg_pwe_hfa_'+level+'_spectra_eu' + suffix in loaded_data:
             # remove minus values in y array
             clip('erg_pwe_hfa_'+level+'_spectra_eu' + suffix, 0., 5000.)
+            # set ylim
+            ylim('erg_pwe_hfa_'+level+'_spectra_eu' + suffix,  2.0, 10000.0)
+            # set zlim
+            zlim('erg_pwe_hfa_'+level+'_spectra_eu' + suffix,  1e-10, 1e-3)
         if 'erg_pwe_hfa_'+level+'_spectra_ev' + suffix in loaded_data:
             # remove minus values in y array
             clip('erg_pwe_hfa_'+level+'_spectra_ev' + suffix, 0., 5000.)
+            # set ylim
+            ylim('erg_pwe_hfa_'+level+'_spectra_ev' + suffix,  2.0, 10000.0)
+            # set zlim
+            zlim('erg_pwe_hfa_'+level+'_spectra_ev' + suffix,  1e-10, 1e-3)
+
+        if 'erg_pwe_hfa_'+level+'_spectra_esum' + suffix in loaded_data:
+            # set ylim
+            ylim('erg_pwe_hfa_'+level+'_spectra_esum' + suffix,  2.0, 10000.0)
+            # set zlim
+            zlim('erg_pwe_hfa_'+level+'_spectra_esum' + suffix,  1e-10, 1e-3)
 
         # set spectrogram plot option
         options('erg_pwe_hfa_'+level+'_spectra_eu' + suffix, 'Spec', 1)
@@ -150,6 +164,11 @@ def pwe_hfa(trange=['2017-04-01', '2017-04-02'],
         options('erg_pwe_hfa_'+level+'_spectra_eu' + suffix, 'ytitle', 'ERG PWE/HFA (EU)')
         options('erg_pwe_hfa_'+level+'_spectra_ev' + suffix, 'ytitle', 'ERG PWE/HFA (EV)')
         options('erg_pwe_hfa_'+level+'_spectra_esum' + suffix, 'ytitle', 'ERG PWE/HFA (ESUM)')
+
+        # set ysubtitle
+        options('erg_pwe_hfa_'+level+'_spectra_eu' + suffix, 'ysubtitle', 'frequency [Hz]')
+        options('erg_pwe_hfa_'+level+'_spectra_ev' + suffix, 'ysubtitle', 'frequency [Hz]')
+        options('erg_pwe_hfa_'+level+'_spectra_esum' + suffix, 'ysubtitle', 'frequency [Hz]')
 
         # set z axis to logscale
         options('erg_pwe_hfa_'+level+'_spectra_eu' + suffix, 'zlog', 1)
