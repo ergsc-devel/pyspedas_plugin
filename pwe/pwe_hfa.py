@@ -138,6 +138,11 @@ def pwe_hfa(trange=['2017-04-01', '2017-04-02'],
         options('erg_pwe_hfa_'+level+'_spectra_el' + suffix, 'yrange', [2., 1000.])
         options('erg_pwe_hfa_'+level+'_spectra_e_mix' + suffix, 'yrange', [2., 1000.])
 
+        # set ytitle
+        options('erg_pwe_hfa_'+level+'_spectra_eu' + suffix, 'ytitle', 'ERG PWE/HFA (EU)')
+        options('erg_pwe_hfa_'+level+'_spectra_ev' + suffix, 'ytitle', 'ERG PWE/HFA (EV)')
+        options('erg_pwe_hfa_'+level+'_spectra_esum' + suffix, 'ytitle', 'ERG PWE/HFA (ESUM)')
+
         # set z axis to logscale
         options('erg_pwe_hfa_'+level+'_spectra_eu' + suffix, 'zlog', 1)
         options('erg_pwe_hfa_'+level+'_spectra_ev' + suffix, 'zlog', 1)
@@ -155,6 +160,11 @@ def pwe_hfa(trange=['2017-04-01', '2017-04-02'],
         options('erg_pwe_hfa_'+level+'_spectra_er' + suffix, 'zrange', [1.e-10, 1.e-03])
         options('erg_pwe_hfa_'+level+'_spectra_el' + suffix, 'zrange', [1.e-10, 1.e-03])
         options('erg_pwe_hfa_'+level+'_spectra_e_mix' + suffix, 'zrange', [1.e-10, 1.e-03])
+
+        # set ztitle
+        options('erg_pwe_hfa_'+level+'_spectra_eu' + suffix, 'ztitle', 'mV^2/m^2/Hz')
+        options('erg_pwe_hfa_'+level+'_spectra_ev' + suffix, 'ztitle', 'mV^2/m^2/Hz')
+        options('erg_pwe_hfa_'+level+'_spectra_esum' + suffix, 'ztitle', 'mV^2/m^2/Hz')
 
         # change colormap option
         options('erg_pwe_hfa_'+level+'_spectra_eu' + suffix, 'Colormap', 'jet')
