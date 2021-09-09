@@ -103,7 +103,7 @@ def pwe_hfa(trange=['2017-04-01', '2017-04-02'],
         print('**************************************************************************')
 
 
-    if level == 'l2':
+    if level == 'l2' and mode == 'low':
     
         # remove minus values in y array
         if 'erg_pwe_hfa_'+level+'_spectra_er' + suffix in loaded_data:
