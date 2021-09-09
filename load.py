@@ -59,24 +59,6 @@ def load(trange=['2017-03-27', '2017-03-28'],
                 file_res=3600.
                 pathformat = 'satellite/erg/'+instrument+'/'+level+'/'+datatype+'/%Y/%m/erg_'+instrument+'_'+level+'_'+datatype+'_dsi_%Y%m%d%H_v??.??.cdf'
 
-        elif instrument == 'orb':
-            if level == 'l3':
-                if model == 'op':
-                    pathformat = 'satellite/erg/'+instrument+'/'+level+'/opq/%Y/%m/erg_'+instrument+'_'+level+'_op_%Y%m%d_'
-                else:
-                    pathformat = 'satellite/erg/'+instrument+'/'+level+'/'+model+'/%Y/%m/erg_'+instrument+'_'+level+'_'+model+'_%Y%m%d_'
-            elif level == 'l2':
-                if datatype == 'def':
-                    pathformat = 'satellite/erg/'+instrument+'/'+ datatype +'/%Y/erg_'+instrument+'_'+level+'_%Y%m%d_'
-                else:
-                    pathformat = 'satellite/erg/'+instrument+'/'+ datatype +'/%Y/erg_'+instrument+'_'+ datatype + '_'+level+'_%Y%m%d_'
-
-
-            if version == None:
-                pathformat += 'v??.cdf'
-            else:
-                pathformat += version + '.cdf'
-
 
         elif instrument == 'pwe_efd':
             pathformat = 'satellite/erg/pwe/efd/'+level+'/'+datatype+'/%Y/%m/erg_'+instrument+'_'+level+'_'+datatype+'_%Y%m%d_v??_??.cdf'
