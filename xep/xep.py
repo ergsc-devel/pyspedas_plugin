@@ -103,29 +103,29 @@ def xep(trange=['2017-06-01', '2017-06-02'],
     if type(loaded_data) is dict:
         tplot_variables = []
         
-        v_vars_min = loaded_data['erg_xep_l2_FEDO_SSD']['v'][0]
-        v_vars_max = loaded_data['erg_xep_l2_FEDO_SSD']['v'][1]
+        v_vars_min = loaded_data['erg_xep_l2_FEDO_SSD' + suffix]['v'][0]
+        v_vars_max = loaded_data['erg_xep_l2_FEDO_SSD' + suffix]['v'][1]
         v_vars = np.sqrt(v_vars_min * v_vars_max) # Geometric mean 
         
-        store_data('erg_xep_l2_FEDO_SSD', data={'x':loaded_data['erg_xep_l2_FEDO_SSD']['x'], 
-                                              'y':loaded_data['erg_xep_l2_FEDO_SSD']['y'],
+        store_data('erg_xep_l2_FEDO_SSD' + suffix, data={'x':loaded_data['erg_xep_l2_FEDO_SSD' + suffix]['x'], 
+                                              'y':loaded_data['erg_xep_l2_FEDO_SSD' + suffix]['y'],
                                               'v':v_vars})
-        tplot_variables.append('erg_xep_l2_FEDO_SSD')
+        tplot_variables.append('erg_xep_l2_FEDO_SSD' + suffix)
         
         # remove minus valuse of y array
-        clip('erg_xep_l2_FEDO_SSD', 0., 5000.)
+        clip('erg_xep_l2_FEDO_SSD' + suffix, 0., 5000.)
         # set spectrogram plot option
-        options('erg_xep_l2_FEDO_SSD', 'Spec', 1)
+        options('erg_xep_l2_FEDO_SSD' + suffix, 'Spec', 1)
         # set y axis to logscale
-        options('erg_xep_l2_FEDO_SSD', 'ylog', 1)
+        options('erg_xep_l2_FEDO_SSD' + suffix, 'ylog', 1)
         # set yrange
-        options('erg_xep_l2_FEDO_SSD', 'yrange', [4.0e+02, 4.5e+03])
+        options('erg_xep_l2_FEDO_SSD' + suffix, 'yrange', [4.0e+02, 4.5e+03])
         # set z axis to logscale
-        options('erg_xep_l2_FEDO_SSD', 'zlog', 1)
+        options('erg_xep_l2_FEDO_SSD' + suffix, 'zlog', 1)
         # set zrange
-        options('erg_xep_l2_FEDO_SSD', 'zrange', [1.0e-01, 1.0e+3])
+        options('erg_xep_l2_FEDO_SSD' + suffix, 'zrange', [1.0e-01, 1.0e+3])
         # change colormap option
-        options('erg_xep_l2_FEDO_SSD', 'Colormap', 'jet')
+        options('erg_xep_l2_FEDO_SSD' + suffix, 'Colormap', 'jet')
 
         return  tplot_variables
         
