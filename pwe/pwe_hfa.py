@@ -217,10 +217,6 @@ def pwe_hfa(trange=['2017-04-01', '2017-04-02'],
         options('erg_pwe_hfa_l3_Fuhr' + suffix, 'ytitle', 'UHR frequency [Mhz]')
         options('erg_pwe_hfa_l3_ne_mgf' + suffix, 'ytitle', 'eletctorn density [/cc]')
 
-        # set ysubtitle
-        options('erg_pwe_hfa_l3_Fuhr' + suffix, 'ysubtitle', 'frequency [khz]')
-        options('erg_pwe_hfa_l3_ne_mgf' + suffix, 'ysubtitle', 'frequency [khz]')
-
         # set y axis to logscale
         options('erg_pwe_hfa_l3_Fuhr' + suffix, 'ylog', 1)
         options('erg_pwe_hfa_l3_ne_mgf' + suffix, 'ylog', 1)
