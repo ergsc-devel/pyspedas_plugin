@@ -70,7 +70,10 @@ def mepi(trange=['2017-03-27', '2017-03-28'],
         List of tplot variables created.
 
     """
+    file_res=3600. * 24
+    prefix = 'erg_mepi_'+level+'_'
 
+    pathformat = 
     if datatype == 'flux' or datatype == 'raw':
         datatype = ['tof', datatype]
         suffix = '_' + datatype[0] + datatype[1] + suffix
