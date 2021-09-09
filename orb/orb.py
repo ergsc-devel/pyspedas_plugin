@@ -181,6 +181,7 @@ def orb(trange=['2017-03-27', '2017-03-28'],
             options('erg_orb_l3_pos_beq_op' + suffix, 'ytitle', 'Beq (op)')
             options('erg_orb_l3_pos_eq_op' + suffix, 'ytitle', 'Eq_pos (op)')
             options('erg_orb_l3_pos_iono_north_op' + suffix, 'ytitle', 'footprint_north (op)')
+            options('erg_orb_l3_pos_iono_south_op' + suffix, 'ytitle', 'footprint_south (op)')
 
             # set ysubtitle
             options('erg_orb_l3_pos_lmc_op' + suffix, 'ysubtitle', '[dimensionless]')
@@ -190,6 +191,7 @@ def orb(trange=['2017-03-27', '2017-03-28'],
             options('erg_orb_l3_pos_beq_op' + suffix, 'ysubtitle', '[nT]')
             options('erg_orb_l3_pos_eq_op' + suffix, 'ysubtitle', '[Re Hour]')
             options('erg_orb_l3_pos_iono_north_op' + suffix, 'ysubtitle', '[deg. deg.]')
+            options('erg_orb_l3_pos_iono_south_op' + suffix, 'ysubtitle', '[deg. deg.]')
 
             # set ylabels
             options('erg_orb_l3_pos_lmc_op' + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg',
@@ -202,6 +204,7 @@ def orb(trange=['2017-03-27', '2017-03-28'],
             options('erg_orb_l3_pos_beq_op' + suffix, 'legend_names', '|B|')
             options('erg_orb_l3_pos_eq_op' + suffix, 'legend_names', ['Re','MLT'])
             options('erg_orb_l3_pos_iono_north_op' + suffix, 'legend_names', ['GLAT','GLON'])
+            options('erg_orb_l3_pos_iono_south_op' + suffix, 'legend_names', ['GLAT','GLON'])
 
             # set y axis to logscale
             options('erg_orb_l3_pos_blocal_op' + suffix, 'ylog', 1)
@@ -217,6 +220,7 @@ def orb(trange=['2017-03-27', '2017-03-28'],
             options('erg_orb_l3_pos_beq_t89' + suffix, 'ytitle', 'Beq (t89)')
             options('erg_orb_l3_pos_eq_t89' + suffix, 'ytitle', 'Eq_pos (t89)')
             options('erg_orb_l3_pos_iono_north_t89' + suffix, 'ytitle', 'footprint_north (t89)')
+            options('erg_orb_l3_pos_iono_south_t89' + suffix, 'ytitle', 'footprint_south (t89)')
 
             # set ysubtitle
             options('erg_orb_l3_pos_lmc_t89' + suffix, 'ysubtitle', '[dimensionless]')
@@ -226,6 +230,7 @@ def orb(trange=['2017-03-27', '2017-03-28'],
             options('erg_orb_l3_pos_beq_t89' + suffix, 'ysubtitle', '[nT]')
             options('erg_orb_l3_pos_eq_t89' + suffix, 'ysubtitle', '[Re Hour]')
             options('erg_orb_l3_pos_iono_north_t89' + suffix, 'ysubtitle', '[deg. deg.]')
+            options('erg_orb_l3_pos_iono_south_t89' + suffix, 'ysubtitle', '[deg. deg.]')
 
             # set labels
             options('erg_orb_l3_pos_lmc_t89' + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg',
@@ -238,6 +243,7 @@ def orb(trange=['2017-03-27', '2017-03-28'],
             options('erg_orb_l3_pos_beq_t89' + suffix, 'legend_names', '|B|')
             options('erg_orb_l3_pos_eq_t89' + suffix, 'legend_names', ['Re','MLT'])
             options('erg_orb_l3_pos_iono_north_t89' + suffix, 'legend_names', ['GLAT','GLON'])
+            options('erg_orb_l3_pos_iono_south_t89' + suffix, 'legend_names', ['GLAT','GLON'])
 
             # set y axis to logscale
             options('erg_orb_l3_pos_blocal_t89' + suffix, 'ylog', 1)
@@ -253,6 +259,7 @@ def orb(trange=['2017-03-27', '2017-03-28'],
             options('erg_orb_l3_pos_beq_TS04' + suffix, 'ytitle', 'Beq (TS04)')
             options('erg_orb_l3_pos_eq_TS04' + suffix, 'ytitle', 'Eq_pos (TS04)')
             options('erg_orb_l3_pos_iono_north_TS04' + suffix, 'ytitle', 'footprint_north (TS04)')
+            options('erg_orb_l3_pos_iono_south_TS04' + suffix, 'ytitle', 'footprint_south (TS04)')
 
             # set ysubtitle
             options('erg_orb_l3_pos_lmc_TS04' + suffix, 'ysubtitle', '[dimensionless]')
@@ -262,6 +269,7 @@ def orb(trange=['2017-03-27', '2017-03-28'],
             options('erg_orb_l3_pos_beq_TS04' + suffix, 'ysubtitle', '[nT]')
             options('erg_orb_l3_pos_eq_TS04' + suffix, 'ysubtitle', '[Re Hour]')
             options('erg_orb_l3_pos_iono_north_TS04' + suffix, 'ysubtitle', '[deg. deg.]')
+            options('erg_orb_l3_pos_iono_south_TS04' + suffix, 'ysubtitle', '[deg. deg.]')
 
             # set labels
             options('erg_orb_l3_pos_lmc_TS04' + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg',
@@ -274,6 +282,7 @@ def orb(trange=['2017-03-27', '2017-03-28'],
             options('erg_orb_l3_pos_beq_TS04' + suffix, 'legend_names', '|B|')
             options('erg_orb_l3_pos_eq_TS04' + suffix, 'legend_names', ['Re','MLT'])
             options('erg_orb_l3_pos_iono_north_TS04' + suffix, 'legend_names',  ['GLAT','GLON'])
+            options('erg_orb_l3_pos_iono_south_TS04' + suffix, 'legend_names',  ['GLAT','GLON'])
 
             # set y axis to logscale
             options('erg_orb_l3_pos_blocal_TS04' + suffix, 'ylog', 1)
