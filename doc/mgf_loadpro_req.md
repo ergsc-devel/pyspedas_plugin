@@ -28,11 +28,13 @@ erg_load_mgf.pro
   - tclip, -120, +1e+6   (only for erg_mgf_l2_dyn_rng_8sec)
   - labels=['Bx','By','Bz'] colors=[2,4,6]  (only for erg_mgf_l2_mag_8sec_*, erg_mgf_l2_igrf_8sec_*, erg_mgf_l2_rmsd_8sec_* )
 
+
 - erg_mgf_l2_mag_64hz_{sgi|dsi|gse|gsm|sm}
   - sample command: timespan, '2017-03-27/10:00', 1, /hour & erg_load_mgf, level='l2', datatype='64hz', coord='sm'  (smの場合)
 
   - tclip, -1e+6, +1e+6 
   - labels=['Bx','By','Bz'] colors=[2,4,6]
+
 
 - erg_mgf_l2_mag_128hz_{sgi|dsi|gse|gsm|sm}
   - sample command: timespan, '2017-03-27/16:00', 1, /hour & erg_load_mgf, level='l2', datatype='128hz', coord='sm'  (smの場合)
@@ -40,35 +42,35 @@ erg_load_mgf.pro
   - tclip, -1e+6, +1e+6 
   - labels=['Bx','By','Bz'] colors=[2,4,6]
 
+
 - erg_mgf_l2_mag_256hz_{sgi|dsi|gse|gsm|sm}
   - sample command: timespan, '2017-03-27/07:00', 1, /hour & erg_load_mgf, level='l2', datatype='256hz', coord='sm'  (smの場合)
 
   - tclip, -1e+6, +1e+6 
   - labels=['Bx','By','Bz'] colors=[2,4,6]
 
-
 ## プロットコマンドとプロット例 / Plot commands and plot examples
 - erg_mgf_l2_mag_8sec_{dsi|gse|gsm|sm}
   - timespan, '2017-03-27' & erg_load_mgf, level='l2', datatype='8sec'
   - tplot, [ 'erg_mgf_l2_mag_8sec_sm' ]
   
-  ![plot example](/doc/imgs/hep_fedo_lh_plot.png)
+  ![plot example](/doc/imgs/mgf_l2_8sec.png)
 
 - erg_mgf_l2_mag_64hz_{dsi|gse|gsm|sm}
   - timespan, '2017-03-27/10:00', 1, /hour & erg_load_mgf, level='l2', datatype='64hz'
   - tplot, [ 'erg_mgf_l2_mag_64hz_sm' ]
   
-  ![plot example](/doc/imgs/hep_fedo_lh_plot.png)
+  ![plot example](/doc/imgs/mgf_l2_64hz.png)
 
 - erg_mgf_l2_mag_128hz_{dsi|gse|gsm|sm}
   - timespan, '2017-03-27/16:00', 1, /hour & erg_load_mgf, level='l2', datatype='128hz'
   - tplot, [ 'erg_mgf_l2_mag_128hz_sm' ]
   
-  ![plot example](/doc/imgs/hep_fedo_lh_plot.png)
+  ![plot example](/doc/imgs/mgf_l2_128hz.png)
 
 - erg_mgf_l2_mag_8sec_mag_8sec_{dsi|gse|gsm|sm}
   - timespan, '2017-03-27/07:00', 1, /hour & erg_load_mgf, level='l2', datatype='256hz'
   - tplot, [ 'erg_mgf_l2_mag_256hz_sm' ]
   
-  ![plot example](/doc/imgs/hep_fedo_lh_plot.png)
+  ![plot example](/doc/imgs/mgf_l2_256hz.png)
 
