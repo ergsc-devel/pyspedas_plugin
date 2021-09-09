@@ -139,7 +139,6 @@ def pwe_hfa(trange=['2017-04-01', '2017-04-02'],
             # set zlim
             zlim('erg_pwe_hfa_'+level+'_spectra_e_ar' + suffix, -1, 1)
 
-
         # set spectrogram plot option
         options('erg_pwe_hfa_'+level+'_spectra_eu' + suffix, 'Spec', 1)
         options('erg_pwe_hfa_'+level+'_spectra_ev' + suffix, 'Spec', 1)
@@ -165,12 +164,14 @@ def pwe_hfa(trange=['2017-04-01', '2017-04-02'],
         options('erg_pwe_hfa_'+level+'_spectra_ev' + suffix, 'ytitle', 'ERG PWE/HFA (EV)')
         options('erg_pwe_hfa_'+level+'_spectra_esum' + suffix, 'ytitle', 'ERG PWE/HFA (ESUM)')
         options('erg_pwe_hfa_'+level+'_spectra_e_ar' + suffix, 'ytitle', 'ERG PWE/HFA (E_AR)')
+        options('erg_pwe_hfa_'+level+'_spectra_bgamma' + suffix, 'ytitle', 'ERG PWE/HFA (BGAMMA)')
 
         # set ysubtitle
         options('erg_pwe_hfa_'+level+'_spectra_eu' + suffix, 'ysubtitle', 'frequency [Hz]')
         options('erg_pwe_hfa_'+level+'_spectra_ev' + suffix, 'ysubtitle', 'frequency [Hz]')
         options('erg_pwe_hfa_'+level+'_spectra_esum' + suffix, 'ysubtitle', 'frequency [Hz]')
         options('erg_pwe_hfa_'+level+'_spectra_e_ar' + suffix, 'ysubtitle', 'frequency [Hz]')
+        options('erg_pwe_hfa_'+level+'_spectra_bgamma' + suffix, 'ysubtitle', 'frequency [Hz]')
 
         # set z axis to logscale
         options('erg_pwe_hfa_'+level+'_spectra_eu' + suffix, 'zlog', 1)
@@ -187,6 +188,7 @@ def pwe_hfa(trange=['2017-04-01', '2017-04-02'],
         options('erg_pwe_hfa_'+level+'_spectra_ev' + suffix, 'ztitle', 'mV^2/m^2/Hz')
         options('erg_pwe_hfa_'+level+'_spectra_esum' + suffix, 'ztitle', 'mV^2/m^2/Hz')
         options('erg_pwe_hfa_'+level+'_spectra_e_ar' + suffix, 'ztitle', 'LH:-1/RH:+1')
+        options('erg_pwe_hfa_'+level+'_spectra_bgamma' + suffix, 'ztitle', 'pT^2/Hz')
 
         # change colormap option
         options('erg_pwe_hfa_'+level+'_spectra_eu' + suffix, 'Colormap', 'jet')
