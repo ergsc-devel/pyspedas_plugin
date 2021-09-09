@@ -106,39 +106,6 @@ def pwe_hfa(trange=['2017-04-01', '2017-04-02'],
     if level == 'l2' and mode == 'low':
     
         
-        if 'erg_pwe_hfa_'+level+'_spectra_er' + suffix in loaded_data:
-            # remove minus values in y array
-            clip('erg_pwe_hfa_'+level+'_spectra_er' + suffix, 0., 5000.)
-        if 'erg_pwe_hfa_'+level+'_spectra_el' + suffix in loaded_data:
-            # remove minus values in y array
-            clip('erg_pwe_hfa_'+level+'_spectra_el' + suffix, 0., 5000.)
-        if 'erg_pwe_hfa_'+level+'_spectra_eu' + suffix in loaded_data:
-            # remove minus values in y array
-            clip('erg_pwe_hfa_'+level+'_spectra_eu' + suffix, 0., 5000.)
-            # set ylim
-            ylim('erg_pwe_hfa_'+level+'_spectra_eu' + suffix,  2.0, 10000.0)
-            # set zlim
-            zlim('erg_pwe_hfa_'+level+'_spectra_eu' + suffix,  1e-10, 1e-3)
-        if 'erg_pwe_hfa_'+level+'_spectra_ev' + suffix in loaded_data:
-            # remove minus values in y array
-            clip('erg_pwe_hfa_'+level+'_spectra_ev' + suffix, 0., 5000.)
-            # set ylim
-            ylim('erg_pwe_hfa_'+level+'_spectra_ev' + suffix,  2.0, 10000.0)
-            # set zlim
-            zlim('erg_pwe_hfa_'+level+'_spectra_ev' + suffix,  1e-10, 1e-3)
-
-        if 'erg_pwe_hfa_'+level+'_spectra_esum' + suffix in loaded_data:
-            # set ylim
-            ylim('erg_pwe_hfa_'+level+'_spectra_esum' + suffix,  2.0, 10000.0)
-            # set zlim
-            zlim('erg_pwe_hfa_'+level+'_spectra_esum' + suffix,  1e-10, 1e-3)
-
-        if 'erg_pwe_hfa_'+level+'_spectra_e_ar' + suffix in loaded_data:
-            # set ylim
-            ylim('erg_pwe_hfa_'+level+'_spectra_e_ar' + suffix,  2.0, 10000.0)
-            # set zlim
-            zlim('erg_pwe_hfa_'+level+'_spectra_e_ar' + suffix, -1, 1)
-
         # set spectrogram plot option
         options('erg_pwe_hfa_'+level+'_spectra_eu' + suffix, 'Spec', 1)
         options('erg_pwe_hfa_'+level+'_spectra_ev' + suffix, 'Spec', 1)
@@ -148,6 +115,31 @@ def pwe_hfa(trange=['2017-04-01', '2017-04-02'],
         options('erg_pwe_hfa_'+level+'_spectra_el' + suffix, 'Spec', 1)
         options('erg_pwe_hfa_'+level+'_spectra_e_mix' + suffix, 'Spec', 1)
         options('erg_pwe_hfa_'+level+'_spectra_e_ar' + suffix, 'Spec', 1)
+
+        if 'erg_pwe_hfa_'+level+'_spectra_er' + suffix in loaded_data:
+            # remove minus values in y array
+            clip('erg_pwe_hfa_'+level+'_spectra_er' + suffix, 0., 5000.)
+        if 'erg_pwe_hfa_'+level+'_spectra_el' + suffix in loaded_data:
+            # remove minus values in y array
+            clip('erg_pwe_hfa_'+level+'_spectra_el' + suffix, 0., 5000.)
+
+
+        if 'erg_pwe_hfa_'+level+'_spectra_eu' + suffix in loaded_data:
+            # remove minus values in y array
+            clip('erg_pwe_hfa_'+level+'_spectra_eu' + suffix, 0., 5000.)
+            # set ylim
+            ylim('erg_pwe_hfa_'+level+'_spectra_eu' + suffix,  2.0, 10000.0)
+            # set zlim
+            zlim('erg_pwe_hfa_'+level+'_spectra_eu' + suffix,  1e-10, 1e-3)
+
+        if 'erg_pwe_hfa_'+level+'_spectra_ev' + suffix in loaded_data:
+            # remove minus values in y array
+            clip('erg_pwe_hfa_'+level+'_spectra_ev' + suffix, 0., 5000.)
+            # set ylim
+            ylim('erg_pwe_hfa_'+level+'_spectra_ev' + suffix,  2.0, 10000.0)
+            # set zlim
+            zlim('erg_pwe_hfa_'+level+'_spectra_ev' + suffix,  1e-10, 1e-3)
+
 
         # set y axis to logscale
         options('erg_pwe_hfa_'+level+'_spectra_eu' + suffix, 'ylog', 1)
@@ -199,5 +191,24 @@ def pwe_hfa(trange=['2017-04-01', '2017-04-02'],
         options('erg_pwe_hfa_'+level+'_spectra_el' + suffix, 'Colormap', 'jet')
         options('erg_pwe_hfa_'+level+'_spectra_e_mix' + suffix, 'Colormap', 'jet')
         options('erg_pwe_hfa_'+level+'_spectra_e_ar' + suffix, 'Colormap', 'jet')
+
+        if 'erg_pwe_hfa_'+level+'_spectra_bgamma' + suffix in loaded_data:
+            # set ylim
+            ylim('erg_pwe_hfa_'+level+'_spectra_bgamma' + suffix, 2.0, 200.0)
+            # set zlim
+            zlim('erg_pwe_hfa_'+level+'_spectra_bgamma' + suffix, 1e-4, 1e+2)
+
+
+        if 'erg_pwe_hfa_'+level+'_spectra_esum' + suffix in loaded_data:
+            # set ylim
+            ylim('erg_pwe_hfa_'+level+'_spectra_esum' + suffix,  2.0, 10000.0)
+            # set zlim
+            zlim('erg_pwe_hfa_'+level+'_spectra_esum' + suffix,  1e-10, 1e-3)
+
+        if 'erg_pwe_hfa_'+level+'_spectra_e_ar' + suffix in loaded_data:
+            # set ylim
+            ylim('erg_pwe_hfa_'+level+'_spectra_e_ar' + suffix,  2.0, 10000.0)
+            # set zlim
+            zlim('erg_pwe_hfa_'+level+'_spectra_e_ar' + suffix, -1, 1)
 
     return loaded_data
