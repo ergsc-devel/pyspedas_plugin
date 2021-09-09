@@ -238,6 +238,14 @@ def hep(trange=['2017-03-27', '2017-03-28'],
                                                   'y':loaded_data['erg_hep_l3_FEDU_L' + suffix]['y'],
                                                   'v1':L_energy_array_ave,
                                                   'v2':loaded_data['erg_hep_l3_FEDU_L' + suffix]['v2']})
+               # set ylim
+               ylim('erg_hep_l3_FEDU_L' + suffix, 0, 180)
+               # set zlim
+               zlim('erg_hep_l3_FEDU_L' + suffix, 1e+2, 1e+6)
+               
+               tplot_variables.append('erg_hep_l3_FEDU_L' + suffix)
+
+               
 
 
                for i in range(loaded_data['erg_hep_l3_FEDU_L' + suffix]['y'].shape[1]): # make Tplot Variables of erg_hep_l3_FEDU_L_paspec_ene?? (??: 00, 01, 02, ..., 15)
