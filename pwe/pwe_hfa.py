@@ -102,64 +102,66 @@ def pwe_hfa(trange=['2017-04-01', '2017-04-02'],
         print('**************************************************************************')
 
 
-    # remove minus values in y array
-    if 'erg_pwe_hfa_'+level+'_spectra_er' + suffix in loaded_data:
-        clip('erg_pwe_hfa_'+level+'_spectra_er' + suffix, 0., 5000.)
-    if 'erg_pwe_hfa_'+level+'_spectra_el' + suffix in loaded_data:
-        clip('erg_pwe_hfa_'+level+'_spectra_el' + suffix, 0., 5000.)
+    if level == 'l2':
+    
+        # remove minus values in y array
+        if 'erg_pwe_hfa_'+level+'_spectra_er' + suffix in loaded_data:
+            clip('erg_pwe_hfa_'+level+'_spectra_er' + suffix, 0., 5000.)
+        if 'erg_pwe_hfa_'+level+'_spectra_el' + suffix in loaded_data:
+            clip('erg_pwe_hfa_'+level+'_spectra_el' + suffix, 0., 5000.)
 
-    # set spectrogram plot option
-    options('erg_pwe_hfa_'+level+'_spectra_eu' + suffix, 'Spec', 1)
-    options('erg_pwe_hfa_'+level+'_spectra_ev' + suffix, 'Spec', 1)
-    options('erg_pwe_hfa_'+level+'_spectra_bgamma' + suffix, 'Spec', 1)
-    options('erg_pwe_hfa_'+level+'_spectra_esum' + suffix, 'Spec', 1)
-    options('erg_pwe_hfa_'+level+'_spectra_er' + suffix, 'Spec', 1)
-    options('erg_pwe_hfa_'+level+'_spectra_el' + suffix, 'Spec', 1)
-    options('erg_pwe_hfa_'+level+'_spectra_e_mix' + suffix, 'Spec', 1)
+        # set spectrogram plot option
+        options('erg_pwe_hfa_'+level+'_spectra_eu' + suffix, 'Spec', 1)
+        options('erg_pwe_hfa_'+level+'_spectra_ev' + suffix, 'Spec', 1)
+        options('erg_pwe_hfa_'+level+'_spectra_bgamma' + suffix, 'Spec', 1)
+        options('erg_pwe_hfa_'+level+'_spectra_esum' + suffix, 'Spec', 1)
+        options('erg_pwe_hfa_'+level+'_spectra_er' + suffix, 'Spec', 1)
+        options('erg_pwe_hfa_'+level+'_spectra_el' + suffix, 'Spec', 1)
+        options('erg_pwe_hfa_'+level+'_spectra_e_mix' + suffix, 'Spec', 1)
 
-    # set y axis to logscale
-    options('erg_pwe_hfa_'+level+'_spectra_eu' + suffix, 'ylog', 1)
-    options('erg_pwe_hfa_'+level+'_spectra_ev' + suffix, 'ylog', 1)
-    options('erg_pwe_hfa_'+level+'_spectra_bgamma' + suffix, 'ylog', 1)
-    options('erg_pwe_hfa_'+level+'_spectra_esum' + suffix, 'ylog', 1)
-    options('erg_pwe_hfa_'+level+'_spectra_er' + suffix, 'ylog', 1)
-    options('erg_pwe_hfa_'+level+'_spectra_el' + suffix, 'ylog', 1)
-    options('erg_pwe_hfa_'+level+'_spectra_e_mix' + suffix, 'ylog', 1)
+        # set y axis to logscale
+        options('erg_pwe_hfa_'+level+'_spectra_eu' + suffix, 'ylog', 1)
+        options('erg_pwe_hfa_'+level+'_spectra_ev' + suffix, 'ylog', 1)
+        options('erg_pwe_hfa_'+level+'_spectra_bgamma' + suffix, 'ylog', 1)
+        options('erg_pwe_hfa_'+level+'_spectra_esum' + suffix, 'ylog', 1)
+        options('erg_pwe_hfa_'+level+'_spectra_er' + suffix, 'ylog', 1)
+        options('erg_pwe_hfa_'+level+'_spectra_el' + suffix, 'ylog', 1)
+        options('erg_pwe_hfa_'+level+'_spectra_e_mix' + suffix, 'ylog', 1)
 
-    # set yrange
-    options('erg_pwe_hfa_'+level+'_spectra_eu' + suffix, 'yrange', [2., 1000.])
-    options('erg_pwe_hfa_'+level+'_spectra_ev' + suffix, 'yrange', [2., 1000.])
-    options('erg_pwe_hfa_'+level+'_spectra_bgamma' + suffix, 'yrange', [2., 300.])
-    options('erg_pwe_hfa_'+level+'_spectra_esum' + suffix, 'yrange', [2., 1000.])
-    options('erg_pwe_hfa_'+level+'_spectra_er' + suffix, 'yrange', [2., 1000.])
-    options('erg_pwe_hfa_'+level+'_spectra_el' + suffix, 'yrange', [2., 1000.])
-    options('erg_pwe_hfa_'+level+'_spectra_e_mix' + suffix, 'yrange', [2., 1000.])
+        # set yrange
+        options('erg_pwe_hfa_'+level+'_spectra_eu' + suffix, 'yrange', [2., 1000.])
+        options('erg_pwe_hfa_'+level+'_spectra_ev' + suffix, 'yrange', [2., 1000.])
+        options('erg_pwe_hfa_'+level+'_spectra_bgamma' + suffix, 'yrange', [2., 300.])
+        options('erg_pwe_hfa_'+level+'_spectra_esum' + suffix, 'yrange', [2., 1000.])
+        options('erg_pwe_hfa_'+level+'_spectra_er' + suffix, 'yrange', [2., 1000.])
+        options('erg_pwe_hfa_'+level+'_spectra_el' + suffix, 'yrange', [2., 1000.])
+        options('erg_pwe_hfa_'+level+'_spectra_e_mix' + suffix, 'yrange', [2., 1000.])
 
-    # set z axis to logscale
-    options('erg_pwe_hfa_'+level+'_spectra_eu' + suffix, 'zlog', 1)
-    options('erg_pwe_hfa_'+level+'_spectra_ev' + suffix, 'zlog', 1)
-    options('erg_pwe_hfa_'+level+'_spectra_bgamma' + suffix, 'zlog', 1)
-    options('erg_pwe_hfa_'+level+'_spectra_esum' + suffix, 'zlog', 1)
-    options('erg_pwe_hfa_'+level+'_spectra_er' + suffix, 'zlog', 1)
-    options('erg_pwe_hfa_'+level+'_spectra_el' + suffix, 'zlog', 1)
-    options('erg_pwe_hfa_'+level+'_spectra_e_mix' + suffix, 'zlog', 1)
+        # set z axis to logscale
+        options('erg_pwe_hfa_'+level+'_spectra_eu' + suffix, 'zlog', 1)
+        options('erg_pwe_hfa_'+level+'_spectra_ev' + suffix, 'zlog', 1)
+        options('erg_pwe_hfa_'+level+'_spectra_bgamma' + suffix, 'zlog', 1)
+        options('erg_pwe_hfa_'+level+'_spectra_esum' + suffix, 'zlog', 1)
+        options('erg_pwe_hfa_'+level+'_spectra_er' + suffix, 'zlog', 1)
+        options('erg_pwe_hfa_'+level+'_spectra_el' + suffix, 'zlog', 1)
+        options('erg_pwe_hfa_'+level+'_spectra_e_mix' + suffix, 'zlog', 1)
 
-    # set zrange
-    options('erg_pwe_hfa_'+level+'_spectra_eu' + suffix, 'zrange', [1.e-10, 1.e-03])
-    options('erg_pwe_hfa_'+level+'_spectra_ev' + suffix, 'zrange', [1.e-10, 1.e-03])
-    options('erg_pwe_hfa_'+level+'_spectra_bgamma' + suffix, 'zrange', [1.e-04, 1.e+02])
-    options('erg_pwe_hfa_'+level+'_spectra_esum' + suffix, 'zrange', [1.e-10, 1.e-03])
-    options('erg_pwe_hfa_'+level+'_spectra_er' + suffix, 'zrange', [1.e-10, 1.e-03])
-    options('erg_pwe_hfa_'+level+'_spectra_el' + suffix, 'zrange', [1.e-10, 1.e-03])
-    options('erg_pwe_hfa_'+level+'_spectra_e_mix' + suffix, 'zrange', [1.e-10, 1.e-03])
+        # set zrange
+        options('erg_pwe_hfa_'+level+'_spectra_eu' + suffix, 'zrange', [1.e-10, 1.e-03])
+        options('erg_pwe_hfa_'+level+'_spectra_ev' + suffix, 'zrange', [1.e-10, 1.e-03])
+        options('erg_pwe_hfa_'+level+'_spectra_bgamma' + suffix, 'zrange', [1.e-04, 1.e+02])
+        options('erg_pwe_hfa_'+level+'_spectra_esum' + suffix, 'zrange', [1.e-10, 1.e-03])
+        options('erg_pwe_hfa_'+level+'_spectra_er' + suffix, 'zrange', [1.e-10, 1.e-03])
+        options('erg_pwe_hfa_'+level+'_spectra_el' + suffix, 'zrange', [1.e-10, 1.e-03])
+        options('erg_pwe_hfa_'+level+'_spectra_e_mix' + suffix, 'zrange', [1.e-10, 1.e-03])
 
-    # change colormap option
-    options('erg_pwe_hfa_'+level+'_spectra_eu' + suffix, 'Colormap', 'jet')
-    options('erg_pwe_hfa_'+level+'_spectra_ev' + suffix, 'Colormap', 'jet')
-    options('erg_pwe_hfa_'+level+'_spectra_bgamma' + suffix, 'Colormap', 'jet')
-    options('erg_pwe_hfa_'+level+'_spectra_esum' + suffix, 'Colormap', 'jet')
-    options('erg_pwe_hfa_'+level+'_spectra_er' + suffix, 'Colormap', 'jet')
-    options('erg_pwe_hfa_'+level+'_spectra_el' + suffix, 'Colormap', 'jet')
-    options('erg_pwe_hfa_'+level+'_spectra_e_mix' + suffix, 'Colormap', 'jet')
+        # change colormap option
+        options('erg_pwe_hfa_'+level+'_spectra_eu' + suffix, 'Colormap', 'jet')
+        options('erg_pwe_hfa_'+level+'_spectra_ev' + suffix, 'Colormap', 'jet')
+        options('erg_pwe_hfa_'+level+'_spectra_bgamma' + suffix, 'Colormap', 'jet')
+        options('erg_pwe_hfa_'+level+'_spectra_esum' + suffix, 'Colormap', 'jet')
+        options('erg_pwe_hfa_'+level+'_spectra_er' + suffix, 'Colormap', 'jet')
+        options('erg_pwe_hfa_'+level+'_spectra_el' + suffix, 'Colormap', 'jet')
+        options('erg_pwe_hfa_'+level+'_spectra_e_mix' + suffix, 'Colormap', 'jet')
 
     return loaded_data
