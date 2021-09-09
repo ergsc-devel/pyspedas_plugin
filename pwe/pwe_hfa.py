@@ -211,4 +211,18 @@ def pwe_hfa(trange=['2017-04-01', '2017-04-02'],
             # set zlim
             zlim('erg_pwe_hfa_'+level+'_spectra_e_ar' + suffix, -1, 1)
 
+    elif level == 'l3':
+
+        # set ytitle
+        options('erg_pwe_hfa_l3_Fuhr' + suffix, 'ytitle', 'UHR frequency [Mhz]')
+        options('erg_pwe_hfa_l3_ne_mgf' + suffix, 'ytitle', 'eletctorn density [/cc]')
+
+        # set ysubtitle
+        options('erg_pwe_hfa_l3_Fuhr' + suffix, 'ysubtitle', 'frequency [khz]')
+        options('erg_pwe_hfa_l3_ne_mgf' + suffix, 'ysubtitle', 'frequency [khz]')
+
+        # set y axis to logscale
+        options('erg_pwe_hfa_l3_Fuhr' + suffix, 'ylog', 1)
+        options('erg_pwe_hfa_l3_ne_mgf' + suffix, 'ylog', 1)
+
     return loaded_data
