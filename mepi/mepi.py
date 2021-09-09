@@ -73,17 +73,21 @@ def mepi(trange=['2017-03-27', '2017-03-28'],
     file_res=3600. * 24
     prefix = 'erg_mepi_'+level+'_'
 
-    pathformat = 
     if datatype == 'flux' or datatype == 'raw':
         datatype = ['tof', datatype]
         suffix = '_' + datatype[0] + datatype[1] + suffix
         
-    
-    loaded_data = load(instrument='mepi', trange=trange, level=level, datatype=datatype, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
+    if 'tof' in datatype and type(datatype) is list:
+        pathformat = 'satellite/erg/mepi/'+level+'/'+datatype[0]+'/%Y/%m/erg_mepi_'+level+'_'+datatype[0]+datatype[1]+'_%Y%m%d_v??_??.cdf'
+    else:
+        pathformat = 'satellite/erg/mepi/'+level+'/'+datatype+'/%Y/%m/erg_mepi_'+level+'_'+datatype+'_%Y%m%d_v??_??.cdf'
+
+
+    loaded_data = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype,file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
 
     if len(loaded_data) > 0 and ror:
     
-        out_files = load(instrument='mepi', trange=trange, level=level, datatype=datatype, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd)
+        out_files = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype,file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd)
         cdf_file = cdflib.CDF(out_files[0])
         gatt = cdf_file.globalattsget()
 
