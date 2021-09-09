@@ -160,15 +160,6 @@ def pwe_hfa(trange=['2017-04-01', '2017-04-02'],
         options('erg_pwe_hfa_'+level+'_spectra_e_mix' + suffix, 'ylog', 1)
         options('erg_pwe_hfa_'+level+'_spectra_e_ar' + suffix, 'ylog', 1)
 
-        # set yrange
-        #options('erg_pwe_hfa_'+level+'_spectra_eu' + suffix, 'yrange', [2., 1000.])
-        #options('erg_pwe_hfa_'+level+'_spectra_ev' + suffix, 'yrange', [2., 1000.])
-        options('erg_pwe_hfa_'+level+'_spectra_bgamma' + suffix, 'yrange', [2., 300.])
-        options('erg_pwe_hfa_'+level+'_spectra_esum' + suffix, 'yrange', [2., 1000.])
-        options('erg_pwe_hfa_'+level+'_spectra_er' + suffix, 'yrange', [2., 1000.])
-        options('erg_pwe_hfa_'+level+'_spectra_el' + suffix, 'yrange', [2., 1000.])
-        options('erg_pwe_hfa_'+level+'_spectra_e_mix' + suffix, 'yrange', [2., 1000.])
-
         # set ytitle
         options('erg_pwe_hfa_'+level+'_spectra_eu' + suffix, 'ytitle', 'ERG PWE/HFA (EU)')
         options('erg_pwe_hfa_'+level+'_spectra_ev' + suffix, 'ytitle', 'ERG PWE/HFA (EV)')
@@ -190,15 +181,6 @@ def pwe_hfa(trange=['2017-04-01', '2017-04-02'],
         options('erg_pwe_hfa_'+level+'_spectra_el' + suffix, 'zlog', 1)
         options('erg_pwe_hfa_'+level+'_spectra_e_mix' + suffix, 'zlog', 1)
 
-
-        # set zrange
-        #options('erg_pwe_hfa_'+level+'_spectra_eu' + suffix, 'zrange', [1.e-10, 1.e-03])
-        #options('erg_pwe_hfa_'+level+'_spectra_ev' + suffix, 'zrange', [1.e-10, 1.e-03])
-        options('erg_pwe_hfa_'+level+'_spectra_bgamma' + suffix, 'zrange', [1.e-04, 1.e+02])
-        options('erg_pwe_hfa_'+level+'_spectra_esum' + suffix, 'zrange', [1.e-10, 1.e-03])
-        options('erg_pwe_hfa_'+level+'_spectra_er' + suffix, 'zrange', [1.e-10, 1.e-03])
-        options('erg_pwe_hfa_'+level+'_spectra_el' + suffix, 'zrange', [1.e-10, 1.e-03])
-        options('erg_pwe_hfa_'+level+'_spectra_e_mix' + suffix, 'zrange', [1.e-10, 1.e-03])
 
         # set ztitle
         options('erg_pwe_hfa_'+level+'_spectra_eu' + suffix, 'ztitle', 'mV^2/m^2/Hz')
