@@ -233,6 +233,7 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
                     options(tplot_variables[1:], 'zlog', 1)
                     options(tplot_variables[1:], 'ysubtitle', '[deg]')
                     options(tplot_variables[1:], 'yrange', [0 , 180])
+                    options(tplot_variables[1:], 'colormap', 'jet')
 
                 for i in range(FEDU_get_data[1].shape[2]): #erg_lepe_l3_pa_pabin_??(??:01,01,..16)_FEDU
                         tplot_name = prefix + 'pabin_' + str(i + 1).zfill(2) +'_FEDU' + suffix
@@ -247,6 +248,7 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
                 options(tplot_variables[-FEDU_get_data[1].shape[2]:], 'ysubtitle', '[eV]')
                 options(tplot_variables[-FEDU_get_data[1].shape[2]:], 'zlog', 1)
                 options(tplot_variables[-FEDU_get_data[1].shape[2]:], 'ylog', 1)
+                options(tplot_variables[-FEDU_get_data[1].shape[2]:], 'colormap', 'jet')
 
                 return tplot_variables
 
