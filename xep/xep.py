@@ -146,4 +146,19 @@ def xep(trange=['2017-06-01', '2017-06-02'],
 
             return  tplot_variables
         
+        if datatype == '2dflux':
+            tplot_variables = []
+
+            if prefix + 'FEDU_SSD' + suffix in loaded_data:
+                store_data(prefix + 'FEDU_SSD' + suffix,
+                             data={'x':loaded_data[prefix + 'FEDU_SSD' + suffix]['x'],
+                                   'y':loaded_data[prefix + 'FEDU_SSD' + suffix]['y'],
+                                   'v1':np.sqrt(loaded_data[prefix + 'FEDU_SSD' + suffix]['v'][:,0]
+                                   *loaded_data[prefix + 'FEDU_SSD' + suffix]['v'][:,1]), # Geometric mean of 'v'
+                                   'v2':[i for i in range(16)]}) # [0, 1, 2, .., 15]
+
+                tplot_variables.append(prefix + 'FEDU_SSD' + suffix)
+
+                return tplot_variables
+
     return loaded_data
