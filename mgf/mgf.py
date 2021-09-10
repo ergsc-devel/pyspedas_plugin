@@ -140,10 +140,10 @@ def mgf(trange=['2017-03-27', '2017-03-28'],
         
         clip(prefix + 'magt_'+datatype+suffix, -1e+6, 1e6)
         
-        clip(prefix + 'rmsd_'+datatype+'_dsi'+suffix, 0., 200.)
-        clip(prefix + 'rmsd_'+datatype+'_gse'+suffix, 0., 200.)
-        clip(prefix + 'rmsd_'+datatype+'_gsm'+suffix, 0., 200.)
-        clip(prefix + 'rmsd_'+datatype+'_sm'+suffix, 0., 200.)
+        clip(prefix + 'rmsd_'+datatype+'_dsi'+suffix,-1e+6, +1e+6)
+        clip(prefix + 'rmsd_'+datatype+'_gse'+suffix, -1e+6, +1e+6)
+        clip(prefix + 'rmsd_'+datatype+'_gsm'+suffix, -1e+6, +1e+6)
+        clip(prefix + 'rmsd_'+datatype+'_sm'+suffix, -1e+6, +1e+6)
         
         clip(prefix + 'rmsd_'+datatype+suffix, 0., 80.)
         
