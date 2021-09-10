@@ -223,6 +223,8 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
                     tplot_variables.append(tplot_name)
                 
                 options(tplot_variables[1:], 'zlog', 1)
+                options(tplot_variables[1:], 'ysubtitle', '[deg]')
+                options(tplot_variables[1:], 'yrange', [0 , 180])
 
 
 
