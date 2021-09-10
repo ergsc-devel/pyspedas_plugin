@@ -79,7 +79,7 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
     if level == 'l3':
         datatype = 'pa'
     
-    if (level == 'l2' and datatype == 'omniflux') or (level == 'l2' and datatype == '3dflux'):
+    if (level == 'l2' and datatype == 'omniflux') or (level == 'l2' and datatype == '3dflux') or level == 'l3':
         notplot=True # to avoid failure of creation plot variables (at store_data.py) of lepe
     
     file_res=3600. * 24
@@ -186,6 +186,20 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
                 options(prefix + 'FEDU' +suffix, 'zlog', 1)
                 options(prefix + 'FEDU' +suffix, 'ylog', 1)
                 options(prefix + 'FEDU' +suffix, 'ysubtitle', '[eV]')
+
+                return tplot_variables
+
+        if level == 'l3':
+            tplot_variables = []
+
+            if prefix + 'FEDU' +suffix in loaded_data:
+                store_data(prefix + 'FEDU' +suffix, 
+                            data={'x':loaded_data[prefix + 'FEDU' +suffix]['x'],
+                                'y':loaded_data[prefix + 'FEDU' +suffix]['y'],
+                                'v1':np.sqrt(loaded_data[prefix + 'FEDU' +suffix]['v1'][:,0,:]
+                                                *loaded_data[prefix + 'FEDU' +suffix]['v1'][:,1,:]),# geometric mean
+                                'v2':loaded_data[prefix + 'FEDU' +suffix]['v2']})
+                tplot_variables.append(prefix + 'FEDU' +suffix)
 
                 return tplot_variables
 
