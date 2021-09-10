@@ -314,8 +314,7 @@ def hep(trange=['2017-03-27', '2017-03-28'],
                     options(tplot_name, 'ytitle', f'HEP-H\nEne{str(i).zfill(2)}\n{H_energy_array[i]} keV')
 
                     tplot_variables.append(tplot_name)
-           
-           
+
            # set z axis to logscale
            options(tplot_variables, 'zlog', 1)
            # set spectrogram plot option
