@@ -125,7 +125,7 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
         print('**************************************************************************')
 
 
-    if type(loaded_data) is dict:
+    if type(loaded_data) is dict and len(loaded_data) > 0:
         if (level == 'l2' and datatype == 'omniflux'):
             tplot_variables = []
             v_array = (loaded_data['erg_lepe_l2_FEDO' + suffix]['v'][:,0,:] + loaded_data['erg_lepe_l2_FEDO' + suffix]['v'][:,1,:])/ 2.
