@@ -108,39 +108,41 @@ def xep(trange=['2017-06-01', '2017-06-02'],
         if datatype == 'omniflux':
             tplot_variables = []
             
-            v_vars_min = loaded_data[prefix + 'FEDO_SSD' + suffix]['v'][0]
-            v_vars_max = loaded_data[prefix + 'FEDO_SSD' + suffix]['v'][1]
-            v_vars = np.sqrt(v_vars_min * v_vars_max) # Geometric mean 
-            
-            store_data(prefix + 'FEDO_SSD' + suffix, data={'x':loaded_data[prefix + 'FEDO_SSD' + suffix]['x'], 
-                                                'y':loaded_data[prefix + 'FEDO_SSD' + suffix]['y'],
-                                                'v':v_vars})
-            tplot_variables.append(prefix + 'FEDO_SSD' + suffix)
-            
-            # remove minus valuse of y array
-            clip(prefix + 'FEDO_SSD' + suffix, 0., 5000.)
-            # set spectrogram plot option
-            options(prefix + 'FEDO_SSD' + suffix, 'Spec', 1)
-            # set y axis to logscale
-            options(prefix + 'FEDO_SSD' + suffix, 'ylog', 1)
-            # set yrange
-            options(prefix + 'FEDO_SSD' + suffix, 'yrange', [4.0e+02, 4.5e+03])
-            # set z axis to logscale
-            options(prefix + 'FEDO_SSD' + suffix, 'zlog', 1)
-            # set zrange
-            options(prefix + 'FEDO_SSD' + suffix, 'zrange', [1.0e-01, 1.0e+3])
-            # change colormap option
-            options(prefix + 'FEDO_SSD' + suffix, 'Colormap', 'jet')
+            if prefix + 'FEDO_SSD' + suffix in loaded_data:
+                v_vars_min = loaded_data[prefix + 'FEDO_SSD' + suffix]['v'][0]
+                v_vars_max = loaded_data[prefix + 'FEDO_SSD' + suffix]['v'][1]
+                v_vars = np.sqrt(v_vars_min * v_vars_max) # Geometric mean 
+                
+                store_data(prefix + 'FEDO_SSD' + suffix, data={'x':loaded_data[prefix + 'FEDO_SSD' + suffix]['x'], 
+                                                    'y':loaded_data[prefix + 'FEDO_SSD' + suffix]['y'],
+                                                    'v':v_vars})
+                tplot_variables.append(prefix + 'FEDO_SSD' + suffix)
+                
+                if prefix + 'FEDO_SSD' + suffix in tplot_variables:
+                    # remove minus valuse of y array
+                    clip(prefix + 'FEDO_SSD' + suffix, 0., 5000.)
+                # set spectrogram plot option
+                options(prefix + 'FEDO_SSD' + suffix, 'Spec', 1)
+                # set y axis to logscale
+                options(prefix + 'FEDO_SSD' + suffix, 'ylog', 1)
+                # set yrange
+                options(prefix + 'FEDO_SSD' + suffix, 'yrange', [4.0e+02, 4.5e+03])
+                # set z axis to logscale
+                options(prefix + 'FEDO_SSD' + suffix, 'zlog', 1)
+                # set zrange
+                options(prefix + 'FEDO_SSD' + suffix, 'zrange', [1.0e-01, 1.0e+3])
+                # change colormap option
+                options(prefix + 'FEDO_SSD' + suffix, 'Colormap', 'jet')
 
-            # set ztitle
-            options(prefix + 'FEDO_SSD' + suffix, 'ztitle', '[/cm^{2}-str-s-keV]')
-            # set ytitle
-            options(prefix + 'FEDO_SSD' + suffix, 'ytitle', 'XEP\nomniflux\nLv2\nEnergy')
-            # set ysubtitle
-            options(prefix + 'FEDO_SSD' + suffix, 'ysubtitle', '[keV]')
+                # set ztitle
+                options(prefix + 'FEDO_SSD' + suffix, 'ztitle', '[/cm^{2}-str-s-keV]')
+                # set ytitle
+                options(prefix + 'FEDO_SSD' + suffix, 'ytitle', 'XEP\nomniflux\nLv2\nEnergy')
+                # set ysubtitle
+                options(prefix + 'FEDO_SSD' + suffix, 'ysubtitle', '[keV]')
 
-            ylim(prefix + 'FEDO_SSD' + suffix, 4.0e+02, 4.5e+03)
-            zlim(prefix + 'FEDO_SSD' + suffix, 1.0e-01, 1.0e+3)
+                ylim(prefix + 'FEDO_SSD' + suffix, 4.0e+02, 4.5e+03)
+                zlim(prefix + 'FEDO_SSD' + suffix, 1.0e-01, 1.0e+3)
 
             return  tplot_variables
         
