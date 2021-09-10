@@ -159,6 +159,9 @@ def xep(trange=['2017-06-01', '2017-06-02'],
 
                 tplot_variables.append(prefix + 'FEDU_SSD' + suffix)
 
+                if prefix + 'FEDU_SSD' + suffix in tplot_variables:
+                    clip(prefix + 'FEDU_SSD' + suffix, -1.0e+10, 1.0e+10)
+
                 return tplot_variables
 
     return loaded_data
