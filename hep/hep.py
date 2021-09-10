@@ -175,7 +175,7 @@ def hep(trange=['2017-03-27', '2017-03-28'],
 
             # set ytitle
             options('erg_hep_l2_FEDO_L' + suffix, 'ytitle', 'HEP-L\nomniflux\nLv2\nEnergy')
-            options('erg_hep_l2_FEDO_H' + suffix, 'ytitle', 'HEP-L\nomniflux\nLv2\nEnergy')
+            options('erg_hep_l2_FEDO_H' + suffix, 'ytitle', 'HEP-H\nomniflux\nLv2\nEnergy')
 
             # set ysubtitle
             options('erg_hep_l2_FEDO_L' + suffix, 'ysubtitle', '[keV]')
