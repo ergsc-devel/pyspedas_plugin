@@ -67,6 +67,9 @@ def mgf(trange=['2017-03-27', '2017-03-28'],
         ror: bool
             If set, print PI info and rules of the road
 
+        coord: str
+            "sm", "dsi", "gse", "gsm", "sgi"
+
         version: str
             Set this value to specify the version of cdf files (such as "v03.03", "v03.04", ...)
 
