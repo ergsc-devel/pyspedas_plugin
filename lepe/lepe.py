@@ -140,12 +140,15 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
 
             # set y axis to logscale
             options(prefix + 'FEDO' + suffix, 'ylog', 1)
-            # set yrange
-            options(prefix + 'FEDO' + suffix, 'yrange', [10., 2.e+04])
+
+            # set ylim
+            ylim(prefix + 'FEDO' + suffix, 19, 21*1e3)
             # set z axis to logscale
             options(prefix + 'FEDO' + suffix, 'zlog', 1)
-            # set zrange
-            options(prefix + 'FEDO' + suffix, 'zrange', [1.e-02, 1.e+06])
+
+            # set zlim
+            zlim(prefix + 'FEDO' + suffix,  1, 1e6)
+
             # change colormap option
             options(prefix + 'FEDO' + suffix, 'Colormap', 'jet')
 
