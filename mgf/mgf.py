@@ -20,7 +20,8 @@ def mgf(trange=['2017-03-27', '2017-03-28'],
         uname=None,
         passwd=None,
         time_clip=False,
-        ror=True):
+        ror=True,
+        version=None):
     """
     This function loads data from the MGF experiment from the Arase mission
     
@@ -65,6 +66,9 @@ def mgf(trange=['2017-03-27', '2017-03-28'],
         ror: bool
             If set, print PI info and rules of the road
 
+        version: str
+            Set this value to specify the version of cdf files (such as "v03.03", "v03.04", ...)
+
     Returns:
         List of tplot variables created.
 
@@ -82,10 +86,15 @@ def mgf(trange=['2017-03-27', '2017-03-28'],
     prefix = 'erg_mgf_'+level+'_'
     if datatype == '8sec':
         file_res=3600. * 24
-        pathformat = 'satellite/erg/mgf/'+level+'/'+datatype+'/%Y/%m/erg_mgf_'+level+'_'+datatype+'_%Y%m%d_v??.??.cdf'
+        pathformat = 'satellite/erg/mgf/'+level+'/'+datatype+'/%Y/%m/erg_mgf_'+level+'_'+datatype+'_%Y%m%d_'
     else:
         file_res=3600.
-        pathformat = 'satellite/erg/mgf/'+level+'/'+datatype+'/%Y/%m/erg_mgf_'+level+'_'+datatype+'_dsi_%Y%m%d%H_v??.??.cdf'
+        pathformat = 'satellite/erg/mgf/'+level+'/'+datatype+'/%Y/%m/erg_mgf_'+level+'_'+datatype+'_dsi_%Y%m%d%H_'
+
+    if version == None:
+        pathformat += 'v??.??.cdf'
+    else:
+        pathformat += version + '.cdf'
 
     loaded_data = load(pathformat=pathformat, file_res=file_res,trange=trange, level=level, datatype=datatype, prefix=prefix, suffix=suffix, get_support_data=get_support_data, varformat=varformat, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
     
