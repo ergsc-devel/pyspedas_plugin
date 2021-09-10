@@ -133,10 +133,11 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
                                                 'v':v_array})
             tplot_variables.append(prefix + 'FEDO' + suffix)
 
-            # change minus values to NaN in y array
-            clip(prefix + 'FEDO' + suffix, 0., 2.e+16)
             # set spectrogram plot option
             options(prefix + 'FEDO' + suffix, 'Spec', 1)
+            # change minus values to NaN in y array
+            clip(prefix + 'FEDO' + suffix, 0., 2.e+16)
+
             # set y axis to logscale
             options(prefix + 'FEDO' + suffix, 'ylog', 1)
             # set yrange
