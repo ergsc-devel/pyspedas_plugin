@@ -20,7 +20,8 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
         time_clip=False,
         ror=True,
         version = None,
-        only_fedu=False):
+        only_fedu=False,
+        et_diagram=False):
     """
     This function loads data from the LEP-e experiment from the Arase mission
     
@@ -74,6 +75,9 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
 
         only_fedu: bool
             If set, not make erg_lepe_l3_pa_enech_??(??:01,01,..32)_FEDU Tplot Variables
+
+        only_fedu: bool
+            If set, make erg_lepe_l3_pa_pabin_??(??:01,01,..16)_FEDU Tplot Variables
 
     Returns:
         List of tplot variables created.
@@ -237,22 +241,24 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
                     options(tplot_variables[1:], 'yrange', [0 , 180])
                     options(tplot_variables[1:], 'colormap', 'jet')
 
-                ytitle_deg_array = np.round(np.nan_to_num(FEDU_get_data[3]), 3)
-                for i in range(FEDU_get_data[1].shape[2]): #erg_lepe_l3_pa_pabin_??(??:01,01,..16)_FEDU
-                        tplot_name = prefix + 'pabin_' + str(i + 1).zfill(2) +'_FEDU' + suffix
-                        store_data(tplot_name,data={'x':FEDU_get_data[0],
-                                                    'y':FEDU_get_data[1][:,:,i],
-                                                    'v':FEDU_get_data[2]})
-                        options(tplot_name, 'spec', 1)
-                        ylim(tplot_name,  19, 21*1e3)
-                        zlim(tplot_name, 1, 1e6)
-                        options(tplot_name, 'ytitle', 'ERG LEP-e\n' + str(ytitle_deg_array[i]) + ' deg\nEnergy')
-                        tplot_variables.append(tplot_name)
-                
-                options(tplot_variables[-FEDU_get_data[1].shape[2]:], 'ysubtitle', '[eV]')
-                options(tplot_variables[-FEDU_get_data[1].shape[2]:], 'zlog', 1)
-                options(tplot_variables[-FEDU_get_data[1].shape[2]:], 'ylog', 1)
-                options(tplot_variables[-FEDU_get_data[1].shape[2]:], 'colormap', 'jet')
+                if et_diagram:
+                    ytitle_deg_array = np.round(np.nan_to_num(FEDU_get_data[3]), 3)
+                    
+                    for i in range(FEDU_get_data[1].shape[2]): # processing for erg_lepe_l3_pa_pabin_??(??:01,01,..16)_FEDU
+                            tplot_name = prefix + 'pabin_' + str(i + 1).zfill(2) +'_FEDU' + suffix
+                            store_data(tplot_name,data={'x':FEDU_get_data[0],
+                                                        'y':FEDU_get_data[1][:,:,i],
+                                                        'v':FEDU_get_data[2]})
+                            options(tplot_name, 'spec', 1)
+                            ylim(tplot_name,  19, 21*1e3)
+                            zlim(tplot_name, 1, 1e6)
+                            options(tplot_name, 'ytitle', 'ERG LEP-e\n' + str(ytitle_deg_array[i]) + ' deg\nEnergy')
+                            tplot_variables.append(tplot_name)
+                    
+                    options(tplot_variables[-FEDU_get_data[1].shape[2]:], 'ysubtitle', '[eV]')
+                    options(tplot_variables[-FEDU_get_data[1].shape[2]:], 'zlog', 1)
+                    options(tplot_variables[-FEDU_get_data[1].shape[2]:], 'ylog', 1)
+                    options(tplot_variables[-FEDU_get_data[1].shape[2]:], 'colormap', 'jet')
 
                 return tplot_variables
 
