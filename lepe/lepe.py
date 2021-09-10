@@ -19,7 +19,8 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
         passwd=None,
         time_clip=False,
         ror=True,
-        version = None):
+        version = None,
+        only_fedu=False):
     """
     This function loads data from the LEP-e experiment from the Arase mission
     
@@ -70,6 +71,9 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
 
         version: str
             Set this value to specify the version of cdf files (such as "v02_02")
+
+        only_fedu: bool
+            If set, not make erg_lepe_l3_pa_enech_??(??:01,01,..32)_FEDU Tplot Variables
 
     Returns:
         List of tplot variables created.
@@ -214,20 +218,21 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
 
                 ytitle_eV_array = np.round(np.nan_to_num(FEDU_get_data[2][0, :]), 2)
 
-                for i in range(FEDU_get_data[2].shape[1]):
-                    tplot_name = prefix + 'enech_' + str(i + 1).zfill(2)
-                    store_data(tplot_name,data={'x':FEDU_get_data[0],
-                                               'y':FEDU_get_data[1][:,i,:],
-                                                'v':FEDU_get_data[3]})
-                    options(tplot_name, 'spec', 1)
-                    ylim(tplot_name, 0, 180)
-                    zlim(tplot_name, 1, 1e6)
-                    options(tplot_name, 'ytitle', 'ERG LEP-e\n' + str(ytitle_eV_array[i]) + 'eV\nPitch angle')
-                    tplot_variables.append(tplot_name)
-                
-                options(tplot_variables[1:], 'zlog', 1)
-                options(tplot_variables[1:], 'ysubtitle', '[deg]')
-                options(tplot_variables[1:], 'yrange', [0 , 180])
+                if not only_fedu:
+                    for i in range(FEDU_get_data[2].shape[1]): # processing for erg_lepe_l3_pa_enech_??(??:01,01,..32)_FEDU
+                        tplot_name = prefix + 'enech_' + str(i + 1).zfill(2)
+                        store_data(tplot_name,data={'x':FEDU_get_data[0],
+                                                'y':FEDU_get_data[1][:,i,:],
+                                                    'v':FEDU_get_data[3]})
+                        options(tplot_name, 'spec', 1)
+                        ylim(tplot_name, 0, 180)
+                        zlim(tplot_name, 1, 1e6)
+                        options(tplot_name, 'ytitle', 'ERG LEP-e\n' + str(ytitle_eV_array[i]) + 'eV\nPitch angle')
+                        tplot_variables.append(tplot_name)
+                    
+                    options(tplot_variables[1:], 'zlog', 1)
+                    options(tplot_variables[1:], 'ysubtitle', '[deg]')
+                    options(tplot_variables[1:], 'yrange', [0 , 180])
 
 
 
