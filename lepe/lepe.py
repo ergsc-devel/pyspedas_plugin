@@ -240,6 +240,7 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
                     options(tplot_variables[1:], 'ysubtitle', '[deg]')
                     options(tplot_variables[1:], 'yrange', [0 , 180])
                     options(tplot_variables[1:], 'colormap', 'jet')
+                    options(tplot_variables[1:], 'ztitle', '[/s-cm^{2}-sr-keV/q]')
 
                 if et_diagram:
                     ytitle_deg_array = np.round(np.nan_to_num(FEDU_get_data[3]), 3)
