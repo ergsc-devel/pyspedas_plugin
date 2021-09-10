@@ -171,6 +171,7 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
                 zlim(prefix + 'FEDU' +suffix, 1, 1e6)
                 options(prefix + 'FEDU' +suffix, 'zlog', 1)
                 options(prefix + 'FEDU' +suffix, 'ylog', 1)
+                options(prefix + 'FEDU' +suffix, 'ysubtitle', '[eV]')
 
                 return tplot_variables
 
