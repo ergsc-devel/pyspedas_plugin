@@ -259,6 +259,7 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
                     options(tplot_variables[-FEDU_get_data[1].shape[2]:], 'zlog', 1)
                     options(tplot_variables[-FEDU_get_data[1].shape[2]:], 'ylog', 1)
                     options(tplot_variables[-FEDU_get_data[1].shape[2]:], 'colormap', 'jet')
+                    options(tplot_variables[-FEDU_get_data[1].shape[2]:], 'ztitle', '[/s-cm^{2}-sr-eV]')
 
                 return tplot_variables
 
