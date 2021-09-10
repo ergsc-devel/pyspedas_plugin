@@ -76,7 +76,7 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
         only_fedu: bool
             If set, not make erg_lepe_l3_pa_enech_??(??:01,01,..32)_FEDU Tplot Variables
 
-        only_fedu: bool
+        et_diagram: bool
             If set, make erg_lepe_l3_pa_pabin_??(??:01,01,..16)_FEDU Tplot Variables
 
     Returns:
