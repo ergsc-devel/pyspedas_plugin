@@ -214,12 +214,12 @@ def mgf(trange=['2017-03-27', '2017-03-28'],
         options(prefix + 'igrf_'+datatype+'_sm'+suffix, 'Color', ['b', 'g', 'r'])
     else:
         # remove -1.0e+30
-        clip(prefix + 'mag_'+datatype+'_dsi'+suffix, -1e+6, 1e6)
+        clip(prefix + 'mag_'+datatype+'_' + coord +suffix, -1e+6, 1e6)
         # set yrange
-        times, bdata = get_data(prefix + 'mag_'+datatype+'_dsi'+suffix)
-        ylim(prefix + 'mag_'+datatype+'_dsi'+suffix, np.nanmin(bdata), np.nanmax(bdata))
+        times, bdata = get_data(prefix + 'mag_'+datatype+'_' + coord +suffix)
+        ylim(prefix + 'mag_'+datatype+'_' + coord +suffix, np.nanmin(bdata), np.nanmax(bdata))
         # set labels
-        options(prefix + 'mag_'+datatype+'_dsi'+suffix, 'legend_names', ['Bx', 'By', 'Bz'])
+        options(prefix + 'mag_'+datatype+'_' + coord +suffix, 'legend_names', ['Bx', 'By', 'Bz'])
         # set color of the labels
-        options(prefix + 'mag_'+datatype+'_dsi'+suffix, 'Color', ['b', 'g', 'r'])
+        options(prefix + 'mag_'+datatype+'_' + coord +suffix, 'Color', ['b', 'g', 'r'])
     return loaded_data
