@@ -19,7 +19,8 @@ def mgf(trange=['2017-03-27', '2017-03-28'],
         no_update=False,
         uname=None,
         passwd=None,
-        time_clip=False):
+        time_clip=False,
+        ror=True):
     """
     This function loads data from the MGF experiment from the Arase mission
     
@@ -61,6 +62,9 @@ def mgf(trange=['2017-03-27', '2017-03-28'],
         time_clip: bool
             Time clip the variables to exactly the range specified in the trange keyword
 
+        ror: bool
+            If set, print PI info and rules of the road
+
     Returns:
         List of tplot variables created.
 
@@ -88,7 +92,7 @@ def mgf(trange=['2017-03-27', '2017-03-28'],
     if loaded_data is None or loaded_data == [] or notplot or downloadonly:
         return loaded_data
 
-    if len(loaded_data) > 0:
+    if len(loaded_data) > 0 and ror:
     
     
         out_files = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype,file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd)
