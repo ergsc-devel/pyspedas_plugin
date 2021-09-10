@@ -217,8 +217,12 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
                     store_data(tplot_name,data={'x':FEDU_get_data[0],
                                                'y':FEDU_get_data[1][:,i,:],
                                                 'v':FEDU_get_data[3]})
-
-                    tplot_variables.append(tplot_name)    
+                    options(tplot_name, 'spec', 1)
+                    ylim(tplot_name, 0, 180)
+                    zlim(tplot_name, 1, 1e6)
+                    tplot_variables.append(tplot_name)
+                
+                options(tplot_variables[1:], 'zlog', 1)
 
 
 
