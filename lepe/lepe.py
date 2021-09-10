@@ -219,7 +219,7 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
                 ytitle_eV_array = np.round(np.nan_to_num(FEDU_get_data[2][0, :]), 2)
 
                 if not only_fedu:
-                    for i in range(FEDU_get_data[2].shape[1]): # processing for erg_lepe_l3_pa_enech_??(??:01,01,..32)_FEDU
+                    for i in range(FEDU_get_data[1].shape[1]): # processing for erg_lepe_l3_pa_enech_??(??:01,01,..32)_FEDU
                         tplot_name = prefix + 'enech_' + str(i + 1).zfill(2)
                         store_data(tplot_name,data={'x':FEDU_get_data[0],
                                                 'y':FEDU_get_data[1][:,i,:],
