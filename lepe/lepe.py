@@ -143,11 +143,21 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
 
             # set ylim
             ylim(prefix + 'FEDO' + suffix, 19, 21*1e3)
+
+            # set ytitle
+            options(prefix + 'FEDO' + suffix, 'ytitle', 'ERG\nLEP-e\nFEDO\nEnergy')
+
+            # set ysubtitle
+            options(prefix + 'FEDO' + suffix, 'ysubtitle', '[eV]')
+
             # set z axis to logscale
             options(prefix + 'FEDO' + suffix, 'zlog', 1)
 
             # set zlim
             zlim(prefix + 'FEDO' + suffix,  1, 1e6)
+
+            # set ztitle
+            options(prefix + 'FEDO' + suffix, 'ztitle',  '[/cm^{2}-str-s-eV]')
 
             # change colormap option
             options(prefix + 'FEDO' + suffix, 'Colormap', 'jet')
