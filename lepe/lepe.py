@@ -2,7 +2,7 @@
 #from pyspedas.erg.load import load
 from load import load
 import numpy as np
-from pytplot import options, clip, ylim, store_data
+from pytplot import options, clip, ylim, zlim, store_data
 import cdflib
 
 def lepe(trange=['2017-04-04', '2017-04-05'],
@@ -79,7 +79,7 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
     if level == 'l3':
         datatype = 'pa'
     
-    if level == 'l2' and datatype == 'omniflux':
+    if (level == 'l2' and datatype == 'omniflux') or (level == 'l2' and datatype == '3dflux'):
         notplot=True # to avoid failure of creation plot variables (at store_data.py) of lepe
     
     file_res=3600. * 24
@@ -149,5 +149,21 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
             options(prefix + 'FEDO' + suffix, 'Colormap', 'jet')
 
             return tplot_variables
+
+        if (level == 'l2' and datatype == '3dflux'):
+            tplot_variables = []
+            
+            if prefix + 'FEDU' +suffix in loaded_data:
+                store_data(prefix + 'FEDU' +suffix, 
+                          data={'x':loaded_data[prefix + 'FEDU' +suffix]['x'],
+                                'y':loaded_data[prefix + 'FEDU' +suffix]['y'],
+                                'v1':np.sqrt(loaded_data[prefix + 'FEDU' +suffix]['v'][:,0,:]
+                                             *loaded_data[prefix + 'FEDU' +suffix]['v'][:,1,:]),# geometric mean
+                                'v2':['01', '02', '03', '04', '05', 'A', 'B', '18', '19', '20', '21', '22'],
+                                'v3':[i for i in range(16)]})
+                    
+                tplot_variables.append(prefix + 'FEDU' +suffix)
+
+                return tplot_variables
 
     return loaded_data
