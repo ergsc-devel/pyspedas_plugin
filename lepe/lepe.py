@@ -2,7 +2,7 @@
 #from pyspedas.erg.load import load
 from load import load
 import numpy as np
-from pytplot import options, clip, ylim, zlim, store_data
+from pytplot import options, clip, ylim, zlim, store_data, get_data
 import cdflib
 
 def lepe(trange=['2017-04-04', '2017-04-05'],
@@ -196,8 +196,8 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
                 store_data(prefix + 'FEDU' +suffix, 
                             data={'x':loaded_data[prefix + 'FEDU' +suffix]['x'],
                                 'y':loaded_data[prefix + 'FEDU' +suffix]['y'],
-                                'v1':np.sqrt(loaded_data[prefix + 'FEDU' +suffix]['v1'][:,0,:]
-                                                *loaded_data[prefix + 'FEDU' +suffix]['v1'][:,1,:]),# geometric mean
+                                'v1':(loaded_data[prefix + 'FEDU' +suffix]['v1'][:,0,:]
+                                        + loaded_data[prefix + 'FEDU' +suffix]['v1'][:,1,:]) / 2.,# arithmetic mean
                                 'v2':loaded_data[prefix + 'FEDU' +suffix]['v2']})
                 tplot_variables.append(prefix + 'FEDU' +suffix)
 
@@ -209,6 +209,18 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
                 options(prefix + 'FEDU' +suffix, 'zlog', 1)
                 options(prefix + 'FEDU' +suffix, 'ylog', 1)
                 options(prefix + 'FEDU' +suffix, 'ysubtitle', '[eV]')
+
+                FEDU_get_data  = get_data(prefix + 'FEDU' +suffix)
+
+                for i in range(FEDU_get_data[2].shape[1]):
+                    tplot_name = prefix + 'enech_' + str(i + 1).zfill(2)
+                    store_data(tplot_name,data={'x':FEDU_get_data[0],
+                                               'y':FEDU_get_data[1][:,i,:],
+                                                'v':FEDU_get_data[3]})
+
+                    tplot_variables.append(tplot_name)    
+
+
 
                 return tplot_variables
 
