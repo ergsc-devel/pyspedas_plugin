@@ -164,6 +164,14 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
                     
                 tplot_variables.append(prefix + 'FEDU' +suffix)
 
+                options(prefix + 'FEDU' +suffix, 'spec', 1)
+                if prefix + 'FEDU' +suffix in tplot_variables:
+                    clip(prefix + 'FEDU' +suffix, 0, 21*1e3)
+                ylim(prefix + 'FEDU' +suffix, 19, 21*1e3)
+                zlim(prefix + 'FEDU' +suffix, 1, 1e6)
+                options(prefix + 'FEDU' +suffix, 'zlog', 1)
+                options(prefix + 'FEDU' +suffix, 'ylog', 1)
+
                 return tplot_variables
 
     return loaded_data
