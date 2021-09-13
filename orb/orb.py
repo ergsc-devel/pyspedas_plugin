@@ -221,7 +221,7 @@ def orb(trange=['2017-03-27', '2017-03-28'],
 
         options(prefix + 'pos_Lm' + suffix, 'Color', ['b', 'g', 'r'])
 
-        options(prefix + 'vek_gse' + suffix, 'Color', ['b', 'g', 'r'])
+        options(prefix + 'vel_gse' + suffix, 'Color', ['b', 'g', 'r'])
         options(prefix + 'vel_gsm' + suffix, 'Color', ['b', 'g', 'r'])
         options(prefix + 'vel_sm' + suffix, 'Color', ['b', 'g', 'r'])
 
