@@ -123,58 +123,58 @@ def orb(trange=['2017-03-27', '2017-03-28'],
     if level == 'l2' and datatype=='def':
 
         # remove -1.0e+30
-        if 'erg_orb_l2_pos_Lm' + suffix in loaded_data:
-            clip('erg_orb_l2_pos_Lm' + suffix, -1e+6, 1e6)
-            times, bdata = get_data('erg_orb_l2_pos_Lm' + suffix)
-            ylim('erg_orb_l2_pos_Lm' + suffix, np.nanmin(bdata), np.nanmax(bdata))
+        if prefix + 'pos_Lm' + suffix in loaded_data:
+            clip(prefix + 'pos_Lm' + suffix, -1e+6, 1e6)
+            times, bdata = get_data(prefix + 'pos_Lm' + suffix)
+            ylim(prefix + 'pos_Lm' + suffix, np.nanmin(bdata), np.nanmax(bdata))
 
 
         # set labels
-        options('erg_orb_l2_pos_gse' + suffix, 'legend_names', ['X','Y','Z'])
-        options('erg_orb_l2_pos_gsm' + suffix, 'legend_names', ['X','Y','Z'])
-        options('erg_orb_l2_pos_sm' + suffix, 'legend_names', ['X','Y','Z'])
+        options(prefix + 'pos_gse' + suffix, 'legend_names', ['X','Y','Z'])
+        options(prefix + 'pos_gsm' + suffix, 'legend_names', ['X','Y','Z'])
+        options(prefix + 'pos_sm' + suffix, 'legend_names', ['X','Y','Z'])
 
-        options('erg_orb_l2_pos_rmlatmlt' + suffix, 'legend_names', ['Re','MLAT','MLT'])
+        options(prefix + 'pos_rmlatmlt' + suffix, 'legend_names', ['Re','MLAT','MLT'])
 
-        options('erg_orb_l2_pos_eq' + suffix, 'legend_names', ['Req','MLT'])
+        options(prefix + 'pos_eq' + suffix, 'legend_names', ['Req','MLT'])
 
-        options('erg_orb_l2_pos_iono_north' + suffix, 'legend_names', ['GLAT','GLON'])
-        options('erg_orb_l2_pos_iono_south' + suffix, 'legend_names', ['GLAT','GLON'])
+        options(prefix + 'pos_iono_north' + suffix, 'legend_names', ['GLAT','GLON'])
+        options(prefix + 'pos_iono_south' + suffix, 'legend_names', ['GLAT','GLON'])
 
-        options('erg_orb_l2_pos_blocal' + suffix, 'legend_names', ['X','Y','Z'])
+        options(prefix + 'pos_blocal' + suffix, 'legend_names', ['X','Y','Z'])
 
-        options('erg_orb_l2_pos_blocal_mag' + suffix, 'legend_names', ['B(model)_at_ERG'])
-        #options('erg_orb_l2_pos_blocal_mag' + suffix, 'legend_names', ['B(model)\n_at_ERG']) # Can't break?
+        options(prefix + 'pos_blocal_mag' + suffix, 'legend_names', ['B(model)_at_ERG'])
+        #options(prefix + 'pos_blocal_mag' + suffix, 'legend_names', ['B(model)\n_at_ERG']) # Can't break?
 
-        options('erg_orb_l2_pos_beq' + suffix, 'legend_names', ['X','Y','Z'])
+        options(prefix + 'pos_beq' + suffix, 'legend_names', ['X','Y','Z'])
 
-        options('erg_orb_l2_pos_Lm' + suffix, 'legend_names', ['90deg','60deg','30deg'])
+        options(prefix + 'pos_Lm' + suffix, 'legend_names', ['90deg','60deg','30deg'])
 
-        options('erg_orb_l2_vel_gse' + suffix, 'legend_names', ['X[km/s]','Y[km/s]','Z[km/s]'])
-        options('erg_orb_l2_vel_gsm' + suffix, 'legend_names', ['X[km/s]','Y[km/s]','Z[km/s]'])
-        options('erg_orb_l2_vel_sm' + suffix, 'legend_names', ['X[km/s]','Y[km/s]','Z[km/s]'])
+        options(prefix + 'vel_gse' + suffix, 'legend_names', ['X[km/s]','Y[km/s]','Z[km/s]'])
+        options(prefix + 'vel_gsm' + suffix, 'legend_names', ['X[km/s]','Y[km/s]','Z[km/s]'])
+        options(prefix + 'vel_sm' + suffix, 'legend_names', ['X[km/s]','Y[km/s]','Z[km/s]'])
 
         # set color
-        options('erg_orb_l2_pos_gse' + suffix, 'Color', ['b', 'g', 'r'])
-        options('erg_orb_l2_pos_gsm' + suffix, 'Color', ['b', 'g', 'r'])
-        options('erg_orb_l2_pos_sm' + suffix, 'Color', ['b', 'g', 'r'])
+        options(prefix + 'pos_gse' + suffix, 'Color', ['b', 'g', 'r'])
+        options(prefix + 'pos_gsm' + suffix, 'Color', ['b', 'g', 'r'])
+        options(prefix + 'pos_sm' + suffix, 'Color', ['b', 'g', 'r'])
 
-        options('erg_orb_l2_pos_rmlatmlt' + suffix, 'Color', ['b', 'g', 'r'])
+        options(prefix + 'pos_rmlatmlt' + suffix, 'Color', ['b', 'g', 'r'])
 
-        options('erg_orb_l2_pos_blocal' + suffix, 'Color', ['b', 'g', 'r'])
+        options(prefix + 'pos_blocal' + suffix, 'Color', ['b', 'g', 'r'])
 
-        options('erg_orb_l2_pos_beq' + suffix, 'Color', ['b', 'g', 'r'])
+        options(prefix + 'pos_beq' + suffix, 'Color', ['b', 'g', 'r'])
 
-        options('erg_orb_l2_pos_Lm' + suffix, 'Color', ['b', 'g', 'r'])
+        options(prefix + 'pos_Lm' + suffix, 'Color', ['b', 'g', 'r'])
 
-        options('erg_orb_l2_vel_gse' + suffix, 'Color', ['b', 'g', 'r'])
-        options('erg_orb_l2_vel_gsm' + suffix, 'Color', ['b', 'g', 'r'])
-        options('erg_orb_l2_vel_sm' + suffix, 'Color', ['b', 'g', 'r'])
+        options(prefix + 'vel_gse' + suffix, 'Color', ['b', 'g', 'r'])
+        options(prefix + 'vel_gsm' + suffix, 'Color', ['b', 'g', 'r'])
+        options(prefix + 'vel_sm' + suffix, 'Color', ['b', 'g', 'r'])
 
         # set y axis to logscale
-        options('erg_orb_l2_pos_blocal_mag' + suffix, 'ylog', 1)
+        options(prefix + 'pos_blocal_mag' + suffix, 'ylog', 1)
 
-        options('erg_orb_l2_pos_beq' + suffix, 'ylog', 1)
+        options(prefix + 'pos_beq' + suffix, 'ylog', 1)
     
     elif level == 'l3':
 
@@ -190,118 +190,118 @@ def orb(trange=['2017-03-27', '2017-03-28'],
         if model == 'op':
         
             # set ytitle
-            options('erg_orb_l3_pos_lmc_op' + suffix, 'ytitle', 'Lmc (op)')
-            options('erg_orb_l3_pos_lstar_op' + suffix, 'ytitle', 'Lstar (op)')
-            options('erg_orb_l3_pos_I_op' + suffix, 'ytitle', 'I (op)')
-            options('erg_orb_l3_pos_blocal_op' + suffix, 'ytitle', 'Blocal (op)')
-            options('erg_orb_l3_pos_beq_op' + suffix, 'ytitle', 'Beq (op)')
-            options('erg_orb_l3_pos_eq_op' + suffix, 'ytitle', 'Eq_pos (op)')
-            options('erg_orb_l3_pos_iono_north_op' + suffix, 'ytitle', 'footprint_north (op)')
-            options('erg_orb_l3_pos_iono_south_op' + suffix, 'ytitle', 'footprint_south (op)')
+            options(prefix + 'pos_lmc_op' + suffix, 'ytitle', 'Lmc (op)')
+            options(prefix + 'pos_lstar_op' + suffix, 'ytitle', 'Lstar (op)')
+            options(prefix + 'pos_I_op' + suffix, 'ytitle', 'I (op)')
+            options(prefix + 'pos_blocal_op' + suffix, 'ytitle', 'Blocal (op)')
+            options(prefix + 'pos_beq_op' + suffix, 'ytitle', 'Beq (op)')
+            options(prefix + 'pos_eq_op' + suffix, 'ytitle', 'Eq_pos (op)')
+            options(prefix + 'pos_iono_north_op' + suffix, 'ytitle', 'footprint_north (op)')
+            options(prefix + 'pos_iono_south_op' + suffix, 'ytitle', 'footprint_south (op)')
 
             # set ysubtitle
-            options('erg_orb_l3_pos_lmc_op' + suffix, 'ysubtitle', '[dimensionless]')
-            options('erg_orb_l3_pos_lstar_op' + suffix, 'ysubtitle', '[dimensionless]')
-            options('erg_orb_l3_pos_I_op' + suffix, 'ysubtitle', '[Re]')
-            options('erg_orb_l3_pos_blocal_op' + suffix, 'ysubtitle', '[nT]')
-            options('erg_orb_l3_pos_beq_op' + suffix, 'ysubtitle', '[nT]')
-            options('erg_orb_l3_pos_eq_op' + suffix, 'ysubtitle', '[Re Hour]')
-            options('erg_orb_l3_pos_iono_north_op' + suffix, 'ysubtitle', '[deg. deg.]')
-            options('erg_orb_l3_pos_iono_south_op' + suffix, 'ysubtitle', '[deg. deg.]')
+            options(prefix + 'pos_lmc_op' + suffix, 'ysubtitle', '[dimensionless]')
+            options(prefix + 'pos_lstar_op' + suffix, 'ysubtitle', '[dimensionless]')
+            options(prefix + 'pos_I_op' + suffix, 'ysubtitle', '[Re]')
+            options(prefix + 'pos_blocal_op' + suffix, 'ysubtitle', '[nT]')
+            options(prefix + 'pos_beq_op' + suffix, 'ysubtitle', '[nT]')
+            options(prefix + 'pos_eq_op' + suffix, 'ysubtitle', '[Re Hour]')
+            options(prefix + 'pos_iono_north_op' + suffix, 'ysubtitle', '[deg. deg.]')
+            options(prefix + 'pos_iono_south_op' + suffix, 'ysubtitle', '[deg. deg.]')
 
             # set ylabels
-            options('erg_orb_l3_pos_lmc_op' + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg',
+            options(prefix + 'pos_lmc_op' + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg',
                                                                         '40deg','30deg','20deg','10deg'])
-            options('erg_orb_l3_pos_lstar_op' + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg',
+            options(prefix + 'pos_lstar_op' + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg',
                                                                         '40deg','30deg','20deg','10deg'])
-            options('erg_orb_l3_pos_I_op' + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg',
+            options(prefix + 'pos_I_op' + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg',
                                                                         '40deg','30deg','20deg','10deg'])
-            options('erg_orb_l3_pos_blocal_op' + suffix, 'legend_names', '|B|')
-            options('erg_orb_l3_pos_beq_op' + suffix, 'legend_names', '|B|')
-            options('erg_orb_l3_pos_eq_op' + suffix, 'legend_names', ['Re','MLT'])
-            options('erg_orb_l3_pos_iono_north_op' + suffix, 'legend_names', ['GLAT','GLON'])
-            options('erg_orb_l3_pos_iono_south_op' + suffix, 'legend_names', ['GLAT','GLON'])
+            options(prefix + 'pos_blocal_op' + suffix, 'legend_names', '|B|')
+            options(prefix + 'pos_beq_op' + suffix, 'legend_names', '|B|')
+            options(prefix + 'pos_eq_op' + suffix, 'legend_names', ['Re','MLT'])
+            options(prefix + 'pos_iono_north_op' + suffix, 'legend_names', ['GLAT','GLON'])
+            options(prefix + 'pos_iono_south_op' + suffix, 'legend_names', ['GLAT','GLON'])
 
             # set y axis to logscale
-            options('erg_orb_l3_pos_blocal_op' + suffix, 'ylog', 1)
-            options('erg_orb_l3_pos_beq_op' + suffix, 'ylog', 1)
+            options(prefix + 'pos_blocal_op' + suffix, 'ylog', 1)
+            options(prefix + 'pos_beq_op' + suffix, 'ylog', 1)
 
         elif model == 't89':
 
             # set ytitle
-            options('erg_orb_l3_pos_lmc_t89' + suffix, 'ytitle', 'Lmc (t89)')
-            options('erg_orb_l3_pos_lstar_t89' + suffix, 'ytitle', 'Lstar (t89)')
-            options('erg_orb_l3_pos_I_t89' + suffix, 'ytitle', 'I (t89)')
-            options('erg_orb_l3_pos_blocal_t89' + suffix, 'ytitle', 'Blocal (t89)')
-            options('erg_orb_l3_pos_beq_t89' + suffix, 'ytitle', 'Beq (t89)')
-            options('erg_orb_l3_pos_eq_t89' + suffix, 'ytitle', 'Eq_pos (t89)')
-            options('erg_orb_l3_pos_iono_north_t89' + suffix, 'ytitle', 'footprint_north (t89)')
-            options('erg_orb_l3_pos_iono_south_t89' + suffix, 'ytitle', 'footprint_south (t89)')
+            options(prefix + 'pos_lmc_t89' + suffix, 'ytitle', 'Lmc (t89)')
+            options(prefix + 'pos_lstar_t89' + suffix, 'ytitle', 'Lstar (t89)')
+            options(prefix + 'pos_I_t89' + suffix, 'ytitle', 'I (t89)')
+            options(prefix + 'pos_blocal_t89' + suffix, 'ytitle', 'Blocal (t89)')
+            options(prefix + 'pos_beq_t89' + suffix, 'ytitle', 'Beq (t89)')
+            options(prefix + 'pos_eq_t89' + suffix, 'ytitle', 'Eq_pos (t89)')
+            options(prefix + 'pos_iono_north_t89' + suffix, 'ytitle', 'footprint_north (t89)')
+            options(prefix + 'pos_iono_south_t89' + suffix, 'ytitle', 'footprint_south (t89)')
 
             # set ysubtitle
-            options('erg_orb_l3_pos_lmc_t89' + suffix, 'ysubtitle', '[dimensionless]')
-            options('erg_orb_l3_pos_lstar_t89' + suffix, 'ysubtitle', '[dimensionless]')
-            options('erg_orb_l3_pos_I_t89' + suffix, 'ysubtitle', '[Re]')
-            options('erg_orb_l3_pos_blocal_t89' + suffix, 'ysubtitle', '[nT]')
-            options('erg_orb_l3_pos_beq_t89' + suffix, 'ysubtitle', '[nT]')
-            options('erg_orb_l3_pos_eq_t89' + suffix, 'ysubtitle', '[Re Hour]')
-            options('erg_orb_l3_pos_iono_north_t89' + suffix, 'ysubtitle', '[deg. deg.]')
-            options('erg_orb_l3_pos_iono_south_t89' + suffix, 'ysubtitle', '[deg. deg.]')
+            options(prefix + 'pos_lmc_t89' + suffix, 'ysubtitle', '[dimensionless]')
+            options(prefix + 'pos_lstar_t89' + suffix, 'ysubtitle', '[dimensionless]')
+            options(prefix + 'pos_I_t89' + suffix, 'ysubtitle', '[Re]')
+            options(prefix + 'pos_blocal_t89' + suffix, 'ysubtitle', '[nT]')
+            options(prefix + 'pos_beq_t89' + suffix, 'ysubtitle', '[nT]')
+            options(prefix + 'pos_eq_t89' + suffix, 'ysubtitle', '[Re Hour]')
+            options(prefix + 'pos_iono_north_t89' + suffix, 'ysubtitle', '[deg. deg.]')
+            options(prefix + 'pos_iono_south_t89' + suffix, 'ysubtitle', '[deg. deg.]')
 
             # set labels
-            options('erg_orb_l3_pos_lmc_t89' + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg',
+            options(prefix + 'pos_lmc_t89' + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg',
                                                                             '40deg','30deg','20deg','10deg'])
-            options('erg_orb_l3_pos_lstar_t89' + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg',
+            options(prefix + 'pos_lstar_t89' + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg',
                                                                             '40deg','30deg','20deg','10deg'])
-            options('erg_orb_l3_pos_I_t89' + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg',
+            options(prefix + 'pos_I_t89' + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg',
                                                                             '40deg','30deg','20deg','10deg'])
-            options('erg_orb_l3_pos_blocal_t89' + suffix, 'legend_names', '|B|')
-            options('erg_orb_l3_pos_beq_t89' + suffix, 'legend_names', '|B|')
-            options('erg_orb_l3_pos_eq_t89' + suffix, 'legend_names', ['Re','MLT'])
-            options('erg_orb_l3_pos_iono_north_t89' + suffix, 'legend_names', ['GLAT','GLON'])
-            options('erg_orb_l3_pos_iono_south_t89' + suffix, 'legend_names', ['GLAT','GLON'])
+            options(prefix + 'pos_blocal_t89' + suffix, 'legend_names', '|B|')
+            options(prefix + 'pos_beq_t89' + suffix, 'legend_names', '|B|')
+            options(prefix + 'pos_eq_t89' + suffix, 'legend_names', ['Re','MLT'])
+            options(prefix + 'pos_iono_north_t89' + suffix, 'legend_names', ['GLAT','GLON'])
+            options(prefix + 'pos_iono_south_t89' + suffix, 'legend_names', ['GLAT','GLON'])
 
             # set y axis to logscale
-            options('erg_orb_l3_pos_blocal_t89' + suffix, 'ylog', 1)
-            options('erg_orb_l3_pos_beq_t89' + suffix, 'ylog', 1)
+            options(prefix + 'pos_blocal_t89' + suffix, 'ylog', 1)
+            options(prefix + 'pos_beq_t89' + suffix, 'ylog', 1)
 
         elif model == 'ts04':
 
             # set ytitle
-            options('erg_orb_l3_pos_lmc_TS04' + suffix, 'ytitle', 'Lmc (TS04)')
-            options('erg_orb_l3_pos_lstar_TS04' + suffix, 'ytitle', 'Lstar (TS04)')
-            options('erg_orb_l3_pos_I_TS04' + suffix, 'ytitle', 'I (TS04)')
-            options('erg_orb_l3_pos_blocal_TS04' + suffix, 'ytitle', 'Blocal (TS04)')
-            options('erg_orb_l3_pos_beq_TS04' + suffix, 'ytitle', 'Beq (TS04)')
-            options('erg_orb_l3_pos_eq_TS04' + suffix, 'ytitle', 'Eq_pos (TS04)')
-            options('erg_orb_l3_pos_iono_north_TS04' + suffix, 'ytitle', 'footprint_north (TS04)')
-            options('erg_orb_l3_pos_iono_south_TS04' + suffix, 'ytitle', 'footprint_south (TS04)')
+            options(prefix + 'pos_lmc_TS04' + suffix, 'ytitle', 'Lmc (TS04)')
+            options(prefix + 'pos_lstar_TS04' + suffix, 'ytitle', 'Lstar (TS04)')
+            options(prefix + 'pos_I_TS04' + suffix, 'ytitle', 'I (TS04)')
+            options(prefix + 'pos_blocal_TS04' + suffix, 'ytitle', 'Blocal (TS04)')
+            options(prefix + 'pos_beq_TS04' + suffix, 'ytitle', 'Beq (TS04)')
+            options(prefix + 'pos_eq_TS04' + suffix, 'ytitle', 'Eq_pos (TS04)')
+            options(prefix + 'pos_iono_north_TS04' + suffix, 'ytitle', 'footprint_north (TS04)')
+            options(prefix + 'pos_iono_south_TS04' + suffix, 'ytitle', 'footprint_south (TS04)')
 
             # set ysubtitle
-            options('erg_orb_l3_pos_lmc_TS04' + suffix, 'ysubtitle', '[dimensionless]')
-            options('erg_orb_l3_pos_lstar_TS04' + suffix, 'ysubtitle', '[dimensionless]')
-            options('erg_orb_l3_pos_I_TS04' + suffix, 'ysubtitle', '[Re]')
-            options('erg_orb_l3_pos_blocal_TS04' + suffix, 'ysubtitle', '[nT]')
-            options('erg_orb_l3_pos_beq_TS04' + suffix, 'ysubtitle', '[nT]')
-            options('erg_orb_l3_pos_eq_TS04' + suffix, 'ysubtitle', '[Re Hour]')
-            options('erg_orb_l3_pos_iono_north_TS04' + suffix, 'ysubtitle', '[deg. deg.]')
-            options('erg_orb_l3_pos_iono_south_TS04' + suffix, 'ysubtitle', '[deg. deg.]')
+            options(prefix + 'pos_lmc_TS04' + suffix, 'ysubtitle', '[dimensionless]')
+            options(prefix + 'pos_lstar_TS04' + suffix, 'ysubtitle', '[dimensionless]')
+            options(prefix + 'pos_I_TS04' + suffix, 'ysubtitle', '[Re]')
+            options(prefix + 'pos_blocal_TS04' + suffix, 'ysubtitle', '[nT]')
+            options(prefix + 'pos_beq_TS04' + suffix, 'ysubtitle', '[nT]')
+            options(prefix + 'pos_eq_TS04' + suffix, 'ysubtitle', '[Re Hour]')
+            options(prefix + 'pos_iono_north_TS04' + suffix, 'ysubtitle', '[deg. deg.]')
+            options(prefix + 'pos_iono_south_TS04' + suffix, 'ysubtitle', '[deg. deg.]')
 
             # set labels
-            options('erg_orb_l3_pos_lmc_TS04' + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg',
+            options(prefix + 'pos_lmc_TS04' + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg',
                                                                             '40deg','30deg','20deg','10deg'])
-            options('erg_orb_l3_pos_lstar_TS04' + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg',
+            options(prefix + 'pos_lstar_TS04' + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg',
                                                                             '40deg','30deg','20deg','10deg'])
-            options('erg_orb_l3_pos_I_TS04' + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg',
+            options(prefix + 'pos_I_TS04' + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg',
                                                                             '40deg','30deg','20deg','10deg'])
-            options('erg_orb_l3_pos_blocal_TS04' + suffix, 'legend_names', '|B|')
-            options('erg_orb_l3_pos_beq_TS04' + suffix, 'legend_names', '|B|')
-            options('erg_orb_l3_pos_eq_TS04' + suffix, 'legend_names', ['Re','MLT'])
-            options('erg_orb_l3_pos_iono_north_TS04' + suffix, 'legend_names',  ['GLAT','GLON'])
-            options('erg_orb_l3_pos_iono_south_TS04' + suffix, 'legend_names',  ['GLAT','GLON'])
+            options(prefix + 'pos_blocal_TS04' + suffix, 'legend_names', '|B|')
+            options(prefix + 'pos_beq_TS04' + suffix, 'legend_names', '|B|')
+            options(prefix + 'pos_eq_TS04' + suffix, 'legend_names', ['Re','MLT'])
+            options(prefix + 'pos_iono_north_TS04' + suffix, 'legend_names',  ['GLAT','GLON'])
+            options(prefix + 'pos_iono_south_TS04' + suffix, 'legend_names',  ['GLAT','GLON'])
 
             # set y axis to logscale
-            options('erg_orb_l3_pos_blocal_TS04' + suffix, 'ylog', 1)
-            options('erg_orb_l3_pos_beq_TS04' + suffix, 'ylog', 1)
+            options(prefix + 'pos_blocal_TS04' + suffix, 'ylog', 1)
+            options(prefix + 'pos_beq_TS04' + suffix, 'ylog', 1)
 
     return loaded_data
