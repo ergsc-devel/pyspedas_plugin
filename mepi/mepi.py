@@ -71,7 +71,7 @@ def mepi(trange=['2017-03-27', '2017-03-28'],
 
     """
     file_res=3600. * 24
-    prefix = 'erg_mepi_'+level+'_'
+    prefix = 'erg_mepi_'+level+'_'+datatype+'_'
 
     if datatype == 'flux' or datatype == 'raw':
         datatype = ['tof', datatype]
@@ -109,7 +109,7 @@ def mepi(trange=['2017-03-27', '2017-03-28'],
 
 
     if datatype == 'omniflux' and level == 'l2':
-        prefix = 'erg_mepi_l2_'
+        #prefix = 'erg_mepi_l2_'
         original_suffix_list = ['FPDO', 'FHE2DO', 'FHEDO', 'FOPPDO', 'FODO', 'FO2PDO',
                                 'FPDO_tof', 'FHE2DO_tof', 'FHEDO_tof', 'FOPPDO_tof', 'FODO_tof', 'FO2PDO_tof']
         tplot_names_list = []
@@ -153,7 +153,7 @@ def mepi(trange=['2017-03-27', '2017-03-28'],
         options(tplot_names_list, 'Colormap', 'jet')
 
     elif datatype == '3dflux' and level == 'l2':
-        prefix = 'erg_mepi_l2_'
+        #prefix = 'erg_mepi_l2_'
         original_suffix_list = ['FPDU', 'FHE2DU', 'FHEDU', 'FOPPDU', 'FODU', 'FO2PDU',
                         'count_raw_P', 'count_raw_HE2', 'count_raw_HE', 'count_raw_OPP', 'count_raw_O', 'count_raw_O2P']
         tplot_names_list = []
