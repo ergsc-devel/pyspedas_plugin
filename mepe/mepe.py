@@ -76,7 +76,7 @@ def mepe(trange=['2017-03-27', '2017-03-28'],
         datatype = '3dflux'
 
     file_res=3600. * 24
-    prefix = 'erg_mepe_'+level+'_'
+    prefix = 'erg_mepe_'+level+ '_' + datatype + '_'
     pathformat = 'satellite/erg/mepe/'+level+'/'+datatype+'/%Y/%m/erg_mepe_'+level+'_'+datatype+'_%Y%m%d_v??_??.cdf'
 
     loaded_data = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype,file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
@@ -106,74 +106,74 @@ def mepe(trange=['2017-03-27', '2017-03-28'],
 
     if datatype == 'omniflux':
         # set spectrogram plot option
-        options('erg_mepe_' + level + '_FEDO' + suffix, 'Spec', 1)
+        options(prefix + 'FEDO' + suffix, 'Spec', 1)
         # set y axis to logscale
-        options('erg_mepe_' + level + '_FEDO' + suffix, 'ylog', 1)
+        options(prefix + 'FEDO' + suffix, 'ylog', 1)
         # set yrange
-        #options('erg_mepe_' + level + '_FEDO' + suffix, 'yrange', [6., 90.])
+        #options(prefix + 'FEDO' + suffix, 'yrange', [6., 90.])
         # set ytitle
-        options('erg_mepe_' + level + '_FEDO' + suffix, 'ytitle', 'ERG\nMEP-e\nFEDO\nEnergy')
+        options(prefix + 'FEDO' + suffix, 'ytitle', 'ERG\nMEP-e\nFEDO\nEnergy')
         # set ysubtitle
-        options('erg_mepe_' + level + '_FEDO' + suffix, 'ysubtitle', '[keV]')
+        options(prefix + 'FEDO' + suffix, 'ysubtitle', '[keV]')
         # set ylim
-        ylim('erg_mepe_' + level + '_FEDO' + suffix, 6., 100.)
+        ylim(prefix + 'FEDO' + suffix, 6., 100.)
         # set z axis to logscale
-        options('erg_mepe_' + level + '_FEDO' + suffix, 'zlog', 1)
+        options(prefix + 'FEDO' + suffix, 'zlog', 1)
         # set zrange
-        #options('erg_mepe_' + level + '_FEDO' + suffix, 'zrange', [1.e+01, 1.e+07])
+        #options(prefix + 'FEDO' + suffix, 'zrange', [1.e+01, 1.e+07])
         # set ztitle
-        options('erg_mepe_' + level + '_FEDO' + suffix, 'ztitle', '[/s-cm^{2}-sr-keV]')
+        options(prefix + 'FEDO' + suffix, 'ztitle', '[/s-cm^{2}-sr-keV]')
         # change colormap option
-        options('erg_mepe_' + level + '_FEDO' + suffix, 'Colormap', 'jet')
+        options(prefix + 'FEDO' + suffix, 'Colormap', 'jet')
     elif datatype == '3dflux' and level == 'l2':
         # set spectrogram plot option
-        options('erg_mepe_' + level + '_FEDU' + suffix, 'Spec', 1)
-        options('erg_mepe_' + level + '_FEDU_n' + suffix, 'Spec', 1)
-        options('erg_mepe_' + level + '_FEEDU' + suffix, 'Spec', 1)
-        options('erg_mepe_' + level + '_count_raw' + suffix, 'Spec', 1)
+        options(prefix + 'FEDU' + suffix, 'Spec', 1)
+        options(prefix + 'FEDU_n' + suffix, 'Spec', 1)
+        options(prefix + 'FEEDU' + suffix, 'Spec', 1)
+        options(prefix + 'count_raw' + suffix, 'Spec', 1)
 
         # set y axis to logscale
-        options('erg_mepe_' + level + '_FEDU' + suffix, 'ylog', 1)
-        options('erg_mepe_' + level + '_FEDU_n' + suffix, 'ylog', 1)
-        options('erg_mepe_' + level + '_FEEDU' + suffix, 'ylog', 1)
-        options('erg_mepe_' + level + '_count_raw' + suffix, 'ylog', 1)
+        options(prefix + 'FEDU' + suffix, 'ylog', 1)
+        options(prefix + 'FEDU_n' + suffix, 'ylog', 1)
+        options(prefix + 'FEEDU' + suffix, 'ylog', 1)
+        options(prefix + 'count_raw' + suffix, 'ylog', 1)
 
         # set yrange
-        #options('erg_mepe_' + level + '_FEDU' + suffix, 'yrange', [6., 100.])
-        #options('erg_mepe_' + level + '_FEDU_n' + suffix, 'yrange', [6., 100.])
-        #options('erg_mepe_' + level + '_FEEDU' + suffix, 'yrange', [6., 100.])
-        #options('erg_mepe_' + level + '_count_raw' + suffix, 'yrange', [6., 100.])
+        #options(prefix + 'FEDU' + suffix, 'yrange', [6., 100.])
+        #options(prefix + 'FEDU_n' + suffix, 'yrange', [6., 100.])
+        #options(prefix + 'FEEDU' + suffix, 'yrange', [6., 100.])
+        #options(prefix + 'count_raw' + suffix, 'yrange', [6., 100.])
 
         # set ysubtitle
-        options('erg_mepe_' + level + '_FEDU' + suffix, 'ysubtitle', '[keV]')
-        options('erg_mepe_' + level + '_FEDU_n' + suffix, 'ysubtitle', '[keV]')
-        options('erg_mepe_' + level + '_count_raw' + suffix, 'ysubtitle', '[keV]')
+        options(prefix + 'FEDU' + suffix, 'ysubtitle', '[keV]')
+        options(prefix + 'FEDU_n' + suffix, 'ysubtitle', '[keV]')
+        options(prefix + 'count_raw' + suffix, 'ysubtitle', '[keV]')
 
         # set ylim
-        ylim('erg_mepe_' + level + '_FEDU' + suffix, 6., 100.)
-        ylim('erg_mepe_' + level + '_FEDU_n' + suffix, 6., 100.)
-        ylim('erg_mepe_' + level + '_count_raw' + suffix, 6., 100.)
+        ylim(prefix + 'FEDU' + suffix, 6., 100.)
+        ylim(prefix + 'FEDU_n' + suffix, 6., 100.)
+        ylim(prefix + 'count_raw' + suffix, 6., 100.)
 
         # set z axis to logscale
-        options('erg_mepe_' + level + '_FEDU' + suffix, 'zlog', 1)
-        options('erg_mepe_' + level + '_FEDU_n' + suffix, 'zlog', 1)
-        options('erg_mepe_' + level + '_FEEDU' + suffix, 'zlog', 1)
-        options('erg_mepe_' + level + '_count_raw' + suffix, 'zlog', 1)
+        options(prefix + 'FEDU' + suffix, 'zlog', 1)
+        options(prefix + 'FEDU_n' + suffix, 'zlog', 1)
+        options(prefix + 'FEEDU' + suffix, 'zlog', 1)
+        options(prefix + 'count_raw' + suffix, 'zlog', 1)
 
         # set zrange
-        #options('erg_mepe_' + level + '_FEDU' + suffix, 'zrange', [1.05*1.0e+4 , 2.0*1.0e+9])
-        #options('erg_mepe_' + level + '_FEDU_n' + suffix, 'zrange', [.95e+4 , 1.05e+9])
-        #options('erg_mepe_' + level + '_FEEDU' + suffix, 'zrange', [6.0e+5 , 1.0e+10])
-        #options('erg_mepe_' + level + '_count_raw' + suffix, 'zrange', [1.0e+0 , 1.0e+4])
+        #options(prefix + 'FEDU' + suffix, 'zrange', [1.05*1.0e+4 , 2.0*1.0e+9])
+        #options(prefix + 'FEDU_n' + suffix, 'zrange', [.95e+4 , 1.05e+9])
+        #options(prefix + 'FEEDU' + suffix, 'zrange', [6.0e+5 , 1.0e+10])
+        #options(prefix + 'count_raw' + suffix, 'zrange', [1.0e+0 , 1.0e+4])
 
         # set ztitle
-        options('erg_mepe_' + level + '_FEDU' + suffix, 'ztitle', '[/s-cm^{2}-sr-keV]')
-        options('erg_mepe_' + level + '_FEDU_n' + suffix, 'ztitle', '[/s-cm^{2}-sr-keV]')
+        options(prefix + 'FEDU' + suffix, 'ztitle', '[/s-cm^{2}-sr-keV]')
+        options(prefix + 'FEDU_n' + suffix, 'ztitle', '[/s-cm^{2}-sr-keV]')
 
         # change colormap option
-        options('erg_mepe_' + level + '_FEDU' + suffix, 'Colormap', 'jet')
-        options('erg_mepe_' + level + '_FEDU_n' + suffix, 'Colormap', 'jet')
-        options('erg_mepe_' + level + '_FEEDU' + suffix, 'Colormap', 'jet')
-        options('erg_mepe_' + level + '_count_raw' + suffix, 'Colormap', 'jet')
+        options(prefix + 'FEDU' + suffix, 'Colormap', 'jet')
+        options(prefix + 'FEDU_n' + suffix, 'Colormap', 'jet')
+        options(prefix + 'FEEDU' + suffix, 'Colormap', 'jet')
+        options(prefix + 'count_raw' + suffix, 'Colormap', 'jet')
 
     return loaded_data
