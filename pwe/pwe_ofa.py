@@ -72,7 +72,7 @@ def pwe_ofa(trange=['2017-04-01', '2017-04-02'],
     """
 
     file_res=3600. * 24
-    prefix = 'erg_pwe_ofa_'+level+'_'
+    prefix = 'erg_pwe_ofa_'+level+'_'+datatype+'_'
 
     pathformat = 'satellite/erg/pwe/ofa/'+level+'/'+datatype+'/%Y/%m/erg_pwe_ofa_'+level+'_'+datatype+'_%Y%m%d_v??_??.cdf'
 
@@ -105,52 +105,52 @@ def pwe_ofa(trange=['2017-04-01', '2017-04-02'],
 
 
     # set spectrogram plot option
-    options('erg_pwe_ofa_'+level+'_E_spectra_132'+suffix,  'Spec', 1)
-    options('erg_pwe_ofa_'+level+'_B_spectra_132'+suffix,  'Spec', 1)
+    options(prefix+'E_spectra_132'+suffix,  'Spec', 1)
+    options(prefix+'B_spectra_132'+suffix,  'Spec', 1)
 
     # set y axis to logscale
-    options('erg_pwe_ofa_'+level+'_E_spectra_132'+suffix,  'ylog', 1)
-    options('erg_pwe_ofa_'+level+'_B_spectra_132'+suffix,  'ylog', 1)
+    options(prefix+'E_spectra_132'+suffix,  'ylog', 1)
+    options(prefix+'B_spectra_132'+suffix,  'ylog', 1)
     
-    if 'erg_pwe_ofa_'+level+'_E_spectra_132'+suffix in loaded_data:
+    if prefix+'E_spectra_132'+suffix in loaded_data:
         # set ylim
-        ylim('erg_pwe_ofa_'+level+'_E_spectra_132'+suffix, 32e-3, 20.)
+        ylim(prefix+'E_spectra_132'+suffix, 32e-3, 20.)
         # set zlim
-        zlim('erg_pwe_ofa_'+level+'_E_spectra_132'+suffix, 1e-9, 1e-2)
+        zlim(prefix+'E_spectra_132'+suffix, 1e-9, 1e-2)
 
-    if 'erg_pwe_ofa_'+level+'_B_spectra_132'+suffix in loaded_data:
+    if prefix+'B_spectra_132'+suffix in loaded_data:
         # set ylim
-        ylim('erg_pwe_ofa_'+level+'_B_spectra_132'+suffix, 32e-3, 20.)
+        ylim(prefix+'B_spectra_132'+suffix, 32e-3, 20.)
         # set zlim
-        zlim('erg_pwe_ofa_'+level+'_B_spectra_132'+suffix, 1e-4, 1e2)
+        zlim(prefix+'B_spectra_132'+suffix, 1e-4, 1e2)
 
     # set ytitle
-    options('erg_pwe_ofa_'+level+'_E_spectra_132'+suffix,  'ytitle', 'ERG PWE/OFA-SPEC (E)')
-    options('erg_pwe_ofa_'+level+'_B_spectra_132'+suffix,  'ytitle', 'ERG PWE/OFA-SPEC (B)')
+    options(prefix+'E_spectra_132'+suffix,  'ytitle', 'ERG PWE/OFA-SPEC (E)')
+    options(prefix+'B_spectra_132'+suffix,  'ytitle', 'ERG PWE/OFA-SPEC (B)')
 
     # set ysubtitle
-    options('erg_pwe_ofa_'+level+'_E_spectra_132'+suffix,  'ysubtitle', 'frequency [kHz]')
-    options('erg_pwe_ofa_'+level+'_B_spectra_132'+suffix,  'ysubtitle', 'frequency [kHz]')
+    options(prefix+'E_spectra_132'+suffix,  'ysubtitle', 'frequency [kHz]')
+    options(prefix+'B_spectra_132'+suffix,  'ysubtitle', 'frequency [kHz]')
 
     # set ztitle
-    options('erg_pwe_ofa_'+level+'_E_spectra_132'+suffix,  'ztitle', 'mV^2/m^2/Hz')
-    options('erg_pwe_ofa_'+level+'_B_spectra_132'+suffix,  'ztitle', 'pT^2/Hz')
+    options(prefix+'E_spectra_132'+suffix,  'ztitle', 'mV^2/m^2/Hz')
+    options(prefix+'B_spectra_132'+suffix,  'ztitle', 'pT^2/Hz')
 
     # set yrange
-    #options('erg_pwe_ofa_'+level+'_E_spectra_132'+suffix,  'yrange', [0., 10.])
-    #options('erg_pwe_ofa_'+level+'_B_spectra_132'+suffix,  'yrange', [0., 11.])
+    #options(prefix+'E_spectra_132'+suffix,  'yrange', [0., 10.])
+    #options(prefix+'B_spectra_132'+suffix,  'yrange', [0., 11.])
     
     # set z axis to logscale
-    options('erg_pwe_ofa_'+level+'_E_spectra_132'+suffix,  'zlog', 1)
-    options('erg_pwe_ofa_'+level+'_B_spectra_132'+suffix,  'zlog', 1)
+    options(prefix+'E_spectra_132'+suffix,  'zlog', 1)
+    options(prefix+'B_spectra_132'+suffix,  'zlog', 1)
     
     # set zrange
-    #options('erg_pwe_ofa_'+level+'_E_spectra_132'+suffix,  'zrange', [1.0e-08, 1.0e-02])
-    #options('erg_pwe_ofa_'+level+'_B_spectra_132'+suffix,  'zrange', [1.0e-04, 1.0e+02])
+    #options(prefix+'E_spectra_132'+suffix,  'zrange', [1.0e-08, 1.0e-02])
+    #options(prefix+'B_spectra_132'+suffix,  'zrange', [1.0e-04, 1.0e+02])
     
     # change colormap option
-    options('erg_pwe_ofa_'+level+'_E_spectra_132'+suffix,  'Colormap', 'jet')
-    options('erg_pwe_ofa_'+level+'_B_spectra_132'+suffix,  'Colormap', 'jet')
+    options(prefix+'E_spectra_132'+suffix,  'Colormap', 'jet')
+    options(prefix+'B_spectra_132'+suffix,  'Colormap', 'jet')
     
     
     return loaded_data
