@@ -80,6 +80,7 @@ def pwe_hfa(trange=['2017-04-01', '2017-04-02'],
     if level == 'l2':
         pathformat = 'satellite/erg/pwe/hfa/'+level+'/'+datatype+'/'+mode+'/%Y/%m/erg_pwe_hfa_'+level+'_'+datatype+'_'+mode+'_%Y%m%d_v??_??.cdf'
     elif level == 'l3':
+        prefix = 'erg_pwe_hfa_'+level+'_1min_'
         pathformat = 'satellite/erg/pwe/hfa/'+level+'/%Y/%m/erg_pwe_hfa_'+level+'_1min_%Y%m%d_v??_??.cdf'
 
 
@@ -227,11 +228,11 @@ def pwe_hfa(trange=['2017-04-01', '2017-04-02'],
     elif level == 'l3':
 
         # set ytitle
-        options('erg_pwe_hfa_l3_Fuhr' + suffix, 'ytitle', 'UHR frequency [Mhz]')
-        options('erg_pwe_hfa_l3_ne_mgf' + suffix, 'ytitle', 'eletctorn density [/cc]')
+        options(prefix + 'Fuhr' + suffix, 'ytitle', 'UHR frequency [Mhz]')
+        options(prefix + 'ne_mgf' + suffix, 'ytitle', 'eletctorn density [/cc]')
 
         # set y axis to logscale
-        options('erg_pwe_hfa_l3_Fuhr' + suffix, 'ylog', 1)
-        options('erg_pwe_hfa_l3_ne_mgf' + suffix, 'ylog', 1)
+        options(prefix + 'Fuhr' + suffix, 'ylog', 1)
+        options(prefix + 'ne_mgf' + suffix, 'ylog', 1)
 
     return loaded_data
