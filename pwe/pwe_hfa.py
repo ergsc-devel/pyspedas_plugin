@@ -73,13 +73,15 @@ def pwe_hfa(trange=['2017-04-01', '2017-04-02'],
     """
     
     file_res=3600. * 24
-    prefix = 'erg_pwe_hfa_'+level+'_'
+    
     if level == 'l2':
-        suffix = '_' + mode + suffix # to avoid duplicate Tplot Variable names in different mode argument
+        prefix = 'erg_pwe_hfa_'+level+'_' + mode +'_'
+        
     if level == 'l2':
         pathformat = 'satellite/erg/pwe/hfa/'+level+'/'+datatype+'/'+mode+'/%Y/%m/erg_pwe_hfa_'+level+'_'+datatype+'_'+mode+'_%Y%m%d_v??_??.cdf'
     elif level == 'l3':
         pathformat = 'satellite/erg/pwe/hfa/'+level+'/%Y/%m/erg_pwe_hfa_'+level+'_1min_%Y%m%d_v??_??.cdf'
+
 
     
     loaded_data = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype,file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
@@ -114,110 +116,110 @@ def pwe_hfa(trange=['2017-04-01', '2017-04-02'],
     
         
         # set spectrogram plot option
-        options('erg_pwe_hfa_'+level+'_spectra_eu' + suffix, 'Spec', 1)
-        options('erg_pwe_hfa_'+level+'_spectra_ev' + suffix, 'Spec', 1)
-        options('erg_pwe_hfa_'+level+'_spectra_bgamma' + suffix, 'Spec', 1)
-        options('erg_pwe_hfa_'+level+'_spectra_esum' + suffix, 'Spec', 1)
-        options('erg_pwe_hfa_'+level+'_spectra_er' + suffix, 'Spec', 1)
-        options('erg_pwe_hfa_'+level+'_spectra_el' + suffix, 'Spec', 1)
-        options('erg_pwe_hfa_'+level+'_spectra_e_mix' + suffix, 'Spec', 1)
-        options('erg_pwe_hfa_'+level+'_spectra_e_ar' + suffix, 'Spec', 1)
+        options(prefix + 'spectra_eu' + suffix, 'Spec', 1)
+        options(prefix + 'spectra_ev' + suffix, 'Spec', 1)
+        options(prefix + 'spectra_bgamma' + suffix, 'Spec', 1)
+        options(prefix + 'spectra_esum' + suffix, 'Spec', 1)
+        options(prefix + 'spectra_er' + suffix, 'Spec', 1)
+        options(prefix + 'spectra_el' + suffix, 'Spec', 1)
+        options(prefix + 'spectra_e_mix' + suffix, 'Spec', 1)
+        options(prefix + 'spectra_e_ar' + suffix, 'Spec', 1)
 
-        if 'erg_pwe_hfa_'+level+'_spectra_er' + suffix in loaded_data:
+        if prefix + 'spectra_er' + suffix in loaded_data:
             # remove minus values in y array
-            clip('erg_pwe_hfa_'+level+'_spectra_er' + suffix, 0., 5000.)
-        if 'erg_pwe_hfa_'+level+'_spectra_el' + suffix in loaded_data:
+            clip(prefix + 'spectra_er' + suffix, 0., 5000.)
+        if prefix + 'spectra_el' + suffix in loaded_data:
             # remove minus values in y array
-            clip('erg_pwe_hfa_'+level+'_spectra_el' + suffix, 0., 5000.)
+            clip(prefix + 'spectra_el' + suffix, 0., 5000.)
 
 
-        if 'erg_pwe_hfa_'+level+'_spectra_eu' + suffix in loaded_data:
+        if prefix + 'spectra_eu' + suffix in loaded_data:
             # remove minus values in y array
-            clip('erg_pwe_hfa_'+level+'_spectra_eu' + suffix, 0., 5000.)
+            clip(prefix + 'spectra_eu' + suffix, 0., 5000.)
             # set ylim
-            ylim('erg_pwe_hfa_'+level+'_spectra_eu' + suffix,  2.0, 10000.0)
+            ylim(prefix + 'spectra_eu' + suffix,  2.0, 10000.0)
             # set zlim
-            zlim('erg_pwe_hfa_'+level+'_spectra_eu' + suffix,  1e-10, 1e-3)
+            zlim(prefix + 'spectra_eu' + suffix,  1e-10, 1e-3)
 
-        if 'erg_pwe_hfa_'+level+'_spectra_ev' + suffix in loaded_data:
+        if prefix + 'spectra_ev' + suffix in loaded_data:
             # remove minus values in y array
-            clip('erg_pwe_hfa_'+level+'_spectra_ev' + suffix, 0., 5000.)
+            clip(prefix + 'spectra_ev' + suffix, 0., 5000.)
             # set ylim
-            ylim('erg_pwe_hfa_'+level+'_spectra_ev' + suffix,  2.0, 10000.0)
+            ylim(prefix + 'spectra_ev' + suffix,  2.0, 10000.0)
             # set zlim
-            zlim('erg_pwe_hfa_'+level+'_spectra_ev' + suffix,  1e-10, 1e-3)
+            zlim(prefix + 'spectra_ev' + suffix,  1e-10, 1e-3)
 
-        if 'erg_pwe_hfa_'+level+'_spectra_bgamma' + suffix in loaded_data:
+        if prefix + 'spectra_bgamma' + suffix in loaded_data:
             # set ylim
-            ylim('erg_pwe_hfa_'+level+'_spectra_bgamma' + suffix, 2.0, 200.0)
+            ylim(prefix + 'spectra_bgamma' + suffix, 2.0, 200.0)
             # set zlim
-            zlim('erg_pwe_hfa_'+level+'_spectra_bgamma' + suffix, 1e-4, 1e+2)
+            zlim(prefix + 'spectra_bgamma' + suffix, 1e-4, 1e+2)
 
 
-        if 'erg_pwe_hfa_'+level+'_spectra_esum' + suffix in loaded_data:
+        if prefix + 'spectra_esum' + suffix in loaded_data:
             # set ylim
-            ylim('erg_pwe_hfa_'+level+'_spectra_esum' + suffix,  2.0, 10000.0)
+            ylim(prefix + 'spectra_esum' + suffix,  2.0, 10000.0)
             # set zlim
-            zlim('erg_pwe_hfa_'+level+'_spectra_esum' + suffix,  1e-10, 1e-3)
+            zlim(prefix + 'spectra_esum' + suffix,  1e-10, 1e-3)
 
-        if 'erg_pwe_hfa_'+level+'_spectra_e_ar' + suffix in loaded_data:
+        if prefix + 'spectra_e_ar' + suffix in loaded_data:
             # set ylim
-            ylim('erg_pwe_hfa_'+level+'_spectra_e_ar' + suffix,  2.0, 10000.0)
+            ylim(prefix + 'spectra_e_ar' + suffix,  2.0, 10000.0)
             # set zlim
-            zlim('erg_pwe_hfa_'+level+'_spectra_e_ar' + suffix, -1, 1)
+            zlim(prefix + 'spectra_e_ar' + suffix, -1, 1)
 
 
         # set y axis to logscale
-        options('erg_pwe_hfa_'+level+'_spectra_eu' + suffix, 'ylog', 1)
-        options('erg_pwe_hfa_'+level+'_spectra_ev' + suffix, 'ylog', 1)
-        options('erg_pwe_hfa_'+level+'_spectra_bgamma' + suffix, 'ylog', 1)
-        options('erg_pwe_hfa_'+level+'_spectra_esum' + suffix, 'ylog', 1)
-        options('erg_pwe_hfa_'+level+'_spectra_er' + suffix, 'ylog', 1)
-        options('erg_pwe_hfa_'+level+'_spectra_el' + suffix, 'ylog', 1)
-        options('erg_pwe_hfa_'+level+'_spectra_e_mix' + suffix, 'ylog', 1)
-        options('erg_pwe_hfa_'+level+'_spectra_e_ar' + suffix, 'ylog', 1)
+        options(prefix + 'spectra_eu' + suffix, 'ylog', 1)
+        options(prefix + 'spectra_ev' + suffix, 'ylog', 1)
+        options(prefix + 'spectra_bgamma' + suffix, 'ylog', 1)
+        options(prefix + 'spectra_esum' + suffix, 'ylog', 1)
+        options(prefix + 'spectra_er' + suffix, 'ylog', 1)
+        options(prefix + 'spectra_el' + suffix, 'ylog', 1)
+        options(prefix + 'spectra_e_mix' + suffix, 'ylog', 1)
+        options(prefix + 'spectra_e_ar' + suffix, 'ylog', 1)
 
         # set z axis to logscale
-        options('erg_pwe_hfa_'+level+'_spectra_eu' + suffix, 'zlog', 1)
-        options('erg_pwe_hfa_'+level+'_spectra_ev' + suffix, 'zlog', 1)
-        options('erg_pwe_hfa_'+level+'_spectra_bgamma' + suffix, 'zlog', 1)
-        options('erg_pwe_hfa_'+level+'_spectra_esum' + suffix, 'zlog', 1)
-        options('erg_pwe_hfa_'+level+'_spectra_er' + suffix, 'zlog', 1)
-        options('erg_pwe_hfa_'+level+'_spectra_el' + suffix, 'zlog', 1)
-        options('erg_pwe_hfa_'+level+'_spectra_e_mix' + suffix, 'zlog', 1)
+        options(prefix + 'spectra_eu' + suffix, 'zlog', 1)
+        options(prefix + 'spectra_ev' + suffix, 'zlog', 1)
+        options(prefix + 'spectra_bgamma' + suffix, 'zlog', 1)
+        options(prefix + 'spectra_esum' + suffix, 'zlog', 1)
+        options(prefix + 'spectra_er' + suffix, 'zlog', 1)
+        options(prefix + 'spectra_el' + suffix, 'zlog', 1)
+        options(prefix + 'spectra_e_mix' + suffix, 'zlog', 1)
 
         # set ytitle
-        options('erg_pwe_hfa_'+level+'_spectra_eu' + suffix, 'ytitle', 'ERG PWE/HFA (EU)')
-        options('erg_pwe_hfa_'+level+'_spectra_ev' + suffix, 'ytitle', 'ERG PWE/HFA (EV)')
-        options('erg_pwe_hfa_'+level+'_spectra_esum' + suffix, 'ytitle', 'ERG PWE/HFA (ESUM)')
-        options('erg_pwe_hfa_'+level+'_spectra_e_ar' + suffix, 'ytitle', 'ERG PWE/HFA (E_AR)')
-        options('erg_pwe_hfa_'+level+'_spectra_bgamma' + suffix, 'ytitle', 'ERG PWE/HFA (BGAMMA)')
+        options(prefix + 'spectra_eu' + suffix, 'ytitle', 'ERG PWE/HFA (EU)')
+        options(prefix + 'spectra_ev' + suffix, 'ytitle', 'ERG PWE/HFA (EV)')
+        options(prefix + 'spectra_esum' + suffix, 'ytitle', 'ERG PWE/HFA (ESUM)')
+        options(prefix + 'spectra_e_ar' + suffix, 'ytitle', 'ERG PWE/HFA (E_AR)')
+        options(prefix + 'spectra_bgamma' + suffix, 'ytitle', 'ERG PWE/HFA (BGAMMA)')
 
         # set ysubtitle
-        options('erg_pwe_hfa_'+level+'_spectra_eu' + suffix, 'ysubtitle', 'frequency [Hz]')
-        options('erg_pwe_hfa_'+level+'_spectra_ev' + suffix, 'ysubtitle', 'frequency [Hz]')
-        options('erg_pwe_hfa_'+level+'_spectra_esum' + suffix, 'ysubtitle', 'frequency [Hz]')
-        options('erg_pwe_hfa_'+level+'_spectra_e_ar' + suffix, 'ysubtitle', 'frequency [Hz]')
-        options('erg_pwe_hfa_'+level+'_spectra_bgamma' + suffix, 'ysubtitle', 'frequency [Hz]')
+        options(prefix + 'spectra_eu' + suffix, 'ysubtitle', 'frequency [Hz]')
+        options(prefix + 'spectra_ev' + suffix, 'ysubtitle', 'frequency [Hz]')
+        options(prefix + 'spectra_esum' + suffix, 'ysubtitle', 'frequency [Hz]')
+        options(prefix + 'spectra_e_ar' + suffix, 'ysubtitle', 'frequency [Hz]')
+        options(prefix + 'spectra_bgamma' + suffix, 'ysubtitle', 'frequency [Hz]')
 
 
 
         # set ztitle
-        options('erg_pwe_hfa_'+level+'_spectra_eu' + suffix, 'ztitle', 'mV^2/m^2/Hz')
-        options('erg_pwe_hfa_'+level+'_spectra_ev' + suffix, 'ztitle', 'mV^2/m^2/Hz')
-        options('erg_pwe_hfa_'+level+'_spectra_esum' + suffix, 'ztitle', 'mV^2/m^2/Hz')
-        options('erg_pwe_hfa_'+level+'_spectra_e_ar' + suffix, 'ztitle', 'LH:-1/RH:+1')
-        options('erg_pwe_hfa_'+level+'_spectra_bgamma' + suffix, 'ztitle', 'pT^2/Hz')
+        options(prefix + 'spectra_eu' + suffix, 'ztitle', 'mV^2/m^2/Hz')
+        options(prefix + 'spectra_ev' + suffix, 'ztitle', 'mV^2/m^2/Hz')
+        options(prefix + 'spectra_esum' + suffix, 'ztitle', 'mV^2/m^2/Hz')
+        options(prefix + 'spectra_e_ar' + suffix, 'ztitle', 'LH:-1/RH:+1')
+        options(prefix + 'spectra_bgamma' + suffix, 'ztitle', 'pT^2/Hz')
 
         # change colormap option
-        options('erg_pwe_hfa_'+level+'_spectra_eu' + suffix, 'Colormap', 'jet')
-        options('erg_pwe_hfa_'+level+'_spectra_ev' + suffix, 'Colormap', 'jet')
-        options('erg_pwe_hfa_'+level+'_spectra_bgamma' + suffix, 'Colormap', 'jet')
-        options('erg_pwe_hfa_'+level+'_spectra_esum' + suffix, 'Colormap', 'jet')
-        options('erg_pwe_hfa_'+level+'_spectra_er' + suffix, 'Colormap', 'jet')
-        options('erg_pwe_hfa_'+level+'_spectra_el' + suffix, 'Colormap', 'jet')
-        options('erg_pwe_hfa_'+level+'_spectra_e_mix' + suffix, 'Colormap', 'jet')
-        options('erg_pwe_hfa_'+level+'_spectra_e_ar' + suffix, 'Colormap', 'jet')
+        options(prefix + 'spectra_eu' + suffix, 'Colormap', 'jet')
+        options(prefix + 'spectra_ev' + suffix, 'Colormap', 'jet')
+        options(prefix + 'spectra_bgamma' + suffix, 'Colormap', 'jet')
+        options(prefix + 'spectra_esum' + suffix, 'Colormap', 'jet')
+        options(prefix + 'spectra_er' + suffix, 'Colormap', 'jet')
+        options(prefix + 'spectra_el' + suffix, 'Colormap', 'jet')
+        options(prefix + 'spectra_e_mix' + suffix, 'Colormap', 'jet')
+        options(prefix + 'spectra_e_ar' + suffix, 'Colormap', 'jet')
 
 
 
