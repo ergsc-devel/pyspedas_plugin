@@ -77,6 +77,8 @@ def orb(trange=['2017-03-27', '2017-03-28'],
 
     prefix = 'erg_orb_'+level+'_'
 
+    if datatype in [ "pre", "spre", "mpre", "lpre"] and level == 'l2':
+        prefix = 'erg_orb_'+datatype+'_'+ level+'_'
 
     if level == 'l3':
         if model == 'op':
@@ -180,8 +182,52 @@ def orb(trange=['2017-03-27', '2017-03-28'],
 
         options(prefix + 'pos_beq' + suffix, 'ylog', 1)
     
+    elif datatype in [ "pre", "spre", "mpre", "lpre"] and level == 'l2':
+        
+        # set labels
+        options(prefix + 'pos_gse' + suffix, 'legend_names', ['X','Y','Z'])
+        options(prefix + 'pos_gsm' + suffix, 'legend_names', ['X','Y','Z'])
+        options(prefix + 'pos_sm' + suffix, 'legend_names', ['X','Y','Z'])
 
+        options(prefix + 'pos_rmlatmlt' + suffix, 'legend_names', ['Re','MLAT','MLT'])
 
+        options(prefix + 'pos_eq' + suffix, 'legend_names', ['Req','MLT'])
+
+        options(prefix + 'pos_iono_north' + suffix, 'legend_names', ['GLAT','GLON'])
+        options(prefix + 'pos_iono_south' + suffix, 'legend_names', ['GLAT','GLON'])
+
+        options(prefix + 'pos_blocal' + suffix, 'legend_names', ['X','Y','Z'])
+
+        options(prefix + 'pos_blocal_mag' + suffix, 'legend_names', 'B(' +datatype + ')\n_at ERG')
+
+        options(prefix + 'pos_beq' + suffix, 'legend_names', ['X','Y','Z'])
+
+        options(prefix + 'pos_Lm' + suffix, 'legend_names', ['90deg','60deg','30deg'])
+
+        options(prefix + 'vel_gse' + suffix, 'legend_names', ['X[km/s]','Y[km/s]','Z[km/s]'])
+        options(prefix + 'vel_gsm' + suffix, 'legend_names', ['X[km/s]','Y[km/s]','Z[km/s]'])
+        options(prefix + 'vel_sm' + suffix, 'legend_names', ['X[km/s]','Y[km/s]','Z[km/s]'])
+
+        # set color
+        options(prefix + 'pos_gse' + suffix, 'Color', ['b', 'g', 'r'])
+        options(prefix + 'pos_gsm' + suffix, 'Color', ['b', 'g', 'r'])
+        options(prefix + 'pos_sm' + suffix, 'Color', ['b', 'g', 'r'])
+
+        options(prefix + 'pos_rmlatmlt' + suffix, 'Color', ['b', 'g', 'r'])
+        
+        options(prefix + 'pos_blocal' + suffix, 'Color', ['b', 'g', 'r'])
+
+        options(prefix + 'pos_beq' + suffix, 'Color', ['b', 'g', 'r'])
+
+        options(prefix + 'pos_Lm' + suffix, 'Color', ['b', 'g', 'r'])
+
+        options(prefix + 'vek_gse' + suffix, 'Color', ['b', 'g', 'r'])
+        options(prefix + 'vel_gsm' + suffix, 'Color', ['b', 'g', 'r'])
+        options(prefix + 'vel_sm' + suffix, 'Color', ['b', 'g', 'r'])
+
+        # set y axis to logscale
+        options(prefix + 'pos_blocal_mag' + suffix, 'ylog', 1)
+        options(prefix + 'pos_beq' + suffix, 'ylog', 1)
 
 
     elif level == 'l3':
