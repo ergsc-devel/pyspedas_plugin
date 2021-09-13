@@ -74,11 +74,12 @@ def mepi(trange=['2017-03-27', '2017-03-28'],
     prefix = 'erg_mepi_'+level+'_'+datatype+'_'
 
     if datatype == 'flux' or datatype == 'raw':
-        datatype = ['tof', datatype]
-        suffix = '_' + datatype[0] + datatype[1] + suffix
+        prefix = 'erg_mepi_'+level+'_tof'+datatype+'_'
+        #datatype = ['tof', datatype]
+        #suffix = '_' + datatype[0] + datatype[1] + suffix
         
-    if 'tof' in datatype and type(datatype) is list:
-        pathformat = 'satellite/erg/mepi/'+level+'/'+datatype[0]+'/%Y/%m/erg_mepi_'+level+'_'+datatype[0]+datatype[1]+'_%Y%m%d_v??_??.cdf'
+    if datatype == 'flux' or datatype == 'raw':
+        pathformat = 'satellite/erg/mepi/'+level+'/tof/%Y/%m/erg_mepi_'+level+'_tof'+datatype+'_%Y%m%d_v??_??.cdf'
     else:
         pathformat = 'satellite/erg/mepi/'+level+'/'+datatype+'/%Y/%m/erg_mepi_'+level+'_'+datatype+'_%Y%m%d_v??_??.cdf'
 
@@ -109,7 +110,6 @@ def mepi(trange=['2017-03-27', '2017-03-28'],
 
 
     if datatype == 'omniflux' and level == 'l2':
-        #prefix = 'erg_mepi_l2_'
         original_suffix_list = ['FPDO', 'FHE2DO', 'FHEDO', 'FOPPDO', 'FODO', 'FO2PDO',
                                 'FPDO_tof', 'FHE2DO_tof', 'FHEDO_tof', 'FOPPDO_tof', 'FODO_tof', 'FO2PDO_tof']
         tplot_names_list = []
@@ -153,7 +153,6 @@ def mepi(trange=['2017-03-27', '2017-03-28'],
         options(tplot_names_list, 'Colormap', 'jet')
 
     elif datatype == '3dflux' and level == 'l2':
-        #prefix = 'erg_mepi_l2_'
         original_suffix_list = ['FPDU', 'FHE2DU', 'FHEDU', 'FOPPDU', 'FODU', 'FO2PDU',
                         'count_raw_P', 'count_raw_HE2', 'count_raw_HE', 'count_raw_OPP', 'count_raw_O', 'count_raw_O2P']
         tplot_names_list = []
@@ -177,9 +176,8 @@ def mepi(trange=['2017-03-27', '2017-03-28'],
         # set z axis to logscale
         options(tplot_names_list, 'zlog', 1)
 
-    elif type(datatype) is list: # for tof Variables
+    elif datatype == 'flux' or datatype == 'raw': # for tof Variables
         if 'flux' in datatype:
-            prefix = 'erg_mepi_l2_'
             original_suffix_list = ['FPDU', 'FHE2DU', 'FHEDU', 'FOPPDU', 'FODU', 'FO2PDU',
                         'count_raw_P', 'count_raw_HE2', 'count_raw_HE', 'count_raw_OPP', 'count_raw_O', 'count_raw_O2P']
             tplot_names_list = []
