@@ -136,78 +136,78 @@ def hep(trange=['2017-03-27', '2017-03-28'],
 
         if level == 'l2' and datatype == 'omniflux':
             tplot_variables = []
-            if 'erg_hep_l2_FEDO_L' + suffix in loaded_data:
-                v_vars_min = loaded_data['erg_hep_l2_FEDO_L' + suffix]['v'][0]
-                v_vars_max = loaded_data['erg_hep_l2_FEDO_L' + suffix]['v'][1]
+            if prefix + 'FEDO_L' + suffix in loaded_data:
+                v_vars_min = loaded_data[prefix + 'FEDO_L' + suffix]['v'][0]
+                v_vars_max = loaded_data[prefix + 'FEDO_L' + suffix]['v'][1]
                 v_vars = np.power(10., (np.log10(v_vars_min) + np.log10(v_vars_max)) / 2.) # log average of energy bins
-                store_data('erg_hep_l2_FEDO_L' + suffix, data={'x':loaded_data['erg_hep_l2_FEDO_L' + suffix]['x'], 
-                                                    'y':loaded_data['erg_hep_l2_FEDO_L' + suffix]['y'],
+                store_data(prefix + 'FEDO_L' + suffix, data={'x':loaded_data[prefix + 'FEDO_L' + suffix]['x'], 
+                                                    'y':loaded_data[prefix + 'FEDO_L' + suffix]['y'],
                                                     'v':v_vars})
-                tplot_variables.append('erg_hep_l2_FEDO_L' + suffix)
+                tplot_variables.append(prefix + 'FEDO_L' + suffix)
 
-            if 'erg_hep_l2_FEDO_H' + suffix in loaded_data:
-                v_vars_min = loaded_data['erg_hep_l2_FEDO_H' + suffix]['v'][0]
-                v_vars_max = loaded_data['erg_hep_l2_FEDO_H' + suffix]['v'][1]
+            if prefix + 'FEDO_H' + suffix in loaded_data:
+                v_vars_min = loaded_data[prefix + 'FEDO_H' + suffix]['v'][0]
+                v_vars_max = loaded_data[prefix + 'FEDO_H' + suffix]['v'][1]
                 v_vars = np.power(10., (np.log10(v_vars_min) + np.log10(v_vars_max)) / 2.) # log average of energy bins
-                store_data('erg_hep_l2_FEDO_H' + suffix, data={'x':loaded_data['erg_hep_l2_FEDO_H' + suffix]['x'], 
-                                                    'y':loaded_data['erg_hep_l2_FEDO_H' + suffix]['y'],
+                store_data(prefix + 'FEDO_H' + suffix, data={'x':loaded_data[prefix + 'FEDO_H' + suffix]['x'], 
+                                                    'y':loaded_data[prefix + 'FEDO_H' + suffix]['y'],
                                                     'v':v_vars})
-                tplot_variables.append('erg_hep_l2_FEDO_H' + suffix)
+                tplot_variables.append(prefix + 'FEDO_H' + suffix)
             
 
             # remove minus valuse of y array
-            if 'erg_hep_l2_FEDO_L' + suffix in tplot_variables:
-                clip('erg_hep_l2_FEDO_L' + suffix, 0., 1.0e+10)
-            if 'erg_hep_l2_FEDO_H' + suffix in tplot_variables:
-                clip('erg_hep_l2_FEDO_H' + suffix, 0., 1.0e+10)
+            if prefix + 'FEDO_L' + suffix in tplot_variables:
+                clip(prefix + 'FEDO_L' + suffix, 0., 1.0e+10)
+            if prefix + 'FEDO_H' + suffix in tplot_variables:
+                clip(prefix + 'FEDO_H' + suffix, 0., 1.0e+10)
 
             # set spectrogram plot option
-            options('erg_hep_l2_FEDO_L' + suffix, 'Spec', 1)
-            options('erg_hep_l2_FEDO_H' + suffix, 'Spec', 1)
+            options(prefix + 'FEDO_L' + suffix, 'Spec', 1)
+            options(prefix + 'FEDO_H' + suffix, 'Spec', 1)
 
             # set y axis to logscale
-            options('erg_hep_l2_FEDO_L' + suffix, 'ylog', 1)
-            options('erg_hep_l2_FEDO_H' + suffix, 'ylog', 1)
+            options(prefix + 'FEDO_L' + suffix, 'ylog', 1)
+            options(prefix + 'FEDO_H' + suffix, 'ylog', 1)
 
             # set yrange
-            options('erg_hep_l2_FEDO_L' + suffix, 'yrange', [3.0e+01, 2.0e+03])
-            options('erg_hep_l2_FEDO_H' + suffix, 'yrange', [7.0e+01, 2.0e+03])
+            options(prefix + 'FEDO_L' + suffix, 'yrange', [3.0e+01, 2.0e+03])
+            options(prefix + 'FEDO_H' + suffix, 'yrange', [7.0e+01, 2.0e+03])
 
             # set ytitle
-            options('erg_hep_l2_FEDO_L' + suffix, 'ytitle', 'HEP-L\nomniflux\nLv2\nEnergy')
-            options('erg_hep_l2_FEDO_H' + suffix, 'ytitle', 'HEP-H\nomniflux\nLv2\nEnergy')
+            options(prefix + 'FEDO_L' + suffix, 'ytitle', 'HEP-L\nomniflux\nLv2\nEnergy')
+            options(prefix + 'FEDO_H' + suffix, 'ytitle', 'HEP-H\nomniflux\nLv2\nEnergy')
 
             # set ysubtitle
-            options('erg_hep_l2_FEDO_L' + suffix, 'ysubtitle', '[keV]')
-            options('erg_hep_l2_FEDO_H' + suffix, 'ysubtitle', '[keV]')
+            options(prefix + 'FEDO_L' + suffix, 'ysubtitle', '[keV]')
+            options(prefix + 'FEDO_H' + suffix, 'ysubtitle', '[keV]')
 
             # set ylim
-            if 'erg_hep_l2_FEDO_L' + suffix in tplot_variables:
-                ylim('erg_hep_l2_FEDO_L' + suffix, 30, 1800)
-            if 'erg_hep_l2_FEDO_H' + suffix in tplot_variables:
-                ylim('erg_hep_l2_FEDO_H' + suffix, 500, 2048)
+            if prefix + 'FEDO_L' + suffix in tplot_variables:
+                ylim(prefix + 'FEDO_L' + suffix, 30, 1800)
+            if prefix + 'FEDO_H' + suffix in tplot_variables:
+                ylim(prefix + 'FEDO_H' + suffix, 500, 2048)
 
             # set z axis to logscale
-            options('erg_hep_l2_FEDO_L' + suffix, 'zlog', 1)
-            options('erg_hep_l2_FEDO_H' + suffix, 'zlog', 1)
+            options(prefix + 'FEDO_L' + suffix, 'zlog', 1)
+            options(prefix + 'FEDO_H' + suffix, 'zlog', 1)
 
             # set zrange
-            options('erg_hep_l2_FEDO_L' + suffix, 'zrange', [1.0e-15, 1.0e+06])
-            options('erg_hep_l2_FEDO_H' + suffix, 'zrange', [1.0e-10, 1.0e+5])
+            options(prefix + 'FEDO_L' + suffix, 'zrange', [1.0e-15, 1.0e+06])
+            options(prefix + 'FEDO_H' + suffix, 'zrange', [1.0e-10, 1.0e+5])
 
             # set ztitle
-            options('erg_hep_l2_FEDO_L' + suffix, 'ztitle', '[/cm^{2}-str-s-keV]')
-            options('erg_hep_l2_FEDO_H' + suffix, 'ztitle', '[/cm^{2}-str-s-keV]')
+            options(prefix + 'FEDO_L' + suffix, 'ztitle', '[/cm^{2}-str-s-keV]')
+            options(prefix + 'FEDO_H' + suffix, 'ztitle', '[/cm^{2}-str-s-keV]')
 
             # set zlim
-            if 'erg_hep_l2_FEDO_L' + suffix in tplot_variables:
-                zlim('erg_hep_l2_FEDO_L' + suffix, 1e+0, 1e+5)
-            if 'erg_hep_l2_FEDO_H' + suffix in tplot_variables:
-                zlim('erg_hep_l2_FEDO_H' + suffix, 1e+0, 1e+5)
+            if prefix + 'FEDO_L' + suffix in tplot_variables:
+                zlim(prefix + 'FEDO_L' + suffix, 1e+0, 1e+5)
+            if prefix + 'FEDO_H' + suffix in tplot_variables:
+                zlim(prefix + 'FEDO_H' + suffix, 1e+0, 1e+5)
 
             # change colormap option
-            options('erg_hep_l2_FEDO_L' + suffix,  'Colormap', 'jet')
-            options('erg_hep_l2_FEDO_H' + suffix,  'Colormap', 'jet')
+            options(prefix + 'FEDO_L' + suffix,  'Colormap', 'jet')
+            options(prefix + 'FEDO_H' + suffix,  'Colormap', 'jet')
 
             return  tplot_variables
 
@@ -215,25 +215,25 @@ def hep(trange=['2017-03-27', '2017-03-28'],
            tplot_variables = []
            v2_array = [i for i in range(15)]
 
-           if 'erg_hep_l2_FEDU_L' + suffix in loaded_data:
+           if prefix + 'FEDU_L' + suffix in loaded_data:
 
-               store_data('erg_hep_l2_FEDU_L' + suffix, data={'x':loaded_data['erg_hep_l2_FEDU_L' + suffix]['x'],
-                                                        'y':loaded_data['erg_hep_l2_FEDU_L' + suffix]['y'],
-                                                        'v1':np.sqrt(loaded_data['erg_hep_l2_FEDU_L' + suffix]['v'][0,:]*
-                                                        loaded_data['erg_hep_l2_FEDU_L' + suffix]['v'][1,:]), # geometric mean for 'v1'
+               store_data(prefix + 'FEDU_L' + suffix, data={'x':loaded_data[prefix + 'FEDU_L' + suffix]['x'],
+                                                        'y':loaded_data[prefix + 'FEDU_L' + suffix]['y'],
+                                                        'v1':np.sqrt(loaded_data[prefix + 'FEDU_L' + suffix]['v'][0,:]*
+                                                        loaded_data[prefix + 'FEDU_L' + suffix]['v'][1,:]), # geometric mean for 'v1'
                                                         'v2':v2_array})
-               tplot_variables.append('erg_hep_l2_FEDU_L' + suffix)
-               clip('erg_hep_l2_FEDU_L' + suffix, -1.0e+10, 1.0e+10)
+               tplot_variables.append(prefix + 'FEDU_L' + suffix)
+               clip(prefix + 'FEDU_L' + suffix, -1.0e+10, 1.0e+10)
 
-           if 'erg_hep_l2_FEDU_H' + suffix in loaded_data:
+           if prefix + 'FEDU_H' + suffix in loaded_data:
 
-               store_data('erg_hep_l2_FEDU_H' + suffix, data={'x':loaded_data['erg_hep_l2_FEDU_H' + suffix]['x'],
-                                                        'y':loaded_data['erg_hep_l2_FEDU_H' + suffix]['y'],
-                                                        'v1':np.sqrt(loaded_data['erg_hep_l2_FEDU_H' + suffix]['v'][0,:]*
-                                                        loaded_data['erg_hep_l2_FEDU_H' + suffix]['v'][1,:]), # geometric mean for 'v1'
+               store_data(prefix + 'FEDU_H' + suffix, data={'x':loaded_data[prefix + 'FEDU_H' + suffix]['x'],
+                                                        'y':loaded_data[prefix + 'FEDU_H' + suffix]['y'],
+                                                        'v1':np.sqrt(loaded_data[prefix + 'FEDU_H' + suffix]['v'][0,:]*
+                                                        loaded_data[prefix + 'FEDU_H' + suffix]['v'][1,:]), # geometric mean for 'v1'
                                                         'v2':v2_array})
-               tplot_variables.append('erg_hep_l2_FEDU_H' + suffix)
-               clip('erg_hep_l2_FEDU_H' + suffix, -1.0e+10, 1.0e+10)
+               tplot_variables.append(prefix + 'FEDU_H' + suffix)
+               clip(prefix + 'FEDU_H' + suffix, -1.0e+10, 1.0e+10)
 
            return tplot_variables
 
@@ -243,33 +243,33 @@ def hep(trange=['2017-03-27', '2017-03-28'],
 
            tplot_variables = []
 
-           if 'erg_hep_l3_FEDU_L' + suffix in loaded_data:
+           if prefix + 'FEDU_L' + suffix in loaded_data:
 
-               L_energy_array_ave = np.sqrt(loaded_data['erg_hep_l3_FEDU_L' + suffix]['v1'][0,:]*
-                                            loaded_data['erg_hep_l3_FEDU_L' + suffix]['v1'][1,:]) # geometric mean for 'v1'
+               L_energy_array_ave = np.sqrt(loaded_data[prefix + 'FEDU_L' + suffix]['v1'][0,:]*
+                                            loaded_data[prefix + 'FEDU_L' + suffix]['v1'][1,:]) # geometric mean for 'v1'
 
                # get energy [keV] array for ytitle options
                L_energy_array = np.trunc(L_energy_array_ave).astype(int)
 
-               store_data('erg_hep_l3_FEDU_L' + suffix, data={'x':loaded_data['erg_hep_l3_FEDU_L' + suffix]['x'],
-                                                  'y':loaded_data['erg_hep_l3_FEDU_L' + suffix]['y'],
+               store_data(prefix + 'FEDU_L' + suffix, data={'x':loaded_data[prefix + 'FEDU_L' + suffix]['x'],
+                                                  'y':loaded_data[prefix + 'FEDU_L' + suffix]['y'],
                                                   'v1':L_energy_array_ave,
-                                                  'v2':loaded_data['erg_hep_l3_FEDU_L' + suffix]['v2']})
+                                                  'v2':loaded_data[prefix + 'FEDU_L' + suffix]['v2']})
                # set ylim
-               ylim('erg_hep_l3_FEDU_L' + suffix, 0, 180)
+               ylim(prefix + 'FEDU_L' + suffix, 0, 180)
                # set zlim
-               zlim('erg_hep_l3_FEDU_L' + suffix, 1e+2, 1e+6)
+               zlim(prefix + 'FEDU_L' + suffix, 1e+2, 1e+6)
                
-               tplot_variables.append('erg_hep_l3_FEDU_L' + suffix)
+               tplot_variables.append(prefix + 'FEDU_L' + suffix)
 
                
 
 
-               for i in range(loaded_data['erg_hep_l3_FEDU_L' + suffix]['y'].shape[1]): # make Tplot Variables of erg_hep_l3_FEDU_L_paspec_ene?? (??: 00, 01, 02, ..., 15)
-                    tplot_name = 'erg_hep_l3_FEDU_L_paspec_ene' + str(i).zfill(2) + suffix
-                    store_data(tplot_name, data={'x':loaded_data['erg_hep_l3_FEDU_L' + suffix]['x'],
-                                                'y':loaded_data['erg_hep_l3_FEDU_L' + suffix]['y'][:,i,:],
-                                                'v':loaded_data['erg_hep_l3_FEDU_L' + suffix]['v2']})
+               for i in range(loaded_data[prefix + 'FEDU_L' + suffix]['y'].shape[1]): # make Tplot Variables of erg_hep_l3_FEDU_L_paspec_ene?? (??: 00, 01, 02, ..., 15)
+                    tplot_name = prefix + 'FEDU_L_paspec_ene' + str(i).zfill(2) + suffix
+                    store_data(tplot_name, data={'x':loaded_data[prefix + 'FEDU_L' + suffix]['x'],
+                                                'y':loaded_data[prefix + 'FEDU_L' + suffix]['y'][:,i,:],
+                                                'v':loaded_data[prefix + 'FEDU_L' + suffix]['v2']})
 
                     # set ylim
                     ylim(tplot_name, 0, 180)
@@ -280,31 +280,31 @@ def hep(trange=['2017-03-27', '2017-03-28'],
 
                     tplot_variables.append(tplot_name)
 
-           if 'erg_hep_l3_FEDU_H' + suffix in loaded_data:
+           if prefix + 'FEDU_H' + suffix in loaded_data:
 
-               H_energy_array_ave = np.sqrt(loaded_data['erg_hep_l3_FEDU_H' + suffix]['v1'][0,:]*
-                                            loaded_data['erg_hep_l3_FEDU_H' + suffix]['v1'][1,:]) # geometric mean for 'v1'
+               H_energy_array_ave = np.sqrt(loaded_data[prefix + 'FEDU_H' + suffix]['v1'][0,:]*
+                                            loaded_data[prefix + 'FEDU_H' + suffix]['v1'][1,:]) # geometric mean for 'v1'
 
                # get energy [keV] array for ytitle options
                H_energy_array = np.trunc(H_energy_array_ave).astype(int)
 
-               store_data('erg_hep_l3_FEDU_H' + suffix, data={'x':loaded_data['erg_hep_l3_FEDU_H' + suffix]['x'],
-                                                  'y':loaded_data['erg_hep_l3_FEDU_H' + suffix]['y'],
+               store_data(prefix + 'FEDU_H' + suffix, data={'x':loaded_data[prefix + 'FEDU_H' + suffix]['x'],
+                                                  'y':loaded_data[prefix + 'FEDU_H' + suffix]['y'],
                                                   'v1':H_energy_array_ave,
-                                                  'v2':loaded_data['erg_hep_l3_FEDU_H' + suffix]['v2']})
+                                                  'v2':loaded_data[prefix + 'FEDU_H' + suffix]['v2']})
                # set ylim
-               ylim('erg_hep_l3_FEDU_H' + suffix, 0, 180)
+               ylim(prefix + 'FEDU_H' + suffix, 0, 180)
                # set zlim
-               zlim('erg_hep_l3_FEDU_H' + suffix, 1e+1, 1e+4)
+               zlim(prefix + 'FEDU_H' + suffix, 1e+1, 1e+4)
                
-               tplot_variables.append('erg_hep_l3_FEDU_H' + suffix)
+               tplot_variables.append(prefix + 'FEDU_H' + suffix)
 
 
-               for i in range(loaded_data['erg_hep_l3_FEDU_H' + suffix]['y'].shape[1]): # make Tplot Variables of erg_hep_l3_FEDU_H_paspec_ene?? (??: 00, 01, 02, ..., 10)
-                    tplot_name = 'erg_hep_l3_FEDU_H_paspec_ene' + str(i).zfill(2) + suffix
-                    store_data(tplot_name, data={'x':loaded_data['erg_hep_l3_FEDU_H' + suffix]['x'],
-                                                'y':loaded_data['erg_hep_l3_FEDU_H' + suffix]['y'][:,i,:],
-                                                'v':loaded_data['erg_hep_l3_FEDU_H' + suffix]['v2']})
+               for i in range(loaded_data[prefix + 'FEDU_H' + suffix]['y'].shape[1]): # make Tplot Variables of erg_hep_l3_FEDU_H_paspec_ene?? (??: 00, 01, 02, ..., 10)
+                    tplot_name = prefix + 'FEDU_H_paspec_ene' + str(i).zfill(2) + suffix
+                    store_data(tplot_name, data={'x':loaded_data[prefix + 'FEDU_H' + suffix]['x'],
+                                                'y':loaded_data[prefix + 'FEDU_H' + suffix]['y'][:,i,:],
+                                                'v':loaded_data[prefix + 'FEDU_H' + suffix]['v2']})
                     
                     # set ylim
                     ylim(tplot_name, 0, 180)
