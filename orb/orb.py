@@ -73,7 +73,11 @@ def orb(trange=['2017-03-27', '2017-03-28'],
 
     """
     file_res=3600. * 24
+
+
     prefix = 'erg_orb_'+level+'_'
+
+
     if level == 'l3':
         if model == 'op':
             pathformat = 'satellite/erg/orb/'+level+'/opq/%Y/%m/erg_orb_'+level+'_op_%Y%m%d_'
@@ -176,6 +180,10 @@ def orb(trange=['2017-03-27', '2017-03-28'],
 
         options(prefix + 'pos_beq' + suffix, 'ylog', 1)
     
+
+
+
+
     elif level == 'l3':
 
         # remove -1.0e+30
@@ -187,121 +195,46 @@ def orb(trange=['2017-03-27', '2017-03-28'],
                     times, bdata = get_data(loaded_data[i])
                     ylim(loaded_data[i], np.nanmin(bdata), np.nanmax(bdata))
 
-        if model == 'op':
+        if model in ["op", "t89","ts04"]:
+
+            if model == "ts04":
+                model = model.upper()
         
             # set ytitle
-            options(prefix + 'pos_lmc_op' + suffix, 'ytitle', 'Lmc (op)')
-            options(prefix + 'pos_lstar_op' + suffix, 'ytitle', 'Lstar (op)')
-            options(prefix + 'pos_I_op' + suffix, 'ytitle', 'I (op)')
-            options(prefix + 'pos_blocal_op' + suffix, 'ytitle', 'Blocal (op)')
-            options(prefix + 'pos_beq_op' + suffix, 'ytitle', 'Beq (op)')
-            options(prefix + 'pos_eq_op' + suffix, 'ytitle', 'Eq_pos (op)')
-            options(prefix + 'pos_iono_north_op' + suffix, 'ytitle', 'footprint_north (op)')
-            options(prefix + 'pos_iono_south_op' + suffix, 'ytitle', 'footprint_south (op)')
+            options(prefix + 'pos_lmc_' + model + suffix, 'ytitle', f'Lmc ({model})')
+            options(prefix + 'pos_lstar_' + model + suffix, 'ytitle', f'Lstar ({model})')
+            options(prefix + 'pos_I_' + model + suffix, 'ytitle', f'I ({model})')
+            options(prefix + 'pos_blocal_' + model + suffix, 'ytitle', f'Blocal ({model})')
+            options(prefix + 'pos_beq_' + model + suffix, 'ytitle', f'Beq ({model})')
+            options(prefix + 'pos_eq_' + model + suffix, 'ytitle', f'Eq_pos ({model})')
+            options(prefix + 'pos_iono_north_' + model + suffix, 'ytitle', f'footprint_north ({model})')
+            options(prefix + 'pos_iono_south_' + model + suffix, 'ytitle', f'footprint_south ({model})')
 
             # set ysubtitle
-            options(prefix + 'pos_lmc_op' + suffix, 'ysubtitle', '[dimensionless]')
-            options(prefix + 'pos_lstar_op' + suffix, 'ysubtitle', '[dimensionless]')
-            options(prefix + 'pos_I_op' + suffix, 'ysubtitle', '[Re]')
-            options(prefix + 'pos_blocal_op' + suffix, 'ysubtitle', '[nT]')
-            options(prefix + 'pos_beq_op' + suffix, 'ysubtitle', '[nT]')
-            options(prefix + 'pos_eq_op' + suffix, 'ysubtitle', '[Re Hour]')
-            options(prefix + 'pos_iono_north_op' + suffix, 'ysubtitle', '[deg. deg.]')
-            options(prefix + 'pos_iono_south_op' + suffix, 'ysubtitle', '[deg. deg.]')
+            options(prefix + 'pos_lmc_' + model + suffix, 'ysubtitle', '[dimensionless]')
+            options(prefix + 'pos_lstar_' + model + suffix, 'ysubtitle', '[dimensionless]')
+            options(prefix + 'pos_I_' + model + suffix, 'ysubtitle', '[Re]')
+            options(prefix + 'pos_blocal_' + model + suffix, 'ysubtitle', '[nT]')
+            options(prefix + 'pos_beq_' + model + suffix, 'ysubtitle', '[nT]')
+            options(prefix + 'pos_eq_' + model + suffix, 'ysubtitle', '[Re Hour]')
+            options(prefix + 'pos_iono_north_' + model + suffix, 'ysubtitle', '[deg. deg.]')
+            options(prefix + 'pos_iono_south_' + model + suffix, 'ysubtitle', '[deg. deg.]')
 
             # set ylabels
-            options(prefix + 'pos_lmc_op' + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg',
+            options(prefix + 'pos_lmc_' + model + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg',
                                                                         '40deg','30deg','20deg','10deg'])
-            options(prefix + 'pos_lstar_op' + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg',
+            options(prefix + 'pos_lstar_' + model + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg',
                                                                         '40deg','30deg','20deg','10deg'])
-            options(prefix + 'pos_I_op' + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg',
+            options(prefix + 'pos_I_' + model + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg',
                                                                         '40deg','30deg','20deg','10deg'])
-            options(prefix + 'pos_blocal_op' + suffix, 'legend_names', '|B|')
-            options(prefix + 'pos_beq_op' + suffix, 'legend_names', '|B|')
-            options(prefix + 'pos_eq_op' + suffix, 'legend_names', ['Re','MLT'])
-            options(prefix + 'pos_iono_north_op' + suffix, 'legend_names', ['GLAT','GLON'])
-            options(prefix + 'pos_iono_south_op' + suffix, 'legend_names', ['GLAT','GLON'])
+            options(prefix + 'pos_blocal_' + model + suffix, 'legend_names', '|B|')
+            options(prefix + 'pos_beq_' + model + suffix, 'legend_names', '|B|')
+            options(prefix + 'pos_eq_' + model + suffix, 'legend_names', ['Re','MLT'])
+            options(prefix + 'pos_iono_north_' + model + suffix, 'legend_names', ['GLAT','GLON'])
+            options(prefix + 'pos_iono_south_' + model + suffix, 'legend_names', ['GLAT','GLON'])
 
             # set y axis to logscale
-            options(prefix + 'pos_blocal_op' + suffix, 'ylog', 1)
-            options(prefix + 'pos_beq_op' + suffix, 'ylog', 1)
-
-        elif model == 't89':
-
-            # set ytitle
-            options(prefix + 'pos_lmc_t89' + suffix, 'ytitle', 'Lmc (t89)')
-            options(prefix + 'pos_lstar_t89' + suffix, 'ytitle', 'Lstar (t89)')
-            options(prefix + 'pos_I_t89' + suffix, 'ytitle', 'I (t89)')
-            options(prefix + 'pos_blocal_t89' + suffix, 'ytitle', 'Blocal (t89)')
-            options(prefix + 'pos_beq_t89' + suffix, 'ytitle', 'Beq (t89)')
-            options(prefix + 'pos_eq_t89' + suffix, 'ytitle', 'Eq_pos (t89)')
-            options(prefix + 'pos_iono_north_t89' + suffix, 'ytitle', 'footprint_north (t89)')
-            options(prefix + 'pos_iono_south_t89' + suffix, 'ytitle', 'footprint_south (t89)')
-
-            # set ysubtitle
-            options(prefix + 'pos_lmc_t89' + suffix, 'ysubtitle', '[dimensionless]')
-            options(prefix + 'pos_lstar_t89' + suffix, 'ysubtitle', '[dimensionless]')
-            options(prefix + 'pos_I_t89' + suffix, 'ysubtitle', '[Re]')
-            options(prefix + 'pos_blocal_t89' + suffix, 'ysubtitle', '[nT]')
-            options(prefix + 'pos_beq_t89' + suffix, 'ysubtitle', '[nT]')
-            options(prefix + 'pos_eq_t89' + suffix, 'ysubtitle', '[Re Hour]')
-            options(prefix + 'pos_iono_north_t89' + suffix, 'ysubtitle', '[deg. deg.]')
-            options(prefix + 'pos_iono_south_t89' + suffix, 'ysubtitle', '[deg. deg.]')
-
-            # set labels
-            options(prefix + 'pos_lmc_t89' + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg',
-                                                                            '40deg','30deg','20deg','10deg'])
-            options(prefix + 'pos_lstar_t89' + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg',
-                                                                            '40deg','30deg','20deg','10deg'])
-            options(prefix + 'pos_I_t89' + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg',
-                                                                            '40deg','30deg','20deg','10deg'])
-            options(prefix + 'pos_blocal_t89' + suffix, 'legend_names', '|B|')
-            options(prefix + 'pos_beq_t89' + suffix, 'legend_names', '|B|')
-            options(prefix + 'pos_eq_t89' + suffix, 'legend_names', ['Re','MLT'])
-            options(prefix + 'pos_iono_north_t89' + suffix, 'legend_names', ['GLAT','GLON'])
-            options(prefix + 'pos_iono_south_t89' + suffix, 'legend_names', ['GLAT','GLON'])
-
-            # set y axis to logscale
-            options(prefix + 'pos_blocal_t89' + suffix, 'ylog', 1)
-            options(prefix + 'pos_beq_t89' + suffix, 'ylog', 1)
-
-        elif model == 'ts04':
-
-            # set ytitle
-            options(prefix + 'pos_lmc_TS04' + suffix, 'ytitle', 'Lmc (TS04)')
-            options(prefix + 'pos_lstar_TS04' + suffix, 'ytitle', 'Lstar (TS04)')
-            options(prefix + 'pos_I_TS04' + suffix, 'ytitle', 'I (TS04)')
-            options(prefix + 'pos_blocal_TS04' + suffix, 'ytitle', 'Blocal (TS04)')
-            options(prefix + 'pos_beq_TS04' + suffix, 'ytitle', 'Beq (TS04)')
-            options(prefix + 'pos_eq_TS04' + suffix, 'ytitle', 'Eq_pos (TS04)')
-            options(prefix + 'pos_iono_north_TS04' + suffix, 'ytitle', 'footprint_north (TS04)')
-            options(prefix + 'pos_iono_south_TS04' + suffix, 'ytitle', 'footprint_south (TS04)')
-
-            # set ysubtitle
-            options(prefix + 'pos_lmc_TS04' + suffix, 'ysubtitle', '[dimensionless]')
-            options(prefix + 'pos_lstar_TS04' + suffix, 'ysubtitle', '[dimensionless]')
-            options(prefix + 'pos_I_TS04' + suffix, 'ysubtitle', '[Re]')
-            options(prefix + 'pos_blocal_TS04' + suffix, 'ysubtitle', '[nT]')
-            options(prefix + 'pos_beq_TS04' + suffix, 'ysubtitle', '[nT]')
-            options(prefix + 'pos_eq_TS04' + suffix, 'ysubtitle', '[Re Hour]')
-            options(prefix + 'pos_iono_north_TS04' + suffix, 'ysubtitle', '[deg. deg.]')
-            options(prefix + 'pos_iono_south_TS04' + suffix, 'ysubtitle', '[deg. deg.]')
-
-            # set labels
-            options(prefix + 'pos_lmc_TS04' + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg',
-                                                                            '40deg','30deg','20deg','10deg'])
-            options(prefix + 'pos_lstar_TS04' + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg',
-                                                                            '40deg','30deg','20deg','10deg'])
-            options(prefix + 'pos_I_TS04' + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg',
-                                                                            '40deg','30deg','20deg','10deg'])
-            options(prefix + 'pos_blocal_TS04' + suffix, 'legend_names', '|B|')
-            options(prefix + 'pos_beq_TS04' + suffix, 'legend_names', '|B|')
-            options(prefix + 'pos_eq_TS04' + suffix, 'legend_names', ['Re','MLT'])
-            options(prefix + 'pos_iono_north_TS04' + suffix, 'legend_names',  ['GLAT','GLON'])
-            options(prefix + 'pos_iono_south_TS04' + suffix, 'legend_names',  ['GLAT','GLON'])
-
-            # set y axis to logscale
-            options(prefix + 'pos_blocal_TS04' + suffix, 'ylog', 1)
-            options(prefix + 'pos_beq_TS04' + suffix, 'ylog', 1)
+            options(prefix + 'pos_blocal_' + model + suffix, 'ylog', 1)
+            options(prefix + 'pos_beq_' + model + suffix, 'ylog', 1)
 
     return loaded_data
