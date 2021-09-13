@@ -77,7 +77,7 @@ def lepi(trange=['2017-07-01', '2017-07-02'],
 
     """
     file_res=3600. * 24
-    prefix = 'erg_lepi_'+level+'_'
+    prefix = 'erg_lepi_'+level+'_' + datatype + '_'
 
     pathformat = 'satellite/erg/lepi/'+level+'/'+datatype+'/%Y/%m/erg_lepi_'+level+'_'+datatype+'_%Y%m%d_'
     if version == None:
@@ -122,33 +122,33 @@ def lepi(trange=['2017-07-01', '2017-07-02'],
         if datatype == 'omniflux' and level == 'l2':
             tplot_variables = []
 
-            if 'erg_lepi_l2_FPDO' + suffix in loaded_data:
-                v_array = loaded_data['erg_lepi_l2_FPDO' + suffix]['v']
+            if prefix + 'FPDO' + suffix in loaded_data:
+                v_array = loaded_data[prefix + 'FPDO' + suffix]['v']
                 v_array = np.where(v_array < 0. , np.nan, v_array) # change minus values to NaN
-                store_data('erg_lepi_l2_FPDO' + suffix, data={'x':loaded_data['erg_lepi_l2_FPDO' + suffix]['x'],
-                                                    'y':loaded_data['erg_lepi_l2_FPDO' + suffix]['y'],
+                store_data(prefix + 'FPDO' + suffix, data={'x':loaded_data[prefix + 'FPDO' + suffix]['x'],
+                                                    'y':loaded_data[prefix + 'FPDO' + suffix]['y'],
                                                     'v':v_array})
-                tplot_variables.append('erg_lepi_l2_FPDO' + suffix)
+                tplot_variables.append(prefix + 'FPDO' + suffix)
 
-            if 'erg_lepi_l2_FHEDO' + suffix in loaded_data:
-                v_array = loaded_data['erg_lepi_l2_FHEDO' + suffix]['v']
+            if prefix + 'FHEDO' + suffix in loaded_data:
+                v_array = loaded_data[prefix + 'FHEDO' + suffix]['v']
                 v_array = np.where(v_array < 0. , np.nan, v_array) # change minus values to NaN
-                store_data('erg_lepi_l2_FHEDO' + suffix, data={'x':loaded_data['erg_lepi_l2_FHEDO' + suffix]['x'],
-                                                    'y':loaded_data['erg_lepi_l2_FHEDO' + suffix]['y'],
+                store_data(prefix + 'FHEDO' + suffix, data={'x':loaded_data[prefix + 'FHEDO' + suffix]['x'],
+                                                    'y':loaded_data[prefix + 'FHEDO' + suffix]['y'],
                                                     'v':v_array})
-                tplot_variables.append('erg_lepi_l2_FHEDO' + suffix)
+                tplot_variables.append(prefix + 'FHEDO' + suffix)
 
-            if 'erg_lepi_l2_FODO' + suffix in loaded_data:
-                v_array = loaded_data['erg_lepi_l2_FODO' + suffix]['v']
+            if prefix + 'FODO' + suffix in loaded_data:
+                v_array = loaded_data[prefix + 'FODO' + suffix]['v']
                 v_array = np.where(v_array < 0. , np.nan, v_array) # change minus values to NaN
-                store_data('erg_lepi_l2_FODO' + suffix, data={'x':loaded_data['erg_lepi_l2_FODO' + suffix]['x'],
-                                                    'y':loaded_data['erg_lepi_l2_FODO' + suffix]['y'],
+                store_data(prefix + 'FODO' + suffix, data={'x':loaded_data[prefix + 'FODO' + suffix]['x'],
+                                                    'y':loaded_data[prefix + 'FODO' + suffix]['y'],
                                                     'v':v_array})
-                tplot_variables.append('erg_lepi_l2_FODO' + suffix)
+                tplot_variables.append(prefix + 'FODO' + suffix)
 
             # remove minus valuse of y array
-            if 'erg_lepi_l2_FPDO' + suffix in loaded_data:
-                clip('erg_lepi_l2_FPDO' + suffix, 0., 2.e+16)
+            if prefix + 'FPDO' + suffix in loaded_data:
+                clip(prefix + 'FPDO' + suffix, 0., 2.e+16)
             
             # set ytitle
             options(tplot_variables, 'ytitle', 'LEPi\nomniflux\nLv2\nEnergy')
@@ -169,9 +169,9 @@ def lepi(trange=['2017-07-01', '2017-07-02'],
                 zlim(tplot_variables[i], 1e+1, 1e+9)
 
             # set yrange
-            #options('erg_lepi_l2_FPDO' + suffix, 'yrange', [0.01, 20.])
-            #options('erg_lepi_l2_FHEDO' + suffix, 'yrange', [0.01, 20.])
-            #options('erg_lepi_l2_FODO' + suffix, 'yrange', [0.01, 20.])
+            #options(prefix + 'FPDO' + suffix, 'yrange', [0.01, 20.])
+            #options(prefix + 'FHEDO' + suffix, 'yrange', [0.01, 20.])
+            #options(prefix + 'FODO' + suffix, 'yrange', [0.01, 20.])
 
             # set ztitle
             options(tplot_variables, 'ztitle', '[/cm^2-str-s-keV]')
@@ -180,9 +180,9 @@ def lepi(trange=['2017-07-01', '2017-07-02'],
             options(tplot_variables, 'zlog', 1)
 
             # set zrange
-            #options('erg_lepi_l2_FPDO' + suffix, 'zrange', [1.e+02, 1.e+09])
-            #options('erg_lepi_l2_FHEDO' + suffix, 'zrange', [1.e+02, 1.e+09])
-            #options('erg_lepi_l2_FODO' + suffix, 'zrange', [1.e+01, 1.e+08])
+            #options(prefix + 'FPDO' + suffix, 'zrange', [1.e+02, 1.e+09])
+            #options(prefix + 'FHEDO' + suffix, 'zrange', [1.e+02, 1.e+09])
+            #options(prefix + 'FODO' + suffix, 'zrange', [1.e+01, 1.e+08])
 
             # change colormap option
             options(tplot_variables, 'Colormap', 'jet')
@@ -190,11 +190,11 @@ def lepi(trange=['2017-07-01', '2017-07-02'],
             return tplot_variables
 
         elif datatype == '3dflux' and level == 'l2':
-            if 'erg_lepi_l2_FPDU' + suffix in loaded_data:
-                clip('erg_lepi_l2_FPDU' + suffix, -1.0e+10, 1.0e+10)
-            if 'erg_lepi_l2_FHEDU' + suffix in loaded_data:
-                clip('erg_lepi_l2_FHEDU' + suffix, -1.0e+10, 1.0e+10)
-            if 'erg_lepi_l2_FODU' + suffix in loaded_data:
-                clip('erg_lepi_l2_FODU' + suffix, -1.0e+10, 1.0e+10)
+            if prefix + 'FPDU' + suffix in loaded_data:
+                clip(prefix + 'FPDU' + suffix, -1.0e+10, 1.0e+10)
+            if prefix + 'FHEDU' + suffix in loaded_data:
+                clip(prefix + 'FHEDU' + suffix, -1.0e+10, 1.0e+10)
+            if prefix + 'FODU' + suffix in loaded_data:
+                clip(prefix + 'FODU' + suffix, -1.0e+10, 1.0e+10)
 
     return loaded_data
