@@ -5,7 +5,7 @@ from pytplot import options, clip, ylim, zlim
 import cdflib
 
 def mepi_tof(trange=['2017-03-27', '2017-03-28'],
-            datatype='omniflux', 
+            datatype='flux', 
             level='l2', 
             suffix='',  
             get_support_data=False, 
@@ -71,18 +71,9 @@ def mepi_tof(trange=['2017-03-27', '2017-03-28'],
 
     """
     file_res=3600. * 24
-    prefix = 'erg_mepi_'+level+'_'+datatype+'_'
-
-    if datatype == 'flux' or datatype == 'raw':
-        prefix = 'erg_mepi_'+level+'_tof'+datatype+'_'
-        #datatype = ['tof', datatype]
-        #suffix = '_' + datatype[0] + datatype[1] + suffix
+    prefix = 'erg_mepi_'+level+'_tof'+datatype+'_'
         
-    if datatype == 'flux' or datatype == 'raw':
-        pathformat = 'satellite/erg/mepi/'+level+'/tof/%Y/%m/erg_mepi_'+level+'_tof'+datatype+'_%Y%m%d_v??_??.cdf'
-    else:
-        pathformat = 'satellite/erg/mepi/'+level+'/'+datatype+'/%Y/%m/erg_mepi_'+level+'_'+datatype+'_%Y%m%d_v??_??.cdf'
-
+    pathformat = 'satellite/erg/mepi/'+level+'/tof/%Y/%m/erg_mepi_'+level+'_tof'+datatype+'_%Y%m%d_v??_??.cdf'
 
     loaded_data = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype,file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
 
