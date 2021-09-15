@@ -73,15 +73,7 @@ def mepi_nml(trange=['2017-03-27', '2017-03-28'],
     file_res=3600. * 24
     prefix = 'erg_mepi_'+level+'_'+datatype+'_'
 
-    if datatype == 'flux' or datatype == 'raw':
-        prefix = 'erg_mepi_'+level+'_tof'+datatype+'_'
-        #datatype = ['tof', datatype]
-        #suffix = '_' + datatype[0] + datatype[1] + suffix
-        
-    if datatype == 'flux' or datatype == 'raw':
-        pathformat = 'satellite/erg/mepi/'+level+'/tof/%Y/%m/erg_mepi_'+level+'_tof'+datatype+'_%Y%m%d_v??_??.cdf'
-    else:
-        pathformat = 'satellite/erg/mepi/'+level+'/'+datatype+'/%Y/%m/erg_mepi_'+level+'_'+datatype+'_%Y%m%d_v??_??.cdf'
+    pathformat = 'satellite/erg/mepi/'+level+'/'+datatype+'/%Y/%m/erg_mepi_'+level+'_'+datatype+'_%Y%m%d_v??_??.cdf'
 
 
     loaded_data = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype,file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
@@ -175,42 +167,5 @@ def mepi_nml(trange=['2017-03-27', '2017-03-28'],
 
         # set z axis to logscale
         options(tplot_names_list, 'zlog', 1)
-
-    elif datatype == 'flux' or datatype == 'raw': # for tof Variables
-        if 'flux' in datatype:
-            original_suffix_list = ['FPDU', 'FHE2DU', 'FHEDU', 'FOPPDU', 'FODU', 'FO2PDU',
-                        'count_raw_P', 'count_raw_HE2', 'count_raw_HE', 'count_raw_OPP', 'count_raw_O', 'count_raw_O2P']
-            tplot_names_list = []
-            for i in range(len(original_suffix_list)):
-                tplot_names_list.append(prefix + original_suffix_list[i] + suffix)
-                if tplot_names_list[i] in loaded_data:
-                    ylim(tplot_names_list[i], 4, 190)
-            
-            # set spectrogram plot option
-            options(tplot_names_list, 'Spec', 1)
-            
-            # set y axis to logscale
-            options(tplot_names_list, 'ylog', 1)
-
-            # set ysubtitle
-            options(tplot_names_list, 'ysubtitle', '[keV/q]')
-
-            # set ztitle
-            options(tplot_names_list[:6], 'ztitle', '[/s-cm^{2}-sr-keV/q]')
-            options(tplot_names_list[6:], 'ztitle', '[cnt/smpl]')
-
-            # set z axis to logscale
-            options(tplot_names_list, 'zlog', 1)
-
-        elif 'raw' in datatype:
-
-            # set spectrogram plot option
-            options(loaded_data, 'Spec', 1)
-
-            # set z axis to logscale
-            options(loaded_data, 'zlog', 1)
-
-
-        
 
     return loaded_data
