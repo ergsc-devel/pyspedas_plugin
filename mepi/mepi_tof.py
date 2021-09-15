@@ -4,7 +4,7 @@ from load import load
 from pytplot import options, clip, ylim, zlim
 import cdflib
 
-def mepi_tow(trange=['2017-03-27', '2017-03-28'],
+def mepi_tof(trange=['2017-03-27', '2017-03-28'],
             datatype='omniflux', 
             level='l2', 
             suffix='',  
