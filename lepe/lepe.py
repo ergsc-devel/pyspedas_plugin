@@ -136,15 +136,17 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
             tplot_variables = []
             v_array = (loaded_data[prefix + 'FEDO' + suffix]['v'][:,0,:] + loaded_data[prefix + 'FEDO' + suffix]['v'][:,1,:])/ 2.
             v_array = np.where(v_array < 0. , np.nan, v_array) # change minus values to NaN
-            store_data(prefix + 'FEDO' + suffix, data={'x':loaded_data[prefix + 'FEDO' + suffix]['x'],
-                                                'y':loaded_data[prefix + 'FEDO' + suffix]['y'],
-                                                'v':v_array})
+            all_nan_v_indices_array =np.where(np.all(np.isnan(v_array), axis=1))[0]
+            store_data(prefix + 'FEDO' + suffix, 
+                    data={'x':np.delete(loaded_data[prefix + 'FEDO' + suffix]['x'], all_nan_v_indices_array, 0),
+                         'y':np.delete(loaded_data[prefix + 'FEDO' + suffix]['y'], all_nan_v_indices_array, 0),
+                         'v':np.delete(v_array, all_nan_v_indices_array, 0)})
             tplot_variables.append(prefix + 'FEDO' + suffix)
 
             # set spectrogram plot option
             options(prefix + 'FEDO' + suffix, 'Spec', 1)
             # change minus values to NaN in y array
-            clip(prefix + 'FEDO' + suffix, 0., 2.e+16)
+            clip(prefix + 'FEDO' + suffix, 0., np.nanmax(loaded_data[prefix + 'FEDO' + suffix]['y']))
 
             # set y axis to logscale
             options(prefix + 'FEDO' + suffix, 'ylog', 1)
