@@ -213,7 +213,7 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
 
                 options(prefix + 'FEDU' +suffix, 'spec', 1)
                 if prefix + 'FEDU' +suffix in tplot_variables:
-                    clip(prefix + 'FEDU' +suffix, 0, 21*1e3)
+                    clip(prefix + 'FEDU' +suffix, 0, np.nanmax(loaded_data[prefix + 'FEDU' +suffix]['y']))
                 ylim(prefix + 'FEDU' +suffix, 19, 21*1e3)
                 zlim(prefix + 'FEDU' +suffix, 1, 1e6)
                 options(prefix + 'FEDU' +suffix, 'zlog', 1)
