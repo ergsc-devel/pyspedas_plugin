@@ -138,8 +138,8 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
             v_array = np.where(v_array < 0. , np.nan, v_array) # change minus values to NaN
             all_nan_v_indices_array =np.where(np.all(np.isnan(v_array), axis=1))[0]
             store_data(prefix + 'FEDO' + suffix, 
-                    data={'x':np.delete(loaded_data[prefix + 'FEDO' + suffix]['x'], all_nan_v_indices_array, 0),
-                         'y':np.delete(loaded_data[prefix + 'FEDO' + suffix]['y'], all_nan_v_indices_array, 0),
+                    data={'x':np.delete(loaded_data[prefix + 'FEDO' + suffix]['x'], all_nan_v_indices_array, axis=0),
+                         'y':np.delete(loaded_data[prefix + 'FEDO' + suffix]['y'], all_nan_v_indices_array, axis=0),
                          'v':np.delete(v_array, all_nan_v_indices_array, 0)})
             tplot_variables.append(prefix + 'FEDO' + suffix)
 
