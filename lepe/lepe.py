@@ -246,12 +246,12 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
 
                 if et_diagram:
                     ytitle_deg_array = np.round(np.nan_to_num(FEDU_get_data[3]), 3)
-                    
+                    all_nan_v_indices_array = np.where(np.all(np.isnan(FEDU_get_data[2]), axis=1))[0]
                     for i in range(FEDU_get_data[1].shape[2]): # processing for erg_lepe_l3_pa_pabin_??(??:01,01,..16)_FEDU
                             tplot_name = prefix + 'pabin_' + str(i + 1).zfill(2) +'_FEDU' + suffix
-                            store_data(tplot_name,data={'x':FEDU_get_data[0],
-                                                        'y':FEDU_get_data[1][:,:,i],
-                                                        'v':FEDU_get_data[2]})
+                            store_data(tplot_name,data={'x':np.delete(FEDU_get_data[0], all_nan_v_indices_array, axis=0),
+                                    'y':np.delete(FEDU_get_data[1][:,:,i], all_nan_v_indices_array, axis=0),
+                                    'v':np.delete(FEDU_get_data[2], all_nan_v_indices_array, axis=0)})
                             options(tplot_name, 'spec', 1)
                             ylim(tplot_name,  19, 21*1e3)
                             zlim(tplot_name, 1, 1e6)
