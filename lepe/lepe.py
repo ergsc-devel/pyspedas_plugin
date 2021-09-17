@@ -176,7 +176,7 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
 
         if (level == 'l2' and datatype == '3dflux'):
             tplot_variables = []
-            
+            other_variables_dict = {}
             if prefix + 'FEDU' +suffix in loaded_data:
                 store_data(prefix + 'FEDU' +suffix, 
                           data={'x':loaded_data[prefix + 'FEDU' +suffix]['x'],
@@ -196,6 +196,11 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
                 options(prefix + 'FEDU' +suffix, 'zlog', 1)
                 options(prefix + 'FEDU' +suffix, 'ylog', 1)
                 options(prefix + 'FEDU' +suffix, 'ysubtitle', '[eV]')
+
+                other_variables_dict[prefix + 'Count_Rate' +suffix] = loaded_data[prefix + 'Count_Rate' +suffix]
+                other_variables_dict[prefix + 'Count_Rate_BG' +suffix] = loaded_data[prefix + 'Count_Rate_BG' +suffix]
+
+                tplot_variables.append(other_variables_dict)
 
                 return tplot_variables
 
