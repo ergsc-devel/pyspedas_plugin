@@ -74,7 +74,11 @@ def pwe_efd(trange=['2017-04-01', '2017-04-02'],
     file_res=3600. * 24
     prefix = 'erg_pwe_efd_'+level+'_'+datatype+'_'
 
-    pathformat = 'satellite/erg/pwe/efd/'+level+'/'+datatype+'/%Y/%m/erg_pwe_efd_'+level+'_'+datatype+'_%Y%m%d_v??_??.cdf'
+    if datatype == 'E256Hz' or datatype == 'E64Hz':
+        pathformat = 'satellite/erg/pwe/efd/'+level+'/'+datatype+'/%Y/%m/erg_pwe_efd_'+level+'_'+datatype+'_dsi_%Y%m%d_v??_??.cdf'
+        # need if sentence for '_[[wpt]]_%Y%m%d_v??_??.cdf'
+    else:
+        pathformat = 'satellite/erg/pwe/efd/'+level+'/'+datatype+'/%Y/%m/erg_pwe_efd_'+level+'_'+datatype+'_%Y%m%d_v??_??.cdf'
 
     loaded_data = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype,file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
 
