@@ -1,6 +1,8 @@
 
-from pyspedas.erg.load import load
-from pytplot import options
+#from pyspedas.erg.load import load
+from load import load
+from pytplot import options, clip, ylim, zlim
+import cdflib
 
 def pwe_efd(trange=['2017-04-01', '2017-04-02'],
         datatype='E_spin', 
@@ -64,5 +66,14 @@ def pwe_efd(trange=['2017-04-01', '2017-04-02'],
         List of tplot variables created.
 
     """
-    return load(instrument='pwe_efd', trange=trange, level=level, datatype=datatype, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
+
+    file_res=3600. * 24
+    prefix = 'erg_pwe_efd_'+level+'_'+datatype+'_'
+
+    pathformat = 'satellite/erg/pwe/efd/'+level+'/'+datatype+'/%Y/%m/erg_pwe_efd_'+level+'_'+datatype+'_%Y%m%d_v??_??.cdf'
+
+    loaded_data = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype,file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
+
+
+    return loaded_data
 
