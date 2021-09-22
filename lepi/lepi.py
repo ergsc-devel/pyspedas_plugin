@@ -218,12 +218,36 @@ def lepi(trange=['2017-07-01', '2017-07-02'],
                 options(tplot_name, 'ytitle', 'ERG LEP-i P\n' + str(ytitle_keV_array[i]) + ' keV\nPitch angle')
                 tplot_variables.append(tplot_name)
 
-            options(tplot_variables, 'zlog', 1)
-            options(tplot_variables, 'ysubtitle', 'PA [deg]')
-            options(tplot_variables, 'colormap', 'jet')
-            options(tplot_variables, 'ztitle', '[/s-cm^{2}-sr-keV/q]')
-
             loaded_data += tplot_variables[1:]
+
+        tplot_variables_length=len(tplot_variables)
+        
+        if prefix + 'FODU' + suffix in loaded_data:
+            tplot_variables.append(prefix + 'FODU' + suffix)
+            get_data_vars = get_data(prefix + 'FODU' + suffix)
+            options(prefix + 'FODU' + suffix, 'spec', 1)
+            ytitle_keV_array = np.round(np.nan_to_num(get_data_vars[2]), 2)
+            for i in range(get_data_vars[1].shape[1]):
+                tplot_name = prefix + 'pabin_' + str(i).zfill(2) + '_FODU' + suffix
+                store_data(tplot_name, data={'x':get_data_vars[0],
+                                            'y':get_data_vars[1][:,i,:],
+                                            'v':get_data_vars[3]})
+                options(tplot_name, 'spec', 1)
+                ylim(tplot_name, 0, 180)
+                zlim(tplot_name, 1e2, 1e5)
+                options(tplot_name, 'ytitle', 'ERG LEP-i P\n' + str(ytitle_keV_array[i]) + ' keV\nPitch angle')
+                tplot_variables.append(tplot_name)
+
+            loaded_data += tplot_variables[tplot_variables_length + 1:]
+
+        options(tplot_variables, 'zlog', 1)
+        options(tplot_variables, 'ysubtitle', 'PA [deg]')
+        options(tplot_variables, 'colormap', 'jet')
+        options(tplot_variables, 'ztitle', '[/s-cm^{2}-sr-keV/q]')
+
+
+
+            
 
 
     return loaded_data
