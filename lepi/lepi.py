@@ -199,4 +199,20 @@ def lepi(trange=['2017-07-01', '2017-07-02'],
         if prefix + 'FODU' + suffix in loaded_data:
             clip(prefix + 'FODU' + suffix, -1.0e+10, 1.0e+10)
 
+    elif level == 'l3':
+        tplot_variables = []
+
+        if prefix + 'FPDU' + suffix in loaded_data:
+            tplot_variables.append(prefix + 'FPDU' + suffix)
+            get_data_vars = get_data(prefix + 'FPDU' + suffix)
+            for i in range(get_data_vars[1].shape[1]):
+                tplot_name = prefix + 'pabin_' + str(i).zfill(2) + '_FPDU' + suffix
+                store_data(tplot_name, data={'x':get_data_vars[0],
+                                            'y':get_data_vars[1][:,i,:],
+                                            'v':get_data_vars[3]})
+                tplot_variables.append(tplot_name)
+
+            loaded_data += tplot_variables[1:]
+
+
     return loaded_data
