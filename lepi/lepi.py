@@ -214,14 +214,14 @@ def lepi(trange=['2017-07-01', '2017-07-02'],
                                             'v':get_data_vars[3]})
                 options(tplot_name, 'spec', 1)
                 ylim(tplot_name, 0, 180)
-                zlim(tplot_name, 1e1, 1e9)
+                zlim(tplot_name, 1e2, 1e5)
                 options(tplot_name, 'ytitle', 'ERG LEP-i P\n' + str(ytitle_keV_array[i]) + ' keV\nPitch angle')
                 tplot_variables.append(tplot_name)
 
-                options(tplot_variables, 'zlog', 1)
-                options(tplot_variables, 'ysubtitle', 'PA [deg]')
-                options(tplot_variables, 'colormap', 'jet')
-                options(tplot_variables, 'ztitle', '[/s-cm^{2}-sr-keV/q]')
+            options(tplot_variables, 'zlog', 1)
+            options(tplot_variables, 'ysubtitle', 'PA [deg]')
+            options(tplot_variables, 'colormap', 'jet')
+            options(tplot_variables, 'ztitle', '[/s-cm^{2}-sr-keV/q]')
 
             loaded_data += tplot_variables[1:]
 
