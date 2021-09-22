@@ -205,6 +205,8 @@ def lepi(trange=['2017-07-01', '2017-07-02'],
         if prefix + 'FPDU' + suffix in loaded_data:
             tplot_variables.append(prefix + 'FPDU' + suffix)
             get_data_vars = get_data(prefix + 'FPDU' + suffix)
+            ylim(prefix + 'FPDU' + suffix, 0, 180)
+            zlim(prefix + 'FPDU' + suffix, 1e2, 1e5)
             options(prefix + 'FPDU' + suffix, 'spec', 1)
             ytitle_keV_array = np.round(np.nan_to_num(get_data_vars[2]), 2)
             for i in range(get_data_vars[1].shape[1]):
@@ -226,6 +228,8 @@ def lepi(trange=['2017-07-01', '2017-07-02'],
             tplot_variables.append(prefix + 'FHEDU' + suffix)
             get_data_vars = get_data(prefix + 'FHEDU' + suffix)
             options(prefix + 'FHEDU' + suffix, 'spec', 1)
+            ylim(prefix + 'FHEDU' + suffix, 0, 180)
+            zlim(prefix + 'FHEDU' + suffix, 1e2, 1e5)
             ytitle_keV_array = np.round(np.nan_to_num(get_data_vars[2]), 2)
             for i in range(get_data_vars[1].shape[1]):
                 tplot_name = prefix + 'pabin_' + str(i).zfill(2) + '_FHEDU' + suffix
@@ -246,6 +250,8 @@ def lepi(trange=['2017-07-01', '2017-07-02'],
             tplot_variables.append(prefix + 'FODU' + suffix)
             get_data_vars = get_data(prefix + 'FODU' + suffix)
             options(prefix + 'FODU' + suffix, 'spec', 1)
+            ylim(prefix + 'FODU' + suffix, 0, 180)
+            zlim(prefix + 'FODU' + suffix, 1e2, 1e5)
             ytitle_keV_array = np.round(np.nan_to_num(get_data_vars[2]), 2)
             for i in range(get_data_vars[1].shape[1]):
                 tplot_name = prefix + 'pabin_' + str(i).zfill(2) + '_FODU' + suffix
