@@ -76,6 +76,10 @@ def lepi(trange=['2017-07-01', '2017-07-02'],
         List of tplot variables created.
 
     """
+
+    if level == 'l3':
+        datatype = 'pa'
+
     file_res=3600. * 24
     prefix = 'erg_lepi_'+level+'_' + datatype + '_'
 
@@ -86,6 +90,7 @@ def lepi(trange=['2017-07-01', '2017-07-02'],
         pathformat += version + '.cdf'
 
     loaded_data = load(pathformat=pathformat, trange=trange, file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
+
 
     if len(loaded_data) > 0 and ror:
 
