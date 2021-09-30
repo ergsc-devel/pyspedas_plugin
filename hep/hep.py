@@ -250,11 +250,13 @@ def hep(trange=['2017-03-27', '2017-03-28'],
 
                # get energy [keV] array for ytitle options
                L_energy_array = np.trunc(L_energy_array_ave).astype(int)
-
+               non_negative_y_array = np.where(loaded_data[prefix + 'FEDU_L' + suffix]['y'] < 0. , np.nan, loaded_data[prefix + 'FEDU_L' + suffix]['y'])
                store_data(prefix + 'FEDU_L' + suffix, data={'x':loaded_data[prefix + 'FEDU_L' + suffix]['x'],
-                                                  'y':loaded_data[prefix + 'FEDU_L' + suffix]['y'],
+                                                  'y':non_negative_y_array,
                                                   'v1':L_energy_array_ave,
                                                   'v2':loaded_data[prefix + 'FEDU_L' + suffix]['v2']})
+               
+               options(prefix + 'FEDU_L' + suffix, 'spec', 1)
                # set ylim
                ylim(prefix + 'FEDU_L' + suffix, 0, 180)
                # set zlim
@@ -268,9 +270,10 @@ def hep(trange=['2017-03-27', '2017-03-28'],
                for i in range(loaded_data[prefix + 'FEDU_L' + suffix]['y'].shape[1]): # make Tplot Variables of erg_hep_l3_FEDU_L_paspec_ene?? (??: 00, 01, 02, ..., 15)
                     tplot_name = prefix + 'FEDU_L_paspec_ene' + str(i).zfill(2) + suffix
                     store_data(tplot_name, data={'x':loaded_data[prefix + 'FEDU_L' + suffix]['x'],
-                                                'y':loaded_data[prefix + 'FEDU_L' + suffix]['y'][:,i,:],
+                                                'y':non_negative_y_array[:,i,:],
                                                 'v':loaded_data[prefix + 'FEDU_L' + suffix]['v2']})
 
+                    options(tplot_name, 'spec', 1)
                     # set ylim
                     ylim(tplot_name, 0, 180)
                     # set zlim
@@ -287,11 +290,13 @@ def hep(trange=['2017-03-27', '2017-03-28'],
 
                # get energy [keV] array for ytitle options
                H_energy_array = np.trunc(H_energy_array_ave).astype(int)
-
+               non_negative_y_array = np.where(loaded_data[prefix + 'FEDU_H' + suffix]['y'] < 0. , np.nan, loaded_data[prefix + 'FEDU_H' + suffix]['y'])
                store_data(prefix + 'FEDU_H' + suffix, data={'x':loaded_data[prefix + 'FEDU_H' + suffix]['x'],
-                                                  'y':loaded_data[prefix + 'FEDU_H' + suffix]['y'],
+                                                  'y':non_negative_y_array,
                                                   'v1':H_energy_array_ave,
                                                   'v2':loaded_data[prefix + 'FEDU_H' + suffix]['v2']})
+               
+               options(prefix + 'FEDU_H' + suffix, 'spec', 1)
                # set ylim
                ylim(prefix + 'FEDU_H' + suffix, 0, 180)
                # set zlim
@@ -303,9 +308,10 @@ def hep(trange=['2017-03-27', '2017-03-28'],
                for i in range(loaded_data[prefix + 'FEDU_H' + suffix]['y'].shape[1]): # make Tplot Variables of erg_hep_l3_FEDU_H_paspec_ene?? (??: 00, 01, 02, ..., 10)
                     tplot_name = prefix + 'FEDU_H_paspec_ene' + str(i).zfill(2) + suffix
                     store_data(tplot_name, data={'x':loaded_data[prefix + 'FEDU_H' + suffix]['x'],
-                                                'y':loaded_data[prefix + 'FEDU_H' + suffix]['y'][:,i,:],
+                                                'y':non_negative_y_array[:,i,:],
                                                 'v':loaded_data[prefix + 'FEDU_H' + suffix]['v2']})
                     
+                    options(tplot_name, 'spec', 1)
                     # set ylim
                     ylim(tplot_name, 0, 180)
                     # set zlim
@@ -318,7 +324,7 @@ def hep(trange=['2017-03-27', '2017-03-28'],
            # set z axis to logscale
            options(tplot_variables, 'zlog', 1)
            # set spectrogram plot option
-           options(tplot_variables, 'spec', 1)
+           #options(tplot_variables, 'spec', 1)
            # change colormap option
            options(tplot_variables, 'colormap', 'jet')
            # set ysubtitle
