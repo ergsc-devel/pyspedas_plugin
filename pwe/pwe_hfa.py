@@ -113,7 +113,7 @@ def pwe_hfa(trange=['2017-04-01', '2017-04-02'],
         print('**************************************************************************')
 
 
-    if level == 'l2' and mode == 'low':
+    if level == 'l2' and mode == 'low' and not notplot:
     
         
         # set spectrogram plot option

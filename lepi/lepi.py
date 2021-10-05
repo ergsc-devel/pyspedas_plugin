@@ -191,7 +191,7 @@ def lepi(trange=['2017-07-01', '2017-07-02'],
         # change colormap option
         options(tplot_variables, 'Colormap', 'jet')
 
-    elif datatype == '3dflux' and level == 'l2':
+    elif datatype == '3dflux' and level == 'l2' and not notplot:
         if prefix + 'FPDU' + suffix in loaded_data:
             clip(prefix + 'FPDU' + suffix, -1.0e+10, 1.0e+10)
         if prefix + 'FHEDU' + suffix in loaded_data:
