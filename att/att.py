@@ -14,7 +14,29 @@ def att(trange=['2017-04-01','2017-04-02'],
         no_update=False,
         uname=None,
         passwd=None):
+    """
+    This function loads attitude data from the Arase mission
+    
+    Parameters:
+        trange : list of str
+            time range of interest [starttime, endtime] with the format 
+            'YYYY-MM-DD','YYYY-MM-DD'] or to specify more or less than a day 
+            ['YYYY-MM-DD/hh:mm:ss','YYYY-MM-DD/hh:mm:ss']
 
+        level: str
+            Data level; Valid options:
+
+        downloadonly: bool
+            Set this flag to download the CDF files, but not load them into 
+            tplot variables
+
+        no_update: bool
+            If set, only load data from your local cache
+
+    Returns:
+        None
+
+    """
     file_res=24*3600.
     pathformat='satellite/erg/att/txt/erg_att_'+level+'_%Y%m%d_v??.txt'
     remote_names = dailynames(file_format=pathformat, trange=trange, res=file_res)
