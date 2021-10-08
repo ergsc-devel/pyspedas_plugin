@@ -17,7 +17,7 @@ def erg_interpolate_att(erg_xxx_in = None):
     time = get_data(erg_xxx_in)[0]
 
     # Prepare some constants
-    dtor = np.pi
+    dtor = np.pi / 180.
 
     output_dictionary = {}
 
