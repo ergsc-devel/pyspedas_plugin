@@ -29,7 +29,7 @@ def erg_interpolate_att(erg_xxx_in = None):
         sprate=get_data('erg_att_sprate')
         if sprate[0].min() > time.min() + 8. or sprate[0].max() < time.max() - 8.:
             tr = get_timespan(erg_xxx_in)
-            att(trange=[time_string([tr[0] -60., tr[1] + 60.])])
+            att(trange=time_string([tr[0] -60., tr[1] + 60.]))
     else:
         tr = get_timespan(erg_xxx_in)
         att(trange=time_string([tr[0] -60., tr[1] + 60.]))
