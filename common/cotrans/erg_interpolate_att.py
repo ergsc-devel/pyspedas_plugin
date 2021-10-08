@@ -40,4 +40,22 @@ def erg_interpolate_att(erg_xxx_in = None):
     spinperiod = {'x': time, 'y': sperInterp}
     output_dictionary['spinperiod'] = spinperiod
 
+
+    #Interporate SGI-Z axis vector 
+    degap('erg_att_gxras',dt=8., margin=.5)
+    degap('erg_att_gxdec',dt=8., margin=.5)
+    ras = get_data('erg_att_gxras')
+    dec = get_data('erg_att_gxdec')
+    time0 = ras[0]
+    ras = ras[1]
+    dec = dec[1]
+    ez = np.cos((90. - dec) * dtor)
+    ex = np.sin((90. - dec) * dtor) * np.cos(ras * dtor)
+    ey = np.sin((90. - dec) * dtor) * np.sin(ras * dtor)
+    ex_interp = np.interp(time, time0, ex)
+    ey_interp = np.interp(time, time0, ey)
+    ez_interp = np.interp(time, time0, ez)
+    sgiz_j2000 = { 'x':time, 'y':np.array([ ex_interp, ey_interp, ez_interp ]) } 
+    output_dictionary['sgiz_j2000'] = sgiz_j2000
+    
     return output_dictionary
