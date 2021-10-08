@@ -1,4 +1,5 @@
 import numpy as np
+from scipy import interpolate
 #import pyspedas
 from pyspedas import tnames
 from pyspedas.analysis.tcrossp import tcrossp
@@ -41,7 +42,16 @@ def erg_interpolate_att(erg_xxx_in = None):
     spinperiod = {'x': time, 'y': sperInterp}
     output_dictionary['spinperiod'] = spinperiod
 
-
+    #Interpolate spin phase
+    degap('erg_att_spphase',dt=8., margin=.5)
+    sphase = get_data('erg_att_spphase')
+    ph_nn = interpolate.interp1d(sphase[0], sphase[1], kind="nearest")(time)
+    per_nn = spinperiod['y']
+    dt = time - interpolate.interp1d(sphase[0], sphase[0], kind="nearest")(time)
+    sphInterp = np.fmod( ph_nn + 360. * dt / per_nn, 360.)
+    sphInterp = np.fmod(sphInterp + 360., 360.)
+    spinphase =  { 'x':time, 'y':sphInterp }
+    output_dictionary['spinphase'] = spinphase
 
     #Interporate SGI-Z axis vector 
     degap('erg_att_izras',dt=8., margin=0.5)
