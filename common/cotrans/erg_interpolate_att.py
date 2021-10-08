@@ -41,11 +41,12 @@ def erg_interpolate_att(erg_xxx_in = None):
     output_dictionary['spinperiod'] = spinperiod
 
 
+
     #Interporate SGI-Z axis vector 
-    degap('erg_att_gxras',dt=8., margin=.5)
-    degap('erg_att_gxdec',dt=8., margin=.5)
-    ras = get_data('erg_att_gxras')
-    dec = get_data('erg_att_gxdec')
+    degap('erg_att_izras',dt=8., margin=0.5)
+    degap('erg_att_izdec',dt=8., margin=0.5)
+    ras = get_data('erg_att_izras')
+    dec = get_data('erg_att_izdec')
     time0 = ras[0]
     ras = ras[1]
     dec = dec[1]
@@ -57,5 +58,5 @@ def erg_interpolate_att(erg_xxx_in = None):
     ez_interp = np.interp(time, time0, ez)
     sgiz_j2000 = { 'x':time, 'y':np.array([ ex_interp, ey_interp, ez_interp ]) } 
     output_dictionary['sgiz_j2000'] = sgiz_j2000
-    
+
     return output_dictionary
