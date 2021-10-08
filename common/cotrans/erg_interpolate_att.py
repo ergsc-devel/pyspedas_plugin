@@ -1,6 +1,7 @@
 import numpy as np
 #import pyspedas
 from pyspedas import tnames
+from pyspedas.analysis.tcrossp import tcrossp
 #import pytplot
 from pytplot import get_data, get_timespan
 from pytplot.tplot_math.degap import degap
@@ -92,5 +93,18 @@ def erg_interpolate_att(erg_xxx_in = None):
     ez_interp = np.interp(time, time0, ez)
     sgaz_j2000 = { 'x':time, 'y':np.array([ ex_interp, ey_interp, ez_interp ]) } 
     output_dictionary['sgaz_j2000'] = sgaz_j2000
+
+    #Derive the other three axes (SGA-Y, SGI-X, SGI-Y) 
+    sgay = tcrossp(output_dictionary['sgaz_j2000']['y'].T, output_dictionary['sgax_j2000']['y'].T, return_data=True).T
+    sgay_j2000 = { 'x':time, 'y':sgay } 
+    output_dictionary['sgay_j2000'] = sgay_j2000
+
+    sgiy = tcrossp(output_dictionary['sgiz_j2000']['y'].T, output_dictionary['sgax_j2000']['y'].T, return_data=True).T
+    sgiy_j2000 = { 'x':time, 'y':sgiy } 
+    output_dictionary['sgiy_j2000'] = sgiy_j2000
+
+    sgix = tcrossp(output_dictionary['sgiy_j2000']['y'].T, output_dictionary['sgiz_j2000']['y'].T, return_data=True).T
+    sgix_j2000 = { 'x':time, 'y':sgix }
+    output_dictionary['sgix_j2000'] = sgix_j2000
 
     return output_dictionary
