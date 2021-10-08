@@ -11,7 +11,22 @@ from pyspedas.utilities.time_string import time_string
 
 
 def erg_interpolate_att(erg_xxx_in = None, noload = False):
+    """
+    This function interpolates erg att data to match erg_xxx_in.
+    
+    Parameters:
+        erg_xxx_in : str
+            input tplot variable relating to ERG to be transformed
 
+    Returns:
+        output_dictionary : dict
+            Dictionary which has below keys.
+                spinperiod: output variable in which the interpolated data of ERG spin period is stored 
+                spinphase: output variable in which the interpolated data of ERG spin phase is stored   
+                sgix_j2000, sgiy_j2000, or sgiz_j2000: output interporated SGI axis vector for each component
+                sgax_j2000, sgay_j2000, or sgaz_j2000: output interporated SGA axis vector for each component
+
+    """
     if erg_xxx_in == None or erg_xxx_in not in tnames():
         print('inputted Tplot variable name is None, or not defined')
         return
