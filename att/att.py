@@ -43,7 +43,6 @@ def att(trange=['2017-04-01','2017-04-02'],
     files = download(remote_file=remote_names, remote_path=CONFIG['remote_data_dir'], local_path=CONFIG['local_data_dir'], no_download=no_update, last_version=True, username=uname, password=passwd)
     out_files = []
 
-    files = download(remote_file=remote_names, remote_path=CONFIG['remote_data_dir'], local_path=CONFIG['local_data_dir'], no_download=no_update, last_version=True, username=uname, password=passwd)
     if files is not None:
         for file in files:
             out_files.append(file)
