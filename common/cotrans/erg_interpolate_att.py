@@ -57,7 +57,7 @@ def erg_interpolate_att(erg_xxx_in = None):
     ex_interp = np.interp(time, time0, ex)
     ey_interp = np.interp(time, time0, ey)
     ez_interp = np.interp(time, time0, ez)
-    sgiz_j2000 = { 'x':time, 'y':np.array([ ex_interp, ey_interp, ez_interp ]) } 
+    sgiz_j2000 = { 'x':time, 'y':np.array([ ex_interp, ey_interp, ez_interp ]).T } 
     output_dictionary['sgiz_j2000'] = sgiz_j2000
 
     #Interporate SGA-X axis vector
@@ -74,7 +74,7 @@ def erg_interpolate_att(erg_xxx_in = None):
     ex_interp = np.interp(time, time0, ex)
     ey_interp = np.interp(time, time0, ey)
     ez_interp = np.interp(time, time0, ez)
-    sgax_j2000 = { 'x':time, 'y':np.array([ ex_interp, ey_interp, ez_interp ]) } 
+    sgax_j2000 = { 'x':time, 'y':np.array([ ex_interp, ey_interp, ez_interp ]).T } 
     output_dictionary['sgax_j2000'] = sgax_j2000
 
     #Interporate SGA-Z axis vector
@@ -91,19 +91,19 @@ def erg_interpolate_att(erg_xxx_in = None):
     ex_interp = np.interp(time, time0, ex)
     ey_interp = np.interp(time, time0, ey)
     ez_interp = np.interp(time, time0, ez)
-    sgaz_j2000 = { 'x':time, 'y':np.array([ ex_interp, ey_interp, ez_interp ]) } 
+    sgaz_j2000 = { 'x':time, 'y':np.array([ ex_interp, ey_interp, ez_interp ]).T } 
     output_dictionary['sgaz_j2000'] = sgaz_j2000
 
     #Derive the other three axes (SGA-Y, SGI-X, SGI-Y) 
-    sgay = tcrossp(output_dictionary['sgaz_j2000']['y'].T, output_dictionary['sgax_j2000']['y'].T, return_data=True).T
+    sgay = tcrossp(output_dictionary['sgaz_j2000']['y'], output_dictionary['sgax_j2000']['y'], return_data=True)
     sgay_j2000 = { 'x':time, 'y':sgay } 
     output_dictionary['sgay_j2000'] = sgay_j2000
 
-    sgiy = tcrossp(output_dictionary['sgiz_j2000']['y'].T, output_dictionary['sgax_j2000']['y'].T, return_data=True).T
+    sgiy = tcrossp(output_dictionary['sgiz_j2000']['y'], output_dictionary['sgax_j2000']['y'], return_data=True)
     sgiy_j2000 = { 'x':time, 'y':sgiy } 
     output_dictionary['sgiy_j2000'] = sgiy_j2000
 
-    sgix = tcrossp(output_dictionary['sgiy_j2000']['y'].T, output_dictionary['sgiz_j2000']['y'].T, return_data=True).T
+    sgix = tcrossp(output_dictionary['sgiy_j2000']['y'], output_dictionary['sgiz_j2000']['y'], return_data=True)
     sgix_j2000 = { 'x':time, 'y':sgix }
     output_dictionary['sgix_j2000'] = sgix_j2000
 
