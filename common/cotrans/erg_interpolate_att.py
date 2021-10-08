@@ -19,7 +19,8 @@ def erg_interpolate_att(erg_xxx_in = None):
     # Prepare some constants
     dtor = np.pi
 
-    
+    output_dictionary = {}
+
     #Load the attitude data 
     if tnames('erg_att_sprate') == ['erg_att_sprate']:
         degap('erg_att_sprate',dt=8., margin=.5)
@@ -30,3 +31,13 @@ def erg_interpolate_att(erg_xxx_in = None):
     else:
         tr = get_timespan(erg_xxx_in)
         att(trange=time_string([tr[0] -60., tr[1] + 60.]))
+
+    #Interpolate spin period 
+    degap('erg_att_sprate',dt=8., margin=.5)
+    sprate=get_data('erg_att_sprate')
+    sper = 1./ (sprate[1] / 60.)
+    sperInterp = np.interp(time, sprate[0], sper)
+    spinperiod = {'x': time, 'y': sperInterp}
+    output_dictionary['spinperiod'] = spinperiod
+
+    return output_dictionary
