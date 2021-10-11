@@ -46,7 +46,7 @@ def dsi2j2000(name_in=None,
                 scpos_y = np.interp(time, get_data_erg_orb_l2[0], get_data_erg_orb_l2[1][:,1])
                 scpos_z = np.interp(time, get_data_erg_orb_l2[0], get_data_erg_orb_l2[1][:,2])
                 scpos = np.array([scpos_x,scpos_y,scpos_z]).T
-                sunpos=np.array([[1.496e+08, 0., 0.]]*time.shape[0])
+                sunpos=np.array([[1.496e+08, 0., 0.]]*time_length)
                 sundir = sunpos - scpos
                 store_data('sundir_gse', data={ 'x':time, 'y':sundir } )
                 tnormalize('sundir_gse', newname='sundir_gse')
@@ -67,6 +67,6 @@ def dsi2j2000(name_in=None,
             j2000y_in_dsi = np.dot(mat ,np.array([0., 1., 0.]))
             j2000z_in_dsi = np.dot(mat ,np.array([0., 0., 1.]))
             mat = cart_trans_matrix_make(j2000x_in_dsi, j2000y_in_dsi, j2000z_in_dsi)
-            dat_new= np.array([np.dot(mat[i,:,:],dat[i,:]) for i in range(time.shape[0])])
+            dat_new= np.array([np.dot(mat[i,:,:],dat[i,:]) for i in range(time_length)])
 
             store_data(name_out,data={'x':time, 'y':dat_new}, attr_dict=dl_in)
