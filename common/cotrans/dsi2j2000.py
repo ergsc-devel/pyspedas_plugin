@@ -61,3 +61,12 @@ def dsi2j2000(name_in=None,
             dsix = tcrossp(dsiy, dsiz_j2000['y'], return_data=True)
             dsix_j2000 = { 'x':time, 'y':dsix }
             dsiy_j2000 = { 'x':time, 'y':dsiy }
+
+            mat = cart_trans_matrix_make(dsix_j2000['y'],dsiy_j2000['y'],dsiz_j2000['y'])
+            j2000x_in_dsi = np.dot(mat ,np.array([1., 0., 0.]))
+            j2000y_in_dsi = np.dot(mat ,np.array([0., 1., 0.]))
+            j2000z_in_dsi = np.dot(mat ,np.array([0., 0., 1.]))
+            mat = cart_trans_matrix_make(j2000x_in_dsi, j2000y_in_dsi, j2000z_in_dsi)
+            dat_new= np.array([np.dot(mat[i,:,:],dat[i,:]) for i in range(time.shape[0])])
+
+            store_data(name_out,data={'x':time, 'y':dat_new}, attr_dict=dl_in)
