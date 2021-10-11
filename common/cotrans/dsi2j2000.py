@@ -38,3 +38,18 @@ def dsi2j2000(name_in=None,
             if no_orb:
                 store_data('sundir_gse',data={'x':time, 'y':sundir})
 
+            else: #Calculate the sun directions from the instantaneous satellite locations 
+                tr = get_timespan(name_in)
+                orb(trange=time_string([tr[0] -60., tr[1] + 60.]))
+                get_data_erg_orb_l2 = get_data('erg_orb_l2_pos_gse')
+                scpos_x = np.interp(time, get_data_erg_orb_l2[0], get_data_erg_orb_l2[1][:,0])
+                scpos_y = np.interp(time, get_data_erg_orb_l2[0], get_data_erg_orb_l2[1][:,1])
+                scpos_z = np.interp(time, get_data_erg_orb_l2[0], get_data_erg_orb_l2[1][:,2])
+                scpos = np.array([scpos_x,scpos_y,scpos_z]).T
+                sunpos=np.array([[1.496e+08, 0., 0.]]*time.shape[0])
+                sundir = sunpos - scpos
+                store_data('sundir_gse', data={ 'x':time, 'y':sundir } )
+                tnormalize('sundir_gse', newname='sundir_gse')
+
+
+
