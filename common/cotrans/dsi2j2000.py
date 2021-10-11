@@ -10,7 +10,8 @@ import numpy as np
 
 def dsi2j2000(name_in=None,
               name_out=None,
-              no_orb=False):
+              no_orb=False,
+              J20002DSI=False):
 
             if name_in == None or name_in not in tplot_names(quiet=True):
                 print('Input of Tplot name is undifiend')
@@ -62,11 +63,18 @@ def dsi2j2000(name_in=None,
             dsix_j2000 = { 'x':time, 'y':dsix }
             dsiy_j2000 = { 'x':time, 'y':dsiy }
 
-            mat = cart_trans_matrix_make(dsix_j2000['y'],dsiy_j2000['y'],dsiz_j2000['y'])
-            j2000x_in_dsi = np.dot(mat ,np.array([1., 0., 0.]))
-            j2000y_in_dsi = np.dot(mat ,np.array([0., 1., 0.]))
-            j2000z_in_dsi = np.dot(mat ,np.array([0., 0., 1.]))
-            mat = cart_trans_matrix_make(j2000x_in_dsi, j2000y_in_dsi, j2000z_in_dsi)
-            dat_new= np.array([np.dot(mat[i,:,:],dat[i,:]) for i in range(time_length)])
+            if not J20002DSI:
+                print('DSI --> J2000')
+                mat = cart_trans_matrix_make(dsix_j2000['y'],dsiy_j2000['y'],dsiz_j2000['y'])
+                j2000x_in_dsi = np.dot(mat ,np.array([1., 0., 0.]))
+                j2000y_in_dsi = np.dot(mat ,np.array([0., 1., 0.]))
+                j2000z_in_dsi = np.dot(mat ,np.array([0., 0., 1.]))
+                mat = cart_trans_matrix_make(j2000x_in_dsi, j2000y_in_dsi, j2000z_in_dsi)
+                dat_new= np.array([np.dot(mat[i,:,:],dat[i,:]) for i in range(time_length)])
+            else:
+                print('J2000 --> DSI')
+                mat = cart_trans_matrix_make(dsix_j2000['y'],dsiy_j2000['y'],dsiz_j2000['y'])
+                dat_new= np.array([np.dot(mat[i,:,:],dat[i,:]) for i in range(time_length)])
+
 
             store_data(name_out,data={'x':time, 'y':dat_new}, attr_dict=dl_in)
