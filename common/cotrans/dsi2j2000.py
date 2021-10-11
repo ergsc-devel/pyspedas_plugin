@@ -51,5 +51,13 @@ def dsi2j2000(name_in=None,
                 store_data('sundir_gse', data={ 'x':time, 'y':sundir } )
                 tnormalize('sundir_gse', newname='sundir_gse')
 
-
-
+            # Derive DSI-X and DSI-Y axis vectors in J2000. 
+            # The elementary vectors below are the definition of DSI. The detailed relationship 
+            # between the spin phase, sun pulse timing, sun direction, and the actual subsolar point 
+            # on the spining s/c body should be incorporated into the calculation below. 
+            cotrans(name_in='sundir_gse', name_out='sundir_j2000', coord_in='gse', coord_out='j2000')
+            sun_j2000 = get_data('sundir_j2000')
+            dsiy = tcrossp(dsiz_j2000['y'], sun_j2000[1], return_data=True)
+            dsix = tcrossp(dsiy, dsiz_j2000['y'], return_data=True)
+            dsix_j2000 = { 'x':time, 'y':dsix }
+            dsiy_j2000 = { 'x':time, 'y':dsiy }
