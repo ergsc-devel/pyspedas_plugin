@@ -13,7 +13,24 @@ def dsi2j2000(name_in=None,
               no_orb=False,
               J20002DSI=False,
               noload=False):
+            """
+            This function transform a time series data between the DSI and J2000 coordinate systems
+            
+            Parameters:
 
+                name_in : str
+                    input tplot variable to be transformed 
+                
+                name_out : str
+                    Name of the tplot variable in which the transformed data is stored
+            
+                J20002DSI : bool
+                    Set to transform data from J2000 to DSI. If not set, it transforms data from DSI to J2000. 
+
+            Returns:
+                None
+
+            """
             if name_in == None or name_in not in tplot_names(quiet=True):
                 print('Input of Tplot name is undifiend')
                 return
