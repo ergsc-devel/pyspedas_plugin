@@ -11,7 +11,8 @@ import numpy as np
 def dsi2j2000(name_in=None,
               name_out=None,
               no_orb=False,
-              J20002DSI=False):
+              J20002DSI=False,
+              noload=False):
 
             if name_in == None or name_in not in tplot_names(quiet=True):
                 print('Input of Tplot name is undifiend')
@@ -22,6 +23,7 @@ def dsi2j2000(name_in=None,
                 name_out = 'result_of_dsi2j2000'
 
             # prepare for transformed Tplot Variable
+            reload = not noload
             dl_in = get_data(name_in, metadata=True)
             get_data_array = get_data(name_in)
             time = get_data_array[0]
@@ -40,23 +42,25 @@ def dsi2j2000(name_in=None,
                 store_data('sundir_gse',data={'x':time, 'y':sundir})
 
             else: #Calculate the sun directions from the instantaneous satellite locations 
-                tr = get_timespan(name_in)
-                orb(trange=time_string([tr[0] -60., tr[1] + 60.]))
-                get_data_erg_orb_l2 = get_data('erg_orb_l2_pos_gse')
-                scpos_x = np.interp(time, get_data_erg_orb_l2[0], get_data_erg_orb_l2[1][:,0])
-                scpos_y = np.interp(time, get_data_erg_orb_l2[0], get_data_erg_orb_l2[1][:,1])
-                scpos_z = np.interp(time, get_data_erg_orb_l2[0], get_data_erg_orb_l2[1][:,2])
-                scpos = np.array([scpos_x,scpos_y,scpos_z]).T
-                sunpos=np.array([[1.496e+08, 0., 0.]]*time_length)
-                sundir = sunpos - scpos
-                store_data('sundir_gse', data={ 'x':time, 'y':sundir } )
-                tnormalize('sundir_gse', newname='sundir_gse')
+                if reload:
+                    tr = get_timespan(name_in)
+                    orb(trange=time_string([tr[0] -60., tr[1] + 60.]))
+                    get_data_erg_orb_l2 = get_data('erg_orb_l2_pos_gse')
+                    scpos_x = np.interp(time, get_data_erg_orb_l2[0], get_data_erg_orb_l2[1][:,0])
+                    scpos_y = np.interp(time, get_data_erg_orb_l2[0], get_data_erg_orb_l2[1][:,1])
+                    scpos_z = np.interp(time, get_data_erg_orb_l2[0], get_data_erg_orb_l2[1][:,2])
+                    scpos = np.array([scpos_x,scpos_y,scpos_z]).T
+                    sunpos=np.array([[1.496e+08, 0., 0.]]*time_length)
+                    sundir = sunpos - scpos
+                    store_data('sundir_gse', data={ 'x':time, 'y':sundir } )
+                    tnormalize('sundir_gse', newname='sundir_gse')
 
             # Derive DSI-X and DSI-Y axis vectors in J2000. 
             # The elementary vectors below are the definition of DSI. The detailed relationship 
             # between the spin phase, sun pulse timing, sun direction, and the actual subsolar point 
             # on the spining s/c body should be incorporated into the calculation below. 
-            cotrans(name_in='sundir_gse', name_out='sundir_j2000', coord_in='gse', coord_out='j2000')
+            if reload:
+                cotrans(name_in='sundir_gse', name_out='sundir_j2000', coord_in='gse', coord_out='j2000')
             sun_j2000 = get_data('sundir_j2000')
             dsiy = tcrossp(dsiz_j2000['y'], sun_j2000[1], return_data=True)
             dsix = tcrossp(dsiy, dsiz_j2000['y'], return_data=True)
