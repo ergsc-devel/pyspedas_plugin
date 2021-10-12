@@ -14,3 +14,11 @@ def sgi2dsi(name_in=None,
             if name_out == None:
                 print('Tplot name for output is undifiend')
                 name_out = 'result_of_dsi2j2000'
+
+            # prepare for transformed Tplot Variable
+            reload = not noload
+            dl_in = get_data(name_in, metadata=True)
+            get_data_array = get_data(name_in)
+            time = get_data_array[0]
+            time_length = time.shape[0]
+            dat = get_data_array[1]
