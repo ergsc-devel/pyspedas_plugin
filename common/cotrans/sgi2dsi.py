@@ -1,6 +1,7 @@
 import numpy as np
 from pytplot import get_data, tplot_names
 from common.cotrans.erg_interpolate_att import erg_interpolate_att
+from common.cotrans.vector_rotate import vector_rotate
 
 def sgi2dsi(name_in=None,
             name_out=None,
@@ -23,6 +24,7 @@ def sgi2dsi(name_in=None,
             time_length = time.shape[0]
             dat = get_data_array[1]
 
+            #Get the SGA and SGI axes by interpolating the attitude data
             interpolated_values = erg_interpolate_att(name_in, noload=noload)
             sgix2ssix_angle = interpolated_values['sgiz_j2000']['y'][:,0]
             sgix2ssix_angle[:] = 90. + 21.6 #[deg] Now the constant angle is used, which is not correct, though 
@@ -31,4 +33,5 @@ def sgi2dsi(name_in=None,
             spphase = interpolated_values['spinphase']['y']
             rot_axis = np.array([[0., 0., 1.]]*time_length)
 
-            
+
+
