@@ -22,3 +22,13 @@ def sgi2dsi(name_in=None,
             time = get_data_array[0]
             time_length = time.shape[0]
             dat = get_data_array[1]
+
+            interpolated_values = erg_interpolate_att(name_in, noload=noload)
+            sgix2ssix_angle = interpolated_values['sgiz_j2000']['y'][:,0]
+            sgix2ssix_angle[:] = 90. + 21.6 #[deg] Now the constant angle is used, which is not correct, though 
+
+            spperiod = interpolated_values['spinperiod']['y']
+            spphase = interpolated_values['spinphase']['y']
+            rot_axis = np.array([[0., 0., 1.]]*time_length)
+
+            
