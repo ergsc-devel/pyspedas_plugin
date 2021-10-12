@@ -7,7 +7,25 @@ def sgi2dsi(name_in=None,
             name_out=None,
             DSI2SGI=False,
             noload=False):
+            """
+            This transform a time series data between the SGI and DSI coordinate systems.
+            
+            Parameters:
 
+                name_in : str
+                    input tplot variable to be transformed 
+                
+                name_out : str
+                    Name of the tplot variable in which the transformed data is stored
+            
+                DSI2SGI : bool
+                     Set to transform data from DSI to SGI (despun coord --> spinning coord). 
+                     If not set, it transforms data from SGI to DSI (spinning coord --> despun coord).
+
+            Returns:
+                None
+
+            """
             if name_in == None or name_in not in tplot_names(quiet=True):
                 print('Input of Tplot name is undifiend')
                 return
