@@ -49,7 +49,7 @@ def dsi2j2000(name_in=None,
 
 
             #Get the SGI axis by interpolating the attitude data
-            dsiz_j2000 = erg_interpolate_att(name_in)['sgiz_j2000']
+            dsiz_j2000 = erg_interpolate_att(name_in, noload=noload)['sgiz_j2000']
 
 
             #Sun direction in J2000
