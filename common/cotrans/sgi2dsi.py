@@ -1,5 +1,5 @@
 import numpy as np
-from pytplot import get_data, tplot_names
+from pytplot import get_data, tplot_names, store_data
 from common.cotrans.erg_interpolate_att import erg_interpolate_att
 from common.cotrans.vector_rotate import vector_rotate
 
@@ -33,5 +33,18 @@ def sgi2dsi(name_in=None,
             spphase = interpolated_values['spinphase']['y']
             rot_axis = np.array([[0., 0., 1.]]*time_length)
 
+            # SGI --> DSI (despin)
+            if not DSI2SGI:
+                print('SGI --> DSI')
+                coor_out = 'dsi'
+                rotated_vector = vector_rotate(x0=dat[:,0], y0=dat[:,1], z0=dat[:,2],
+                              nx=rot_axis[:,0], ny=rot_axis[:,1], nz=rot_axis[:,2],
+                              theta=-sgix2ssix_angle + spphase)
+            else:# DSI --> SGI (spin) 
+                print('DSI --> SGI')
+                coord_out = 'sgi'
+                rotated_vector = vector_rotate(x0=dat[:,0], y0=dat[:,1], z0=dat[:,2],
+                              nx=rot_axis[:,0], ny=rot_axis[:,1], nz=rot_axis[:,2],
+                              theta=-1.*(-sgix2ssix_angle + spphase))
 
-
+            store_data(name_out, data={'x':time, 'y':rotated_vector}, attr_dict=dl_in)
