@@ -1,6 +1,7 @@
 import numpy as np
 from pytplot import get_data, tplot_names, store_data
 from common.cotrans.erg_interpolate_att import erg_interpolate_att
+from common.cotrans.cart_trans_matrix_make import cart_trans_matrix_make
 
 def sga2sgi(name_in=None,
             name_out=None,
@@ -38,4 +39,8 @@ def sga2sgi(name_in=None,
                 print('SGI --> SGA')
                 coord_out = 'sga'
 
-                
+                #Transform SGA-X,Y,Z axis unit vectors in J2000 to those in SGI
+                mat = cart_trans_matrix_make(sgix, sgiy, sgiz)
+                sgax_in_sgi = np.array([np.dot(mat[i,:,:],sgax[i,:]) for i in range(time_length)])
+                sgay_in_sgi = np.array([np.dot(mat[i,:,:],sgay[i,:]) for i in range(time_length)])
+                sgaz_in_sgi = np.array([np.dot(mat[i,:,:],sgaz[i,:]) for i in range(time_length)])
