@@ -30,4 +30,6 @@ def sga2sgi(name_in=None,
             sgay = interpolated_values['sgay_j2000']['y']
             sgaz = interpolated_values['sgaz_j2000']['y']
 
-            
+            if not SGI2SGA:
+                print('SGA --> SGI')
+                coord_out = 'sgi'
