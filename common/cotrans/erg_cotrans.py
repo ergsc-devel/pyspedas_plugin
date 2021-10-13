@@ -24,3 +24,6 @@ def erg_coord_trans(in_name=None,
                             name_sgi = erg_replace_coord_suffix(in_name=in_name, out_coord='sgi')
                             sgi2dsi(name_in=in_name, name_out=name_sgi, DSI2SGI=True, noload=noload)
                             sga2sgi(name_in=name_sgi, name_out=out_name, SGI2SGA=True, noload=noload)
+
+#;;;; Main routine for coordinate transformation ;;;;; 
+def erg_cotrans():
