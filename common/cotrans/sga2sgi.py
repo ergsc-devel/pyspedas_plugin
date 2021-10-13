@@ -48,3 +48,6 @@ def sga2sgi(name_in=None,
                 #Now transform the given vector in SGI to those in SGA
                 mat = cart_trans_matrix_make(sgax_in_sgi, sgay_in_sgi, sgaz_in_sgi)
                 dat_new = np.array([np.dot(mat[i,:,:],dat[i,:]) for i in range(time_length)])
+
+            #Store the converted data in a tplot variable 
+            store_data(name_out, data={'x':time, 'y':dat_new}, attr_dict=dl_in)
