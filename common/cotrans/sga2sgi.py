@@ -15,3 +15,9 @@ def sga2sgi(name_in=None,
                 print('Tplot name for output is undifiend')
                 name_out = 'result_of_sga2sgi'
 
+            get_data_vars = get_data(name_in)
+            dl_in = get_data(name_in, metadata=True)
+            time = get_data_vars[0]
+            time_length = time.shape[0]
+            dat = get_data_vars[1]
+
