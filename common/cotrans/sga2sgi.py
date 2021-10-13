@@ -44,3 +44,7 @@ def sga2sgi(name_in=None,
                 sgax_in_sgi = np.array([np.dot(mat[i,:,:],sgax[i,:]) for i in range(time_length)])
                 sgay_in_sgi = np.array([np.dot(mat[i,:,:],sgay[i,:]) for i in range(time_length)])
                 sgaz_in_sgi = np.array([np.dot(mat[i,:,:],sgaz[i,:]) for i in range(time_length)])
+
+                #Now transform the given vector in SGI to those in SGA
+                mat = cart_trans_matrix_make(sgax_in_sgi, sgay_in_sgi, sgaz_in_sgi)
+                dat_new = np.array([np.dot(mat[i,:,:],dat[i,:]) for i in range(time_length)])
