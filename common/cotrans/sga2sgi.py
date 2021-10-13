@@ -7,7 +7,24 @@ def sga2sgi(name_in=None,
             name_out=None,
             SGI2SGA=False,
             noload=False):
+            """
+            This transform a time series data between the SGA and SGI coordinate systems.
+            
+            Parameters:
 
+                name_in : str
+                    input tplot variable to be transformed 
+                
+                name_out : str
+                    Name of the tplot variable in which the transformed data is stored
+            
+                SGI2SGA : bool
+                      Set to transform data from SGI to SGA. If not set, it transforms data from SGA to SGI.
+
+            Returns:
+                None
+
+            """
             if name_in == None or name_in not in tplot_names(quiet=True):
                 print('Input of Tplot name is undifiend')
                 return
