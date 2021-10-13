@@ -21,3 +21,13 @@ def sga2sgi(name_in=None,
             time_length = time.shape[0]
             dat = get_data_vars[1]
 
+            #Get the SGA and SGI axes by interpolating the attitude data
+            interpolated_values = erg_interpolate_att(name_in, noload=noload)
+            sgix = interpolated_values['sgix_j2000']['y']
+            sgiy = interpolated_values['sgiy_j2000']['y']
+            sgiz = interpolated_values['sgiz_j2000']['y']
+            sgax = interpolated_values['sgax_j2000']['y']
+            sgay = interpolated_values['sgay_j2000']['y']
+            sgaz = interpolated_values['sgaz_j2000']['y']
+
+            
