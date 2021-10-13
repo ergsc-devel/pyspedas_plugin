@@ -35,6 +35,17 @@ def sga2sgi(name_in=None,
                 print('SGA --> SGI')
                 coord_out = 'sgi'
 
+                #Transform SGI-X,Y,Z axis unit vectors in J2000 to those in SGA 
+                mat = cart_trans_matrix_make(sgax, sgay, sgaz)
+                sgix_in_sga = np.array([np.dot(mat[i,:,:],sgix[i,:]) for i in range(time_length)])
+                sgiy_in_sga = np.array([np.dot(mat[i,:,:],sgiy[i,:]) for i in range(time_length)])
+                sgiz_in_sga = np.array([np.dot(mat[i,:,:],sgiz[i,:]) for i in range(time_length)])
+
+                #Now transform the given vector in SGA to those in SGI
+                mat = cart_trans_matrix_make(sgix_in_sga, sgiy_in_sga, sgiz_in_sga)
+                dat_new = np.array([np.dot(mat[i,:,:],dat[i,:]) for i in range(time_length)])
+
+
             else:
                 print('SGI --> SGA')
                 coord_out = 'sga'
