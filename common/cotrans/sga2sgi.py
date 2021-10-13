@@ -33,3 +33,9 @@ def sga2sgi(name_in=None,
             if not SGI2SGA:
                 print('SGA --> SGI')
                 coord_out = 'sgi'
+
+            else:
+                print('SGI --> SGA')
+                coord_out = 'sga'
+
+                
