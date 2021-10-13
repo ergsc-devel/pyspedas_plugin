@@ -32,7 +32,7 @@ def sgi2dsi(name_in=None,
 
             if name_out == None:
                 print('Tplot name for output is undifiend')
-                name_out = 'result_of_dsi2j2000'
+                name_out = 'result_of_sgi2dsi'
 
             # prepare for transformed Tplot Variable
             reload = not noload
