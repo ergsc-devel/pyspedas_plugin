@@ -1,3 +1,15 @@
+            """
+;    To transform time series data from one coordinate to another. The supported coordinate 
+;     systems are: SGA, SGI, DSI, J2000. Further transformation from J2000 to the 
+;     geophysical coordinates (GEI, GSE, etc) can be processed by "cotrans()", which can be
+      imported by (from pyspedas.cotrans.cotrans import cotrans). 
+;     
+;     The actual transformation is done by helper functions, such as sga2sgi(), sgi2dsi(), 
+;     and dsi2j2000().
+            
+Main routine for coordinate transformation is erg_cotrans().
+            """
+
 from pytplot import tplot_copy
 from pyspedas import tnames
 from common.cotrans.sgi2dsi import sgi2dsi
@@ -78,7 +90,35 @@ def erg_cotrans(in_name='',
                 in_coord='',
                 out_coord='',
                 noload=False):
+                """
+                Parameters:
 
+                    in_name : str
+                        name of input tplot variable to be transformed
+                    
+                    name_out : str
+                        Name of output tplot variable in which the transformed data are stored. 
+                         If not explicitly provided, out_name is automatically generated from 
+                         "in_name" by replacing the coordinate name with a new one. 
+                         For example, if you runs erg_cotrans(in_name='xxxx_sgi', out_coord='sga')
+                         then the result is stored in a newly created tplot variable 'xxxx_sga'.
+                
+                    in_coord : str
+                        'sga', 'sgi', 'dsi', or 'j2000'
+                        Set to explicitly give the coordinate system name for the input variable.
+                        If not given, this routine tries to guess it from the name of the input
+                        tplot variable (in_name).
+
+                    out_coord : str
+                        'sga', 'sgi', 'dsi', or 'j2000'
+                        Set to explicitly give the coordinate system name for the output variable.
+                        If not given, the coordinate system name is obtained from the variable name
+                        as done for in_coord.
+
+                Returns:
+                    None
+
+                """
                 valid_suffixes = ['sga', 'sgi', 'dsi', 'j2000']
 
                 in_names=tnames(in_name)
