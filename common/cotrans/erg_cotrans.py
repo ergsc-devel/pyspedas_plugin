@@ -1,4 +1,5 @@
 from pytplot import tplot_copy
+from pyspedas import tnames
 from common.cotrans.sgi2dsi import sgi2dsi
 from common.cotrans.sga2sgi import sga2sgi
 
@@ -31,3 +32,10 @@ def erg_cotrans(in_name=None,
                 in_coord=None,
                 out_coord=None,
                 noload=False):
+
+                valid_suffixes = ['sga', 'sgi', 'dsi', 'j2000']
+
+                in_names=tnames(in_name)
+                if len(in_names) == 0:
+                    print('in_name is not match in stored Tplot Variables, return')
+                    return
