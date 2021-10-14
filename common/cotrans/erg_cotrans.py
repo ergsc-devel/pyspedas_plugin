@@ -57,4 +57,5 @@ def erg_cotrans(in_name='',
                             continue
                     else:
                         out_suf = out_coord
-                    
+
+                    erg_coord_trans(in_name= input_name, out_name=out_name, in_coord=in_suf, out_coord=out_suf, noload=noload)
