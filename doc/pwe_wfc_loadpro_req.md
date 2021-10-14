@@ -32,9 +32,14 @@ erg_load_pwe_wfc.pro
   - ztitle, '[pT^2/Hz]'
   - ztickunits='scientific'
 
+- erg_pwe_wfc_l2_e_65khz_Ex_waveform, erg_pwe_wfc_l2_e_65khz_Bx_waveform
+  - l.172からl.234までの波形２次元データを１次元に展開するところ
+  - l.199 : データが非常に重いので、展開範囲の再確認
+  - 時刻データ操作時にtt2000オプションを必ずつけてください。
+
 
 ## プロットコマンドとプロット例 / Plot commands and plot examples
--  'erg_pwe_wfc_l2_e_65khz_Ex_waveform', 'erg_pwe_wfc_l2_e_65khz_Bx_waveform'
+-  erg_pwe_wfc_l2_e_65khz_Ex_waveform, erg_pwe_wfc_l2_e_65khz_Bx_waveform
   - timespan, '2017-04-01/12:58:00', 0.01, /s
   - erg_load_pwe_wfc, level='l2', datatype='waveform' 
   - tplot, [ 'erg_pwe_wfc_l2_e_65khz_Ex_waveform', 'erg_pwe_wfc_l2_e_65khz_Bx_waveform' ] 
