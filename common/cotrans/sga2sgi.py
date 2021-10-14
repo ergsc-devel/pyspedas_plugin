@@ -54,13 +54,13 @@ def sga2sgi(name_in=None,
 
                 #Transform SGI-X,Y,Z axis unit vectors in J2000 to those in SGA 
                 mat = cart_trans_matrix_make(sgax, sgay, sgaz)
-                sgix_in_sga = np.array([np.dot(mat[i,:,:],sgix[i,:]) for i in range(time_length)])
-                sgiy_in_sga = np.array([np.dot(mat[i,:,:],sgiy[i,:]) for i in range(time_length)])
-                sgiz_in_sga = np.array([np.dot(mat[i,:,:],sgiz[i,:]) for i in range(time_length)])
+                sgix_in_sga = np.einsum("ijk,ik->ij",mat,sgix)
+                sgiy_in_sga = np.einsum("ijk,ik->ij",mat,sgiy)
+                sgiz_in_sga = np.einsum("ijk,ik->ij",mat,sgiz)
 
                 #Now transform the given vector in SGA to those in SGI
                 mat = cart_trans_matrix_make(sgix_in_sga, sgiy_in_sga, sgiz_in_sga)
-                dat_new = np.array([np.dot(mat[i,:,:],dat[i,:]) for i in range(time_length)])
+                dat_new = np.einsum("ijk,ik->ij",mat,dat)
 
 
             else:
@@ -69,13 +69,14 @@ def sga2sgi(name_in=None,
 
                 #Transform SGA-X,Y,Z axis unit vectors in J2000 to those in SGI
                 mat = cart_trans_matrix_make(sgix, sgiy, sgiz)
-                sgax_in_sgi = np.array([np.dot(mat[i,:,:],sgax[i,:]) for i in range(time_length)])
-                sgay_in_sgi = np.array([np.dot(mat[i,:,:],sgay[i,:]) for i in range(time_length)])
-                sgaz_in_sgi = np.array([np.dot(mat[i,:,:],sgaz[i,:]) for i in range(time_length)])
+                sgax_in_sgi = np.einsum("ijk,ik->ij",mat,sgax)
+                sgay_in_sgi = np.einsum("ijk,ik->ij",mat,sgay)
+                sgaz_in_sgi = np.einsum("ijk,ik->ij",mat,sgaz)
 
                 #Now transform the given vector in SGI to those in SGA
                 mat = cart_trans_matrix_make(sgax_in_sgi, sgay_in_sgi, sgaz_in_sgi)
-                dat_new = np.array([np.dot(mat[i,:,:],dat[i,:]) for i in range(time_length)])
+                dat_new = np.einsum("ijk,ik->ij",mat,dat)
+
 
             #Store the converted data in a tplot variable 
             store_data(name_out, data={'x':time, 'y':dat_new}, attr_dict=dl_in)
