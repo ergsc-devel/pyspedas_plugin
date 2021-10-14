@@ -1,4 +1,4 @@
-            """
+"""
 ;    To transform time series data from one coordinate to another. The supported coordinate 
 ;     systems are: SGA, SGI, DSI, J2000. Further transformation from J2000 to the 
 ;     geophysical coordinates (GEI, GSE, etc) can be processed by "cotrans()", which can be
@@ -8,7 +8,7 @@
 ;     and dsi2j2000().
             
 Main routine for coordinate transformation is erg_cotrans().
-            """
+"""
 
 from pytplot import tplot_copy
 from pyspedas import tnames
