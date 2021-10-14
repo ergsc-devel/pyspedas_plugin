@@ -34,6 +34,18 @@ def erg_coord_trans(in_name=None,
                             sgi2dsi(name_in=name_sgi, name_out=name_dsi, noload=noload)
                             dsi2j2000(name_in=name_dsi, name_out=out_name, noload=noload)
 
+                    #From SGI
+                    if in_coord == 'sgi':
+                        if out_coord == 'sga':#sgi --> sga
+                            sga2sgi(name_in=in_name, name_out=out_name, SGI2SGA=True, noload=noload)
+                        elif out_coord == 'dsi':#sgi --> dsi
+                            sgi2dsi(name_in=in_name, name_out=out_name, noload=noload)
+                        elif out_coord == 'j2000':#sgi --> dsi --> j2000
+                            name_dsi = erg_replace_coord_suffix(in_name=in_name, out_coord='dsi')
+                            sgi2dsi(name_in=in_name, name_out=name_dsi, noload=noload)
+                            dsi2j2000(name_in=name_dsi, name_out=out_name, noload=noload)
+
+
 
                     #From DSI
                     elif in_coord == 'dsi':
