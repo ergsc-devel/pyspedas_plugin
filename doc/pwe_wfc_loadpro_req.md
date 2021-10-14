@@ -49,7 +49,7 @@ erg_load_pwe_wfc.pro
 
 -  erg_pwe_wfc_l2_e_65khz_E_spectra, erg_pwe_wfc_l2_e_65khz_B_spectra
   - timespan, '2017-04-01/14:04:39', 1, /m
-  - erg_load_pwe_wfc, level='l2', datatype='waveform' 
+  - erg_load_pwe_wfc, level='l2', datatype='spec' 
   - tplot, [ 'erg_pwe_wfc_l2_e_65khz_E_spectra', 'erg_pwe_wfc_l2_e_65khz_E_spectra' ] 
 
   ![plot example](/doc/imgs/wfc_l2_spec_eb_plot.png) 

@@ -50,7 +50,7 @@ erg_load_pwe_efd.pro
 - erg_pwe_efd_l2_sepc_spectra
   - timespan, '2017-04-01'
   - erg_load_pwe_efd, level='l2', datatype='spec'
-  - tplot, [ 'erg_pwe_efd_l2_sepc_spectra' ] 
+  - tplot, [ 'erg_pwe_efd_l2_spec_spectra' ] 
 
   ![plot example](/doc/imgs/efd_l2_E_spec.png) 
 
