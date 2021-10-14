@@ -91,14 +91,10 @@ def dsi2j2000(name_in=None,
                 j2000y_in_dsi = np.dot(mat ,np.array([0., 1., 0.]))
                 j2000z_in_dsi = np.dot(mat ,np.array([0., 0., 1.]))
                 mat = cart_trans_matrix_make(j2000x_in_dsi, j2000y_in_dsi, j2000z_in_dsi)
-                #dat_new = np.array([mat[:,i,0]*dat[:,0] + mat[:,i,1]*dat[:,1] + mat[:,i,2]*dat[:,2]
-                                    #for i in range(3)]).T
                 dat_new = np.einsum("ijk,ik->ij",mat,dat)
             else:
                 print('J2000 --> DSI')
                 mat = cart_trans_matrix_make(dsix_j2000['y'],dsiy_j2000['y'],dsiz_j2000['y'])
-                #dat_new = np.array([mat[:,i,0]*dat[:,0] + mat[:,i,1]*dat[:,1] + mat[:,i,2]*dat[:,2]
-                                    #for i in range(3)]).T
                 dat_new = np.einsum("ijk,ik->ij",mat,dat)
 
             store_data(name_out,data={'x':time, 'y':dat_new}, attr_dict=dl_in)
