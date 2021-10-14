@@ -18,9 +18,25 @@ def erg_coord_trans(in_name=None,
                     if in_coord == out_coord:
                         tplot_copy(in_name, out_name)
                         return
-                        
+                    
+                    #From SGA
+                    if in_coord == 'sga':
+                        if out_coord == 'sgi':#sga --> sgi
+                            sga2sgi(name_in=in_name, name_out=out_name, noload=noload)
+                        elif out_coord == 'dsi':#sga --> sgi --> dsi
+                            name_sgi=erg_replace_coord_suffix(in_name=in_name, out_coord='sgi')
+                            sga2sgi(name_in=in_name, name_out=name_sgi, noload=noload)
+                            sgi2dsi(name_in=name_sgi, name_out=out_name, noload=noload)
+                        elif out_coord == 'j2000':#sga --> sgi --> dsi --> j2000
+                            name_sgi = erg_replace_coord_suffix(in_name=in_name, out_coord='sgi')
+                            sga2sgi(name_in=in_name, name_out=name_sgi,noload=noload)
+                            name_dsi = erg_replace_coord_suffix(in_name=name_sgi, out_coord='dsi')
+                            sgi2dsi(name_in=name_sgi, name_out=name_dsi, noload=noload)
+                            dsi2j2000(name_in=name_dsi, name_out=out_name, noload=noload)
+
+
                     #From DSI
-                    if in_coord == 'dsi':
+                    elif in_coord == 'dsi':
 
                         if out_coord == 'sga': # dsi --> sgi --> sga
                             name_sgi = erg_replace_coord_suffix(in_name=in_name, out_coord='sgi')
