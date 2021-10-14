@@ -27,10 +27,10 @@ def erg_coord_trans(in_name=None,
                             sga2sgi(name_in=name_sgi, name_out=out_name, SGI2SGA=True, noload=noload)
 
 #;;;; Main routine for coordinate transformation ;;;;; 
-def erg_cotrans(in_name=None,
-                out_name=None,
-                in_coord=None,
-                out_coord=None,
+def erg_cotrans(in_name='',
+                out_name='',
+                in_coord='',
+                out_coord='',
                 noload=False):
 
                 valid_suffixes = ['sga', 'sgi', 'dsi', 'j2000']
