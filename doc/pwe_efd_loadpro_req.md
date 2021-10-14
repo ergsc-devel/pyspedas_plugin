@@ -45,25 +45,25 @@ erg_load_pwe_efd.pro
   - erg_load_pwe_efd, level='l2', datatype='E256', coord='wpt'
   - tplot, [ 'erg_pwe_efd_l2_*waveform' ] 
 
-  ![plot example](/doc/imgs/efd_l2_E_waveform_plot.png) 
+  ![plot example](/doc/imgs/efd_l2_E_waveform.png) 
   
 - erg_pwe_efd_l2_sepc_spectra
   - timespan, '2017-04-01'
   - erg_load_pwe_efd, level='l2', datatype='spec'
   - tplot, [ 'erg_pwe_efd_l2_sepc_spectra' ] 
 
-  ![plot example](/doc/imgs/efd_l2_E_spec_plot.png) 
+  ![plot example](/doc/imgs/efd_l2_E_spec.png) 
 
 - erg_pwe_efd_l2_pot_Vu1
   - timespan, '2017-04-01'
   - erg_load_pwe_efd, level='l2', datatype='pot'
   - tplot, [ 'erg_pwe_efd_l2_pot_Vu1' ] 
 
-  ![plot example](/doc/imgs/efd_l2_E_pot_plot.png) 
+  ![plot example](/doc/imgs/efd_l2_E_pot.png) 
 
 - erg_pwe_efd_l2_pot8Hz_Vu1_waveform_8Hz, erg_pwe_efd_l2_pot8Hz_Vv1_waveform_8Hz, erg_pwe_efd_l2_pot8Hz_Vu2_waveform_8Hz, erg_pwe_efd_l2_pot8Hz_Vv2_waveform_8Hz
   - timespan, '2017-04-01/10-:30', 1, /m
   - erg_load_pwe_efd, level='l2', datatype='pot8Hz'
   - tplot, [ 'erg_pwe_efd_l2_pot8Hz_Vu1_waveform_8Hz', 'erg_pwe_efd_l2_pot8Hz_Vv1_waveform_8Hz', 'erg_pwe_efd_l2_pot8Hz_Vu2_waveform_8Hz', 'erg_pwe_efd_l2_pot8Hz_Vv2_waveform_8Hz' ] 
 
-  ![plot example](/doc/imgs/efd_l2_E_pot8Hz_plot.png) 
+  ![plot example](/doc/imgs/efd_l2_E_pot8Hz.png) 
