@@ -35,7 +35,7 @@ erg_load_pwe_efd.pro
   - erg_load_pwe_efd, level='l2', datatype='E_spin'
   - tplot, [ 'erg_pwe_efd_l2_E_spin_Eu_dsi', 'erg_pwe_efd_l2_E_spin_Ev_dsi' ] 
 
-  ![plot example](/doc/imgs/efd_l2_E_spin_plot.png) 
+  ![plot example](/doc/imgs/efd_l2_E_spin.png) 
 
 - erg_pwe_efd_l2_E64Hz_dsi_Ex_waveform, erg_pwe_efd_l2_E64Hz_dsi_Ey_waveform, erg_pwe_efd_l2_E64Hz_wpt_Ex_waveform, erg_pwe_efd_l2_E64Hz_wpt_Ey_waveform, erg_pwe_efd_l2_E256Hz_dsi_Ex_waveform, erg_pwe_efd_l2_E256Hz_dsi_Ey_waveform, erg_pwe_efd_l2_E256Hz_wpt_Ex_waveform, erg_pwe_efd_l2_E256Hz_wpt_Ey_waveform
   - timespan, '2017-04-01/11:30', 10, /m
