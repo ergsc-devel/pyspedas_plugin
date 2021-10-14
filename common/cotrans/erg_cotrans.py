@@ -45,8 +45,6 @@ def erg_coord_trans(in_name=None,
                             sgi2dsi(name_in=in_name, name_out=name_dsi, noload=noload)
                             dsi2j2000(name_in=name_dsi, name_out=out_name, noload=noload)
 
-
-
                     #From DSI
                     elif in_coord == 'dsi':
 
@@ -59,7 +57,20 @@ def erg_coord_trans(in_name=None,
                         elif out_coord == 'j2000': #dsi --> j2000
                             dsi2j2000(name_in=in_name, name_out=out_name, noload=noload)
 
-
+                    #From J2000
+                    elif in_coord == 'j2000':
+                        if out_coord == 'sga': #j2000 --> dsi --> sgi --> sga
+                            name_dsi = erg_replace_coord_suffix(in_name=in_name, out_coord='dsi')
+                            dsi2j2000(name_in=in_name, name_out=name_dsi, J20002DSI=True, noload=noload)
+                            name_sgi = erg_replace_coord_suffix(in_name=name_dsi, out_coord='sgi')
+                            sgi2dsi(name_in=name_dsi, name_out=name_sgi, DSI2SGI=True, noload=noload)
+                            sga2sgi(name_in=name_sgi, name_out=out_name, SGI2SGA=True, noload=noload)
+                        elif out_coord == 'sgi': #j2000 --> dsi --> sgi
+                            name_dsi = erg_replace_coord_suffix(in_name=in_name, out_coord='dsi')
+                            dsi2j2000(name_in=in_name, name_out=name_dsi, J20002DSI=True, noload=noload)
+                            sgi2dsi(name_in=name_dsi, name_out=out_name, DSI2SGI=True, noload=noload)
+                        elif out_coord == 'dsi': #j2000 --> dsi
+                            dsi2j2000(name_in=in_name, name_out=out_name, J20002DSI=True, noload=noload)
 
 #;;;; Main routine for coordinate transformation ;;;;; 
 def erg_cotrans(in_name='',
