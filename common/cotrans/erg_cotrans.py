@@ -2,6 +2,7 @@ from pytplot import tplot_copy
 from pyspedas import tnames
 from common.cotrans.sgi2dsi import sgi2dsi
 from common.cotrans.sga2sgi import sga2sgi
+from common.cotrans.dsi2j2000 import dsi2j2000
 
 def erg_replace_coord_suffix(in_name=None, out_coord=None):
     nms = in_name.split('_')
@@ -25,6 +26,12 @@ def erg_coord_trans(in_name=None,
                             name_sgi = erg_replace_coord_suffix(in_name=in_name, out_coord='sgi')
                             sgi2dsi(name_in=in_name, name_out=name_sgi, DSI2SGI=True, noload=noload)
                             sga2sgi(name_in=name_sgi, name_out=out_name, SGI2SGA=True, noload=noload)
+                        elif out_coord == 'sgi': # dsi --> sgi
+                            sgi2dsi(name_in=in_name, name_out=out_name, DSI2SGI=True, noload=noload)
+                        elif out_coord == 'j2000': #dsi --> j2000
+                            dsi2j2000(name_in=in_name, name_out=out_name, noload=noload)
+
+
 
 #;;;; Main routine for coordinate transformation ;;;;; 
 def erg_cotrans(in_name='',
@@ -57,5 +64,8 @@ def erg_cotrans(in_name='',
                             continue
                     else:
                         out_suf = out_coord
-
-                    erg_coord_trans(in_name= input_name, out_name=out_name, in_coord=in_suf, out_coord=out_suf, noload=noload)
+                    if out_name == '':
+                        out_name_temp=erg_replace_coord_suffix(in_name=input_name, out_coord=out_suf)
+                        erg_coord_trans(in_name= input_name, out_name=out_name_temp, in_coord=in_suf, out_coord=out_suf, noload=noload)
+                    else:
+                        erg_coord_trans(in_name= input_name, out_name=out_name, in_coord=in_suf, out_coord=out_suf, noload=noload)
