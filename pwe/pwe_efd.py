@@ -96,6 +96,10 @@ def pwe_efd(trange=['2017-04-01', '2017-04-02'],
         if 'spin' in datatype:
             component=['Eu','Ev','Eu1','Ev1','Eu2','Ev2']
             labels=['Ex', 'Ey']
+        if datatype == 'pot':
+            component=['Vu1','Vu2','Vv1','Vv2']
+        if datatype == 'pot8Hz':
+            component=['Vu1_waveform_8Hz','Vu2_waveform_8Hz','Vv1_waveform_8Hz','Vv2_waveform_8Hz']
 
 
 
