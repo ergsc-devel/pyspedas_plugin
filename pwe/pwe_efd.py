@@ -1,7 +1,7 @@
 
 #from pyspedas.erg.load import load
 from load import load
-from pytplot import options, get_data, clip, ylim, zlim
+from pytplot import options, get_data, store_data, clip, ylim, zlim
 from pyspedas.utilities.time_double import time_float
 import cdflib
 import numpy as np
@@ -85,6 +85,11 @@ def pwe_efd(trange=['2017-04-01', '2017-04-02'],
         md='E'+mode
         pathformat = 'satellite/erg/pwe/efd/'+level+'/'+md+'/%Y/%m/erg_pwe_efd_'+level+'_'+md+'_'+coord+'_%Y%m%d_v??_??.cdf'
         prefix += md + '_' + coord + '_'
+        if coord == 'wpt':
+            component=['Eu_waveform', 'Ev_waveform']
+        elif coord == 'dsi':
+            component=['Ex_waveform', 'Ey_waveform', 'Eu_offset'+'_'+mode, 'Ev_offset'+'_'+mode]
+
     else:
         pathformat = 'satellite/erg/pwe/efd/'+level+'/'+datatype+'/%Y/%m/erg_pwe_efd_'+level+'_'+datatype+'_%Y%m%d_v??_??.cdf'
         prefix += datatype + '_'
@@ -141,8 +146,17 @@ def pwe_efd(trange=['2017-04-01', '2017-04-02'],
             ylim_max = np.nanmax(get_data_vars[1][min_time_index:max_time_index])
             ylim(t_plot_name, ylim_min, ylim_max)
 
-
-
+    if '64' in datatype or '256' in datatype:
+        for elem in component:
+            get_data_vars = get_data(prefix+elem)
+            dl_in = get_data(prefix+elem, metadata=True)
+            time1 = get_data_vars[0]
+            dt = get_data_vars[2]
+            ndt=dt.size
+            ndata=get_data_vars[1].size
+            time_new = (np.tile(time1, (ndt, 1)).T + dt * 1e-3).reshape(ndata)
+            data_new = get_data_vars[1].reshape(ndata)
+            store_data(prefix+elem,data={'x':time_new, 'y':data_new}, attr_dict=dl_in)
 
     return loaded_data
 
