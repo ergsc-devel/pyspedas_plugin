@@ -150,7 +150,7 @@ def pwe_efd(trange=['2017-04-01', '2017-04-02'],
             ylim_max = np.nanmax(get_data_vars[1][min_time_index:max_time_index])
             ylim(t_plot_name, ylim_min, ylim_max)
 
-    if '64' in datatype or '256' in datatype:
+    if '64' in datatype or '256' in datatype or datatype == 'pot8Hz':
         for elem in component:
             t_plot_name = prefix+elem
             get_data_vars = get_data(t_plot_name)
