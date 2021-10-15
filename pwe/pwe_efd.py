@@ -157,6 +157,19 @@ def pwe_efd(trange=['2017-04-01', '2017-04-02'],
             time_new = (np.tile(time1, (ndt, 1)).T + dt * 1e-3).reshape(ndata)
             data_new = get_data_vars[1].reshape(ndata)
             store_data(prefix+elem,data={'x':time_new, 'y':data_new}, attr_dict=dl_in)
-
+            ####ylim settings because pytplot.timespan() doesn't affect in ylim.
+            ####May be it will be no need in future.
+            if time_new[0] < time_min_max[0]:
+                min_time_index = np.where((time_new <= time_min_max[0]))[0][-1]
+            else:
+                min_time_index = 0
+            if time_min_max[1] < time_new[-1]:
+                max_time_index = np.where(time_min_max[1] <= time_new)[0][0]
+            else:
+                max_time_index = -1
+            ylim_min = np.nanmin(data_new[min_time_index:max_time_index])
+            ylim_max = np.nanmax(data_new[min_time_index:max_time_index])
+            ylim(prefix+elem, ylim_min, ylim_max)
+            
     return loaded_data
 
