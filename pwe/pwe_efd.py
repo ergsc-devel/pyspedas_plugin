@@ -86,6 +86,11 @@ def pwe_efd(trange=['2017-04-01', '2017-04-02'],
     else:
         pathformat = 'satellite/erg/pwe/efd/'+level+'/'+datatype+'/%Y/%m/erg_pwe_efd_'+level+'_'+datatype+'_%Y%m%d_v??_??.cdf'
         prefix += datatype + '_'
+        if 'spin' in datatype:
+            component=['Eu','Ev','Eu1','Ev1','Eu2','Ev2']
+            labels=['Ex', 'Ey']
+
+
 
     loaded_data = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype,file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
 
@@ -113,6 +118,10 @@ def pwe_efd(trange=['2017-04-01', '2017-04-02'],
         print('Contact: erg_pwe_info at isee.nagoya-u.ac.jp')
         print('**************************************************************************')
 
+    if 'spin' in datatype:
+        for elem in component:
+            options(prefix + elem + '_dsi','ytitle', elem + ' vector in DSI')
+            options(prefix + elem + '_dsi','legend_names', labels)
 
     return loaded_data
 
