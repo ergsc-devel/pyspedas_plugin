@@ -178,5 +178,10 @@ def pwe_efd(trange=['2017-04-01', '2017-04-02'],
             ylim_max = np.nanmax(data_new[min_time_index:max_time_index])
             ylim(t_plot_name, ylim_min, ylim_max)
             
+    if datatype == 'pot':
+        for elem in component:
+            t_plot_name = prefix+elem
+            options(t_plot_name, 'ytitle', elem+' potential')
+
     return loaded_data
 
