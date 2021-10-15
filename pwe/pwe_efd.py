@@ -152,11 +152,12 @@ def pwe_efd(trange=['2017-04-01', '2017-04-02'],
             get_data_vars = get_data(t_plot_name)
             dl_in = get_data(t_plot_name, metadata=True)
             time1 = get_data_vars[0]
+            data = np.where(get_data_vars[1] <= -1e+30, np.nan, get_data_vars[1])
             dt = get_data_vars[2]
             ndt=dt.size
-            ndata=get_data_vars[1].size
+            ndata=data.size
             time_new = (np.tile(time1, (ndt, 1)).T + dt * 1e-3).reshape(ndata)
-            data_new = get_data_vars[1].reshape(ndata)
+            data_new = data.reshape(ndata)
             store_data(t_plot_name,data={'x':time_new, 'y':data_new}, attr_dict=dl_in)
             ####ylim settings because pytplot.timespan() doesn't affect in ylim.
             ####May be it will be no need in future.
