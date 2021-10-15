@@ -77,6 +77,7 @@ def pwe_efd(trange=['2017-04-01', '2017-04-02'],
 
     if datatype == 'E256Hz' or datatype == 'E64Hz':
         pathformat = 'satellite/erg/pwe/efd/'+level+'/'+datatype+'/%Y/%m/erg_pwe_efd_'+level+'_'+datatype+'_'+coord+'_%Y%m%d_v??_??.cdf'
+        prefix += coord + '_'
     else:
         pathformat = 'satellite/erg/pwe/efd/'+level+'/'+datatype+'/%Y/%m/erg_pwe_efd_'+level+'_'+datatype+'_%Y%m%d_v??_??.cdf'
 
