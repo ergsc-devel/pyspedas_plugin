@@ -3,6 +3,7 @@
 from load import load
 from pytplot import options, get_data, store_data, clip, ylim, zlim
 from pyspedas.utilities.time_double import time_float
+from pyspedas import tnames
 import cdflib
 import numpy as np
 
@@ -163,7 +164,7 @@ def pwe_efd(trange=['2017-04-01', '2017-04-02'],
             time_new = (np.tile(time1, (ndt, 1)).T + dt * 1e-3).reshape(ndata)
             data_new = data.reshape(ndata)
             store_data(t_plot_name,data={'x':time_new, 'y':data_new}, attr_dict=dl_in)
-            options(t_plot_name, 'ytitle', '\n'.join(t_plot_name.split('_')[4:]))
+            options(t_plot_name, 'ytitle', '\n'.join(t_plot_name.split('_')))
             ####ylim settings because pytplot.timespan() doesn't affect in ylim.
             ####May be it will be no need in future.
             if time_new[0] < time_min_max[0]:
@@ -182,6 +183,19 @@ def pwe_efd(trange=['2017-04-01', '2017-04-02'],
         for elem in component:
             t_plot_name = prefix+elem
             options(t_plot_name, 'ytitle', elem+' potential')
+
+    if datatype == 'spec':
+        options(tnames('*spec_spectra*'), 'spec', 1)
+        options(tnames('*spec_spectra*'), 'colormap', 'jet')
+        options(tnames('*spec_spectra*'), 'zlog', 1)
+        ylim(prefix + 'spectra', 0,100)
+        zlim(prefix + 'spectra',1e-6, 1e-2)
+        options(tnames('*spec_spectra*'), 'ysubtitle', '[Hz]')
+        options(tnames('*spec_spectra*'), 'ztitle','[mV^2/m^2/Hz]')
+        for t_plot_name in (tnames('*spec_spectra*')):
+            options(t_plot_name, 'ytitle', '\n'.join(t_plot_name.split('_')))
+
+
 
     return loaded_data
 
