@@ -1,8 +1,10 @@
 
 #from pyspedas.erg.load import load
 from load import load
-from pytplot import options, clip, ylim, zlim
+from pytplot import options, get_data, clip, ylim, zlim
+from pyspedas.utilities.time_double import time_float
 import cdflib
+import numpy as np
 
 def pwe_efd(trange=['2017-04-01', '2017-04-02'],
         datatype='E_spin', 
@@ -118,10 +120,29 @@ def pwe_efd(trange=['2017-04-01', '2017-04-02'],
         print('Contact: erg_pwe_info at isee.nagoya-u.ac.jp')
         print('**************************************************************************')
 
+    time_min_max = time_float(trange)
     if 'spin' in datatype:
         for elem in component:
-            options(prefix + elem + '_dsi','ytitle', elem + ' vector in DSI')
-            options(prefix + elem + '_dsi','legend_names', labels)
+            t_plot_name = prefix + elem + '_dsi'
+            options(t_plot_name,'ytitle', elem + ' vector in DSI')
+            options(t_plot_name,'legend_names', labels)
+            ####ylim settings because pytplot.timespan() doesn't affect in ylim.
+            ####May be it will be no need in future.
+            get_data_vars = get_data(t_plot_name)
+            if get_data_vars[0][0] < time_min_max[0]:
+                min_time_index = np.where((get_data_vars[0] <= time_min_max[0]))[0][-1]
+            else:
+                min_time_index = 0
+            if time_min_max[1] < get_data_vars[0][-1]:
+                max_time_index = np.where(time_min_max[1] <= get_data_vars[0])[0][0]
+            else:
+                max_time_index = -1
+            ylim_min = np.nanmin(get_data_vars[1][min_time_index:max_time_index])
+            ylim_max = np.nanmax(get_data_vars[1][min_time_index:max_time_index])
+            ylim(t_plot_name, ylim_min, ylim_max)
+
+
+
 
     return loaded_data
 
