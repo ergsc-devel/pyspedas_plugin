@@ -91,6 +91,8 @@ def pwe_wfc(trange=['2017-04-01/12:00:00', '2017-04-01/13:00:00'],
             component_suffix_list = []
             if component == 'all':
                 component_list =['e', 'b']
+            elif component == 'e' or component == 'b':
+                component_list = [component]
             for com in component_list:
                 prefix = 'erg_pwe_wfc_' + level + '_' + com + '_' + mode +'_'
                 pathformat = 'satellite/erg/pwe/wfc/'+level+'/'+datatype+'/%Y/%m/erg_pwe_wfc_'+level+'_'+com+'_'+datatype+'_'+mode+'_%Y%m%d%H_v??_??.cdf'
