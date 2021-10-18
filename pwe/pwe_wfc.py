@@ -2,6 +2,7 @@
 #from pyspedas.erg.load import load
 from load import load
 from pytplot import options, clip, ylim, zlim
+from pyspedas import tnames
 import cdflib
 
 def pwe_wfc(trange=['2017-04-01/12:00:00', '2017-04-01/13:00:00'],
@@ -85,10 +86,12 @@ def pwe_wfc(trange=['2017-04-01/12:00:00', '2017-04-01/13:00:00'],
                 pathformat = 'satellite/erg/pwe/wfc/'+level+'/'+datatype+'/%Y/%m/erg_pwe_wfc_'+level+'_'+com+'_'+datatype+'_'+mode+'_sgi_%Y%m%d%H_v??_??.cdf'
                 loaded_data +=load(pathformat=pathformat, trange=trange, level=level, datatype=datatype,file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
         elif datatype == 'spec':
+            prefix_list = []
             for com in ['e', 'b']:
                 prefix = 'erg_pwe_wfc_' + level + '_' + com + '_' + mode +'_'
                 pathformat = 'satellite/erg/pwe/wfc/'+level+'/'+datatype+'/%Y/%m/erg_pwe_wfc_'+level+'_'+com+'_'+datatype+'_'+mode+'_%Y%m%d%H_v??_??.cdf'
                 loaded_data +=load(pathformat=pathformat, trange=trange, level=level, datatype=datatype,file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
+                prefix_list.append(prefix)
 
     
     
@@ -118,10 +121,26 @@ def pwe_wfc(trange=['2017-04-01/12:00:00', '2017-04-01/13:00:00'],
         except:
             print('printing PI info and rules of the road was failed')
 
-
-
-
-
+    tplot_names_list = []
+    if datatype == 'spec':
+        options(prefix_list[0] + 'E_spectra', 'spec', 1)
+        options(prefix_list[0] + 'E_spectra', 'colormap', 'jet')
+        options(prefix_list[0] + 'E_spectra','ylog', 1)
+        options(prefix_list[0] + 'E_spectra','zlog', 1)
+        options(prefix_list[0] + 'E_spectra','ysubtitle', 'Hz')
+        ylim(prefix_list[0] + 'E_spectra', 32., 2e4)
+        zlim(prefix_list[0] + 'E_spectra', 1e-9, 1e-2)
+        options(prefix_list[0] + 'E_spectra', 'ztitle', '[mV^2/m^2/Hz]')
+        options(prefix_list[0] + 'E_spectra', 'ytitle', 'E/nspectra')
+        options(prefix_list[1] + 'B_spectra', 'spec', 1)
+        options(prefix_list[1] + 'B_spectra', 'colormap', 'jet')
+        options(prefix_list[1] + 'B_spectra', 'ylog', 1)
+        options(prefix_list[1] + 'B_spectra', 'zlog', 1)
+        options(prefix_list[1] + 'B_spectra', 'ysubtitle', 'Hz')
+        ylim(prefix_list[1] + 'B_spectra', 32., 2e4)
+        zlim(prefix_list[1] + 'B_spectra', 1e-4, 1e2)
+        options(prefix_list[1] + 'B_spectra', 'ztitle', '[pT^2/Hz]')
+        options(prefix_list[1] + 'B_spectra', 'ytitle', 'B/nspectra')
 
 
     return loaded_data
