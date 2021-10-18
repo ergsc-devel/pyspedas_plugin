@@ -39,7 +39,7 @@ erg_load_pwe_wfc.pro
 
 
 ## プロットコマンドとプロット例 / Plot commands and plot examples
--  erg_pwe_wfc_l2_e_65khz_Ex_waveform, erg_pwe_wfc_l2_e_65khz_Bx_waveform
+- erg_pwe_wfc_l2_e_65khz_Ex_waveform, erg_pwe_wfc_l2_e_65khz_Bx_waveform
   - timespan, '2017-04-01/12:57:59.5', 1, /s
   - erg_load_pwe_wfc, level='l2', datatype='waveform' 
   - tplot, [ 'erg_pwe_wfc_l2_e_65khz_Ex_waveform', 'erg_pwe_wfc_l2_e_65khz_Bx_waveform' ] 
@@ -48,7 +48,7 @@ erg_load_pwe_wfc.pro
   ![plot example](/doc/imgs/wfc_l2_waveform_eb_plot.png) 
 
 
--  erg_pwe_wfc_l2_e_65khz_E_spectra, erg_pwe_wfc_l2_e_65khz_B_spectra
+- erg_pwe_wfc_l2_e_65khz_E_spectra, erg_pwe_wfc_l2_e_65khz_B_spectra
   - timespan, '2017-04-01/14:04:39', 1, /m
   - erg_load_pwe_wfc, level='l2', datatype='spec' 
   - tplot, [ 'erg_pwe_wfc_l2_e_65khz_E_spectra', 'erg_pwe_wfc_l2_e_65khz_E_spectra' ] 
