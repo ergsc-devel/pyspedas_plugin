@@ -83,7 +83,13 @@ def pwe_wfc(trange=['2017-04-01/12:00:00', '2017-04-01/13:00:00'],
     loaded_data = []
     if level == 'l2':
         if datatype == 'waveform':
-            for com in ['e', 'b']:
+            prefix_list = []
+            component_suffix_list = []
+            if component == 'all':
+                component_list =['e', 'b']
+            elif component == 'e' or component == 'b':
+                component_list = [component]
+            for com in component_list:
                 prefix = 'erg_pwe_wfc_' + level + '_' + com + '_' + mode +'_'
                 pathformat = 'satellite/erg/pwe/wfc/'+level+'/'+datatype+'/%Y/%m/erg_pwe_wfc_'+level+'_'+com+'_'+datatype+'_'+mode+'_'+coord+'_%Y%m%d%H_v??_??.cdf'
                 loaded_data +=load(pathformat=pathformat, trange=trange, level=level, datatype=datatype,file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
