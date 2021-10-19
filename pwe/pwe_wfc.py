@@ -161,12 +161,12 @@ def pwe_wfc(trange=['2017-04-01/12:00:00', '2017-04-01/13:00:00'],
         for t_plot_name in tplot_name_list:
             get_data_vars = get_data(t_plot_name)
             dl_in = get_data(t_plot_name, metadata=True)
-            time1 = get_data_vars[0]
+            time_array = get_data_vars[0]
             data = np.where(get_data_vars[1] <= -1e+30, np.nan, get_data_vars[1])
             dt = get_data_vars[2]
             ndt=dt.size
             ndata=data.size
-            time_new = (np.tile(time1, (ndt, 1)).T + dt * 1e+6).reshape(ndata)
+            time_new = (np.tile(time_array, (ndt, 1)).T + dt * 1e+6).reshape(ndata)
             data_new = data.reshape(ndata)
             store_data(t_plot_name,data={'x':time_new, 'y':data_new}, attr_dict=dl_in)
 
