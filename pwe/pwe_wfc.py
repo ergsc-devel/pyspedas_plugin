@@ -3,6 +3,8 @@
 import numpy as np
 from load import load
 from pytplot import options, clip, ylim, zlim, get_data, store_data
+from pyspedas.utilities.time_double import time_float
+
 from pyspedas import tnames
 import cdflib
 
@@ -158,16 +160,29 @@ def pwe_wfc(trange=['2017-04-01/12:00:00', '2017-04-01/13:00:00'],
                 options(prefix_list[i] + component_suffix_list[i], 'ytitle', 'B\nspectra')
 
     if datatype == 'waveform':
+        trange_in_float = time_float(trange)
         for t_plot_name in tplot_name_list:
             get_data_vars = get_data(t_plot_name)
             dl_in = get_data(t_plot_name, metadata=True)
             time_array = get_data_vars[0]
+            if time_array[0] <= trange_in_float[0]:
+                t_ge_indices = np.where(time_array <= trange_in_float[0])
+                t_min_index = t_ge_indices[0][-1]
+            else:
+                t_min_index = 0
+            if trange_in_float[1] <= time_array[-1]:
+                t_le_indices = np.where(trange_in_float[1] <= time_array)
+                t_max_index = t_le_indices[0][0]
+            else:
+                t_max_index = -1
+            if t_min_index == t_max_index:
+                t_max_index =+ 1
             data = np.where(get_data_vars[1] <= -1e+30, np.nan, get_data_vars[1])
             dt = get_data_vars[2]
             ndt=dt.size
-            ndata=data.size
-            time_new = (np.tile(time_array, (ndt, 1)).T + dt * 1e+6).reshape(ndata)
-            data_new = data.reshape(ndata)
+            ndata= (t_max_index - t_min_index) * ndt
+            time_new = (np.tile(time_array[t_min_index:t_max_index], (ndt, 1)).T + dt * 1e-3).reshape(ndata)
+            data_new = data[t_min_index:t_max_index].reshape(ndata)
             store_data(t_plot_name,data={'x':time_new, 'y':data_new}, attr_dict=dl_in)
 
     return loaded_data
