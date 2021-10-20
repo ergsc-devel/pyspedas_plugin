@@ -147,20 +147,21 @@ def pwe_wfc(trange=['2017-04-01/12:00:00', '2017-04-01/13:00:00'],
     
     if datatype == 'spec':
         for i in range(len(prefix_list)):
-            options(prefix_list[i] + component_suffix_list[i], 'spec', 1)
-            options(prefix_list[i] + component_suffix_list[i], 'colormap', 'jet')
-            options(prefix_list[i] + component_suffix_list[i],'ylog', 1)
-            options(prefix_list[i] + component_suffix_list[i],'zlog', 1)
-            options(prefix_list[i] + component_suffix_list[i],'ysubtitle', '[Hz]')
-            ylim(prefix_list[i] + component_suffix_list[i], 32., 2e4)
+            t_plot_name = prefix_list[i] + component_suffix_list[i]
+            options(t_plot_name, 'spec', 1)
+            options(t_plot_name, 'colormap', 'jet')
+            options(t_plot_name,'ylog', 1)
+            options(t_plot_name,'zlog', 1)
+            options(t_plot_name,'ysubtitle', '[Hz]')
+            ylim(t_plot_name, 32., 2e4)
             if 'E_spectra' in component_suffix_list[i]:
-                zlim(prefix_list[i] + component_suffix_list[i], 1e-9, 1e-2)
-                options(prefix_list[i] + component_suffix_list[i], 'ztitle', '[mV^2/m^2/Hz]')
-                options(prefix_list[i] + component_suffix_list[i], 'ytitle', 'E\nspectra')
+                zlim(t_plot_name, 1e-9, 1e-2)
+                options(t_plot_name, 'ztitle', '[mV^2/m^2/Hz]')
+                options(t_plot_name, 'ytitle', 'E\nspectra')
             elif 'B_spectra' in  component_suffix_list[i]:
-                zlim(prefix_list[i] + component_suffix_list[i], 1e-4, 1e2)
-                options(prefix_list[i] + component_suffix_list[i], 'ztitle', '[pT^2/Hz]')
-                options(prefix_list[i] + component_suffix_list[i], 'ytitle', 'B\nspectra')
+                zlim(t_plot_name, 1e-4, 1e2)
+                options(t_plot_name, 'ztitle', '[pT^2/Hz]')
+                options(t_plot_name, 'ytitle', 'B\nspectra')
 
     if datatype == 'waveform':
         trange_in_float = time_float(trange)
