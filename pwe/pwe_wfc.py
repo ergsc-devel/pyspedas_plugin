@@ -94,7 +94,7 @@ def pwe_wfc(trange=['2017-04-01/12:00:00', '2017-04-01/13:00:00'],
             for com in component_list:
                 prefix = 'erg_pwe_wfc_' + level + '_' + com + '_' + mode +'_'
                 pathformat = 'satellite/erg/pwe/wfc/'+level+'/'+datatype+'/%Y/%m/erg_pwe_wfc_'+level+'_'+com+'_'+datatype+'_'+mode+'_'+coord+'_%Y%m%d%H_v??_??.cdf'
-                loaded_data +=load(pathformat=pathformat, trange=trange, level=level, datatype=datatype,file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
+                loaded_data.append(load(pathformat=pathformat, trange=trange, level=level, datatype=datatype,file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd))
                 if com == 'e':
                     tplot_name_list += [prefix + 'Ex_waveform', prefix + 'Ey_waveform']
                 elif com == 'b':
@@ -109,7 +109,7 @@ def pwe_wfc(trange=['2017-04-01/12:00:00', '2017-04-01/13:00:00'],
             for com in component_list:
                 prefix = 'erg_pwe_wfc_' + level + '_' + com + '_' + mode +'_'
                 pathformat = 'satellite/erg/pwe/wfc/'+level+'/'+datatype+'/%Y/%m/erg_pwe_wfc_'+level+'_'+com+'_'+datatype+'_'+mode+'_%Y%m%d%H_v??_??.cdf'
-                loaded_data +=load(pathformat=pathformat, trange=trange, level=level, datatype=datatype,file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
+                loaded_data.append(load(pathformat=pathformat, trange=trange, level=level, datatype=datatype,file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd))
                 prefix_list.append(prefix)
                 component_suffix_list.append(com.upper() + '_spectra')
 
@@ -142,6 +142,9 @@ def pwe_wfc(trange=['2017-04-01/12:00:00', '2017-04-01/13:00:00'],
         except:
             print('printing PI info and rules of the road was failed')
 
+    if notplot:
+        return loaded_data
+    
     if datatype == 'spec':
         for i in range(len(prefix_list)):
             options(prefix_list[i] + component_suffix_list[i], 'spec', 1)
