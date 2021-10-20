@@ -164,22 +164,35 @@ def pwe_wfc(trange=['2017-04-01/12:00:00', '2017-04-01/13:00:00'],
 
     if datatype == 'waveform':
         trange_in_float = time_float(trange)
+        yn = ''
+        all_time_range_flag = False
+        if trange_in_float[1] - trange_in_float[0] <= 0.:
+            yn = input(f'Invalid time range. Use full time range ?:[y/n] ')
+            if yn == 'y':
+                all_time_range_flag = True
+                t_min_index = 0
+                t_max_index = -1
+                min_time_index = 0
+                max_time_index = -1
+            else:
+                return
         for t_plot_name in tplot_name_list:
             get_data_vars = get_data(t_plot_name)
             dl_in = get_data(t_plot_name, metadata=True)
             time_array = get_data_vars[0]
-            if time_array[0] <= trange_in_float[0]:
-                t_ge_indices = np.where(time_array <= trange_in_float[0])
-                t_min_index = t_ge_indices[0][-1]
-            else:
-                t_min_index = 0
-            if trange_in_float[1] <= time_array[-1]:
-                t_le_indices = np.where(trange_in_float[1] <= time_array)
-                t_max_index = t_le_indices[0][0]
-            else:
-                t_max_index = -1
-            if t_min_index == t_max_index:
-                t_max_index =+ 1
+            if not all_time_range_flag:
+                if time_array[0] <= trange_in_float[0]:
+                    t_ge_indices = np.where(time_array <= trange_in_float[0])
+                    t_min_index = t_ge_indices[0][-1]
+                else:
+                    t_min_index = 0
+                if trange_in_float[1] <= time_array[-1]:
+                    t_le_indices = np.where(trange_in_float[1] <= time_array)
+                    t_max_index = t_le_indices[0][0]
+                else:
+                    t_max_index = -1
+                if t_min_index == t_max_index:
+                    t_max_index =+ 1
             data = np.where(get_data_vars[1] <= -1e+30, np.nan, get_data_vars[1])
             dt = get_data_vars[2]
             ndt=dt.size
@@ -189,14 +202,15 @@ def pwe_wfc(trange=['2017-04-01/12:00:00', '2017-04-01/13:00:00'],
             store_data(t_plot_name,data={'x':time_new, 'y':data_new}, attr_dict=dl_in)
             ####ylim settings because pytplot.timespan() doesn't affect in ylim.
             ####May be it will be no need in future.
-            if time_new[0] <= trange_in_float[0]:
-                min_time_index = np.where((time_new <= trange_in_float[0]))[0][-1]
-            else:
-                min_time_index = 0
-            if trange_in_float[1] <= time_new[-1]:
-                max_time_index = np.where(trange_in_float[1] <= time_new)[0][0]
-            else:
-                max_time_index = -1
+            if not all_time_range_flag:
+                if time_new[0] <= trange_in_float[0]:
+                    min_time_index = np.where((time_new <= trange_in_float[0]))[0][-1]
+                else:
+                    min_time_index = 0
+                if trange_in_float[1] <= time_new[-1]:
+                    max_time_index = np.where(trange_in_float[1] <= time_new)[0][0]
+                else:
+                    max_time_index = -1
             ylim_min = np.nanmin(data_new[min_time_index:max_time_index])
             ylim_max = np.nanmax(data_new[min_time_index:max_time_index])
             ylim(t_plot_name, ylim_min, ylim_max)
