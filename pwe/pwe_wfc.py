@@ -146,6 +146,7 @@ def pwe_wfc(trange=['2017-04-01/12:00:00', '2017-04-01/13:00:00'],
         return loaded_data
     
     if datatype == 'spec':
+        trange_in_float = time_float(trange)
         for i in range(len(prefix_list)):
             t_plot_name = prefix_list[i] + component_suffix_list[i]
             options(t_plot_name, 'spec', 1)
@@ -162,6 +163,33 @@ def pwe_wfc(trange=['2017-04-01/12:00:00', '2017-04-01/13:00:00'],
                 zlim(t_plot_name, 1e-4, 1e2)
                 options(t_plot_name, 'ztitle', '[pT^2/Hz]')
                 options(t_plot_name, 'ytitle', 'B\nspectra')
+
+            get_data_vars = get_data(t_plot_name)
+            time_array = get_data_vars[0]
+            if time_array[0] <= trange_in_float[0]:
+                t_ge_indices = np.where(time_array <= trange_in_float[0])
+                t_min_index = t_ge_indices[0][-1]
+            else:
+                t_min_index = 0
+            if trange_in_float[1] <= time_array[-1]:
+                t_le_indices = np.where(trange_in_float[1] <= time_array)
+                t_max_index = t_le_indices[0][0]
+            else:
+                t_max_index = -1
+            if t_min_index == t_max_index:
+                t_max_index =+ 1
+            if (t_min_index != 0) or (t_max_index != -1):
+                meta_data = get_data(t_plot_name, metadata=True)
+                store_data(t_plot_name, newname=t_plot_name+'_all_loaded_time_range')
+                store_data(t_plot_name, data={'x':time_array[t_min_index:t_max_index],
+                                            'y':get_data_vars[1][t_min_index:t_max_index],
+                                            'v':get_data_vars[2]},
+                                            attr_dict=meta_data)
+                options(t_plot_name, 'zlog', 1)
+                if 'E_spectra' in t_plot_name:
+                    zlim(t_plot_name,  1e-9, 1e-2)
+                elif 'B_spectra' in t_plot_name:
+                    zlim(t_plot_name,  1e-4, 1e2)
 
     if datatype == 'waveform':
         trange_in_float = time_float(trange)
