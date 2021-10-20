@@ -198,6 +198,7 @@ def pwe_wfc(trange=['2017-04-01/12:00:00', '2017-04-01/13:00:00'],
             time_new = (np.tile(time_array[t_min_index:t_max_index], (ndt, 1)).T + dt * 1e-3).reshape(ndata)
             data_new = data[t_min_index:t_max_index].reshape(ndata)
             store_data(t_plot_name,data={'x':time_new, 'y':data_new}, attr_dict=dl_in)
+            options(t_plot_name, 'ytitle', '\n'.join(t_plot_name.split('_')))
             ####ylim settings because pytplot.timespan() doesn't affect in ylim.
             ####May be it will be no need in future.
             if not all_time_range_flag:
