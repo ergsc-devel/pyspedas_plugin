@@ -172,8 +172,6 @@ def pwe_wfc(trange=['2017-04-01/12:00:00', '2017-04-01/13:00:00'],
                 all_time_range_flag = True
                 t_min_index = 0
                 t_max_index = -1
-                min_time_index = 0
-                max_time_index = -1
             else:
                 return
         for t_plot_name in tplot_name_list:
@@ -204,15 +202,15 @@ def pwe_wfc(trange=['2017-04-01/12:00:00', '2017-04-01/13:00:00'],
             ####May be it will be no need in future.
             if not all_time_range_flag:
                 if time_new[0] <= trange_in_float[0]:
-                    min_time_index = np.where((time_new <= trange_in_float[0]))[0][-1]
+                    t_min_index = np.where((time_new <= trange_in_float[0]))[0][-1]
                 else:
-                    min_time_index = 0
+                    t_min_index = 0
                 if trange_in_float[1] <= time_new[-1]:
-                    max_time_index = np.where(trange_in_float[1] <= time_new)[0][0]
+                    t_max_index = np.where(trange_in_float[1] <= time_new)[0][0]
                 else:
-                    max_time_index = -1
-            ylim_min = np.nanmin(data_new[min_time_index:max_time_index])
-            ylim_max = np.nanmax(data_new[min_time_index:max_time_index])
+                    t_max_index = -1
+            ylim_min = np.nanmin(data_new[t_min_index:t_max_index])
+            ylim_max = np.nanmax(data_new[t_min_index:t_max_index])
             ylim(t_plot_name, ylim_min, ylim_max)
 
     return loaded_data
