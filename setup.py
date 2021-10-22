@@ -7,7 +7,7 @@ from codecs import open
 
 setup(
     name='ergpyspedas',
-    version='1.0',
+    version='0.0',
     packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
     install_requires=['pyspedas>=1.2.8'],
     python_requires='>=3.7',
