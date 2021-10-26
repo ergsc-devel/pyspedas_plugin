@@ -1,5 +1,5 @@
 import numpy as np
-from pytplot import get_data, tplot_names, store_data
+from pytplot import get_data, tplot_names, store_data, options
 from .erg_interpolate_att import erg_interpolate_att
 from .vector_rotate import vector_rotate
 
@@ -66,3 +66,4 @@ def sgi2dsi(name_in=None,
                               theta=-1.*(-sgix2ssix_angle + spphase))
 
             store_data(name_out, data={'x':time, 'y':rotated_vector}, attr_dict=dl_in)
+            options(name_out, 'ytitle','\n'.join(name_out.split('_')))
