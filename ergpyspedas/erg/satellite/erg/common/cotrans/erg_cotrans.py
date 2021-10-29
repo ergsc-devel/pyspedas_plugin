@@ -96,7 +96,7 @@ def erg_cotrans(in_name='',
                     in_name : str
                         name of input tplot variable to be transformed
                     
-                    name_out : str
+                    out_name : str
                         Name of output tplot variable in which the transformed data are stored. 
                          If not explicitly provided, out_name is automatically generated from 
                          "in_name" by replacing the coordinate name with a new one. 
