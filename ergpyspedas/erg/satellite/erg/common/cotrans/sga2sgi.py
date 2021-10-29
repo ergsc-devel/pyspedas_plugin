@@ -1,5 +1,5 @@
 import numpy as np
-from pytplot import get_data, tplot_names, store_data
+from pytplot import get_data, tplot_names, store_data, options
 #from common.cotrans.erg_interpolate_att import erg_interpolate_att
 from .erg_interpolate_att import erg_interpolate_att
 #from common.cotrans.cart_trans_matrix_make import cart_trans_matrix_make
@@ -82,3 +82,4 @@ def sga2sgi(name_in=None,
 
             #Store the converted data in a tplot variable 
             store_data(name_out, data={'x':time, 'y':dat_new}, attr_dict=dl_in)
+            options(name_out, 'ytitle','\n'.join(name_out.split('_')))

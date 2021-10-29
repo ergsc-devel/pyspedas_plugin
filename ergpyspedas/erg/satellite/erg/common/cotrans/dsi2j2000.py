@@ -1,4 +1,4 @@
-from pytplot import tplot_names , get_data, get_timespan, store_data
+from pytplot import tplot_names , get_data, get_timespan, store_data, options
 from .erg_interpolate_att import erg_interpolate_att
 from pyspedas.analysis.tnormalize import tnormalize
 from ...orb.orb import orb
@@ -98,3 +98,4 @@ def dsi2j2000(name_in=None,
                 dat_new = np.einsum("ijk,ik->ij",mat,dat)
 
             store_data(name_out,data={'x':time, 'y':dat_new}, attr_dict=dl_in)
+            options(name_out, 'ytitle','\n'.join(name_out.split('_')))
