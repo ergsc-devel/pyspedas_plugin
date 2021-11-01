@@ -1,27 +1,29 @@
 
 #from pyspedas.erg.load import load
 #from load import load
-from ..load import load
-from pytplot import options, clip, ylim, zlim
 import cdflib
+from pytplot import clip, options, ylim, zlim
+
+from ..load import load
+
 
 def mepi_tof(trange=['2017-03-27', '2017-03-28'],
-            datatype='flux', 
-            level='l2', 
-            suffix='',  
-            get_support_data=False, 
-            varformat=None,
-            varnames=[],
-            downloadonly=False,
-            notplot=False,
-            no_update=False,
-            uname=None,
-            passwd=None,
-            time_clip=False,
-            ror=True):
+             datatype='flux',
+             level='l2',
+             suffix='',
+             get_support_data=False,
+             varformat=None,
+             varnames=[],
+             downloadonly=False,
+             notplot=False,
+             no_update=False,
+             uname=None,
+             passwd=None,
+             time_clip=False,
+             ror=True):
     """
     This function loads data from the MEP-i experiment from the Arase mission
-    
+
     Parameters:
         trange : list of str
             time range of interest [starttime, endtime] with the format 
@@ -71,16 +73,19 @@ def mepi_tof(trange=['2017-03-27', '2017-03-28'],
         List of tplot variables created.
 
     """
-    file_res=3600. * 24
+    file_res = 3600. * 24
     prefix = 'erg_mepi_'+level+'_tof'+datatype+'_'
-        
-    pathformat = 'satellite/erg/mepi/'+level+'/tof/%Y/%m/erg_mepi_'+level+'_tof'+datatype+'_%Y%m%d_v??_??.cdf'
 
-    loaded_data = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype,file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
+    pathformat = 'satellite/erg/mepi/'+level+'/tof/%Y/%m/erg_mepi_' + \
+        level+'_tof'+datatype+'_%Y%m%d_v??_??.cdf'
+
+    loaded_data = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype, file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
+                       varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
 
     if len(loaded_data) > 0 and ror:
-    
-        out_files = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype,file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd)
+
+        out_files = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype, file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
+                         varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd)
         cdf_file = cdflib.CDF(out_files[0])
         gatt = cdf_file.globalattsget()
 
@@ -94,38 +99,37 @@ def mepi_tof(trange=['2017-03-27', '2017-03-28'],
         print("Affiliation: "+gatt["PI_AFFILIATION"])
         print('')
         print('- The rules of the road (RoR) common to the ERG project:')
-        print('      https://ergsc.isee.nagoya-u.ac.jp/data_info/rules_of_the_road.shtml.en')
+        print(
+            '      https://ergsc.isee.nagoya-u.ac.jp/data_info/rules_of_the_road.shtml.en')
         print('- RoR for MEP-i data: https://ergsc.isee.nagoya-u.ac.jp/mw/index.php/ErgSat/Mepi')
         print('')
         print('Contact: erg_mep_info at isee.nagoya-u.ac.jp')
         print('**************************************************************************')
 
-
     if 'flux' in datatype:
-            original_suffix_list = ['FPDU', 'FHE2DU', 'FHEDU', 'FOPPDU', 'FODU', 'FO2PDU',
-                        'count_raw_P', 'count_raw_HE2', 'count_raw_HE', 'count_raw_OPP', 'count_raw_O', 'count_raw_O2P']
-            tplot_names_list = []
-            for i in range(len(original_suffix_list)):
-                tplot_names_list.append(prefix + original_suffix_list[i] + suffix)
-                if tplot_names_list[i] in loaded_data:
-                    ylim(tplot_names_list[i], 4, 190)
-            
-            # set spectrogram plot option
-            options(tplot_names_list, 'Spec', 1)
-            
-            # set y axis to logscale
-            options(tplot_names_list, 'ylog', 1)
+        original_suffix_list = ['FPDU', 'FHE2DU', 'FHEDU', 'FOPPDU', 'FODU', 'FO2PDU',
+                                'count_raw_P', 'count_raw_HE2', 'count_raw_HE', 'count_raw_OPP', 'count_raw_O', 'count_raw_O2P']
+        tplot_names_list = []
+        for i in range(len(original_suffix_list)):
+            tplot_names_list.append(prefix + original_suffix_list[i] + suffix)
+            if tplot_names_list[i] in loaded_data:
+                ylim(tplot_names_list[i], 4, 190)
 
-            # set ysubtitle
-            options(tplot_names_list, 'ysubtitle', '[keV/q]')
+        # set spectrogram plot option
+        options(tplot_names_list, 'Spec', 1)
 
-            # set ztitle
-            options(tplot_names_list[:6], 'ztitle', '[/s-cm^{2}-sr-keV/q]')
-            options(tplot_names_list[6:], 'ztitle', '[cnt/smpl]')
+        # set y axis to logscale
+        options(tplot_names_list, 'ylog', 1)
 
-            # set z axis to logscale
-            options(tplot_names_list, 'zlog', 1)
-            
+        # set ysubtitle
+        options(tplot_names_list, 'ysubtitle', '[keV/q]')
+
+        # set ztitle
+        options(tplot_names_list[:6], 'ztitle', '[/s-cm^{2}-sr-keV/q]')
+        options(tplot_names_list[6:], 'ztitle', '[cnt/smpl]')
+
+        # set z axis to logscale
+        options(tplot_names_list, 'zlog', 1)
 
     elif 'raw' in datatype:
 
@@ -134,8 +138,5 @@ def mepi_tof(trange=['2017-03-27', '2017-03-28'],
 
         # set z axis to logscale
         options(loaded_data, 'zlog', 1)
-
-
-        
 
     return loaded_data

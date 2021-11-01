@@ -1,27 +1,29 @@
 
 #from pyspedas.erg.load import load
 #from load import load
-from ..load import load
-from pytplot import options, clip, ylim, zlim
 import cdflib
+from pytplot import clip, options, ylim, zlim
+
+from ..load import load
+
 
 def pwe_ofa(trange=['2017-04-01', '2017-04-02'],
-        datatype='spec', 
-        level='l2', 
-        suffix='',  
-        get_support_data=False, 
-        varformat=None,
-        varnames=[],
-        downloadonly=False,
-        notplot=False,
-        no_update=False,
-        uname=None,
-        passwd=None,
-        time_clip=False,
-        ror=True):
+            datatype='spec',
+            level='l2',
+            suffix='',
+            get_support_data=False,
+            varformat=None,
+            varnames=[],
+            downloadonly=False,
+            notplot=False,
+            no_update=False,
+            uname=None,
+            passwd=None,
+            time_clip=False,
+            ror=True):
     """
     This function loads data from the PWE experiment from the Arase mission
-    
+
     Parameters:
         trange : list of str
             time range of interest [starttime, endtime] with the format 
@@ -72,17 +74,19 @@ def pwe_ofa(trange=['2017-04-01', '2017-04-02'],
 
     """
 
-    file_res=3600. * 24
+    file_res = 3600. * 24
     prefix = 'erg_pwe_ofa_'+level+'_'+datatype+'_'
 
-    pathformat = 'satellite/erg/pwe/ofa/'+level+'/'+datatype+'/%Y/%m/erg_pwe_ofa_'+level+'_'+datatype+'_%Y%m%d_v??_??.cdf'
+    pathformat = 'satellite/erg/pwe/ofa/'+level+'/'+datatype + \
+        '/%Y/%m/erg_pwe_ofa_'+level+'_'+datatype+'_%Y%m%d_v??_??.cdf'
 
-    loaded_data = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype,file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
-    
+    loaded_data = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype, file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
+                       varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
+
     if len(loaded_data) > 0 and ror:
 
-    
-        out_files = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype,file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd)
+        out_files = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype, file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
+                         varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd)
         cdf_file = cdflib.CDF(out_files[0])
         gatt = cdf_file.globalattsget()
 
@@ -94,16 +98,16 @@ def pwe_ofa(trange=['2017-04-01', '2017-04-02'],
         print(gatt["LOGICAL_SOURCE_DESCRIPTION"])
         print('')
         print('Information about ERG PWE OFA')
-        print('')        
+        print('')
         print('PI: ', gatt['PI_NAME'])
         print("Affiliation: "+gatt["PI_AFFILIATION"])
         print('')
         print('RoR of ERG project common: https://ergsc.isee.nagoya-u.ac.jp/data_info/rules_of_the_road.shtml.en')
-        print('RoR of PWE/OFA: https://ergsc.isee.nagoya-u.ac.jp/mw/index.php/ErgSat/Pwe/Ofa')
+        print(
+            'RoR of PWE/OFA: https://ergsc.isee.nagoya-u.ac.jp/mw/index.php/ErgSat/Pwe/Ofa')
         print('')
         print('Contact: erg_pwe_info at isee.nagoya-u.ac.jp')
         print('**************************************************************************')
-
 
     # set spectrogram plot option
     options(prefix+'E_spectra_132'+suffix,  'Spec', 1)
@@ -112,7 +116,7 @@ def pwe_ofa(trange=['2017-04-01', '2017-04-02'],
     # set y axis to logscale
     options(prefix+'E_spectra_132'+suffix,  'ylog', 1)
     options(prefix+'B_spectra_132'+suffix,  'ylog', 1)
-    
+
     if prefix+'E_spectra_132'+suffix in loaded_data:
         # set ylim
         ylim(prefix+'E_spectra_132'+suffix, 32e-3, 20.)
@@ -140,18 +144,17 @@ def pwe_ofa(trange=['2017-04-01', '2017-04-02'],
     # set yrange
     #options(prefix+'E_spectra_132'+suffix,  'yrange', [0., 10.])
     #options(prefix+'B_spectra_132'+suffix,  'yrange', [0., 11.])
-    
+
     # set z axis to logscale
     options(prefix+'E_spectra_132'+suffix,  'zlog', 1)
     options(prefix+'B_spectra_132'+suffix,  'zlog', 1)
-    
+
     # set zrange
     #options(prefix+'E_spectra_132'+suffix,  'zrange', [1.0e-08, 1.0e-02])
     #options(prefix+'B_spectra_132'+suffix,  'zrange', [1.0e-04, 1.0e+02])
-    
+
     # change colormap option
     options(prefix+'E_spectra_132'+suffix,  'Colormap', 'jet')
     options(prefix+'B_spectra_132'+suffix,  'Colormap', 'jet')
-    
-    
+
     return loaded_data

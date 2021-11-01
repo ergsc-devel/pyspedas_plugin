@@ -1,31 +1,33 @@
 
 #from pyspedas.erg.load import load
 #from load import load
-from ..load import load
-import numpy as np
-from pytplot import options, clip, ylim, zlim, store_data, get_data
 import cdflib
+import numpy as np
+from pytplot import clip, get_data, options, store_data, ylim, zlim
+
+from ..load import load
+
 
 def lepe(trange=['2017-04-04', '2017-04-05'],
-        datatype='omniflux', 
-        level='l2', 
-        suffix='',  
-        get_support_data=False, 
-        varformat=None,
-        varnames=[],
-        downloadonly=False,
-        notplot=False,
-        no_update=False,
-        uname=None,
-        passwd=None,
-        time_clip=False,
-        ror=True,
-        version = None,
-        only_fedu=False,
-        et_diagram=False):
+         datatype='omniflux',
+         level='l2',
+         suffix='',
+         get_support_data=False,
+         varformat=None,
+         varnames=[],
+         downloadonly=False,
+         notplot=False,
+         no_update=False,
+         uname=None,
+         passwd=None,
+         time_clip=False,
+         ror=True,
+         version=None,
+         only_fedu=False,
+         et_diagram=False):
     """
     This function loads data from the LEP-e experiment from the Arase mission
-    
+
     Parameters:
         trange : list of str
             time range of interest [starttime, endtime] with the format 
@@ -87,26 +89,28 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
 
     if level == 'l3':
         datatype = 'pa'
-    
+
     if (level == 'l2' and datatype == 'omniflux') or (level == 'l2' and datatype == '3dflux') or level == 'l3':
-        notplot=True # to avoid failure of creation plot variables (at store_data.py) of lepe
-    
-    file_res=3600. * 24
-    prefix = 'erg_lepe_'+level+'_'+ datatype + '_'
-    pathformat = 'satellite/erg/lepe/'+level+'/'+datatype+'/%Y/%m/erg_lepe_'+level+'_'+datatype+'_%Y%m%d_'
+        # to avoid failure of creation plot variables (at store_data.py) of lepe
+        notplot = True
+
+    file_res = 3600. * 24
+    prefix = 'erg_lepe_'+level+'_' + datatype + '_'
+    pathformat = 'satellite/erg/lepe/'+level+'/'+datatype + \
+        '/%Y/%m/erg_lepe_'+level+'_'+datatype+'_%Y%m%d_'
 
     if version == None:
         pathformat += 'v??_??.cdf'
     else:
         pathformat += version + '.cdf'
 
-    loaded_data = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype,file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
+    loaded_data = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype, file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
+                       varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
 
-    
     if len(loaded_data) > 0 and ror:
 
-    
-        out_files = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype,file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd)
+        out_files = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype, file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
+                         varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd)
         cdf_file = cdflib.CDF(out_files[0])
         gatt = cdf_file.globalattsget()
 
@@ -123,31 +127,37 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
         print('')
         print('RoR of ERG project common: https://ergsc.isee.nagoya-u.ac.jp/data_info/rules_of_the_road.shtml.en')
         if level == 'l2':
-            print('RoR of LEPe L2: https://ergsc.isee.nagoya-u.ac.jp/mw/index.php/ErgSat/Lepe')
+            print(
+                'RoR of LEPe L2: https://ergsc.isee.nagoya-u.ac.jp/mw/index.php/ErgSat/Lepe')
         if level == 'l3':
-            print('RoR of LEPe L3: https://ergsc.isee.nagoya-u.ac.jp/mw/index.php/ErgSat/Lepe')
-            print('RoR of MGF L2: https://ergsc.isee.nagoya-u.ac.jp/mw/index.php/ErgSat/Mgf')
+            print(
+                'RoR of LEPe L3: https://ergsc.isee.nagoya-u.ac.jp/mw/index.php/ErgSat/Lepe')
+            print(
+                'RoR of MGF L2: https://ergsc.isee.nagoya-u.ac.jp/mw/index.php/ErgSat/Mgf')
         print('')
         print('Contact: erg_lepe_info at isee.nagoya-u.ac.jp')
         print('**************************************************************************')
 
-
     if type(loaded_data) is dict and len(loaded_data) > 0:
         if (level == 'l2' and datatype == 'omniflux'):
             tplot_variables = []
-            v_array = (loaded_data[prefix + 'FEDO' + suffix]['v'][:,0,:] + loaded_data[prefix + 'FEDO' + suffix]['v'][:,1,:])/ 2.
-            v_array = np.where(v_array < 0. , np.nan, v_array) # change minus values to NaN
-            all_nan_v_indices_array =np.where(np.all(np.isnan(v_array), axis=1))[0]
-            store_data(prefix + 'FEDO' + suffix, 
-                    data={'x':np.delete(loaded_data[prefix + 'FEDO' + suffix]['x'], all_nan_v_indices_array, axis=0),
-                         'y':np.delete(loaded_data[prefix + 'FEDO' + suffix]['y'], all_nan_v_indices_array, axis=0),
-                         'v':np.delete(v_array, all_nan_v_indices_array, 0)})
+            v_array = (loaded_data[prefix + 'FEDO' + suffix]['v'][:, 0, :] +
+                       loaded_data[prefix + 'FEDO' + suffix]['v'][:, 1, :]) / 2.
+            # change minus values to NaN
+            v_array = np.where(v_array < 0., np.nan, v_array)
+            all_nan_v_indices_array = np.where(
+                np.all(np.isnan(v_array), axis=1))[0]
+            store_data(prefix + 'FEDO' + suffix,
+                       data={'x': np.delete(loaded_data[prefix + 'FEDO' + suffix]['x'], all_nan_v_indices_array, axis=0),
+                             'y': np.delete(loaded_data[prefix + 'FEDO' + suffix]['y'], all_nan_v_indices_array, axis=0),
+                             'v': np.delete(v_array, all_nan_v_indices_array, 0)})
             tplot_variables.append(prefix + 'FEDO' + suffix)
 
             # set spectrogram plot option
             options(prefix + 'FEDO' + suffix, 'Spec', 1)
             # change minus values to NaN in y array
-            clip(prefix + 'FEDO' + suffix, 0., np.nanmax(loaded_data[prefix + 'FEDO' + suffix]['y']))
+            clip(prefix + 'FEDO' + suffix, 0.,
+                 np.nanmax(loaded_data[prefix + 'FEDO' + suffix]['y']))
 
             # set y axis to logscale
             options(prefix + 'FEDO' + suffix, 'ylog', 1)
@@ -156,7 +166,8 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
             ylim(prefix + 'FEDO' + suffix, 19, 21*1e3)
 
             # set ytitle
-            options(prefix + 'FEDO' + suffix, 'ytitle', 'ERG\nLEP-e\nFEDO\nEnergy')
+            options(prefix + 'FEDO' + suffix, 'ytitle',
+                    'ERG\nLEP-e\nFEDO\nEnergy')
 
             # set ysubtitle
             options(prefix + 'FEDO' + suffix, 'ysubtitle', '[eV]')
@@ -178,28 +189,31 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
         if (level == 'l2' and datatype == '3dflux'):
             tplot_variables = []
             other_variables_dict = {}
-            if prefix + 'FEDU' +suffix in loaded_data:
-                store_data(prefix + 'FEDU' +suffix, 
-                          data={'x':loaded_data[prefix + 'FEDU' +suffix]['x'],
-                                'y':loaded_data[prefix + 'FEDU' +suffix]['y'],
-                                'v1':np.sqrt(loaded_data[prefix + 'FEDU' +suffix]['v'][:,0,:]
-                                             *loaded_data[prefix + 'FEDU' +suffix]['v'][:,1,:]),# geometric mean
-                                'v2':['01', '02', '03', '04', '05', 'A', 'B', '18', '19', '20', '21', '22'],
-                                'v3':[i for i in range(16)]})
-                    
-                tplot_variables.append(prefix + 'FEDU' +suffix)
+            if prefix + 'FEDU' + suffix in loaded_data:
+                store_data(prefix + 'FEDU' + suffix,
+                           data={'x': loaded_data[prefix + 'FEDU' + suffix]['x'],
+                                 'y': loaded_data[prefix + 'FEDU' + suffix]['y'],
+                                 'v1': np.sqrt(loaded_data[prefix + 'FEDU' + suffix]['v'][:, 0, :]
+                                               * loaded_data[prefix + 'FEDU' + suffix]['v'][:, 1, :]),  # geometric mean
+                                 'v2': ['01', '02', '03', '04', '05', 'A', 'B', '18', '19', '20', '21', '22'],
+                                 'v3': [i for i in range(16)]})
 
-                options(prefix + 'FEDU' +suffix, 'spec', 1)
-                if prefix + 'FEDU' +suffix in tplot_variables:
-                    clip(prefix + 'FEDU' +suffix, 0, np.nanmax(loaded_data[prefix + 'FEDU' +suffix]['y']))
-                ylim(prefix + 'FEDU' +suffix, 19, 21*1e3)
-                zlim(prefix + 'FEDU' +suffix, 1, 1e6)
-                options(prefix + 'FEDU' +suffix, 'zlog', 1)
-                options(prefix + 'FEDU' +suffix, 'ylog', 1)
-                options(prefix + 'FEDU' +suffix, 'ysubtitle', '[eV]')
+                tplot_variables.append(prefix + 'FEDU' + suffix)
 
-                other_variables_dict[prefix + 'Count_Rate' +suffix] = loaded_data[prefix + 'Count_Rate' +suffix]
-                other_variables_dict[prefix + 'Count_Rate_BG' +suffix] = loaded_data[prefix + 'Count_Rate_BG' +suffix]
+                options(prefix + 'FEDU' + suffix, 'spec', 1)
+                if prefix + 'FEDU' + suffix in tplot_variables:
+                    clip(prefix + 'FEDU' + suffix, 0,
+                         np.nanmax(loaded_data[prefix + 'FEDU' + suffix]['y']))
+                ylim(prefix + 'FEDU' + suffix, 19, 21*1e3)
+                zlim(prefix + 'FEDU' + suffix, 1, 1e6)
+                options(prefix + 'FEDU' + suffix, 'zlog', 1)
+                options(prefix + 'FEDU' + suffix, 'ylog', 1)
+                options(prefix + 'FEDU' + suffix, 'ysubtitle', '[eV]')
+
+                other_variables_dict[prefix + 'Count_Rate' +
+                                     suffix] = loaded_data[prefix + 'Count_Rate' + suffix]
+                other_variables_dict[prefix + 'Count_Rate_BG' +
+                                     suffix] = loaded_data[prefix + 'Count_Rate_BG' + suffix]
 
                 tplot_variables.append(other_variables_dict)
 
@@ -208,70 +222,87 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
         if level == 'l3':
             tplot_variables = []
 
-            if prefix + 'FEDU' +suffix in loaded_data:
-                store_data(prefix + 'FEDU' +suffix, 
-                            data={'x':loaded_data[prefix + 'FEDU' +suffix]['x'],
-                                'y':loaded_data[prefix + 'FEDU' +suffix]['y'],
-                                'v1':(loaded_data[prefix + 'FEDU' +suffix]['v1'][:,0,:]
-                                        + loaded_data[prefix + 'FEDU' +suffix]['v1'][:,1,:]) / 2.,# arithmetic mean
-                                'v2':loaded_data[prefix + 'FEDU' +suffix]['v2']})
-                tplot_variables.append(prefix + 'FEDU' +suffix)
+            if prefix + 'FEDU' + suffix in loaded_data:
+                store_data(prefix + 'FEDU' + suffix,
+                           data={'x': loaded_data[prefix + 'FEDU' + suffix]['x'],
+                                 'y': loaded_data[prefix + 'FEDU' + suffix]['y'],
+                                 'v1': (loaded_data[prefix + 'FEDU' + suffix]['v1'][:, 0, :]
+                                        + loaded_data[prefix + 'FEDU' + suffix]['v1'][:, 1, :]) / 2.,  # arithmetic mean
+                                 'v2': loaded_data[prefix + 'FEDU' + suffix]['v2']})
+                tplot_variables.append(prefix + 'FEDU' + suffix)
 
-                options(prefix + 'FEDU' +suffix, 'spec', 1)
-                if prefix + 'FEDU' +suffix in tplot_variables:
-                    clip(prefix + 'FEDU' +suffix, 0, np.nanmax(loaded_data[prefix + 'FEDU' +suffix]['y']))
-                ylim(prefix + 'FEDU' +suffix, 19, 21*1e3)
-                zlim(prefix + 'FEDU' +suffix, 1, 1e6)
-                options(prefix + 'FEDU' +suffix, 'zlog', 1)
-                options(prefix + 'FEDU' +suffix, 'ylog', 1)
-                options(prefix + 'FEDU' +suffix, 'ysubtitle', '[eV]')
+                options(prefix + 'FEDU' + suffix, 'spec', 1)
+                if prefix + 'FEDU' + suffix in tplot_variables:
+                    clip(prefix + 'FEDU' + suffix, 0,
+                         np.nanmax(loaded_data[prefix + 'FEDU' + suffix]['y']))
+                ylim(prefix + 'FEDU' + suffix, 19, 21*1e3)
+                zlim(prefix + 'FEDU' + suffix, 1, 1e6)
+                options(prefix + 'FEDU' + suffix, 'zlog', 1)
+                options(prefix + 'FEDU' + suffix, 'ylog', 1)
+                options(prefix + 'FEDU' + suffix, 'ysubtitle', '[eV]')
 
-                FEDU_get_data  = get_data(prefix + 'FEDU' +suffix)
-
-                
+                FEDU_get_data = get_data(prefix + 'FEDU' + suffix)
 
                 if not only_fedu:
 
-                    ytitle_eV_array = np.round(np.nan_to_num(FEDU_get_data[2][0, :]), 2)
-                    for i in range(FEDU_get_data[1].shape[1]): # processing for erg_lepe_l3_pa_enech_??(??:01,01,..32)_FEDU
-                        tplot_name = prefix + 'enech_' + str(i + 1).zfill(2) +'_FEDU' + suffix
-                        store_data(tplot_name,data={'x':FEDU_get_data[0],
-                                                'y':FEDU_get_data[1][:,i,:],
-                                                    'v':FEDU_get_data[3]})
+                    ytitle_eV_array = np.round(
+                        np.nan_to_num(FEDU_get_data[2][0, :]), 2)
+                    # processing for erg_lepe_l3_pa_enech_??(??:01,01,..32)_FEDU
+                    for i in range(FEDU_get_data[1].shape[1]):
+                        tplot_name = prefix + 'enech_' + \
+                            str(i + 1).zfill(2) + '_FEDU' + suffix
+                        store_data(tplot_name, data={'x': FEDU_get_data[0],
+                                                     'y': FEDU_get_data[1][:, i, :],
+                                                     'v': FEDU_get_data[3]})
                         options(tplot_name, 'spec', 1)
                         ylim(tplot_name, 0, 180)
                         zlim(tplot_name, 1, 1e6)
-                        options(tplot_name, 'ytitle', 'ERG LEP-e\n' + str(ytitle_eV_array[i]) + ' eV\nPitch angle')
+                        options(tplot_name, 'ytitle', 'ERG LEP-e\n' +
+                                str(ytitle_eV_array[i]) + ' eV\nPitch angle')
                         tplot_variables.append(tplot_name)
-                    
+
                     options(tplot_variables[1:], 'zlog', 1)
                     options(tplot_variables[1:], 'ysubtitle', '[deg]')
-                    options(tplot_variables[1:], 'yrange', [0 , 180])
+                    options(tplot_variables[1:], 'yrange', [0, 180])
                     options(tplot_variables[1:], 'colormap', 'jet')
-                    options(tplot_variables[1:], 'ztitle', '[/s-cm^{2}-sr-keV/q]')
+                    options(tplot_variables[1:],
+                            'ztitle', '[/s-cm^{2}-sr-keV/q]')
 
                 if et_diagram:
-                    ytitle_deg_array = np.round(np.nan_to_num(FEDU_get_data[3]), 3)
-                    all_nan_v_indices_array = np.where(np.all(np.isnan(FEDU_get_data[2]), axis=1))[0]
-                    x_all_nan_deleted_array = np.delete(FEDU_get_data[0], all_nan_v_indices_array, axis=0)
-                    y_all_nan_deleted_array = np.delete(FEDU_get_data[1], all_nan_v_indices_array, axis=0)
-                    v_all_nan_deleted_array = np.delete(FEDU_get_data[2], all_nan_v_indices_array, axis=0)
-                    for i in range(FEDU_get_data[1].shape[2]): # processing for erg_lepe_l3_pa_pabin_??(??:01,01,..16)_FEDU
-                            tplot_name = prefix + 'pabin_' + str(i + 1).zfill(2) +'_FEDU' + suffix
-                            store_data(tplot_name,data={'x':x_all_nan_deleted_array,
-                                    'y':y_all_nan_deleted_array[:,:,i],
-                                    'v':v_all_nan_deleted_array})
-                            options(tplot_name, 'spec', 1)
-                            ylim(tplot_name,  19, 21*1e3)
-                            zlim(tplot_name, 1, 1e6)
-                            options(tplot_name, 'ytitle', 'ERG LEP-e\n' + str(ytitle_deg_array[i]) + ' deg\nEnergy')
-                            tplot_variables.append(tplot_name)
-                    
-                    options(tplot_variables[-FEDU_get_data[1].shape[2]:], 'ysubtitle', '[eV]')
-                    options(tplot_variables[-FEDU_get_data[1].shape[2]:], 'zlog', 1)
-                    options(tplot_variables[-FEDU_get_data[1].shape[2]:], 'ylog', 1)
-                    options(tplot_variables[-FEDU_get_data[1].shape[2]:], 'colormap', 'jet')
-                    options(tplot_variables[-FEDU_get_data[1].shape[2]:], 'ztitle', '[/s-cm^{2}-sr-eV]')
+                    ytitle_deg_array = np.round(
+                        np.nan_to_num(FEDU_get_data[3]), 3)
+                    all_nan_v_indices_array = np.where(
+                        np.all(np.isnan(FEDU_get_data[2]), axis=1))[0]
+                    x_all_nan_deleted_array = np.delete(
+                        FEDU_get_data[0], all_nan_v_indices_array, axis=0)
+                    y_all_nan_deleted_array = np.delete(
+                        FEDU_get_data[1], all_nan_v_indices_array, axis=0)
+                    v_all_nan_deleted_array = np.delete(
+                        FEDU_get_data[2], all_nan_v_indices_array, axis=0)
+                    # processing for erg_lepe_l3_pa_pabin_??(??:01,01,..16)_FEDU
+                    for i in range(FEDU_get_data[1].shape[2]):
+                        tplot_name = prefix + 'pabin_' + \
+                            str(i + 1).zfill(2) + '_FEDU' + suffix
+                        store_data(tplot_name, data={'x': x_all_nan_deleted_array,
+                                                     'y': y_all_nan_deleted_array[:, :, i],
+                                                     'v': v_all_nan_deleted_array})
+                        options(tplot_name, 'spec', 1)
+                        ylim(tplot_name,  19, 21*1e3)
+                        zlim(tplot_name, 1, 1e6)
+                        options(tplot_name, 'ytitle', 'ERG LEP-e\n' +
+                                str(ytitle_deg_array[i]) + ' deg\nEnergy')
+                        tplot_variables.append(tplot_name)
+
+                    options(
+                        tplot_variables[-FEDU_get_data[1].shape[2]:], 'ysubtitle', '[eV]')
+                    options(
+                        tplot_variables[-FEDU_get_data[1].shape[2]:], 'zlog', 1)
+                    options(
+                        tplot_variables[-FEDU_get_data[1].shape[2]:], 'ylog', 1)
+                    options(
+                        tplot_variables[-FEDU_get_data[1].shape[2]:], 'colormap', 'jet')
+                    options(
+                        tplot_variables[-FEDU_get_data[1].shape[2]:], 'ztitle', '[/s-cm^{2}-sr-eV]')
 
                 return tplot_variables
 

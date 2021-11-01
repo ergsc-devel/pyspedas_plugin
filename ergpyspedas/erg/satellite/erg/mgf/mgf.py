@@ -1,18 +1,20 @@
+import cdflib
 import numpy as np
+from pytplot import clip, get_data, options, ylim
+
 #from pyspedas.erg.load import load
 #from . import load
 #from .load import load
 #import load
 #from load import load
 from ..load import load
-from pytplot import options, clip, ylim, get_data
-import cdflib
+
 
 def mgf(trange=['2017-03-27', '2017-03-28'],
-        datatype='8sec', 
-        level='l2', 
-        suffix='',  
-        get_support_data=False, 
+        datatype='8sec',
+        level='l2',
+        suffix='',
+        get_support_data=False,
         varformat=None,
         varnames=[],
         downloadonly=False,
@@ -26,7 +28,7 @@ def mgf(trange=['2017-03-27', '2017-03-28'],
         version=None):
     """
     This function loads data from the MGF experiment from the Arase mission
-    
+
     Parameters:
         trange : list of str
             time range of interest [starttime, endtime] with the format 
@@ -90,26 +92,29 @@ def mgf(trange=['2017-03-27', '2017-03-28'],
 
     prefix = 'erg_mgf_'+level+'_'
     if datatype == '8sec':
-        file_res=3600. * 24
-        pathformat = 'satellite/erg/mgf/'+level+'/'+datatype+'/%Y/%m/erg_mgf_'+level+'_'+datatype+'_%Y%m%d_'
+        file_res = 3600. * 24
+        pathformat = 'satellite/erg/mgf/'+level+'/'+datatype + \
+            '/%Y/%m/erg_mgf_'+level+'_'+datatype+'_%Y%m%d_'
     else:
-        file_res=3600.
-        pathformat = 'satellite/erg/mgf/'+level+'/'+datatype+'/%Y/%m/erg_mgf_'+level+'_'+datatype+'_' +coord + '_%Y%m%d%H_'
+        file_res = 3600.
+        pathformat = 'satellite/erg/mgf/'+level+'/'+datatype + \
+            '/%Y/%m/erg_mgf_'+level+'_'+datatype+'_' + coord + '_%Y%m%d%H_'
 
     if version == None:
         pathformat += 'v??.??.cdf'
     else:
         pathformat += version + '.cdf'
 
-    loaded_data = load(pathformat=pathformat, file_res=file_res,trange=trange, level=level, datatype=datatype, prefix=prefix, suffix=suffix, get_support_data=get_support_data, varformat=varformat, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
-    
+    loaded_data = load(pathformat=pathformat, file_res=file_res, trange=trange, level=level, datatype=datatype, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
+                       varformat=varformat, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
+
     if loaded_data is None or loaded_data == [] or notplot or downloadonly:
         return loaded_data
 
     if len(loaded_data) > 0 and ror:
-    
-    
-        out_files = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype,file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd)
+
+        out_files = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype, file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
+                         varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd)
         cdf_file = cdflib.CDF(out_files[0])
         gatt = cdf_file.globalattsget()
 
@@ -128,8 +133,6 @@ def mgf(trange=['2017-03-27', '2017-03-28'],
         print('Contact: erg_mgf_info at isee.nagoya-u.ac.jp')
         print('**************************************************************************')
 
-
-
     if datatype == '8sec':
 
         # remove -1.0e+30
@@ -138,98 +141,137 @@ def mgf(trange=['2017-03-27', '2017-03-28'],
         clip(prefix + 'mag_'+datatype+'_gse'+suffix, -1e+6, 1e6)
         clip(prefix + 'mag_'+datatype+'_gsm'+suffix, -1e+6, 1e6)
         clip(prefix + 'mag_'+datatype+'_sm'+suffix, -1e+6, 1e6)
-        
+
         clip(prefix + 'magt_'+datatype+suffix, -1e+6, 1e6)
-        
-        clip(prefix + 'rmsd_'+datatype+'_dsi'+suffix,-1e+6, +1e+6)
+
+        clip(prefix + 'rmsd_'+datatype+'_dsi'+suffix, -1e+6, +1e+6)
         clip(prefix + 'rmsd_'+datatype+'_gse'+suffix, -1e+6, +1e+6)
         clip(prefix + 'rmsd_'+datatype+'_gsm'+suffix, -1e+6, +1e+6)
         clip(prefix + 'rmsd_'+datatype+'_sm'+suffix, -1e+6, +1e+6)
-        
+
         clip(prefix + 'rmsd_'+datatype+suffix, 0., 80.)
-        
+
         clip(prefix + 'dyn_rng_'+datatype+suffix, -120., +1e+6)
 
-        clip(prefix + 'igrf_'+datatype+'_dsi'+suffix,-1e+6, +1e+6)
+        clip(prefix + 'igrf_'+datatype+'_dsi'+suffix, -1e+6, +1e+6)
         clip(prefix + 'igrf_'+datatype+'_gse'+suffix, -1e+6, +1e+6)
         clip(prefix + 'igrf_'+datatype+'_gsm'+suffix, -1e+6, +1e+6)
         clip(prefix + 'igrf_'+datatype+'_sm'+suffix, -1e+6, +1e+6)
 
         # set yrange
         times, bdata = get_data(prefix + 'mag_'+datatype+'_dsi'+suffix)
-        ylim(prefix + 'mag_'+datatype+'_dsi'+suffix, np.nanmin(bdata), np.nanmax(bdata))
+        ylim(prefix + 'mag_'+datatype+'_dsi'+suffix,
+             np.nanmin(bdata), np.nanmax(bdata))
         times, bdata = get_data(prefix + 'mag_'+datatype+'_gse'+suffix)
-        ylim(prefix + 'mag_'+datatype+'_gse'+suffix, np.nanmin(bdata), np.nanmax(bdata))
+        ylim(prefix + 'mag_'+datatype+'_gse'+suffix,
+             np.nanmin(bdata), np.nanmax(bdata))
         times, bdata = get_data(prefix + 'mag_'+datatype+'_gsm'+suffix)
-        ylim(prefix + 'mag_'+datatype+'_gsm'+suffix, np.nanmin(bdata), np.nanmax(bdata))
+        ylim(prefix + 'mag_'+datatype+'_gsm'+suffix,
+             np.nanmin(bdata), np.nanmax(bdata))
         times, bdata = get_data(prefix + 'mag_'+datatype+'_sm'+suffix)
-        ylim(prefix + 'mag_'+datatype+'_sm'+suffix, np.nanmin(bdata), np.nanmax(bdata))
-        
+        ylim(prefix + 'mag_'+datatype+'_sm'+suffix,
+             np.nanmin(bdata), np.nanmax(bdata))
+
         times, bdata = get_data(prefix + 'magt_'+datatype+suffix)
-        ylim(prefix + 'magt_'+datatype+suffix, np.nanmin(bdata), np.nanmax(bdata))
-        
+        ylim(prefix + 'magt_'+datatype+suffix,
+             np.nanmin(bdata), np.nanmax(bdata))
+
         times, bdata = get_data(prefix + 'rmsd_'+datatype+suffix,)
-        ylim(prefix + 'rmsd_'+datatype+suffix, np.nanmin(bdata), np.nanmax(bdata))
-        
+        ylim(prefix + 'rmsd_'+datatype+suffix,
+             np.nanmin(bdata), np.nanmax(bdata))
+
         times, bdata = get_data(prefix + 'rmsd_'+datatype+'_dsi'+suffix)
-        ylim(prefix + 'rmsd_'+datatype+'_dsi'+suffix, np.nanmin(bdata), np.nanmax(bdata))
+        ylim(prefix + 'rmsd_'+datatype+'_dsi'+suffix,
+             np.nanmin(bdata), np.nanmax(bdata))
         times, bdata = get_data(prefix + 'rmsd_'+datatype+'_gse'+suffix)
-        ylim(prefix + 'rmsd_'+datatype+'_gse'+suffix, np.nanmin(bdata), np.nanmax(bdata))
+        ylim(prefix + 'rmsd_'+datatype+'_gse'+suffix,
+             np.nanmin(bdata), np.nanmax(bdata))
         times, bdata = get_data(prefix + 'rmsd_'+datatype+'_gsm'+suffix)
-        ylim(prefix + 'rmsd_'+datatype+'_gsm'+suffix, np.nanmin(bdata), np.nanmax(bdata))
+        ylim(prefix + 'rmsd_'+datatype+'_gsm'+suffix,
+             np.nanmin(bdata), np.nanmax(bdata))
         times, bdata = get_data(prefix + 'rmsd_'+datatype+'_sm'+suffix)
-        ylim(prefix + 'rmsd_'+datatype+'_sm'+suffix, np.nanmin(bdata), np.nanmax(bdata))
-        
+        ylim(prefix + 'rmsd_'+datatype+'_sm'+suffix,
+             np.nanmin(bdata), np.nanmax(bdata))
+
         times, bdata = get_data(prefix + 'rmsd_'+datatype+suffix)
-        ylim(prefix + 'rmsd_'+datatype+suffix, np.nanmin(bdata), np.nanmax(bdata))
-        
+        ylim(prefix + 'rmsd_'+datatype+suffix,
+             np.nanmin(bdata), np.nanmax(bdata))
+
         times, bdata = get_data(prefix + 'quality_'+datatype+suffix)
-        ylim(prefix + 'quality_'+datatype+suffix, np.nanmin(bdata), np.nanmax(bdata))
+        ylim(prefix + 'quality_'+datatype+suffix,
+             np.nanmin(bdata), np.nanmax(bdata))
         times, bdata = get_data(prefix + 'quality_'+datatype+'_gc'+suffix)
-        ylim(prefix + 'quality_'+datatype+'_gc'+suffix, np.nanmin(bdata), np.nanmax(bdata))
-        
+        ylim(prefix + 'quality_'+datatype+'_gc' +
+             suffix, np.nanmin(bdata), np.nanmax(bdata))
+
         # set labels
-        options(prefix + 'mag_'+datatype+'_dsi'+suffix, 'legend_names', ['Bx', 'By', 'Bz'])
-        options(prefix + 'mag_'+datatype+'_gse'+suffix, 'legend_names', ['Bx', 'By', 'Bz'])
-        options(prefix + 'mag_'+datatype+'_gsm'+suffix, 'legend_names', ['Bx', 'By', 'Bz'])
-        options(prefix + 'mag_'+datatype+'_sm'+suffix, 'legend_names', ['Bx', 'By', 'Bz'])
-        
-        options(prefix + 'rmsd_'+datatype+'_dsi'+suffix, 'legend_names', ['Bx', 'By', 'Bz'])
-        options(prefix + 'rmsd_'+datatype+'_gse'+suffix, 'legend_names', ['Bx', 'By', 'Bz'])
-        options(prefix + 'rmsd_'+datatype+'_gsm'+suffix, 'legend_names', ['Bx', 'By', 'Bz'])
-        options(prefix + 'rmsd_'+datatype+'_sm'+suffix, 'legend_names', ['Bx', 'By', 'Bz'])
-        
-        options(prefix + 'igrf_'+datatype+'_dsi'+suffix, 'legend_names', ['Bx', 'By', 'Bz'])
-        options(prefix + 'igrf_'+datatype+'_gse'+suffix, 'legend_names', ['Bx', 'By', 'Bz'])
-        options(prefix + 'igrf_'+datatype+'_gsm'+suffix, 'legend_names', ['Bx', 'By', 'Bz'])
-        options(prefix + 'igrf_'+datatype+'_sm'+suffix, 'legend_names', ['Bx', 'By', 'Bz'])
+        options(prefix + 'mag_'+datatype+'_dsi'+suffix,
+                'legend_names', ['Bx', 'By', 'Bz'])
+        options(prefix + 'mag_'+datatype+'_gse'+suffix,
+                'legend_names', ['Bx', 'By', 'Bz'])
+        options(prefix + 'mag_'+datatype+'_gsm'+suffix,
+                'legend_names', ['Bx', 'By', 'Bz'])
+        options(prefix + 'mag_'+datatype+'_sm'+suffix,
+                'legend_names', ['Bx', 'By', 'Bz'])
+
+        options(prefix + 'rmsd_'+datatype+'_dsi'+suffix,
+                'legend_names', ['Bx', 'By', 'Bz'])
+        options(prefix + 'rmsd_'+datatype+'_gse'+suffix,
+                'legend_names', ['Bx', 'By', 'Bz'])
+        options(prefix + 'rmsd_'+datatype+'_gsm'+suffix,
+                'legend_names', ['Bx', 'By', 'Bz'])
+        options(prefix + 'rmsd_'+datatype+'_sm'+suffix,
+                'legend_names', ['Bx', 'By', 'Bz'])
+
+        options(prefix + 'igrf_'+datatype+'_dsi'+suffix,
+                'legend_names', ['Bx', 'By', 'Bz'])
+        options(prefix + 'igrf_'+datatype+'_gse'+suffix,
+                'legend_names', ['Bx', 'By', 'Bz'])
+        options(prefix + 'igrf_'+datatype+'_gsm'+suffix,
+                'legend_names', ['Bx', 'By', 'Bz'])
+        options(prefix + 'igrf_'+datatype+'_sm'+suffix,
+                'legend_names', ['Bx', 'By', 'Bz'])
 
         # set color of the labels
-        options(prefix + 'mag_'+datatype+'_dsi'+suffix, 'Color', ['b', 'g', 'r'])
-        options(prefix + 'mag_'+datatype+'_gse'+suffix, 'Color', ['b', 'g', 'r'])
-        options(prefix + 'mag_'+datatype+'_gsm'+suffix, 'Color', ['b', 'g', 'r'])
-        options(prefix + 'mag_'+datatype+'_sm'+suffix, 'Color', ['b', 'g', 'r'])
-        
-        
-        options(prefix + 'rmsd_'+datatype+'_dsi'+suffix, 'Color', ['b', 'g', 'r'])
-        options(prefix + 'rmsd_'+datatype+'_gse'+suffix, 'Color', ['b', 'g', 'r'])
-        options(prefix + 'rmsd_'+datatype+'_gsm'+suffix, 'Color', ['b', 'g', 'r'])
-        options(prefix + 'rmsd_'+datatype+'_sm'+suffix, 'Color', ['b', 'g', 'r'])
-        
+        options(prefix + 'mag_'+datatype+'_dsi' +
+                suffix, 'Color', ['b', 'g', 'r'])
+        options(prefix + 'mag_'+datatype+'_gse' +
+                suffix, 'Color', ['b', 'g', 'r'])
+        options(prefix + 'mag_'+datatype+'_gsm' +
+                suffix, 'Color', ['b', 'g', 'r'])
+        options(prefix + 'mag_'+datatype+'_sm' +
+                suffix, 'Color', ['b', 'g', 'r'])
+
+        options(prefix + 'rmsd_'+datatype+'_dsi' +
+                suffix, 'Color', ['b', 'g', 'r'])
+        options(prefix + 'rmsd_'+datatype+'_gse' +
+                suffix, 'Color', ['b', 'g', 'r'])
+        options(prefix + 'rmsd_'+datatype+'_gsm' +
+                suffix, 'Color', ['b', 'g', 'r'])
+        options(prefix + 'rmsd_'+datatype+'_sm' +
+                suffix, 'Color', ['b', 'g', 'r'])
+
         options(prefix + 'quality_'+datatype+suffix, 'Color', ['r', 'g', 'b'])
-        
-        options(prefix + 'igrf_'+datatype+'_dsi'+suffix, 'Color', ['b', 'g', 'r'])
-        options(prefix + 'igrf_'+datatype+'_gse'+suffix, 'Color', ['b', 'g', 'r'])
-        options(prefix + 'igrf_'+datatype+'_gsm'+suffix, 'Color', ['b', 'g', 'r'])
-        options(prefix + 'igrf_'+datatype+'_sm'+suffix, 'Color', ['b', 'g', 'r'])
+
+        options(prefix + 'igrf_'+datatype+'_dsi' +
+                suffix, 'Color', ['b', 'g', 'r'])
+        options(prefix + 'igrf_'+datatype+'_gse' +
+                suffix, 'Color', ['b', 'g', 'r'])
+        options(prefix + 'igrf_'+datatype+'_gsm' +
+                suffix, 'Color', ['b', 'g', 'r'])
+        options(prefix + 'igrf_'+datatype+'_sm' +
+                suffix, 'Color', ['b', 'g', 'r'])
     else:
         # remove -1.0e+30
-        clip(prefix + 'mag_'+datatype+'_' + coord +suffix, -1e+6, 1e6)
+        clip(prefix + 'mag_'+datatype+'_' + coord + suffix, -1e+6, 1e6)
         # set yrange
-        times, bdata = get_data(prefix + 'mag_'+datatype+'_' + coord +suffix)
-        ylim(prefix + 'mag_'+datatype+'_' + coord +suffix, np.nanmin(bdata), np.nanmax(bdata))
+        times, bdata = get_data(prefix + 'mag_'+datatype+'_' + coord + suffix)
+        ylim(prefix + 'mag_'+datatype+'_' + coord +
+             suffix, np.nanmin(bdata), np.nanmax(bdata))
         # set labels
-        options(prefix + 'mag_'+datatype+'_' + coord +suffix, 'legend_names', ['Bx', 'By', 'Bz'])
+        options(prefix + 'mag_'+datatype+'_' + coord +
+                suffix, 'legend_names', ['Bx', 'By', 'Bz'])
         # set color of the labels
-        options(prefix + 'mag_'+datatype+'_' + coord +suffix, 'Color', ['b', 'g', 'r'])
+        options(prefix + 'mag_'+datatype+'_' + coord +
+                suffix, 'Color', ['b', 'g', 'r'])
     return loaded_data

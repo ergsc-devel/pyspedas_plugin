@@ -1,29 +1,31 @@
 
 #from pyspedas.erg.load import load
 #from load import load
-from ..load import load
-import numpy as np
-from pytplot import options, clip, ylim, zlim, store_data, get_data
 import cdflib
+import numpy as np
+from pytplot import clip, get_data, options, store_data, ylim, zlim
+
+from ..load import load
+
 
 def lepi(trange=['2017-07-01', '2017-07-02'],
-        datatype='omniflux', 
-        level='l2', 
-        suffix='',  
-        get_support_data=False, 
-        varformat=None,
-        varnames=[],
-        downloadonly=False,
-        notplot=False,
-        no_update=False,
-        uname=None,
-        passwd=None,
-        time_clip=False,
-        ror=True,
-        version=None):
+         datatype='omniflux',
+         level='l2',
+         suffix='',
+         get_support_data=False,
+         varformat=None,
+         varnames=[],
+         downloadonly=False,
+         notplot=False,
+         no_update=False,
+         uname=None,
+         passwd=None,
+         time_clip=False,
+         ror=True,
+         version=None):
     """
     This function loads data from the LEP-i experiment from the Arase mission
-    
+
     Parameters:
         trange : list of str
             time range of interest [starttime, endtime] with the format 
@@ -81,22 +83,23 @@ def lepi(trange=['2017-07-01', '2017-07-02'],
     if level == 'l3':
         datatype = 'pa'
 
-    file_res=3600. * 24
+    file_res = 3600. * 24
     prefix = 'erg_lepi_'+level+'_' + datatype + '_'
 
-    pathformat = 'satellite/erg/lepi/'+level+'/'+datatype+'/%Y/%m/erg_lepi_'+level+'_'+datatype+'_%Y%m%d_'
+    pathformat = 'satellite/erg/lepi/'+level+'/'+datatype + \
+        '/%Y/%m/erg_lepi_'+level+'_'+datatype+'_%Y%m%d_'
     if version == None:
         pathformat += 'v??_??.cdf'
     else:
         pathformat += version + '.cdf'
 
-    loaded_data = load(pathformat=pathformat, trange=trange, file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
-
+    loaded_data = load(pathformat=pathformat, trange=trange, file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
+                       varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
 
     if len(loaded_data) > 0 and ror:
 
-    
-        out_files = load(pathformat=pathformat, trange=trange,file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd)
+        out_files = load(pathformat=pathformat, trange=trange, file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
+                         varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd)
         cdf_file = cdflib.CDF(out_files[0])
         gatt = cdf_file.globalattsget()
 
@@ -118,49 +121,49 @@ def lepi(trange=['2017-07-01', '2017-07-02'],
         print('Contact: erg_lepi_info at isee.nagoya-u.ac.jp')
         print('**************************************************************************')
 
-
-
     if datatype == 'omniflux' and level == 'l2':
         tplot_variables = []
 
         if prefix + 'FPDO' + suffix in loaded_data:
-            store_data(prefix + 'FPDO' + suffix,newname=prefix + 'FPDO_raw' + suffix)
+            store_data(prefix + 'FPDO' + suffix,
+                       newname=prefix + 'FPDO_raw' + suffix)
             loaded_data.append(prefix + 'FPDO_raw' + suffix)
             get_data_vars = get_data(prefix + 'FPDO_raw' + suffix)
-            flag_FPDO = store_data(prefix + 'FPDO' + suffix, data={'x':get_data_vars[0],
-                                                                    'y':get_data_vars[1][:,:-2],
-                                                                    'v':get_data_vars[2][:-2]})
+            flag_FPDO = store_data(prefix + 'FPDO' + suffix, data={'x': get_data_vars[0],
+                                                                   'y': get_data_vars[1][:, :-2],
+                                                                   'v': get_data_vars[2][:-2]})
             tplot_variables.append(prefix + 'FPDO' + suffix)
 
-
         if prefix + 'FHEDO' + suffix in loaded_data:
-            store_data(prefix + 'FHEDO' + suffix,newname=prefix + 'FHEDO_raw' + suffix)
+            store_data(prefix + 'FHEDO' + suffix,
+                       newname=prefix + 'FHEDO_raw' + suffix)
             loaded_data.append(prefix + 'FHEDO_raw' + suffix)
             get_data_vars = get_data(prefix + 'FHEDO_raw' + suffix)
-            store_data(prefix + 'FHEDO' + suffix, data={'x':get_data_vars[0],
-                                                        'y':get_data_vars[1][:,:-2],
-                                                        'v':get_data_vars[2][:-2]})
+            store_data(prefix + 'FHEDO' + suffix, data={'x': get_data_vars[0],
+                                                        'y': get_data_vars[1][:, :-2],
+                                                        'v': get_data_vars[2][:-2]})
             tplot_variables.append(prefix + 'FHEDO' + suffix)
 
         if prefix + 'FODO' + suffix in loaded_data:
-            store_data(prefix + 'FODO' + suffix,newname=prefix + 'FODO_raw' + suffix)
+            store_data(prefix + 'FODO' + suffix,
+                       newname=prefix + 'FODO_raw' + suffix)
             loaded_data.append(prefix + 'FODO_raw' + suffix)
             get_data_vars = get_data(prefix + 'FODO_raw' + suffix)
-            store_data(prefix + 'FODO' + suffix, data={'x':get_data_vars[0],
-                                                        'y':get_data_vars[1][:,:-2],
-                                                        'v':get_data_vars[2][:-2]})
+            store_data(prefix + 'FODO' + suffix, data={'x': get_data_vars[0],
+                                                       'y': get_data_vars[1][:, :-2],
+                                                       'v': get_data_vars[2][:-2]})
             tplot_variables.append(prefix + 'FODO' + suffix)
 
         # remove minus valuse of y array
         if flag_FPDO:
             clip(prefix + 'FPDO' + suffix, 0., 2.e+16)
-        
+
         # set ytitle
         options(tplot_variables, 'ytitle', 'LEPi\nomniflux\nLv2\nEnergy')
 
         # set ysubtitle
         options(tplot_variables, 'ysubtitle', '[keV/q]')
-        
+
         # set spectrogram plot option
         options(tplot_variables, 'Spec', 1)
 
@@ -211,20 +214,22 @@ def lepi(trange=['2017-07-01', '2017-07-02'],
             options(prefix + 'FPDU' + suffix, 'spec', 1)
             ytitle_keV_array = np.round(np.nan_to_num(get_data_vars[2]), 2)
             for i in range(get_data_vars[1].shape[1]):
-                tplot_name = prefix + 'pabin_' + str(i).zfill(2) + '_FPDU' + suffix
-                store_data(tplot_name, data={'x':get_data_vars[0],
-                                            'y':get_data_vars[1][:,i,:],
-                                            'v':get_data_vars[3]})
+                tplot_name = prefix + 'pabin_' + \
+                    str(i).zfill(2) + '_FPDU' + suffix
+                store_data(tplot_name, data={'x': get_data_vars[0],
+                                             'y': get_data_vars[1][:, i, :],
+                                             'v': get_data_vars[3]})
                 options(tplot_name, 'spec', 1)
                 ylim(tplot_name, 0, 180)
                 zlim(tplot_name, 1e2, 1e5)
-                options(tplot_name, 'ytitle', 'ERG LEP-i P\n' + str(ytitle_keV_array[i]) + ' keV\nPitch angle')
+                options(tplot_name, 'ytitle', 'ERG LEP-i P\n' +
+                        str(ytitle_keV_array[i]) + ' keV\nPitch angle')
                 tplot_variables.append(tplot_name)
 
             loaded_data += tplot_variables[1:]
 
-        tplot_variables_length=len(tplot_variables)
-        
+        tplot_variables_length = len(tplot_variables)
+
         if prefix + 'FHEDU' + suffix in loaded_data:
             tplot_variables.append(prefix + 'FHEDU' + suffix)
             get_data_vars = get_data(prefix + 'FHEDU' + suffix)
@@ -233,20 +238,22 @@ def lepi(trange=['2017-07-01', '2017-07-02'],
             zlim(prefix + 'FHEDU' + suffix, 1e2, 1e5)
             ytitle_keV_array = np.round(np.nan_to_num(get_data_vars[2]), 2)
             for i in range(get_data_vars[1].shape[1]):
-                tplot_name = prefix + 'pabin_' + str(i).zfill(2) + '_FHEDU' + suffix
-                store_data(tplot_name, data={'x':get_data_vars[0],
-                                            'y':get_data_vars[1][:,i,:],
-                                            'v':get_data_vars[3]})
+                tplot_name = prefix + 'pabin_' + \
+                    str(i).zfill(2) + '_FHEDU' + suffix
+                store_data(tplot_name, data={'x': get_data_vars[0],
+                                             'y': get_data_vars[1][:, i, :],
+                                             'v': get_data_vars[3]})
                 options(tplot_name, 'spec', 1)
                 ylim(tplot_name, 0, 180)
                 zlim(tplot_name, 1e2, 1e5)
-                options(tplot_name, 'ytitle', 'ERG LEP-i P\n' + str(ytitle_keV_array[i]) + ' keV\nPitch angle')
+                options(tplot_name, 'ytitle', 'ERG LEP-i P\n' +
+                        str(ytitle_keV_array[i]) + ' keV\nPitch angle')
                 tplot_variables.append(tplot_name)
 
             loaded_data += tplot_variables[tplot_variables_length + 1:]
 
-        tplot_variables_length=len(tplot_variables)
-        
+        tplot_variables_length = len(tplot_variables)
+
         if prefix + 'FODU' + suffix in loaded_data:
             tplot_variables.append(prefix + 'FODU' + suffix)
             get_data_vars = get_data(prefix + 'FODU' + suffix)
@@ -255,14 +262,16 @@ def lepi(trange=['2017-07-01', '2017-07-02'],
             zlim(prefix + 'FODU' + suffix, 1e2, 1e5)
             ytitle_keV_array = np.round(np.nan_to_num(get_data_vars[2]), 2)
             for i in range(get_data_vars[1].shape[1]):
-                tplot_name = prefix + 'pabin_' + str(i).zfill(2) + '_FODU' + suffix
-                store_data(tplot_name, data={'x':get_data_vars[0],
-                                            'y':get_data_vars[1][:,i,:],
-                                            'v':get_data_vars[3]})
+                tplot_name = prefix + 'pabin_' + \
+                    str(i).zfill(2) + '_FODU' + suffix
+                store_data(tplot_name, data={'x': get_data_vars[0],
+                                             'y': get_data_vars[1][:, i, :],
+                                             'v': get_data_vars[3]})
                 options(tplot_name, 'spec', 1)
                 ylim(tplot_name, 0, 180)
                 zlim(tplot_name, 1e2, 1e5)
-                options(tplot_name, 'ytitle', 'ERG LEP-i P\n' + str(ytitle_keV_array[i]) + ' keV\nPitch angle')
+                options(tplot_name, 'ytitle', 'ERG LEP-i P\n' +
+                        str(ytitle_keV_array[i]) + ' keV\nPitch angle')
                 tplot_variables.append(tplot_name)
 
             loaded_data += tplot_variables[tplot_variables_length + 1:]
@@ -271,10 +280,5 @@ def lepi(trange=['2017-07-01', '2017-07-02'],
         options(tplot_variables, 'ysubtitle', 'PA [deg]')
         options(tplot_variables, 'colormap', 'jet')
         options(tplot_variables, 'ztitle', '[/s-cm^{2}-sr-keV/q]')
-
-
-
-            
-
 
     return loaded_data

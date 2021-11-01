@@ -1,17 +1,19 @@
 
 #from pyspedas.erg.load import load
 #from load import load
-from ..load import load
-from pytplot import get_data, options, clip, ylim
 import cdflib
 import numpy as np
+from pytplot import clip, get_data, options, ylim
+
+from ..load import load
+
 
 def orb(trange=['2017-03-27', '2017-03-28'],
         datatype='def',
         level='l2',
         model="op",
-        suffix='',  
-        get_support_data=False, 
+        suffix='',
+        get_support_data=False,
         varformat=None,
         varnames=[],
         downloadonly=False,
@@ -23,7 +25,7 @@ def orb(trange=['2017-03-27', '2017-03-28'],
         version=None):
     """
     This function loads orbit data from the Arase mission
-    
+
     Parameters:
         trange : list of str
             time range of interest [starttime, endtime] with the format 
@@ -73,34 +75,38 @@ def orb(trange=['2017-03-27', '2017-03-28'],
         List of tplot variables created.
 
     """
-    file_res=3600. * 24
-
+    file_res = 3600. * 24
 
     prefix = 'erg_orb_'+level+'_'
 
-    if datatype in [ "pre", "spre", "mpre", "lpre"] and level == 'l2':
-        prefix = 'erg_orb_'+datatype+'_'+ level+'_'
+    if datatype in ["pre", "spre", "mpre", "lpre"] and level == 'l2':
+        prefix = 'erg_orb_'+datatype+'_' + level+'_'
 
     if level == 'l3':
         if model == 'op':
-            pathformat = 'satellite/erg/orb/'+level+'/opq/%Y/%m/erg_orb_'+level+'_op_%Y%m%d_'
+            pathformat = 'satellite/erg/orb/'+level + \
+                '/opq/%Y/%m/erg_orb_'+level+'_op_%Y%m%d_'
         else:
-            pathformat = 'satellite/erg/orb/'+level+'/'+model+'/%Y/%m/erg_orb_'+level+'_'+model+'_%Y%m%d_'
+            pathformat = 'satellite/erg/orb/'+level+'/'+model + \
+                '/%Y/%m/erg_orb_'+level+'_'+model+'_%Y%m%d_'
     elif level == 'l2':
         if datatype == 'def':
-            pathformat = 'satellite/erg/orb/'+ datatype +'/%Y/erg_orb_'+level+'_%Y%m%d_'
+            pathformat = 'satellite/erg/orb/' + datatype + '/%Y/erg_orb_'+level+'_%Y%m%d_'
         else:
-            pathformat = 'satellite/erg/orb/'+ datatype +'/%Y/erg_orb_'+ datatype + '_'+level+'_%Y%m%d_'
+            pathformat = 'satellite/erg/orb/' + datatype + \
+                '/%Y/erg_orb_' + datatype + '_'+level+'_%Y%m%d_'
     if version == None:
         pathformat += 'v??.cdf'
     else:
         pathformat += version + '.cdf'
 
-    loaded_data = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype,file_res=file_res, prefix=prefix,suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd, version=version)
+    loaded_data = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype, file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
+                       varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd, version=version)
 
     if len(loaded_data) > 0:
-    
-        out_files = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype,file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd,version=version)
+
+        out_files = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype, file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
+                         varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd, version=version)
         cdf_file = cdflib.CDF(out_files[0])
         try:
             gatt = cdf_file.globalattsget()
@@ -112,22 +118,23 @@ def orb(trange=['2017-03-27', '2017-03-28'],
             # --- print PI info and rules of the road
 
             print(' ')
-            print('**************************************************************************')
+            print(
+                '**************************************************************************')
             print(gatt["LOGICAL_SOURCE_DESCRIPTION"])
             print('')
             #print('Information about ERG L3 orbit')
             print('Information about ERG orbit')
             print('')
-            #print('PI: ', gatt['PI_NAME']) # not need?
-            #print("Affiliation: "+gatt["PI_AFFILIATION"]) # not need?
+            # print('PI: ', gatt['PI_NAME']) # not need?
+            # print("Affiliation: "+gatt["PI_AFFILIATION"]) # not need?
             print('')
             print('RoR of ERG project common: https://ergsc.isee.nagoya-u.ac.jp/data_info/rules_of_the_road.shtml.en')
             print('')
             print('Contact: erg-sc-core at isee.nagoya-u.ac.jp')
-            print('**************************************************************************')
+            print(
+                '**************************************************************************')
 
-
-    if level == 'l2' and datatype=='def':
+    if level == 'l2' and datatype == 'def':
 
         # remove -1.0e+30
         if prefix + 'pos_Lm' + suffix in loaded_data:
@@ -135,31 +142,39 @@ def orb(trange=['2017-03-27', '2017-03-28'],
             times, bdata = get_data(prefix + 'pos_Lm' + suffix)
             ylim(prefix + 'pos_Lm' + suffix, np.nanmin(bdata), np.nanmax(bdata))
 
-
         # set labels
-        options(prefix + 'pos_gse' + suffix, 'legend_names', ['X','Y','Z'])
-        options(prefix + 'pos_gsm' + suffix, 'legend_names', ['X','Y','Z'])
-        options(prefix + 'pos_sm' + suffix, 'legend_names', ['X','Y','Z'])
+        options(prefix + 'pos_gse' + suffix, 'legend_names', ['X', 'Y', 'Z'])
+        options(prefix + 'pos_gsm' + suffix, 'legend_names', ['X', 'Y', 'Z'])
+        options(prefix + 'pos_sm' + suffix, 'legend_names', ['X', 'Y', 'Z'])
 
-        options(prefix + 'pos_rmlatmlt' + suffix, 'legend_names', ['Re','MLAT','MLT'])
+        options(prefix + 'pos_rmlatmlt' + suffix,
+                'legend_names', ['Re', 'MLAT', 'MLT'])
 
-        options(prefix + 'pos_eq' + suffix, 'legend_names', ['Req','MLT'])
+        options(prefix + 'pos_eq' + suffix, 'legend_names', ['Req', 'MLT'])
 
-        options(prefix + 'pos_iono_north' + suffix, 'legend_names', ['GLAT','GLON'])
-        options(prefix + 'pos_iono_south' + suffix, 'legend_names', ['GLAT','GLON'])
+        options(prefix + 'pos_iono_north' + suffix,
+                'legend_names', ['GLAT', 'GLON'])
+        options(prefix + 'pos_iono_south' + suffix,
+                'legend_names', ['GLAT', 'GLON'])
 
-        options(prefix + 'pos_blocal' + suffix, 'legend_names', ['X','Y','Z'])
+        options(prefix + 'pos_blocal' + suffix,
+                'legend_names', ['X', 'Y', 'Z'])
 
-        options(prefix + 'pos_blocal_mag' + suffix, 'legend_names', ['B(model)_at_ERG'])
-        #options(prefix + 'pos_blocal_mag' + suffix, 'legend_names', ['B(model)\n_at_ERG']) # Can't break?
+        options(prefix + 'pos_blocal_mag' + suffix,
+                'legend_names', ['B(model)_at_ERG'])
+        # options(prefix + 'pos_blocal_mag' + suffix, 'legend_names', ['B(model)\n_at_ERG']) # Can't break?
 
-        options(prefix + 'pos_beq' + suffix, 'legend_names', ['X','Y','Z'])
+        options(prefix + 'pos_beq' + suffix, 'legend_names', ['X', 'Y', 'Z'])
 
-        options(prefix + 'pos_Lm' + suffix, 'legend_names', ['90deg','60deg','30deg'])
+        options(prefix + 'pos_Lm' + suffix, 'legend_names',
+                ['90deg', '60deg', '30deg'])
 
-        options(prefix + 'vel_gse' + suffix, 'legend_names', ['X[km/s]','Y[km/s]','Z[km/s]'])
-        options(prefix + 'vel_gsm' + suffix, 'legend_names', ['X[km/s]','Y[km/s]','Z[km/s]'])
-        options(prefix + 'vel_sm' + suffix, 'legend_names', ['X[km/s]','Y[km/s]','Z[km/s]'])
+        options(prefix + 'vel_gse' + suffix, 'legend_names',
+                ['X[km/s]', 'Y[km/s]', 'Z[km/s]'])
+        options(prefix + 'vel_gsm' + suffix, 'legend_names',
+                ['X[km/s]', 'Y[km/s]', 'Z[km/s]'])
+        options(prefix + 'vel_sm' + suffix, 'legend_names',
+                ['X[km/s]', 'Y[km/s]', 'Z[km/s]'])
 
         # set color
         options(prefix + 'pos_gse' + suffix, 'Color', ['b', 'g', 'r'])
@@ -182,32 +197,41 @@ def orb(trange=['2017-03-27', '2017-03-28'],
         options(prefix + 'pos_blocal_mag' + suffix, 'ylog', 1)
 
         options(prefix + 'pos_beq' + suffix, 'ylog', 1)
-    
-    elif datatype in [ "pre", "spre", "mpre", "lpre"] and level == 'l2':
-        
+
+    elif datatype in ["pre", "spre", "mpre", "lpre"] and level == 'l2':
+
         # set labels
-        options(prefix + 'pos_gse' + suffix, 'legend_names', ['X','Y','Z'])
-        options(prefix + 'pos_gsm' + suffix, 'legend_names', ['X','Y','Z'])
-        options(prefix + 'pos_sm' + suffix, 'legend_names', ['X','Y','Z'])
+        options(prefix + 'pos_gse' + suffix, 'legend_names', ['X', 'Y', 'Z'])
+        options(prefix + 'pos_gsm' + suffix, 'legend_names', ['X', 'Y', 'Z'])
+        options(prefix + 'pos_sm' + suffix, 'legend_names', ['X', 'Y', 'Z'])
 
-        options(prefix + 'pos_rmlatmlt' + suffix, 'legend_names', ['Re','MLAT','MLT'])
+        options(prefix + 'pos_rmlatmlt' + suffix,
+                'legend_names', ['Re', 'MLAT', 'MLT'])
 
-        options(prefix + 'pos_eq' + suffix, 'legend_names', ['Req','MLT'])
+        options(prefix + 'pos_eq' + suffix, 'legend_names', ['Req', 'MLT'])
 
-        options(prefix + 'pos_iono_north' + suffix, 'legend_names', ['GLAT','GLON'])
-        options(prefix + 'pos_iono_south' + suffix, 'legend_names', ['GLAT','GLON'])
+        options(prefix + 'pos_iono_north' + suffix,
+                'legend_names', ['GLAT', 'GLON'])
+        options(prefix + 'pos_iono_south' + suffix,
+                'legend_names', ['GLAT', 'GLON'])
 
-        options(prefix + 'pos_blocal' + suffix, 'legend_names', ['X','Y','Z'])
+        options(prefix + 'pos_blocal' + suffix,
+                'legend_names', ['X', 'Y', 'Z'])
 
-        options(prefix + 'pos_blocal_mag' + suffix, 'legend_names', 'B(' +datatype + ')\n_at ERG')
+        options(prefix + 'pos_blocal_mag' + suffix,
+                'legend_names', 'B(' + datatype + ')\n_at ERG')
 
-        options(prefix + 'pos_beq' + suffix, 'legend_names', ['X','Y','Z'])
+        options(prefix + 'pos_beq' + suffix, 'legend_names', ['X', 'Y', 'Z'])
 
-        options(prefix + 'pos_Lm' + suffix, 'legend_names', ['90deg','60deg','30deg'])
+        options(prefix + 'pos_Lm' + suffix, 'legend_names',
+                ['90deg', '60deg', '30deg'])
 
-        options(prefix + 'vel_gse' + suffix, 'legend_names', ['X[km/s]','Y[km/s]','Z[km/s]'])
-        options(prefix + 'vel_gsm' + suffix, 'legend_names', ['X[km/s]','Y[km/s]','Z[km/s]'])
-        options(prefix + 'vel_sm' + suffix, 'legend_names', ['X[km/s]','Y[km/s]','Z[km/s]'])
+        options(prefix + 'vel_gse' + suffix, 'legend_names',
+                ['X[km/s]', 'Y[km/s]', 'Z[km/s]'])
+        options(prefix + 'vel_gsm' + suffix, 'legend_names',
+                ['X[km/s]', 'Y[km/s]', 'Z[km/s]'])
+        options(prefix + 'vel_sm' + suffix, 'legend_names',
+                ['X[km/s]', 'Y[km/s]', 'Z[km/s]'])
 
         # set color
         options(prefix + 'pos_gse' + suffix, 'Color', ['b', 'g', 'r'])
@@ -215,7 +239,7 @@ def orb(trange=['2017-03-27', '2017-03-28'],
         options(prefix + 'pos_sm' + suffix, 'Color', ['b', 'g', 'r'])
 
         options(prefix + 'pos_rmlatmlt' + suffix, 'Color', ['b', 'g', 'r'])
-        
+
         options(prefix + 'pos_blocal' + suffix, 'Color', ['b', 'g', 'r'])
 
         options(prefix + 'pos_beq' + suffix, 'Color', ['b', 'g', 'r'])
@@ -229,7 +253,6 @@ def orb(trange=['2017-03-27', '2017-03-28'],
         # set y axis to logscale
         options(prefix + 'pos_blocal_mag' + suffix, 'ylog', 1)
         options(prefix + 'pos_beq' + suffix, 'ylog', 1)
-
 
     elif level == 'l3':
 
@@ -242,43 +265,62 @@ def orb(trange=['2017-03-27', '2017-03-28'],
                     times, bdata = get_data(loaded_data[i])
                     ylim(loaded_data[i], np.nanmin(bdata), np.nanmax(bdata))
 
-        if model in ["op", "t89","ts04"]:
+        if model in ["op", "t89", "ts04"]:
 
             if model == "ts04":
                 model = model.upper()
-        
+
             # set ytitle
-            options(prefix + 'pos_lmc_' + model + suffix, 'ytitle', f'Lmc ({model})')
-            options(prefix + 'pos_lstar_' + model + suffix, 'ytitle', f'Lstar ({model})')
-            options(prefix + 'pos_I_' + model + suffix, 'ytitle', f'I ({model})')
-            options(prefix + 'pos_blocal_' + model + suffix, 'ytitle', f'Blocal ({model})')
-            options(prefix + 'pos_beq_' + model + suffix, 'ytitle', f'Beq ({model})')
-            options(prefix + 'pos_eq_' + model + suffix, 'ytitle', f'Eq_pos ({model})')
-            options(prefix + 'pos_iono_north_' + model + suffix, 'ytitle', f'footprint_north ({model})')
-            options(prefix + 'pos_iono_south_' + model + suffix, 'ytitle', f'footprint_south ({model})')
+            options(prefix + 'pos_lmc_' + model +
+                    suffix, 'ytitle', f'Lmc ({model})')
+            options(prefix + 'pos_lstar_' + model +
+                    suffix, 'ytitle', f'Lstar ({model})')
+            options(prefix + 'pos_I_' + model +
+                    suffix, 'ytitle', f'I ({model})')
+            options(prefix + 'pos_blocal_' + model +
+                    suffix, 'ytitle', f'Blocal ({model})')
+            options(prefix + 'pos_beq_' + model +
+                    suffix, 'ytitle', f'Beq ({model})')
+            options(prefix + 'pos_eq_' + model + suffix,
+                    'ytitle', f'Eq_pos ({model})')
+            options(prefix + 'pos_iono_north_' + model + suffix,
+                    'ytitle', f'footprint_north ({model})')
+            options(prefix + 'pos_iono_south_' + model + suffix,
+                    'ytitle', f'footprint_south ({model})')
 
             # set ysubtitle
-            options(prefix + 'pos_lmc_' + model + suffix, 'ysubtitle', '[dimensionless]')
-            options(prefix + 'pos_lstar_' + model + suffix, 'ysubtitle', '[dimensionless]')
+            options(prefix + 'pos_lmc_' + model + suffix,
+                    'ysubtitle', '[dimensionless]')
+            options(prefix + 'pos_lstar_' + model +
+                    suffix, 'ysubtitle', '[dimensionless]')
             options(prefix + 'pos_I_' + model + suffix, 'ysubtitle', '[Re]')
-            options(prefix + 'pos_blocal_' + model + suffix, 'ysubtitle', '[nT]')
+            options(prefix + 'pos_blocal_' + model +
+                    suffix, 'ysubtitle', '[nT]')
             options(prefix + 'pos_beq_' + model + suffix, 'ysubtitle', '[nT]')
-            options(prefix + 'pos_eq_' + model + suffix, 'ysubtitle', '[Re Hour]')
-            options(prefix + 'pos_iono_north_' + model + suffix, 'ysubtitle', '[deg. deg.]')
-            options(prefix + 'pos_iono_south_' + model + suffix, 'ysubtitle', '[deg. deg.]')
+            options(prefix + 'pos_eq_' + model +
+                    suffix, 'ysubtitle', '[Re Hour]')
+            options(prefix + 'pos_iono_north_' + model +
+                    suffix, 'ysubtitle', '[deg. deg.]')
+            options(prefix + 'pos_iono_south_' + model +
+                    suffix, 'ysubtitle', '[deg. deg.]')
 
             # set ylabels
-            options(prefix + 'pos_lmc_' + model + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg',
-                                                                        '40deg','30deg','20deg','10deg'])
-            options(prefix + 'pos_lstar_' + model + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg',
-                                                                        '40deg','30deg','20deg','10deg'])
-            options(prefix + 'pos_I_' + model + suffix, 'legend_names', ['90deg','80deg','70deg','60deg','50deg',
-                                                                        '40deg','30deg','20deg','10deg'])
-            options(prefix + 'pos_blocal_' + model + suffix, 'legend_names', '|B|')
-            options(prefix + 'pos_beq_' + model + suffix, 'legend_names', '|B|')
-            options(prefix + 'pos_eq_' + model + suffix, 'legend_names', ['Re','MLT'])
-            options(prefix + 'pos_iono_north_' + model + suffix, 'legend_names', ['GLAT','GLON'])
-            options(prefix + 'pos_iono_south_' + model + suffix, 'legend_names', ['GLAT','GLON'])
+            options(prefix + 'pos_lmc_' + model + suffix, 'legend_names', ['90deg', '80deg', '70deg', '60deg', '50deg',
+                                                                           '40deg', '30deg', '20deg', '10deg'])
+            options(prefix + 'pos_lstar_' + model + suffix, 'legend_names', ['90deg', '80deg', '70deg', '60deg', '50deg',
+                                                                             '40deg', '30deg', '20deg', '10deg'])
+            options(prefix + 'pos_I_' + model + suffix, 'legend_names', ['90deg', '80deg', '70deg', '60deg', '50deg',
+                                                                         '40deg', '30deg', '20deg', '10deg'])
+            options(prefix + 'pos_blocal_' + model +
+                    suffix, 'legend_names', '|B|')
+            options(prefix + 'pos_beq_' + model +
+                    suffix, 'legend_names', '|B|')
+            options(prefix + 'pos_eq_' + model + suffix,
+                    'legend_names', ['Re', 'MLT'])
+            options(prefix + 'pos_iono_north_' + model +
+                    suffix, 'legend_names', ['GLAT', 'GLON'])
+            options(prefix + 'pos_iono_south_' + model +
+                    suffix, 'legend_names', ['GLAT', 'GLON'])
 
             # set y axis to logscale
             options(prefix + 'pos_blocal_' + model + suffix, 'ylog', 1)

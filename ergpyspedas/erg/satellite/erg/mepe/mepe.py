@@ -1,27 +1,29 @@
 
 #from pyspedas.erg.load import load
 #from load import load
-from ..load import load
-from pytplot import options, clip, ylim, zlim
 import cdflib
+from pytplot import clip, options, ylim, zlim
+
+from ..load import load
+
 
 def mepe(trange=['2017-03-27', '2017-03-28'],
-        datatype='omniflux', 
-        level='l2', 
-        suffix='',  
-        get_support_data=False, 
-        varformat=None,
-        varnames=[],
-        downloadonly=False,
-        notplot=False,
-        no_update=False,
-        uname=None,
-        passwd=None,
-        time_clip=False,
-        ror=True):
+         datatype='omniflux',
+         level='l2',
+         suffix='',
+         get_support_data=False,
+         varformat=None,
+         varnames=[],
+         downloadonly=False,
+         notplot=False,
+         no_update=False,
+         uname=None,
+         passwd=None,
+         time_clip=False,
+         ror=True):
     """
     This function loads data from the MEP-e experiment from the Arase mission
-    
+
     Parameters:
         trange : list of str
             time range of interest [starttime, endtime] with the format 
@@ -72,20 +74,21 @@ def mepe(trange=['2017-03-27', '2017-03-28'],
 
     """
 
-
     if level == 'l3':
         datatype = '3dflux'
 
-    file_res=3600. * 24
-    prefix = 'erg_mepe_'+level+ '_' + datatype + '_'
-    pathformat = 'satellite/erg/mepe/'+level+'/'+datatype+'/%Y/%m/erg_mepe_'+level+'_'+datatype+'_%Y%m%d_v??_??.cdf'
+    file_res = 3600. * 24
+    prefix = 'erg_mepe_'+level + '_' + datatype + '_'
+    pathformat = 'satellite/erg/mepe/'+level+'/'+datatype + \
+        '/%Y/%m/erg_mepe_'+level+'_'+datatype+'_%Y%m%d_v??_??.cdf'
 
-    loaded_data = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype,file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
-    
+    loaded_data = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype, file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
+                       varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
+
     if len(loaded_data) > 0 and ror:
 
-    
-        out_files = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype,file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd)
+        out_files = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype, file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
+                         varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd)
         cdf_file = cdflib.CDF(out_files[0])
         gatt = cdf_file.globalattsget()
 
@@ -99,7 +102,8 @@ def mepe(trange=['2017-03-27', '2017-03-28'],
         print("Affiliation: "+gatt["PI_AFFILIATION"])
         print('')
         print('- The rules of the road (RoR) common to the ERG project:')
-        print('      https://ergsc.isee.nagoya-u.ac.jp/data_info/rules_of_the_road.shtml.en')
+        print(
+            '      https://ergsc.isee.nagoya-u.ac.jp/data_info/rules_of_the_road.shtml.en')
         print('- RoR for MEP-e data:  https://ergsc.isee.nagoya-u.ac.jp/mw/index.php/ErgSat/Mepe')
         print('')
         print('Contact: erg_mep_info at isee.nagoya-u.ac.jp')

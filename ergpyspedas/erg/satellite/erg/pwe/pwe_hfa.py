@@ -1,28 +1,30 @@
 
 #from pyspedas.erg.load import load
 #from load import load
-from ..load import load
-from pytplot import options, clip, ylim, zlim
 import cdflib
+from pytplot import clip, options, ylim, zlim
+
+from ..load import load
+
 
 def pwe_hfa(trange=['2017-04-01', '2017-04-02'],
-        datatype='spec', 
-        mode='low',
-        level='l2', 
-        suffix='',  
-        get_support_data=False, 
-        varformat=None,
-        varnames=[],
-        downloadonly=False,
-        notplot=False,
-        no_update=False,
-        uname=None,
-        passwd=None,
-        time_clip=False,
-        ror=True):
+            datatype='spec',
+            mode='low',
+            level='l2',
+            suffix='',
+            get_support_data=False,
+            varformat=None,
+            varnames=[],
+            downloadonly=False,
+            notplot=False,
+            no_update=False,
+            uname=None,
+            passwd=None,
+            time_clip=False,
+            ror=True):
     """
     This function loads data from the PWE experiment from the Arase mission
-    
+
     Parameters:
         trange : list of str
             time range of interest [starttime, endtime] with the format 
@@ -72,26 +74,27 @@ def pwe_hfa(trange=['2017-04-01', '2017-04-02'],
         List of tplot variables created.
 
     """
-    
-    file_res=3600. * 24
-    
+
+    file_res = 3600. * 24
+
     if level == 'l2':
-        prefix = 'erg_pwe_hfa_'+level+'_' + mode +'_'
-        
+        prefix = 'erg_pwe_hfa_'+level+'_' + mode + '_'
+
     if level == 'l2':
-        pathformat = 'satellite/erg/pwe/hfa/'+level+'/'+datatype+'/'+mode+'/%Y/%m/erg_pwe_hfa_'+level+'_'+datatype+'_'+mode+'_%Y%m%d_v??_??.cdf'
+        pathformat = 'satellite/erg/pwe/hfa/'+level+'/'+datatype+'/'+mode + \
+            '/%Y/%m/erg_pwe_hfa_'+level+'_'+datatype+'_'+mode+'_%Y%m%d_v??_??.cdf'
     elif level == 'l3':
         prefix = 'erg_pwe_hfa_'+level+'_1min_'
-        pathformat = 'satellite/erg/pwe/hfa/'+level+'/%Y/%m/erg_pwe_hfa_'+level+'_1min_%Y%m%d_v??_??.cdf'
+        pathformat = 'satellite/erg/pwe/hfa/'+level + \
+            '/%Y/%m/erg_pwe_hfa_'+level+'_1min_%Y%m%d_v??_??.cdf'
 
+    loaded_data = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype, file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
+                       varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
 
-    
-    loaded_data = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype,file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
-    
     if len(loaded_data) > 0 and ror:
 
-    
-        out_files = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype,file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd)
+        out_files = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype, file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
+                         varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd)
         cdf_file = cdflib.CDF(out_files[0])
         gatt = cdf_file.globalattsget()
 
@@ -103,20 +106,19 @@ def pwe_hfa(trange=['2017-04-01', '2017-04-02'],
         print(gatt["LOGICAL_SOURCE_DESCRIPTION"])
         print('')
         print('Information about ERG PWE HFA')
-        print('')        
+        print('')
         print('PI: ', gatt['PI_NAME'])
         print("Affiliation: "+gatt["PI_AFFILIATION"])
         print('')
         print('RoR of ERG project common: https://ergsc.isee.nagoya-u.ac.jp/data_info/rules_of_the_road.shtml.en')
-        print('RoR of PWE/HFA: https://ergsc.isee.nagoya-u.ac.jp/mw/index.php/ErgSat/Pwe/Hfa')
+        print(
+            'RoR of PWE/HFA: https://ergsc.isee.nagoya-u.ac.jp/mw/index.php/ErgSat/Pwe/Hfa')
         print('')
         print('Contact: erg_pwe_info at isee.nagoya-u.ac.jp')
         print('**************************************************************************')
 
-
     if level == 'l2' and mode == 'low' and not notplot:
-    
-        
+
         # set spectrogram plot option
         options(prefix + 'spectra_eu' + suffix, 'Spec', 1)
         options(prefix + 'spectra_ev' + suffix, 'Spec', 1)
@@ -133,7 +135,6 @@ def pwe_hfa(trange=['2017-04-01', '2017-04-02'],
         if prefix + 'spectra_el' + suffix in loaded_data:
             # remove minus values in y array
             clip(prefix + 'spectra_el' + suffix, 0., 5000.)
-
 
         if prefix + 'spectra_eu' + suffix in loaded_data:
             # remove minus values in y array
@@ -157,7 +158,6 @@ def pwe_hfa(trange=['2017-04-01', '2017-04-02'],
             # set zlim
             zlim(prefix + 'spectra_bgamma' + suffix, 1e-4, 1e+2)
 
-
         if prefix + 'spectra_esum' + suffix in loaded_data:
             # set ylim
             ylim(prefix + 'spectra_esum' + suffix,  2.0, 10000.0)
@@ -169,7 +169,6 @@ def pwe_hfa(trange=['2017-04-01', '2017-04-02'],
             ylim(prefix + 'spectra_e_ar' + suffix,  2.0, 10000.0)
             # set zlim
             zlim(prefix + 'spectra_e_ar' + suffix, -1, 1)
-
 
         # set y axis to logscale
         options(prefix + 'spectra_eu' + suffix, 'ylog', 1)
@@ -193,18 +192,22 @@ def pwe_hfa(trange=['2017-04-01', '2017-04-02'],
         # set ytitle
         options(prefix + 'spectra_eu' + suffix, 'ytitle', 'ERG PWE/HFA (EU)')
         options(prefix + 'spectra_ev' + suffix, 'ytitle', 'ERG PWE/HFA (EV)')
-        options(prefix + 'spectra_esum' + suffix, 'ytitle', 'ERG PWE/HFA (ESUM)')
-        options(prefix + 'spectra_e_ar' + suffix, 'ytitle', 'ERG PWE/HFA (E_AR)')
-        options(prefix + 'spectra_bgamma' + suffix, 'ytitle', 'ERG PWE/HFA (BGAMMA)')
+        options(prefix + 'spectra_esum' + suffix,
+                'ytitle', 'ERG PWE/HFA (ESUM)')
+        options(prefix + 'spectra_e_ar' + suffix,
+                'ytitle', 'ERG PWE/HFA (E_AR)')
+        options(prefix + 'spectra_bgamma' + suffix,
+                'ytitle', 'ERG PWE/HFA (BGAMMA)')
 
         # set ysubtitle
         options(prefix + 'spectra_eu' + suffix, 'ysubtitle', 'frequency [Hz]')
         options(prefix + 'spectra_ev' + suffix, 'ysubtitle', 'frequency [Hz]')
-        options(prefix + 'spectra_esum' + suffix, 'ysubtitle', 'frequency [Hz]')
-        options(prefix + 'spectra_e_ar' + suffix, 'ysubtitle', 'frequency [Hz]')
-        options(prefix + 'spectra_bgamma' + suffix, 'ysubtitle', 'frequency [Hz]')
-
-
+        options(prefix + 'spectra_esum' + suffix,
+                'ysubtitle', 'frequency [Hz]')
+        options(prefix + 'spectra_e_ar' + suffix,
+                'ysubtitle', 'frequency [Hz]')
+        options(prefix + 'spectra_bgamma' + suffix,
+                'ysubtitle', 'frequency [Hz]')
 
         # set ztitle
         options(prefix + 'spectra_eu' + suffix, 'ztitle', 'mV^2/m^2/Hz')
@@ -223,14 +226,12 @@ def pwe_hfa(trange=['2017-04-01', '2017-04-02'],
         options(prefix + 'spectra_e_mix' + suffix, 'Colormap', 'jet')
         options(prefix + 'spectra_e_ar' + suffix, 'Colormap', 'jet')
 
-
-
-
     elif level == 'l3':
 
         # set ytitle
         options(prefix + 'Fuhr' + suffix, 'ytitle', 'UHR frequency [Mhz]')
-        options(prefix + 'ne_mgf' + suffix, 'ytitle', 'eletctorn density [/cc]')
+        options(prefix + 'ne_mgf' + suffix,
+                'ytitle', 'eletctorn density [/cc]')
 
         # set y axis to logscale
         options(prefix + 'Fuhr' + suffix, 'ylog', 1)

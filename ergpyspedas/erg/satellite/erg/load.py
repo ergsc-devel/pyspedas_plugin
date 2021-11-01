@@ -1,23 +1,25 @@
+from pyspedas.analysis.time_clip import time_clip as tclip
 from pyspedas.utilities.dailynames import dailynames
 from pyspedas.utilities.download import download
-from pyspedas.analysis.time_clip import time_clip as tclip
 from pytplot import cdf_to_tplot
 
 from .config import CONFIG
+
 #from config import CONFIG
 
-def load(trange=['2017-03-27', '2017-03-28'], 
+
+def load(trange=['2017-03-27', '2017-03-28'],
          pathformat=None,
          instrument='mgf',
-         datatype='8sec', 
+         datatype='8sec',
          mode=None,
          site=None,
          model=None,
-         level='l2', 
+         level='l2',
          prefix='',
          suffix='',
          file_res=24*3600.,
-         get_support_data=False, 
+         get_support_data=False,
          varformat=None,
          varnames=[],
          downloadonly=False,
@@ -43,11 +45,13 @@ def load(trange=['2017-03-27', '2017-03-28'],
     """
 
     # find the full remote path names using the trange
-    remote_names = dailynames(file_format=pathformat, trange=trange, res=file_res)
+    remote_names = dailynames(file_format=pathformat,
+                              trange=trange, res=file_res)
 
     out_files = []
 
-    files = download(remote_file=remote_names, remote_path=CONFIG['remote_data_dir'], local_path=CONFIG['local_data_dir'], no_download=no_update, last_version=True, username=uname, password=passwd)
+    files = download(remote_file=remote_names, remote_path=CONFIG['remote_data_dir'], local_path=CONFIG[
+                     'local_data_dir'], no_download=no_update, last_version=True, username=uname, password=passwd)
     if files is not None:
         for file in files:
             out_files.append(file)
@@ -57,8 +61,9 @@ def load(trange=['2017-03-27', '2017-03-28'],
     if downloadonly:
         return out_files
 
-    tvars = cdf_to_tplot(out_files, prefix=prefix, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, notplot=notplot)
-    
+    tvars = cdf_to_tplot(out_files, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
+                         varformat=varformat, varnames=varnames, notplot=notplot)
+
     if notplot:
         return tvars
 

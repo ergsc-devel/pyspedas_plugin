@@ -1,15 +1,17 @@
 #from pyspedas.erg.load import load
 #from load import load
-from ..load import load
-import numpy as np
-from pytplot import options, clip, ylim, zlim, store_data
 import cdflib
+import numpy as np
+from pytplot import clip, options, store_data, ylim, zlim
+
+from ..load import load
+
 
 def hep(trange=['2017-03-27', '2017-03-28'],
-        datatype='omniflux', 
-        level='l2', 
-        suffix='',  
-        get_support_data=False, 
+        datatype='omniflux',
+        level='l2',
+        suffix='',
+        get_support_data=False,
         varformat=None,
         varnames=[],
         downloadonly=False,
@@ -22,7 +24,7 @@ def hep(trange=['2017-03-27', '2017-03-28'],
         version=None):
     """
     This function loads data from the HEP experiment from the Arase mission
-    
+
     Parameters:
         trange : list of str
             time range of interest [starttime, endtime] with the format 
@@ -75,63 +77,66 @@ def hep(trange=['2017-03-27', '2017-03-28'],
         List of tplot variables created.
 
     """
-    
-    file_res=3600. * 24
+
+    file_res = 3600. * 24
     prefix = 'erg_hep_'+level+'_'
 
     if level == 'l2':
-        pathformat = 'satellite/erg/hep/'+level+'/'+datatype+'/%Y/%m/erg_hep_'+level+'_'+datatype +'_%Y%m%d_'
+        pathformat = 'satellite/erg/hep/'+level+'/'+datatype + \
+            '/%Y/%m/erg_hep_'+level+'_'+datatype + '_%Y%m%d_'
         if version == None:
             pathformat += 'v??_??.cdf'
         else:
             pathformat += version + '.cdf'
     if level == 'l3':
-        pathformat = 'satellite/erg/hep/'+level+'/pa/%Y/%m/erg_hep_'+level+'_pa_%Y%m%d_'
+        pathformat = 'satellite/erg/hep/'+level + \
+            '/pa/%Y/%m/erg_hep_'+level+'_pa_%Y%m%d_'
         if version == None:
             pathformat += 'v??_??.cdf'
         else:
             pathformat += version + '.cdf'
 
-
     if level == 'l2' and datatype == 'omniflux' or datatype == '3dflux' or level == 'l3':
-        notplot=True # to avoid failure of creation plot variables (at store_data.py) of hep 
+        # to avoid failure of creation plot variables (at store_data.py) of hep
+        notplot = True
 
-    loaded_data = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype,file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd, version=version)
+    loaded_data = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype, file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
+                       varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd, version=version)
 
-
-    
     if len(loaded_data) > 0 and ror:
 
-    
-        out_files = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype,file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data, varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd, version=version)
+        out_files = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype, file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
+                         varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd, version=version)
         cdf_file = cdflib.CDF(out_files[0])
-        
+
         try:
             gatt = cdf_file.globalattsget()
         except:
             gatt = None
 
-        
         if gatt is not None:
             # --- print PI info and rules of the road
 
             print(' ')
-            print('**************************************************************************')
+            print(
+                '**************************************************************************')
             print(gatt["LOGICAL_SOURCE_DESCRIPTION"])
             print('')
             print('PI: ', gatt['PI_NAME'])
             print("Affiliation: "+gatt["PI_AFFILIATION"])
             print('')
             print('- The rules of the road (RoR) common to the ERG project:')
-            print('       https://ergsc.isee.nagoya-u.ac.jp/data_info/rules_of_the_road.shtml.en')
-            print('- RoR for HEP data: https://ergsc.isee.nagoya-u.ac.jp/mw/index.php/ErgSat/Hep')
+            print(
+                '       https://ergsc.isee.nagoya-u.ac.jp/data_info/rules_of_the_road.shtml.en')
+            print(
+                '- RoR for HEP data: https://ergsc.isee.nagoya-u.ac.jp/mw/index.php/ErgSat/Hep')
             if level == 'l3':
-                print('- RoR for MGF data: https://ergsc.isee.nagoya-u.ac.jp/mw/index.php/ErgSat/Mgf')
+                print(
+                    '- RoR for MGF data: https://ergsc.isee.nagoya-u.ac.jp/mw/index.php/ErgSat/Mgf')
             print('')
             print('Contact: erg_hep_info at isee.nagoya-u.ac.jp')
-            print('**************************************************************************')
-
-
+            print(
+                '**************************************************************************')
 
     if type(loaded_data) is dict:
 
@@ -140,21 +145,24 @@ def hep(trange=['2017-03-27', '2017-03-28'],
             if prefix + 'FEDO_L' + suffix in loaded_data:
                 v_vars_min = loaded_data[prefix + 'FEDO_L' + suffix]['v'][0]
                 v_vars_max = loaded_data[prefix + 'FEDO_L' + suffix]['v'][1]
-                v_vars = np.power(10., (np.log10(v_vars_min) + np.log10(v_vars_max)) / 2.) # log average of energy bins
-                store_data(prefix + 'FEDO_L' + suffix, data={'x':loaded_data[prefix + 'FEDO_L' + suffix]['x'], 
-                                                    'y':loaded_data[prefix + 'FEDO_L' + suffix]['y'],
-                                                    'v':v_vars})
+                # log average of energy bins
+                v_vars = np.power(
+                    10., (np.log10(v_vars_min) + np.log10(v_vars_max)) / 2.)
+                store_data(prefix + 'FEDO_L' + suffix, data={'x': loaded_data[prefix + 'FEDO_L' + suffix]['x'],
+                                                             'y': loaded_data[prefix + 'FEDO_L' + suffix]['y'],
+                                                             'v': v_vars})
                 tplot_variables.append(prefix + 'FEDO_L' + suffix)
 
             if prefix + 'FEDO_H' + suffix in loaded_data:
                 v_vars_min = loaded_data[prefix + 'FEDO_H' + suffix]['v'][0]
                 v_vars_max = loaded_data[prefix + 'FEDO_H' + suffix]['v'][1]
-                v_vars = np.power(10., (np.log10(v_vars_min) + np.log10(v_vars_max)) / 2.) # log average of energy bins
-                store_data(prefix + 'FEDO_H' + suffix, data={'x':loaded_data[prefix + 'FEDO_H' + suffix]['x'], 
-                                                    'y':loaded_data[prefix + 'FEDO_H' + suffix]['y'],
-                                                    'v':v_vars})
+                # log average of energy bins
+                v_vars = np.power(
+                    10., (np.log10(v_vars_min) + np.log10(v_vars_max)) / 2.)
+                store_data(prefix + 'FEDO_H' + suffix, data={'x': loaded_data[prefix + 'FEDO_H' + suffix]['x'],
+                                                             'y': loaded_data[prefix + 'FEDO_H' + suffix]['y'],
+                                                             'v': v_vars})
                 tplot_variables.append(prefix + 'FEDO_H' + suffix)
-            
 
             # remove minus valuse of y array
             if prefix + 'FEDO_L' + suffix in tplot_variables:
@@ -175,8 +183,10 @@ def hep(trange=['2017-03-27', '2017-03-28'],
             options(prefix + 'FEDO_H' + suffix, 'yrange', [7.0e+01, 2.0e+03])
 
             # set ytitle
-            options(prefix + 'FEDO_L' + suffix, 'ytitle', 'HEP-L\nomniflux\nLv2\nEnergy')
-            options(prefix + 'FEDO_H' + suffix, 'ytitle', 'HEP-H\nomniflux\nLv2\nEnergy')
+            options(prefix + 'FEDO_L' + suffix, 'ytitle',
+                    'HEP-L\nomniflux\nLv2\nEnergy')
+            options(prefix + 'FEDO_H' + suffix, 'ytitle',
+                    'HEP-H\nomniflux\nLv2\nEnergy')
 
             # set ysubtitle
             options(prefix + 'FEDO_L' + suffix, 'ysubtitle', '[keV]')
@@ -197,8 +207,10 @@ def hep(trange=['2017-03-27', '2017-03-28'],
             options(prefix + 'FEDO_H' + suffix, 'zrange', [1.0e-10, 1.0e+5])
 
             # set ztitle
-            options(prefix + 'FEDO_L' + suffix, 'ztitle', '[/cm^{2}-str-s-keV]')
-            options(prefix + 'FEDO_H' + suffix, 'ztitle', '[/cm^{2}-str-s-keV]')
+            options(prefix + 'FEDO_L' + suffix,
+                    'ztitle', '[/cm^{2}-str-s-keV]')
+            options(prefix + 'FEDO_H' + suffix,
+                    'ztitle', '[/cm^{2}-str-s-keV]')
 
             # set zlim
             if prefix + 'FEDO_L' + suffix in tplot_variables:
@@ -210,69 +222,67 @@ def hep(trange=['2017-03-27', '2017-03-28'],
             options(prefix + 'FEDO_L' + suffix,  'Colormap', 'jet')
             options(prefix + 'FEDO_H' + suffix,  'Colormap', 'jet')
 
-            return  tplot_variables
+            return tplot_variables
 
         if level == 'l2' and datatype == '3dflux':
-           tplot_variables = []
-           v2_array = [i for i in range(15)]
+            tplot_variables = []
+            v2_array = [i for i in range(15)]
 
-           if prefix + 'FEDU_L' + suffix in loaded_data:
+            if prefix + 'FEDU_L' + suffix in loaded_data:
 
-               store_data(prefix + 'FEDU_L' + suffix, data={'x':loaded_data[prefix + 'FEDU_L' + suffix]['x'],
-                                                        'y':loaded_data[prefix + 'FEDU_L' + suffix]['y'],
-                                                        'v1':np.sqrt(loaded_data[prefix + 'FEDU_L' + suffix]['v'][0,:]*
-                                                        loaded_data[prefix + 'FEDU_L' + suffix]['v'][1,:]), # geometric mean for 'v1'
-                                                        'v2':v2_array})
-               tplot_variables.append(prefix + 'FEDU_L' + suffix)
-               clip(prefix + 'FEDU_L' + suffix, -1.0e+10, 1.0e+10)
+                store_data(prefix + 'FEDU_L' + suffix, data={'x': loaded_data[prefix + 'FEDU_L' + suffix]['x'],
+                                                             'y': loaded_data[prefix + 'FEDU_L' + suffix]['y'],
+                                                             'v1': np.sqrt(loaded_data[prefix + 'FEDU_L' + suffix]['v'][0, :] *
+                                                                           loaded_data[prefix + 'FEDU_L' + suffix]['v'][1, :]),  # geometric mean for 'v1'
+                                                             'v2': v2_array})
+                tplot_variables.append(prefix + 'FEDU_L' + suffix)
+                clip(prefix + 'FEDU_L' + suffix, -1.0e+10, 1.0e+10)
 
-           if prefix + 'FEDU_H' + suffix in loaded_data:
+            if prefix + 'FEDU_H' + suffix in loaded_data:
 
-               store_data(prefix + 'FEDU_H' + suffix, data={'x':loaded_data[prefix + 'FEDU_H' + suffix]['x'],
-                                                        'y':loaded_data[prefix + 'FEDU_H' + suffix]['y'],
-                                                        'v1':np.sqrt(loaded_data[prefix + 'FEDU_H' + suffix]['v'][0,:]*
-                                                        loaded_data[prefix + 'FEDU_H' + suffix]['v'][1,:]), # geometric mean for 'v1'
-                                                        'v2':v2_array})
-               tplot_variables.append(prefix + 'FEDU_H' + suffix)
-               clip(prefix + 'FEDU_H' + suffix, -1.0e+10, 1.0e+10)
+                store_data(prefix + 'FEDU_H' + suffix, data={'x': loaded_data[prefix + 'FEDU_H' + suffix]['x'],
+                                                             'y': loaded_data[prefix + 'FEDU_H' + suffix]['y'],
+                                                             'v1': np.sqrt(loaded_data[prefix + 'FEDU_H' + suffix]['v'][0, :] *
+                                                                           loaded_data[prefix + 'FEDU_H' + suffix]['v'][1, :]),  # geometric mean for 'v1'
+                                                             'v2': v2_array})
+                tplot_variables.append(prefix + 'FEDU_H' + suffix)
+                clip(prefix + 'FEDU_H' + suffix, -1.0e+10, 1.0e+10)
 
-           return tplot_variables
+            return tplot_variables
 
+        if level == 'l3':  # implementation for level = 'l3'
 
+            tplot_variables = []
 
-        if level == 'l3': # implementation for level = 'l3'
+            if prefix + 'FEDU_L' + suffix in loaded_data:
 
-           tplot_variables = []
+                L_energy_array_ave = np.sqrt(loaded_data[prefix + 'FEDU_L' + suffix]['v1'][0, :] *
+                                             loaded_data[prefix + 'FEDU_L' + suffix]['v1'][1, :])  # geometric mean for 'v1'
 
-           if prefix + 'FEDU_L' + suffix in loaded_data:
+                # get energy [keV] array for ytitle options
+                L_energy_array = np.trunc(L_energy_array_ave).astype(int)
+                non_negative_y_array = np.where(
+                    loaded_data[prefix + 'FEDU_L' + suffix]['y'] < 0., np.nan, loaded_data[prefix + 'FEDU_L' + suffix]['y'])
+                store_data(prefix + 'FEDU_L' + suffix, data={'x': loaded_data[prefix + 'FEDU_L' + suffix]['x'],
+                                                             'y': non_negative_y_array,
+                                                             'v1': L_energy_array_ave,
+                                                             'v2': loaded_data[prefix + 'FEDU_L' + suffix]['v2']})
 
-               L_energy_array_ave = np.sqrt(loaded_data[prefix + 'FEDU_L' + suffix]['v1'][0,:]*
-                                            loaded_data[prefix + 'FEDU_L' + suffix]['v1'][1,:]) # geometric mean for 'v1'
+                options(prefix + 'FEDU_L' + suffix, 'spec', 1)
+                # set ylim
+                ylim(prefix + 'FEDU_L' + suffix, 0, 180)
+                # set zlim
+                zlim(prefix + 'FEDU_L' + suffix, 1e+2, 1e+6)
 
-               # get energy [keV] array for ytitle options
-               L_energy_array = np.trunc(L_energy_array_ave).astype(int)
-               non_negative_y_array = np.where(loaded_data[prefix + 'FEDU_L' + suffix]['y'] < 0. , np.nan, loaded_data[prefix + 'FEDU_L' + suffix]['y'])
-               store_data(prefix + 'FEDU_L' + suffix, data={'x':loaded_data[prefix + 'FEDU_L' + suffix]['x'],
-                                                  'y':non_negative_y_array,
-                                                  'v1':L_energy_array_ave,
-                                                  'v2':loaded_data[prefix + 'FEDU_L' + suffix]['v2']})
-               
-               options(prefix + 'FEDU_L' + suffix, 'spec', 1)
-               # set ylim
-               ylim(prefix + 'FEDU_L' + suffix, 0, 180)
-               # set zlim
-               zlim(prefix + 'FEDU_L' + suffix, 1e+2, 1e+6)
-               
-               tplot_variables.append(prefix + 'FEDU_L' + suffix)
+                tplot_variables.append(prefix + 'FEDU_L' + suffix)
 
-               
-
-
-               for i in range(loaded_data[prefix + 'FEDU_L' + suffix]['y'].shape[1]): # make Tplot Variables of erg_hep_l3_FEDU_L_paspec_ene?? (??: 00, 01, 02, ..., 15)
-                    tplot_name = prefix + 'FEDU_L_paspec_ene' + str(i).zfill(2) + suffix
-                    store_data(tplot_name, data={'x':loaded_data[prefix + 'FEDU_L' + suffix]['x'],
-                                                'y':non_negative_y_array[:,i,:],
-                                                'v':loaded_data[prefix + 'FEDU_L' + suffix]['v2']})
+                # make Tplot Variables of erg_hep_l3_FEDU_L_paspec_ene?? (??: 00, 01, 02, ..., 15)
+                for i in range(loaded_data[prefix + 'FEDU_L' + suffix]['y'].shape[1]):
+                    tplot_name = prefix + 'FEDU_L_paspec_ene' + \
+                        str(i).zfill(2) + suffix
+                    store_data(tplot_name, data={'x': loaded_data[prefix + 'FEDU_L' + suffix]['x'],
+                                                 'y': non_negative_y_array[:, i, :],
+                                                 'v': loaded_data[prefix + 'FEDU_L' + suffix]['v2']})
 
                     options(tplot_name, 'spec', 1)
                     # set ylim
@@ -280,59 +290,63 @@ def hep(trange=['2017-03-27', '2017-03-28'],
                     # set zlim
                     zlim(tplot_name, 1e+2, 1e+6)
                     # set ytitle
-                    options(tplot_name, 'ytitle', f'HEP-L\nEne{str(i).zfill(2)}\n{L_energy_array[i]} keV')
+                    options(
+                        tplot_name, 'ytitle', f'HEP-L\nEne{str(i).zfill(2)}\n{L_energy_array[i]} keV')
 
                     tplot_variables.append(tplot_name)
 
-           if prefix + 'FEDU_H' + suffix in loaded_data:
+            if prefix + 'FEDU_H' + suffix in loaded_data:
 
-               H_energy_array_ave = np.sqrt(loaded_data[prefix + 'FEDU_H' + suffix]['v1'][0,:]*
-                                            loaded_data[prefix + 'FEDU_H' + suffix]['v1'][1,:]) # geometric mean for 'v1'
+                H_energy_array_ave = np.sqrt(loaded_data[prefix + 'FEDU_H' + suffix]['v1'][0, :] *
+                                             loaded_data[prefix + 'FEDU_H' + suffix]['v1'][1, :])  # geometric mean for 'v1'
 
-               # get energy [keV] array for ytitle options
-               H_energy_array = np.trunc(H_energy_array_ave).astype(int)
-               non_negative_y_array = np.where(loaded_data[prefix + 'FEDU_H' + suffix]['y'] < 0. , np.nan, loaded_data[prefix + 'FEDU_H' + suffix]['y'])
-               store_data(prefix + 'FEDU_H' + suffix, data={'x':loaded_data[prefix + 'FEDU_H' + suffix]['x'],
-                                                  'y':non_negative_y_array,
-                                                  'v1':H_energy_array_ave,
-                                                  'v2':loaded_data[prefix + 'FEDU_H' + suffix]['v2']})
-               
-               options(prefix + 'FEDU_H' + suffix, 'spec', 1)
-               # set ylim
-               ylim(prefix + 'FEDU_H' + suffix, 0, 180)
-               # set zlim
-               zlim(prefix + 'FEDU_H' + suffix, 1e+1, 1e+4)
-               
-               tplot_variables.append(prefix + 'FEDU_H' + suffix)
+                # get energy [keV] array for ytitle options
+                H_energy_array = np.trunc(H_energy_array_ave).astype(int)
+                non_negative_y_array = np.where(
+                    loaded_data[prefix + 'FEDU_H' + suffix]['y'] < 0., np.nan, loaded_data[prefix + 'FEDU_H' + suffix]['y'])
+                store_data(prefix + 'FEDU_H' + suffix, data={'x': loaded_data[prefix + 'FEDU_H' + suffix]['x'],
+                                                             'y': non_negative_y_array,
+                                                             'v1': H_energy_array_ave,
+                                                             'v2': loaded_data[prefix + 'FEDU_H' + suffix]['v2']})
 
+                options(prefix + 'FEDU_H' + suffix, 'spec', 1)
+                # set ylim
+                ylim(prefix + 'FEDU_H' + suffix, 0, 180)
+                # set zlim
+                zlim(prefix + 'FEDU_H' + suffix, 1e+1, 1e+4)
 
-               for i in range(loaded_data[prefix + 'FEDU_H' + suffix]['y'].shape[1]): # make Tplot Variables of erg_hep_l3_FEDU_H_paspec_ene?? (??: 00, 01, 02, ..., 10)
-                    tplot_name = prefix + 'FEDU_H_paspec_ene' + str(i).zfill(2) + suffix
-                    store_data(tplot_name, data={'x':loaded_data[prefix + 'FEDU_H' + suffix]['x'],
-                                                'y':non_negative_y_array[:,i,:],
-                                                'v':loaded_data[prefix + 'FEDU_H' + suffix]['v2']})
-                    
+                tplot_variables.append(prefix + 'FEDU_H' + suffix)
+
+                # make Tplot Variables of erg_hep_l3_FEDU_H_paspec_ene?? (??: 00, 01, 02, ..., 10)
+                for i in range(loaded_data[prefix + 'FEDU_H' + suffix]['y'].shape[1]):
+                    tplot_name = prefix + 'FEDU_H_paspec_ene' + \
+                        str(i).zfill(2) + suffix
+                    store_data(tplot_name, data={'x': loaded_data[prefix + 'FEDU_H' + suffix]['x'],
+                                                 'y': non_negative_y_array[:, i, :],
+                                                 'v': loaded_data[prefix + 'FEDU_H' + suffix]['v2']})
+
                     options(tplot_name, 'spec', 1)
                     # set ylim
                     ylim(tplot_name, 0, 180)
                     # set zlim
                     zlim(tplot_name, 1e+1, 1e+4)
                     # set ytitle
-                    options(tplot_name, 'ytitle', f'HEP-H\nEne{str(i).zfill(2)}\n{H_energy_array[i]} keV')
+                    options(
+                        tplot_name, 'ytitle', f'HEP-H\nEne{str(i).zfill(2)}\n{H_energy_array[i]} keV')
 
                     tplot_variables.append(tplot_name)
 
-           # set z axis to logscale
-           options(tplot_variables, 'zlog', 1)
-           # set spectrogram plot option
-           #options(tplot_variables, 'spec', 1)
-           # change colormap option
-           options(tplot_variables, 'colormap', 'jet')
-           # set ysubtitle
-           options(tplot_variables, 'ysubtitle', 'PA [deg]')
-           # set ztitle
-           options(tplot_variables, 'ztitle', '[/keV/cm^{2}/sr/s]')
+            # set z axis to logscale
+            options(tplot_variables, 'zlog', 1)
+            # set spectrogram plot option
+            #options(tplot_variables, 'spec', 1)
+            # change colormap option
+            options(tplot_variables, 'colormap', 'jet')
+            # set ysubtitle
+            options(tplot_variables, 'ysubtitle', 'PA [deg]')
+            # set ztitle
+            options(tplot_variables, 'ztitle', '[/keV/cm^{2}/sr/s]')
 
-           return tplot_variables
+            return tplot_variables
 
     return loaded_data

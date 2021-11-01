@@ -5,7 +5,8 @@ CONFIG = {'local_data_dir': 'erg_data/',
 
 # override local data directory with environment variables
 if os.environ.get('SPEDAS_DATA_DIR'):
-    CONFIG['local_data_dir'] = os.sep.join([os.environ['SPEDAS_DATA_DIR'], 'ergsc'])
+    CONFIG['local_data_dir'] = os.sep.join(
+        [os.environ['SPEDAS_DATA_DIR'], 'ergsc'])
 
 if os.environ.get('ERG_DATA_DIR'):
     CONFIG['local_data_dir'] = os.environ['ERG_DATA_DIR']
