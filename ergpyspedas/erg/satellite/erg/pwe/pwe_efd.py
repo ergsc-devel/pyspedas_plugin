@@ -198,14 +198,14 @@ def pwe_efd(trange=['2017-04-01', '2017-04-02'],
             options(t_plot_name, 'ytitle', elem+' potential')
 
     if datatype == 'spec':
-        options(tnames('*spec_spectra*'), 'spec', 1)
-        options(tnames('*spec_spectra*'), 'colormap', 'jet')
-        options(tnames('*spec_spectra*'), 'zlog', 1)
+        options(tnames(prefix + '*spectra*'), 'spec', 1)
+        options(tnames(prefix + '*spectra*'), 'colormap', 'jet')
+        options(tnames(prefix + '*spectra*'), 'zlog', 1)
         ylim(prefix + 'spectra', 0, 100)
         zlim(prefix + 'spectra', 1e-6, 1e-2)
-        options(tnames('*spec_spectra*'), 'ysubtitle', '[Hz]')
-        options(tnames('*spec_spectra*'), 'ztitle', '[mV^2/m^2/Hz]')
-        for t_plot_name in (tnames('*spec_spectra*')):
+        options(tnames(prefix + '*spectra*'), 'ysubtitle', '[Hz]')
+        options(tnames(prefix + '*spectra*'), 'ztitle', '[mV^2/m^2/Hz]')
+        for t_plot_name in (tnames(prefix + '*spectra*')):
             options(t_plot_name, 'ytitle', '\n'.join(t_plot_name.split('_')))
 
     return loaded_data
