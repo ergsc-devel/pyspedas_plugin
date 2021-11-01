@@ -115,8 +115,10 @@ def orb(trange=['2017-03-27', '2017-03-28'],
                 '**************************************************************************')
             print(gatt["LOGICAL_SOURCE_DESCRIPTION"])
             print('')
-            #print('Information about ERG L3 orbit')
-            print('Information about ERG orbit')
+            if level == 'l3':
+                print('Information about ERG L3 orbit')
+            elif level == 'l2':
+                print('Information about ERG orbit')
             print('')
             # print('PI: ', gatt['PI_NAME']) # not need?
             # print("Affiliation: "+gatt["PI_AFFILIATION"]) # not need?
