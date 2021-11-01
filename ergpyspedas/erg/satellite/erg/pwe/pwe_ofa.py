@@ -86,26 +86,30 @@ def pwe_ofa(trange=['2017-04-01', '2017-04-02'],
         out_files = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype, file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
                          varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd)
         cdf_file = cdflib.CDF(out_files[0])
-        gatt = cdf_file.globalattsget()
 
-        # --- print PI info and rules of the road
+        try:
+            gatt = cdf_file.globalattsget()
 
-        print(' ')
-        print(' ')
-        print('**************************************************************************')
-        print(gatt["LOGICAL_SOURCE_DESCRIPTION"])
-        print('')
-        print('Information about ERG PWE OFA')
-        print('')
-        print('PI: ', gatt['PI_NAME'])
-        print("Affiliation: "+gatt["PI_AFFILIATION"])
-        print('')
-        print('RoR of ERG project common: https://ergsc.isee.nagoya-u.ac.jp/data_info/rules_of_the_road.shtml.en')
-        print(
-            'RoR of PWE/OFA: https://ergsc.isee.nagoya-u.ac.jp/mw/index.php/ErgSat/Pwe/Ofa')
-        print('')
-        print('Contact: erg_pwe_info at isee.nagoya-u.ac.jp')
-        print('**************************************************************************')
+            # --- print PI info and rules of the road
+
+            print(' ')
+            print(' ')
+            print('**************************************************************************')
+            print(gatt["LOGICAL_SOURCE_DESCRIPTION"])
+            print('')
+            print('Information about ERG PWE OFA')
+            print('')
+            print('PI: ', gatt['PI_NAME'])
+            print("Affiliation: "+gatt["PI_AFFILIATION"])
+            print('')
+            print('RoR of ERG project common: https://ergsc.isee.nagoya-u.ac.jp/data_info/rules_of_the_road.shtml.en')
+            print(
+                'RoR of PWE/OFA: https://ergsc.isee.nagoya-u.ac.jp/mw/index.php/ErgSat/Pwe/Ofa')
+            print('')
+            print('Contact: erg_pwe_info at isee.nagoya-u.ac.jp')
+            print('**************************************************************************')
+        except:
+            print('printing PI info and rules of the road was failed')
 
     # set spectrogram plot option
     options(prefix+'E_spectra_132'+suffix,  'Spec', 1)

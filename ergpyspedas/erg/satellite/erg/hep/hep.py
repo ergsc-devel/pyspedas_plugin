@@ -109,10 +109,6 @@ def hep(trange=['2017-03-27', '2017-03-28'],
 
         try:
             gatt = cdf_file.globalattsget()
-        except:
-            gatt = None
-
-        if gatt is not None:
             # --- print PI info and rules of the road
 
             print(' ')
@@ -135,6 +131,8 @@ def hep(trange=['2017-03-27', '2017-03-28'],
             print('Contact: erg_hep_info at isee.nagoya-u.ac.jp')
             print(
                 '**************************************************************************')
+        except:
+            print('printing PI info and rules of the road was failed')
 
     if isinstance(loaded_data, dict):
 

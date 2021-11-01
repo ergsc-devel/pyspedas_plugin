@@ -110,31 +110,34 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
         out_files = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype, file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
                          varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd)
         cdf_file = cdflib.CDF(out_files[0])
-        gatt = cdf_file.globalattsget()
+        try:
+            gatt = cdf_file.globalattsget()
 
-        # --- print PI info and rules of the road
+            # --- print PI info and rules of the road
 
-        print(' ')
-        print('**************************************************************************')
-        print(gatt["LOGICAL_SOURCE_DESCRIPTION"])
-        print('')
-        print('Information about ERG LEPe')
-        print('')
-        print('PI: ', gatt['PI_NAME'])
-        print("Affiliation: "+gatt["PI_AFFILIATION"])
-        print('')
-        print('RoR of ERG project common: https://ergsc.isee.nagoya-u.ac.jp/data_info/rules_of_the_road.shtml.en')
-        if level == 'l2':
-            print(
-                'RoR of LEPe L2: https://ergsc.isee.nagoya-u.ac.jp/mw/index.php/ErgSat/Lepe')
-        if level == 'l3':
-            print(
-                'RoR of LEPe L3: https://ergsc.isee.nagoya-u.ac.jp/mw/index.php/ErgSat/Lepe')
-            print(
-                'RoR of MGF L2: https://ergsc.isee.nagoya-u.ac.jp/mw/index.php/ErgSat/Mgf')
-        print('')
-        print('Contact: erg_lepe_info at isee.nagoya-u.ac.jp')
-        print('**************************************************************************')
+            print(' ')
+            print('**************************************************************************')
+            print(gatt["LOGICAL_SOURCE_DESCRIPTION"])
+            print('')
+            print('Information about ERG LEPe')
+            print('')
+            print('PI: ', gatt['PI_NAME'])
+            print("Affiliation: "+gatt["PI_AFFILIATION"])
+            print('')
+            print('RoR of ERG project common: https://ergsc.isee.nagoya-u.ac.jp/data_info/rules_of_the_road.shtml.en')
+            if level == 'l2':
+                print(
+                    'RoR of LEPe L2: https://ergsc.isee.nagoya-u.ac.jp/mw/index.php/ErgSat/Lepe')
+            if level == 'l3':
+                print(
+                    'RoR of LEPe L3: https://ergsc.isee.nagoya-u.ac.jp/mw/index.php/ErgSat/Lepe')
+                print(
+                    'RoR of MGF L2: https://ergsc.isee.nagoya-u.ac.jp/mw/index.php/ErgSat/Mgf')
+            print('')
+            print('Contact: erg_lepe_info at isee.nagoya-u.ac.jp')
+            print('**************************************************************************')
+        except:
+            print('printing PI info and rules of the road was failed')
 
     if (isinstance(loaded_data, dict)) and (len(loaded_data) > 0):
         if (level == 'l2') and (datatype == 'omniflux'):

@@ -99,25 +99,28 @@ def lepi(trange=['2017-07-01', '2017-07-02'],
         out_files = load(pathformat=pathformat, trange=trange, file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
                          varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd)
         cdf_file = cdflib.CDF(out_files[0])
-        gatt = cdf_file.globalattsget()
+        try:
+            gatt = cdf_file.globalattsget()
 
-        # --- print PI info and rules of the road
+            # --- print PI info and rules of the road
 
-        print(' ')
-        print('**************************************************************************')
-        print(gatt["LOGICAL_SOURCE_DESCRIPTION"])
-        print('')
-        print('Information about ERG LEPi')
-        print('')
-        print('PI: ', gatt['PI_NAME'])
-        #print("Affiliation: "+gatt["PI_AFFILIATION"])
-        print('')
-        print('RoR of ERG project common: https://ergsc.isee.nagoya-u.ac.jp/data_info/rules_of_the_road.shtml.en')
-        print('RoR of LEPi L2: https://ergsc.isee.nagoya-u.ac.jp/mw/index.php/ErgSat/Lepi')
-        print('RoR of ERG/LEPi: https://ergsc.isee.nagoya-u.ac.jp/mw/index.php/ErgSat/Lepi#Rules_of_the_Road')
-        print('')
-        print('Contact: erg_lepi_info at isee.nagoya-u.ac.jp')
-        print('**************************************************************************')
+            print(' ')
+            print('**************************************************************************')
+            print(gatt["LOGICAL_SOURCE_DESCRIPTION"])
+            print('')
+            print('Information about ERG LEPi')
+            print('')
+            print('PI: ', gatt['PI_NAME'])
+            #print("Affiliation: "+gatt["PI_AFFILIATION"])
+            print('')
+            print('RoR of ERG project common: https://ergsc.isee.nagoya-u.ac.jp/data_info/rules_of_the_road.shtml.en')
+            print('RoR of LEPi L2: https://ergsc.isee.nagoya-u.ac.jp/mw/index.php/ErgSat/Lepi')
+            print('RoR of ERG/LEPi: https://ergsc.isee.nagoya-u.ac.jp/mw/index.php/ErgSat/Lepi#Rules_of_the_Road')
+            print('')
+            print('Contact: erg_lepi_info at isee.nagoya-u.ac.jp')
+            print('**************************************************************************')
+        except:
+            print('printing PI info and rules of the road was failed')
 
     if (datatype == 'omniflux') and (level == 'l2'):
         tplot_variables = []

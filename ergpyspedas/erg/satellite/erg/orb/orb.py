@@ -108,11 +108,6 @@ def orb(trange=['2017-03-27', '2017-03-28'],
         cdf_file = cdflib.CDF(out_files[0])
         try:
             gatt = cdf_file.globalattsget()
-        except:
-            gatt = None
-
-        if gatt is not None:
-
             # --- print PI info and rules of the road
 
             print(' ')
@@ -131,6 +126,8 @@ def orb(trange=['2017-03-27', '2017-03-28'],
             print('Contact: erg-sc-core at isee.nagoya-u.ac.jp')
             print(
                 '**************************************************************************')
+        except:
+            print('printing PI info and rules of the road was failed')
 
     if (level == 'l2') and (datatype == 'def'):
 

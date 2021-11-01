@@ -111,22 +111,25 @@ def mgf(trange=['2017-03-27', '2017-03-28'],
         out_files = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype, file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
                          varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd)
         cdf_file = cdflib.CDF(out_files[0])
-        gatt = cdf_file.globalattsget()
+        try:
+            gatt = cdf_file.globalattsget()
 
-        # --- print PI info and rules of the road
-        print(' ')
-        print('**************************************************************************')
-        print(gatt["LOGICAL_SOURCE_DESCRIPTION"])
-        print('')
-        print('Information about ERG MGF')
-        print('')
-        print('PI: ', gatt['PI_NAME'])
-        print("Affiliation: "+gatt["PI_AFFILIATION"])
-        print('')
-        print('RoR of ERG project common: https://ergsc.isee.nagoya-u.ac.jp/data_info/rules_of_the_road.shtml.en')
-        print('RoR of MGF L2: https://ergsc.isee.nagoya-u.ac.jp/mw/index.php/ErgSat/Mgf')
-        print('Contact: erg_mgf_info at isee.nagoya-u.ac.jp')
-        print('**************************************************************************')
+            # --- print PI info and rules of the road
+            print(' ')
+            print('**************************************************************************')
+            print(gatt["LOGICAL_SOURCE_DESCRIPTION"])
+            print('')
+            print('Information about ERG MGF')
+            print('')
+            print('PI: ', gatt['PI_NAME'])
+            print("Affiliation: "+gatt["PI_AFFILIATION"])
+            print('')
+            print('RoR of ERG project common: https://ergsc.isee.nagoya-u.ac.jp/data_info/rules_of_the_road.shtml.en')
+            print('RoR of MGF L2: https://ergsc.isee.nagoya-u.ac.jp/mw/index.php/ErgSat/Mgf')
+            print('Contact: erg_mgf_info at isee.nagoya-u.ac.jp')
+            print('**************************************************************************')
+        except:
+            print('printing PI info and rules of the road was failed')
 
     if datatype == '8sec':
 
