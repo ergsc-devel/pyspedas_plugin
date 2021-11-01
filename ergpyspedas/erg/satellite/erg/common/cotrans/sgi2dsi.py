@@ -59,15 +59,13 @@ def sgi2dsi(name_in=None,
         print('SGI --> DSI')
         coor_out = 'dsi'
         rotated_vector = vector_rotate(x0=dat[:, 0], y0=dat[:, 1], z0=dat[:, 2],
-                                       nx=rot_axis[:, 0], ny=rot_axis[:,
-                                                                      1], nz=rot_axis[:, 2],
+                                       nx=rot_axis[:, 0], ny=rot_axis[:,1], nz=rot_axis[:, 2],
                                        theta=-sgix2ssix_angle + spphase)
     else:  # DSI --> SGI (spin)
         print('DSI --> SGI')
         coord_out = 'sgi'
         rotated_vector = vector_rotate(x0=dat[:, 0], y0=dat[:, 1], z0=dat[:, 2],
-                                       nx=rot_axis[:, 0], ny=rot_axis[:,
-                                                                      1], nz=rot_axis[:, 2],
+                                       nx=rot_axis[:, 0], ny=rot_axis[:,1], nz=rot_axis[:, 2],
                                        theta=-1.*(-sgix2ssix_angle + spphase))
 
     store_data(name_out, data={'x': time_array,
