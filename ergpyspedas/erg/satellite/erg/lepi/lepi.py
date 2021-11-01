@@ -111,7 +111,7 @@ def lepi(trange=['2017-07-01', '2017-07-02'],
             print('Information about ERG LEPi')
             print('')
             print('PI: ', gatt['PI_NAME'])
-            #print("Affiliation: "+gatt["PI_AFFILIATION"])
+            print("Affiliation: "+gatt["PI_AFFILIATION"])
             print('')
             print('RoR of ERG project common: https://ergsc.isee.nagoya-u.ac.jp/data_info/rules_of_the_road.shtml.en')
             print('RoR of LEPi L2: https://ergsc.isee.nagoya-u.ac.jp/mw/index.php/ErgSat/Lepi')
