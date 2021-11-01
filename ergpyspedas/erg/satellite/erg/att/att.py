@@ -4,7 +4,9 @@ from pyspedas.utilities.dailynames import dailynames
 from pyspedas.utilities.download import download
 from pyspedas.utilities.time_double import time_float
 from pytplot import store_data
+
 from ..config import CONFIG
+from ..load import load
 
 
 def att(trange=['2017-04-01', '2017-04-02'],
@@ -38,17 +40,9 @@ def att(trange=['2017-04-01', '2017-04-02'],
     """
     file_res = 24*3600.
     pathformat = 'satellite/erg/att/txt/erg_att_'+level+'_%Y%m%d_v??.txt'
-    remote_names = dailynames(file_format=pathformat,
-                              trange=trange, res=file_res)
-    files = download(remote_file=remote_names, remote_path=CONFIG['remote_data_dir'], local_path=CONFIG[
-                     'local_data_dir'], no_download=no_update, last_version=True, username=uname, password=passwd)
-    out_files = []
 
-    if files is not None:
-        for file in files:
-            out_files.append(file)
-
-    out_files = sorted(out_files)
+    out_files = load(pathformat=pathformat, trange=trange, file_res=file_res,
+                     downloadonly=True, no_update=no_update, uname=uname, passwd=uname)
 
     if downloadonly:
         return out_files
