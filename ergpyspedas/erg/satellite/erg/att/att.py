@@ -1,5 +1,4 @@
 import pandas as pd
-
 from pyspedas.utilities.time_double import time_float
 from pytplot import store_data
 
