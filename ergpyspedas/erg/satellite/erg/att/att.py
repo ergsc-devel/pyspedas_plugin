@@ -1,11 +1,8 @@
 import pandas as pd
-from pyspedas.analysis.time_clip import time_clip as tclip
-from pyspedas.utilities.dailynames import dailynames
-from pyspedas.utilities.download import download
+
 from pyspedas.utilities.time_double import time_float
 from pytplot import store_data
 
-from ..config import CONFIG
 from ..load import load
 
 
