@@ -19,7 +19,8 @@ def orb(trange=['2017-03-27', '2017-03-28'],
         uname=None,
         passwd=None,
         time_clip=False,
-        version=None):
+        version=None,
+        ror=True):
     """
     This function loads orbit data from the Arase mission
 
@@ -100,7 +101,7 @@ def orb(trange=['2017-03-27', '2017-03-28'],
     loaded_data = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype, file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
                        varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd, version=version)
 
-    if len(loaded_data) > 0:
+    if (len(loaded_data) > 0) and ror:
 
         out_files = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype, file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
                          varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd, version=version)
