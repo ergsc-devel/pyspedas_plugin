@@ -37,8 +37,8 @@ def sga2sgi(name_in=None,
 
     get_data_vars = get_data(name_in)
     dl_in = get_data(name_in, metadata=True)
-    time = get_data_vars[0]
-    time_length = time.shape[0]
+    time_array = get_data_vars[0]
+    time_length = time_array.shape[0]
     dat = get_data_vars[1]
 
     # Get the SGA and SGI axes by interpolating the attitude data
@@ -79,5 +79,5 @@ def sga2sgi(name_in=None,
         dat_new = np.einsum("ijk,ik->ij", mat, dat)
 
     # Store the converted data in a tplot variable
-    store_data(name_out, data={'x': time, 'y': dat_new}, attr_dict=dl_in)
+    store_data(name_out, data={'x': time_array, 'y': dat_new}, attr_dict=dl_in)
     options(name_out, 'ytitle', '\n'.join(name_out.split('_')))

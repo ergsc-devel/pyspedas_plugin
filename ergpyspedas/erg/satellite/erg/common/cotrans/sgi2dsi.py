@@ -40,8 +40,8 @@ def sgi2dsi(name_in=None,
     reload = not noload
     dl_in = get_data(name_in, metadata=True)
     get_data_array = get_data(name_in)
-    time = get_data_array[0]
-    time_length = time.shape[0]
+    time_array = get_data_array[0]
+    time_length = time_array.shape[0]
     dat = get_data_array[1]
 
     # Get the SGA and SGI axes by interpolating the attitude data
@@ -70,6 +70,6 @@ def sgi2dsi(name_in=None,
                                                                       1], nz=rot_axis[:, 2],
                                        theta=-1.*(-sgix2ssix_angle + spphase))
 
-    store_data(name_out, data={'x': time,
+    store_data(name_out, data={'x': time_array,
                'y': rotated_vector}, attr_dict=dl_in)
     options(name_out, 'ytitle', '\n'.join(name_out.split('_')))

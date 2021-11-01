@@ -45,8 +45,8 @@ def dsi2j2000(name_in=None,
     reload = not noload
     dl_in = get_data(name_in, metadata=True)
     get_data_array = get_data(name_in)
-    time = get_data_array[0]
-    time_length = time.shape[0]
+    time_array = get_data_array[0]
+    time_length = time_array.shape[0]
     dat = get_data_array[1]
 
     # Get the SGI axis by interpolating the attitude data
@@ -56,7 +56,7 @@ def dsi2j2000(name_in=None,
     sundir = np.array([[1., 0., 0.]]*time_length)
 
     if no_orb:
-        store_data('sundir_gse', data={'x': time, 'y': sundir})
+        store_data('sundir_gse', data={'x': time_array, 'y': sundir})
 
     else:  # Calculate the sun directions from the instantaneous satellite locations
         if reload:
@@ -64,15 +64,15 @@ def dsi2j2000(name_in=None,
             orb(trange=time_string([tr[0] - 60., tr[1] + 60.]))
             get_data_erg_orb_l2 = get_data('erg_orb_l2_pos_gse')
             scpos_x = np.interp(
-                time, get_data_erg_orb_l2[0], get_data_erg_orb_l2[1][:, 0])
+                time_array, get_data_erg_orb_l2[0], get_data_erg_orb_l2[1][:, 0])
             scpos_y = np.interp(
-                time, get_data_erg_orb_l2[0], get_data_erg_orb_l2[1][:, 1])
+                time_array, get_data_erg_orb_l2[0], get_data_erg_orb_l2[1][:, 1])
             scpos_z = np.interp(
-                time, get_data_erg_orb_l2[0], get_data_erg_orb_l2[1][:, 2])
+                time_array, get_data_erg_orb_l2[0], get_data_erg_orb_l2[1][:, 2])
             scpos = np.array([scpos_x, scpos_y, scpos_z]).T
             sunpos = np.array([[1.496e+08, 0., 0.]]*time_length)
             sundir = sunpos - scpos
-            store_data('sundir_gse', data={'x': time, 'y': sundir})
+            store_data('sundir_gse', data={'x': time_array, 'y': sundir})
             tnormalize('sundir_gse', newname='sundir_gse')
 
     # Derive DSI-X and DSI-Y axis vectors in J2000.
@@ -85,8 +85,8 @@ def dsi2j2000(name_in=None,
     sun_j2000 = get_data('sundir_j2000')
     dsiy = tcrossp(dsiz_j2000['y'], sun_j2000[1], return_data=True)
     dsix = tcrossp(dsiy, dsiz_j2000['y'], return_data=True)
-    dsix_j2000 = {'x': time, 'y': dsix}
-    dsiy_j2000 = {'x': time, 'y': dsiy}
+    dsix_j2000 = {'x': time_array, 'y': dsix}
+    dsiy_j2000 = {'x': time_array, 'y': dsiy}
 
     if not J20002DSI:
         print('DSI --> J2000')
@@ -104,5 +104,5 @@ def dsi2j2000(name_in=None,
             dsix_j2000['y'], dsiy_j2000['y'], dsiz_j2000['y'])
         dat_new = np.einsum("ijk,ik->ij", mat, dat)
 
-    store_data(name_out, data={'x': time, 'y': dat_new}, attr_dict=dl_in)
+    store_data(name_out, data={'x': time_array, 'y': dat_new}, attr_dict=dl_in)
     options(name_out, 'ytitle', '\n'.join(name_out.split('_')))

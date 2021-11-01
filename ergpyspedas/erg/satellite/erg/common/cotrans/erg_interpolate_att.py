@@ -32,7 +32,7 @@ def erg_interpolate_att(erg_xxx_in=None, noload=False):
 
     reload = not noload
 
-    time = get_data(erg_xxx_in)[0]
+    time_array = get_data(erg_xxx_in)[0]
 
     # Prepare some constants
     dtor = np.pi / 180.
@@ -44,7 +44,7 @@ def erg_interpolate_att(erg_xxx_in=None, noload=False):
         if reload:
             degap('erg_att_sprate', dt=8., margin=.5)
         sprate = get_data('erg_att_sprate')
-        if sprate[0].min() > time.min() + 8. or sprate[0].max() < time.max() - 8.:
+        if sprate[0].min() > time_array.min() + 8. or sprate[0].max() < time_array.max() - 8.:
             tr = get_timespan(erg_xxx_in)
             if reload:
                 att(trange=time_string([tr[0] - 60., tr[1] + 60.]))
@@ -58,21 +58,21 @@ def erg_interpolate_att(erg_xxx_in=None, noload=False):
         degap('erg_att_sprate', dt=8., margin=.5)
     sprate = get_data('erg_att_sprate')
     sper = 1. / (sprate[1] / 60.)
-    sperInterp = np.interp(time, sprate[0], sper)
-    spinperiod = {'x': time, 'y': sperInterp}
+    sperInterp = np.interp(time_array, sprate[0], sper)
+    spinperiod = {'x': time_array, 'y': sperInterp}
     output_dictionary['spinperiod'] = spinperiod
 
     # Interpolate spin phase
     if reload:
         degap('erg_att_spphase', dt=8., margin=.5)
     sphase = get_data('erg_att_spphase')
-    ph_nn = interpolate.interp1d(sphase[0], sphase[1], kind="nearest")(time)
+    ph_nn = interpolate.interp1d(sphase[0], sphase[1], kind="nearest")(time_array)
     per_nn = spinperiod['y']
-    dt = time - \
-        interpolate.interp1d(sphase[0], sphase[0], kind="nearest")(time)
+    dt = time_array - \
+        interpolate.interp1d(sphase[0], sphase[0], kind="nearest")(time_array)
     sphInterp = np.fmod(ph_nn + 360. * dt / per_nn, 360.)
     sphInterp = np.fmod(sphInterp + 360., 360.)
-    spinphase = {'x': time, 'y': sphInterp}
+    spinphase = {'x': time_array, 'y': sphInterp}
     output_dictionary['spinphase'] = spinphase
 
     # Interporate SGI-Z axis vector
@@ -87,10 +87,10 @@ def erg_interpolate_att(erg_xxx_in=None, noload=False):
     ez = np.cos((90. - dec) * dtor)
     ex = np.sin((90. - dec) * dtor) * np.cos(ras * dtor)
     ey = np.sin((90. - dec) * dtor) * np.sin(ras * dtor)
-    ex_interp = np.interp(time, time0, ex)
-    ey_interp = np.interp(time, time0, ey)
-    ez_interp = np.interp(time, time0, ez)
-    sgiz_j2000 = {'x': time, 'y': np.array(
+    ex_interp = np.interp(time_array, time0, ex)
+    ey_interp = np.interp(time_array, time0, ey)
+    ez_interp = np.interp(time_array, time0, ez)
+    sgiz_j2000 = {'x': time_array, 'y': np.array(
         [ex_interp, ey_interp, ez_interp]).T}
     output_dictionary['sgiz_j2000'] = sgiz_j2000
 
@@ -106,10 +106,10 @@ def erg_interpolate_att(erg_xxx_in=None, noload=False):
     ez = np.cos((90. - dec) * dtor)
     ex = np.sin((90. - dec) * dtor) * np.cos(ras * dtor)
     ey = np.sin((90. - dec) * dtor) * np.sin(ras * dtor)
-    ex_interp = np.interp(time, time0, ex)
-    ey_interp = np.interp(time, time0, ey)
-    ez_interp = np.interp(time, time0, ez)
-    sgax_j2000 = {'x': time, 'y': np.array(
+    ex_interp = np.interp(time_array, time0, ex)
+    ey_interp = np.interp(time_array, time0, ey)
+    ez_interp = np.interp(time_array, time0, ez)
+    sgax_j2000 = {'x': time_array, 'y': np.array(
         [ex_interp, ey_interp, ez_interp]).T}
     output_dictionary['sgax_j2000'] = sgax_j2000
 
@@ -125,27 +125,27 @@ def erg_interpolate_att(erg_xxx_in=None, noload=False):
     ez = np.cos((90. - dec) * dtor)
     ex = np.sin((90. - dec) * dtor) * np.cos(ras * dtor)
     ey = np.sin((90. - dec) * dtor) * np.sin(ras * dtor)
-    ex_interp = np.interp(time, time0, ex)
-    ey_interp = np.interp(time, time0, ey)
-    ez_interp = np.interp(time, time0, ez)
-    sgaz_j2000 = {'x': time, 'y': np.array(
+    ex_interp = np.interp(time_array, time0, ex)
+    ey_interp = np.interp(time_array, time0, ey)
+    ez_interp = np.interp(time_array, time0, ez)
+    sgaz_j2000 = {'x': time_array, 'y': np.array(
         [ex_interp, ey_interp, ez_interp]).T}
     output_dictionary['sgaz_j2000'] = sgaz_j2000
 
     # Derive the other three axes (SGA-Y, SGI-X, SGI-Y)
     sgay = tcrossp(output_dictionary['sgaz_j2000']['y'],
                    output_dictionary['sgax_j2000']['y'], return_data=True)
-    sgay_j2000 = {'x': time, 'y': sgay}
+    sgay_j2000 = {'x': time_array, 'y': sgay}
     output_dictionary['sgay_j2000'] = sgay_j2000
 
     sgiy = tcrossp(output_dictionary['sgiz_j2000']['y'],
                    output_dictionary['sgax_j2000']['y'], return_data=True)
-    sgiy_j2000 = {'x': time, 'y': sgiy}
+    sgiy_j2000 = {'x': time_array, 'y': sgiy}
     output_dictionary['sgiy_j2000'] = sgiy_j2000
 
     sgix = tcrossp(output_dictionary['sgiy_j2000']['y'],
                    output_dictionary['sgiz_j2000']['y'], return_data=True)
-    sgix_j2000 = {'x': time, 'y': sgix}
+    sgix_j2000 = {'x': time_array, 'y': sgix}
     output_dictionary['sgix_j2000'] = sgix_j2000
 
     return output_dictionary
