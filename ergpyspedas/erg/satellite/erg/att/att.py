@@ -39,7 +39,7 @@ def att(trange=['2017-04-01', '2017-04-02'],
     pathformat = 'satellite/erg/att/txt/erg_att_'+level+'_%Y%m%d_v??.txt'
 
     out_files = load(pathformat=pathformat, trange=trange, file_res=file_res,
-                     downloadonly=True, no_update=no_update, uname=uname, passwd=uname)
+                     downloadonly=True, no_update=no_update, uname=uname, passwd=passwd)
 
     if downloadonly:
         return out_files
