@@ -112,8 +112,6 @@ def mepe(trange=['2017-03-27', '2017-03-28'],
         options(prefix + 'FEDO' + suffix, 'Spec', 1)
         # set y axis to logscale
         options(prefix + 'FEDO' + suffix, 'ylog', 1)
-        # set yrange
-        #options(prefix + 'FEDO' + suffix, 'yrange', [6., 90.])
         # set ytitle
         options(prefix + 'FEDO' + suffix, 'ytitle', 'ERG\nMEP-e\nFEDO\nEnergy')
         # set ysubtitle
