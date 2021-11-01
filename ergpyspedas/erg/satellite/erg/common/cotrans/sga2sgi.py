@@ -1,9 +1,7 @@
 import numpy as np
 from pytplot import get_data, options, store_data, tplot_names
 
-#from common.cotrans.cart_trans_matrix_make import cart_trans_matrix_make
 from .cart_trans_matrix_make import cart_trans_matrix_make
-#from common.cotrans.erg_interpolate_att import erg_interpolate_att
 from .erg_interpolate_att import erg_interpolate_att
 
 

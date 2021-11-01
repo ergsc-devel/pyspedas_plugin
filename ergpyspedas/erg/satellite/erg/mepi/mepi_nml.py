@@ -1,6 +1,3 @@
-
-#from pyspedas.erg.load import load
-#from load import load
 import cdflib
 from pytplot import clip, options, ylim, zlim
 
@@ -128,11 +125,6 @@ def mepi_nml(trange=['2017-03-27', '2017-03-28'],
         # set y axis to logscale
         options(tplot_names_list, 'ylog', 1)
 
-        # set yrange
-        #options('erg_mepi_' + level + '_FPDO' + suffix, 'yrange', [4., 200.])
-        #options('erg_mepi_' + level + '_FHE2DO' + suffix, 'yrange', [4., 200.])
-        #options('erg_mepi_' + level + '_FHEDO' + suffix, 'yrange', [4., 200.])
-
         # set ysubtitle
         options(tplot_names_list, 'ysubtitle', '[keV/q]')
 
@@ -141,11 +133,6 @@ def mepi_nml(trange=['2017-03-27', '2017-03-28'],
 
         # set ztitle
         options(tplot_names_list, 'ztitle', '[/s-cm^{2}-sr-keV/q]')
-
-        # set zrange
-        #options('erg_mepi_' + level + '_FPDO' + suffix, 'zrange', [1.e+01, 1.e+06])
-        #options('erg_mepi_' + level + '_FHE2DO' + suffix, 'zrange', [6.e+00, 3.e+04])
-        #options('erg_mepi_' + level + '_FHEDO' + suffix, 'zrange', [7.e+00, 8.e+04])
 
         # change colormap option
         options(tplot_names_list, 'Colormap', 'jet')

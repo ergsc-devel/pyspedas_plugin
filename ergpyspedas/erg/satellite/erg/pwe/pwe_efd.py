@@ -1,6 +1,3 @@
-
-#from pyspedas.erg.load import load
-#from load import load
 import cdflib
 import numpy as np
 from pyspedas import tnames

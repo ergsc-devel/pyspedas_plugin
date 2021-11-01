@@ -1,12 +1,9 @@
-
-#from pyspedas.erg.load import load
 import cdflib
 import numpy as np
 from pyspedas import tnames
 from pyspedas.utilities.time_double import time_float
 from pytplot import clip, get_data, options, store_data, ylim, zlim
 
-#from load import load
 from ..load import load
 
 

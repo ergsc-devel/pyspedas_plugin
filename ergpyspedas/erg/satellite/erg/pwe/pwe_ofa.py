@@ -1,6 +1,4 @@
 
-#from pyspedas.erg.load import load
-#from load import load
 import cdflib
 from pytplot import clip, options, ylim, zlim
 
@@ -141,17 +139,9 @@ def pwe_ofa(trange=['2017-04-01', '2017-04-02'],
     options(prefix+'E_spectra_132'+suffix,  'ztitle', 'mV^2/m^2/Hz')
     options(prefix+'B_spectra_132'+suffix,  'ztitle', 'pT^2/Hz')
 
-    # set yrange
-    #options(prefix+'E_spectra_132'+suffix,  'yrange', [0., 10.])
-    #options(prefix+'B_spectra_132'+suffix,  'yrange', [0., 11.])
-
     # set z axis to logscale
     options(prefix+'E_spectra_132'+suffix,  'zlog', 1)
     options(prefix+'B_spectra_132'+suffix,  'zlog', 1)
-
-    # set zrange
-    #options(prefix+'E_spectra_132'+suffix,  'zrange', [1.0e-08, 1.0e-02])
-    #options(prefix+'B_spectra_132'+suffix,  'zrange', [1.0e-04, 1.0e+02])
 
     # change colormap option
     options(prefix+'E_spectra_132'+suffix,  'Colormap', 'jet')

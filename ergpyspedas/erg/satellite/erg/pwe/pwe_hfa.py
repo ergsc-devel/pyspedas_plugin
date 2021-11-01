@@ -1,6 +1,3 @@
-
-#from pyspedas.erg.load import load
-#from load import load
 import cdflib
 from pytplot import clip, options, ylim, zlim
 

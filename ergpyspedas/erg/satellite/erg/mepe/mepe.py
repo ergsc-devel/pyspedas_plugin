@@ -1,6 +1,4 @@
 
-#from pyspedas.erg.load import load
-#from load import load
 import cdflib
 from pytplot import clip, options, ylim, zlim
 
@@ -124,8 +122,6 @@ def mepe(trange=['2017-03-27', '2017-03-28'],
         ylim(prefix + 'FEDO' + suffix, 6., 100.)
         # set z axis to logscale
         options(prefix + 'FEDO' + suffix, 'zlog', 1)
-        # set zrange
-        #options(prefix + 'FEDO' + suffix, 'zrange', [1.e+01, 1.e+07])
         # set ztitle
         options(prefix + 'FEDO' + suffix, 'ztitle', '[/s-cm^{2}-sr-keV]')
         # change colormap option
@@ -143,12 +139,6 @@ def mepe(trange=['2017-03-27', '2017-03-28'],
         options(prefix + 'FEEDU' + suffix, 'ylog', 1)
         options(prefix + 'count_raw' + suffix, 'ylog', 1)
 
-        # set yrange
-        #options(prefix + 'FEDU' + suffix, 'yrange', [6., 100.])
-        #options(prefix + 'FEDU_n' + suffix, 'yrange', [6., 100.])
-        #options(prefix + 'FEEDU' + suffix, 'yrange', [6., 100.])
-        #options(prefix + 'count_raw' + suffix, 'yrange', [6., 100.])
-
         # set ysubtitle
         options(prefix + 'FEDU' + suffix, 'ysubtitle', '[keV]')
         options(prefix + 'FEDU_n' + suffix, 'ysubtitle', '[keV]')
@@ -164,12 +154,6 @@ def mepe(trange=['2017-03-27', '2017-03-28'],
         options(prefix + 'FEDU_n' + suffix, 'zlog', 1)
         options(prefix + 'FEEDU' + suffix, 'zlog', 1)
         options(prefix + 'count_raw' + suffix, 'zlog', 1)
-
-        # set zrange
-        #options(prefix + 'FEDU' + suffix, 'zrange', [1.05*1.0e+4 , 2.0*1.0e+9])
-        #options(prefix + 'FEDU_n' + suffix, 'zrange', [.95e+4 , 1.05e+9])
-        #options(prefix + 'FEEDU' + suffix, 'zrange', [6.0e+5 , 1.0e+10])
-        #options(prefix + 'count_raw' + suffix, 'zrange', [1.0e+0 , 1.0e+4])
 
         # set ztitle
         options(prefix + 'FEDU' + suffix, 'ztitle', '[/s-cm^{2}-sr-keV]')

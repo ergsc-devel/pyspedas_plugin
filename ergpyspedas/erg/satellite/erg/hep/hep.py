@@ -1,5 +1,3 @@
-#from pyspedas.erg.load import load
-#from load import load
 import cdflib
 import numpy as np
 from pytplot import clip, options, store_data, ylim, zlim
@@ -338,8 +336,6 @@ def hep(trange=['2017-03-27', '2017-03-28'],
 
             # set z axis to logscale
             options(tplot_variables, 'zlog', 1)
-            # set spectrogram plot option
-            #options(tplot_variables, 'spec', 1)
             # change colormap option
             options(tplot_variables, 'colormap', 'jet')
             # set ysubtitle

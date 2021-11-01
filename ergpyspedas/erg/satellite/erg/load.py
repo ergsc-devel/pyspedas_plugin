@@ -5,9 +5,6 @@ from pytplot import cdf_to_tplot
 
 from .config import CONFIG
 
-#from config import CONFIG
-
-
 def load(trange=['2017-03-27', '2017-03-28'],
          pathformat=None,
          instrument='mgf',

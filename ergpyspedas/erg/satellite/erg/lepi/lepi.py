@@ -1,6 +1,4 @@
 
-#from pyspedas.erg.load import load
-#from load import load
 import cdflib
 import numpy as np
 from pytplot import clip, get_data, options, store_data, ylim, zlim
@@ -176,21 +174,11 @@ def lepi(trange=['2017-07-01', '2017-07-02'],
             # set zlim
             zlim(tplot_variables[i], 1e+1, 1e+9)
 
-        # set yrange
-        #options(prefix + 'FPDO' + suffix, 'yrange', [0.01, 20.])
-        #options(prefix + 'FHEDO' + suffix, 'yrange', [0.01, 20.])
-        #options(prefix + 'FODO' + suffix, 'yrange', [0.01, 20.])
-
         # set ztitle
         options(tplot_variables, 'ztitle', '[/cm^2-str-s-keV]')
 
         # set z axis to logscale
         options(tplot_variables, 'zlog', 1)
-
-        # set zrange
-        #options(prefix + 'FPDO' + suffix, 'zrange', [1.e+02, 1.e+09])
-        #options(prefix + 'FHEDO' + suffix, 'zrange', [1.e+02, 1.e+09])
-        #options(prefix + 'FODO' + suffix, 'zrange', [1.e+01, 1.e+08])
 
         # change colormap option
         options(tplot_variables, 'Colormap', 'jet')
