@@ -92,7 +92,7 @@ def orb(trange=['2017-03-27', '2017-03-28'],
         else:
             pathformat = 'satellite/erg/orb/' + datatype + \
                 '/%Y/erg_orb_' + datatype + '_'+level+'_%Y%m%d_'
-    if version == None:
+    if version is None:
         pathformat += 'v??.cdf'
     else:
         pathformat += version + '.cdf'
@@ -131,7 +131,7 @@ def orb(trange=['2017-03-27', '2017-03-28'],
             print(
                 '**************************************************************************')
 
-    if level == 'l2' and datatype == 'def':
+    if (level == 'l2') and (datatype == 'def'):
 
         # remove -1.0e+30
         if prefix + 'pos_Lm' + suffix in loaded_data:
@@ -195,7 +195,7 @@ def orb(trange=['2017-03-27', '2017-03-28'],
 
         options(prefix + 'pos_beq' + suffix, 'ylog', 1)
 
-    elif datatype in ["pre", "spre", "mpre", "lpre"] and level == 'l2':
+    elif (datatype in ["pre", "spre", "mpre", "lpre"]) and (level == 'l2'):
 
         # set labels
         options(prefix + 'pos_gse' + suffix, 'legend_names', ['X', 'Y', 'Z'])

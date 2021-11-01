@@ -86,7 +86,7 @@ def lepi(trange=['2017-07-01', '2017-07-02'],
 
     pathformat = 'satellite/erg/lepi/'+level+'/'+datatype + \
         '/%Y/%m/erg_lepi_'+level+'_'+datatype+'_%Y%m%d_'
-    if version == None:
+    if version is None:
         pathformat += 'v??_??.cdf'
     else:
         pathformat += version + '.cdf'
@@ -94,7 +94,7 @@ def lepi(trange=['2017-07-01', '2017-07-02'],
     loaded_data = load(pathformat=pathformat, trange=trange, file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
                        varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
 
-    if len(loaded_data) > 0 and ror:
+    if (len(loaded_data) > 0) and ror:
 
         out_files = load(pathformat=pathformat, trange=trange, file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
                          varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd)
@@ -119,7 +119,7 @@ def lepi(trange=['2017-07-01', '2017-07-02'],
         print('Contact: erg_lepi_info at isee.nagoya-u.ac.jp')
         print('**************************************************************************')
 
-    if datatype == 'omniflux' and level == 'l2':
+    if (datatype == 'omniflux') and (level == 'l2'):
         tplot_variables = []
 
         if prefix + 'FPDO' + suffix in loaded_data:
@@ -183,7 +183,7 @@ def lepi(trange=['2017-07-01', '2017-07-02'],
         # change colormap option
         options(tplot_variables, 'Colormap', 'jet')
 
-    elif datatype == '3dflux' and level == 'l2' and not notplot:
+    elif (datatype == '3dflux') and (level == 'l2') and (not notplot):
         if prefix + 'FPDU' + suffix in loaded_data:
             clip(prefix + 'FPDU' + suffix, -1.0e+10, 1.0e+10)
         if prefix + 'FHEDU' + suffix in loaded_data:

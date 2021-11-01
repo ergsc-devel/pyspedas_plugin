@@ -79,7 +79,7 @@ def mepi_nml(trange=['2017-03-27', '2017-03-28'],
     loaded_data = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype, file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
                        varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
 
-    if len(loaded_data) > 0 and ror:
+    if (len(loaded_data) > 0) and ror:
 
         out_files = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype, file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
                          varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd)
@@ -103,7 +103,7 @@ def mepi_nml(trange=['2017-03-27', '2017-03-28'],
         print('Contact: erg_mep_info at isee.nagoya-u.ac.jp')
         print('**************************************************************************')
 
-    if datatype == 'omniflux' and level == 'l2':
+    if (datatype == 'omniflux') and (level == 'l2'):
         original_suffix_list = ['FPDO', 'FHE2DO', 'FHEDO', 'FOPPDO', 'FODO', 'FO2PDO',
                                 'FPDO_tof', 'FHE2DO_tof', 'FHEDO_tof', 'FOPPDO_tof', 'FODO_tof', 'FO2PDO_tof']
         tplot_names_list = []
@@ -137,7 +137,7 @@ def mepi_nml(trange=['2017-03-27', '2017-03-28'],
         # change colormap option
         options(tplot_names_list, 'Colormap', 'jet')
 
-    elif datatype == '3dflux' and level == 'l2':
+    elif (datatype == '3dflux') and (level == 'l2'):
         original_suffix_list = ['FPDU', 'FHE2DU', 'FHEDU', 'FOPPDU', 'FODU', 'FO2PDU',
                                 'count_raw_P', 'count_raw_HE2', 'count_raw_HE', 'count_raw_OPP', 'count_raw_O', 'count_raw_O2P']
         tplot_names_list = []

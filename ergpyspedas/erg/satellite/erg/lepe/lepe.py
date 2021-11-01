@@ -88,7 +88,7 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
     if level == 'l3':
         datatype = 'pa'
 
-    if (level == 'l2' and datatype == 'omniflux') or (level == 'l2' and datatype == '3dflux') or level == 'l3':
+    if ((level == 'l2') and (datatype == 'omniflux')) or ((level == 'l2') and (datatype == '3dflux')) or (level == 'l3'):
         # to avoid failure of creation plot variables (at store_data.py) of lepe
         notplot = True
 
@@ -97,7 +97,7 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
     pathformat = 'satellite/erg/lepe/'+level+'/'+datatype + \
         '/%Y/%m/erg_lepe_'+level+'_'+datatype+'_%Y%m%d_'
 
-    if version == None:
+    if version is None:
         pathformat += 'v??_??.cdf'
     else:
         pathformat += version + '.cdf'
@@ -105,7 +105,7 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
     loaded_data = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype, file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
                        varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
 
-    if len(loaded_data) > 0 and ror:
+    if (len(loaded_data) > 0) and ror:
 
         out_files = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype, file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
                          varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd)
@@ -136,8 +136,8 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
         print('Contact: erg_lepe_info at isee.nagoya-u.ac.jp')
         print('**************************************************************************')
 
-    if type(loaded_data) is dict and len(loaded_data) > 0:
-        if (level == 'l2' and datatype == 'omniflux'):
+    if (isinstance(loaded_data, dict)) and (len(loaded_data) > 0):
+        if (level == 'l2') and (datatype == 'omniflux'):
             tplot_variables = []
             v_array = (loaded_data[prefix + 'FEDO' + suffix]['v'][:, 0, :] +
                        loaded_data[prefix + 'FEDO' + suffix]['v'][:, 1, :]) / 2.
@@ -184,7 +184,7 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
 
             return tplot_variables
 
-        if (level == 'l2' and datatype == '3dflux'):
+        if (level == 'l2') and (datatype == '3dflux'):
             tplot_variables = []
             other_variables_dict = {}
             if prefix + 'FEDU' + suffix in loaded_data:

@@ -78,7 +78,7 @@ def pwe_efd(trange=['2017-04-01', '2017-04-02'],
     file_res = 3600. * 24
     prefix = 'erg_pwe_efd_'+level+'_'
 
-    if '64' in datatype or '256' in datatype:
+    if ('64' in datatype) or ('256' in datatype):
         if '64' in datatype:
             mode = '64Hz'
         elif '256' in datatype:
@@ -109,7 +109,7 @@ def pwe_efd(trange=['2017-04-01', '2017-04-02'],
     loaded_data = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype, file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
                        varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
 
-    if len(loaded_data) > 0 and ror:
+    if (len(loaded_data) > 0) and ror:
 
         out_files = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype, file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
                          varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd)
@@ -160,7 +160,7 @@ def pwe_efd(trange=['2017-04-01', '2017-04-02'],
                 get_data_vars[1][min_time_index:max_time_index])
             ylim(t_plot_name, ylim_min, ylim_max)
 
-    if '64' in datatype or '256' in datatype or datatype == 'pot8Hz':
+    if ('64' in datatype) or ('256' in datatype) or (datatype == 'pot8Hz'):
         for elem in component:
             t_plot_name = prefix+elem
             get_data_vars = get_data(t_plot_name)

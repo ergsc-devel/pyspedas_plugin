@@ -88,7 +88,7 @@ def pwe_hfa(trange=['2017-04-01', '2017-04-02'],
     loaded_data = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype, file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
                        varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
 
-    if len(loaded_data) > 0 and ror:
+    if (len(loaded_data) > 0) and ror:
 
         out_files = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype, file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
                          varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd)
@@ -114,7 +114,7 @@ def pwe_hfa(trange=['2017-04-01', '2017-04-02'],
         print('Contact: erg_pwe_info at isee.nagoya-u.ac.jp')
         print('**************************************************************************')
 
-    if level == 'l2' and mode == 'low' and not notplot:
+    if (level == 'l2') and (mode == 'low') and (not notplot):
 
         # set spectrogram plot option
         options(prefix + 'spectra_eu' + suffix, 'Spec', 1)

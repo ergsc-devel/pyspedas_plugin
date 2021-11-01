@@ -88,7 +88,7 @@ def pwe_wfc(trange=['2017-04-01/12:00:00', '2017-04-01/13:00:00'],
             tplot_name_list = []
             if component == 'all':
                 component_list = ['e', 'b']
-            elif component == 'e' or component == 'b':
+            elif (component == 'e') or (component == 'b'):
                 component_list = [component]
             for com in component_list:
                 prefix = 'erg_pwe_wfc_' + level + '_' + com + '_' + mode + '_'
@@ -107,7 +107,7 @@ def pwe_wfc(trange=['2017-04-01/12:00:00', '2017-04-01/13:00:00'],
             component_suffix_list = []
             if component == 'all':
                 component_list = ['e', 'b']
-            elif component == 'e' or component == 'b':
+            elif (component == 'e') or (component == 'b'):
                 component_list = [component]
             for com in component_list:
                 prefix = 'erg_pwe_wfc_' + level + '_' + com + '_' + mode + '_'
@@ -118,7 +118,7 @@ def pwe_wfc(trange=['2017-04-01/12:00:00', '2017-04-01/13:00:00'],
                 prefix_list.append(prefix)
                 component_suffix_list.append(com.upper() + '_spectra')
 
-    if len(loaded_data) > 0 and ror:
+    if (len(loaded_data) > 0) and ror:
 
         out_files = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype, file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
                          varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd)

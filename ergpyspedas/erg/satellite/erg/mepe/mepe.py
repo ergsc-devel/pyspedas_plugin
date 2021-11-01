@@ -83,7 +83,7 @@ def mepe(trange=['2017-03-27', '2017-03-28'],
     loaded_data = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype, file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
                        varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
 
-    if len(loaded_data) > 0 and ror:
+    if (len(loaded_data) > 0) and ror:
 
         out_files = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype, file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
                          varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd)
@@ -126,7 +126,7 @@ def mepe(trange=['2017-03-27', '2017-03-28'],
         options(prefix + 'FEDO' + suffix, 'ztitle', '[/s-cm^{2}-sr-keV]')
         # change colormap option
         options(prefix + 'FEDO' + suffix, 'Colormap', 'jet')
-    elif datatype == '3dflux' and level == 'l2':
+    elif (datatype == '3dflux') and (level == 'l2'):
         # set spectrogram plot option
         options(prefix + 'FEDU' + suffix, 'Spec', 1)
         options(prefix + 'FEDU_n' + suffix, 'Spec', 1)

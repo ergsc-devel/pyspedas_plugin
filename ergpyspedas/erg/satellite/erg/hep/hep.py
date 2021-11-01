@@ -82,26 +82,26 @@ def hep(trange=['2017-03-27', '2017-03-28'],
     if level == 'l2':
         pathformat = 'satellite/erg/hep/'+level+'/'+datatype + \
             '/%Y/%m/erg_hep_'+level+'_'+datatype + '_%Y%m%d_'
-        if version == None:
+        if version is None:
             pathformat += 'v??_??.cdf'
         else:
             pathformat += version + '.cdf'
     if level == 'l3':
         pathformat = 'satellite/erg/hep/'+level + \
             '/pa/%Y/%m/erg_hep_'+level+'_pa_%Y%m%d_'
-        if version == None:
+        if version is None:
             pathformat += 'v??_??.cdf'
         else:
             pathformat += version + '.cdf'
 
-    if level == 'l2' and datatype == 'omniflux' or datatype == '3dflux' or level == 'l3':
+    if ((level == 'l2') and (datatype == 'omniflux')) or (datatype == '3dflux') or (level == 'l3'):
         # to avoid failure of creation plot variables (at store_data.py) of hep
         notplot = True
 
     loaded_data = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype, file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
                        varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd, version=version)
 
-    if len(loaded_data) > 0 and ror:
+    if (len(loaded_data) > 0) and ror:
 
         out_files = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype, file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
                          varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd, version=version)
@@ -136,9 +136,9 @@ def hep(trange=['2017-03-27', '2017-03-28'],
             print(
                 '**************************************************************************')
 
-    if type(loaded_data) is dict:
+    if isinstance(loaded_data, dict):
 
-        if level == 'l2' and datatype == 'omniflux':
+        if (level == 'l2') and (datatype == 'omniflux'):
             tplot_variables = []
             if prefix + 'FEDO_L' + suffix in loaded_data:
                 v_vars_min = loaded_data[prefix + 'FEDO_L' + suffix]['v'][0]
@@ -222,7 +222,7 @@ def hep(trange=['2017-03-27', '2017-03-28'],
 
             return tplot_variables
 
-        if level == 'l2' and datatype == '3dflux':
+        if (level == 'l2') and (datatype == '3dflux'):
             tplot_variables = []
             v2_array = [i for i in range(15)]
 

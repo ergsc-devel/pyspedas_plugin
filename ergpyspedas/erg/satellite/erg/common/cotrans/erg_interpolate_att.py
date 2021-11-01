@@ -26,7 +26,7 @@ def erg_interpolate_att(erg_xxx_in=None, noload=False):
                 sgax_j2000, sgay_j2000, or sgaz_j2000: output interporated SGA axis vector for each component
 
     """
-    if erg_xxx_in == None or erg_xxx_in not in tnames():
+    if (erg_xxx_in is None) or (erg_xxx_in not in tnames()):
         print('inputted Tplot variable name is None, or not defined')
         return
 
