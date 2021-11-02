@@ -17,15 +17,15 @@ def att(trange=['2017-04-01', '2017-04-02'],
 
     Parameters:
         trange : list of str
-            time range of interest [starttime, endtime] with the format 
-            'YYYY-MM-DD','YYYY-MM-DD'] or to specify more or less than a day 
+            time range of interest [starttime, endtime] with the format
+            'YYYY-MM-DD','YYYY-MM-DD'] or to specify more or less than a day
             ['YYYY-MM-DD/hh:mm:ss','YYYY-MM-DD/hh:mm:ss']
 
         level: str
             Data level; Valid options:
 
         downloadonly: bool
-            Set this flag to download the files, but not load them into 
+            Set this flag to download the files, but not load them into
             tplot variables
 
         notplot: bool

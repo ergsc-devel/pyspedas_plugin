@@ -26,8 +26,8 @@ def orb(trange=['2017-03-27', '2017-03-28'],
 
     Parameters:
         trange : list of str
-            time range of interest [starttime, endtime] with the format 
-            'YYYY-MM-DD','YYYY-MM-DD'] or to specify more or less than a day 
+            time range of interest [starttime, endtime] with the format
+            'YYYY-MM-DD','YYYY-MM-DD'] or to specify more or less than a day
             ['YYYY-MM-DD/hh:mm:ss','YYYY-MM-DD/hh:mm:ss']
 
         datatype: str
@@ -37,12 +37,12 @@ def orb(trange=['2017-03-27', '2017-03-28'],
             Data level; Valid options:
 
         suffix: str
-            The tplot variable names will be given this suffix.  By default, 
+            The tplot variable names will be given this suffix.  By default,
             no suffix is added.
 
         get_support_data: bool
             Data with an attribute "VAR_TYPE" with a value of "support_data"
-            will be loaded into tplot.  By default, only loads in data with a 
+            will be loaded into tplot.  By default, only loads in data with a
             "VAR_TYPE" attribute of "data".
 
         varformat: str
@@ -54,7 +54,7 @@ def orb(trange=['2017-03-27', '2017-03-28'],
             all data variables are loaded)
 
         downloadonly: bool
-            Set this flag to download the CDF files, but not load them into 
+            Set this flag to download the CDF files, but not load them into
             tplot variables
 
         notplot: bool
@@ -143,7 +143,7 @@ def orb(trange=['2017-03-27', '2017-03-28'],
         # remove -1.0e+30
         if prefix + 'pos_Lm' + suffix in loaded_data:
             clip(prefix + 'pos_Lm' + suffix, -1e+6, 1e6)
-            times, bdata = get_data(prefix + 'pos_Lm' + suffix)
+            _, bdata = get_data(prefix + 'pos_Lm' + suffix)
             ylim(prefix + 'pos_Lm' + suffix, np.nanmin(bdata), np.nanmax(bdata))
 
         # set labels
@@ -266,7 +266,7 @@ def orb(trange=['2017-03-27', '2017-03-28'],
             if len(get_data_vars) < 3:
                 if np.nanmin(get_data_vars[1]) < -1.0e+29:
                     clip(loaded_data[i], -1e+6, 1e6)
-                    times, bdata = get_data(loaded_data[i])
+                    _, bdata = get_data(loaded_data[i])
                     ylim(loaded_data[i], np.nanmin(bdata), np.nanmax(bdata))
 
         if model in ["op", "t89", "ts04"]:

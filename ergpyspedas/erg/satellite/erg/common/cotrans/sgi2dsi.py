@@ -15,13 +15,13 @@ def sgi2dsi(name_in=None,
     Parameters:
 
         name_in : str
-            input tplot variable to be transformed 
+            input tplot variable to be transformed
 
         name_out : str
             Name of the tplot variable in which the transformed data is stored
 
         DSI2SGI : bool
-             Set to transform data from DSI to SGI (despun coord --> spinning coord). 
+             Set to transform data from DSI to SGI (despun coord --> spinning coord).
              If not set, it transforms data from SGI to DSI (spinning coord --> despun coord).
 
     Returns:
@@ -59,7 +59,7 @@ def sgi2dsi(name_in=None,
         print('SGI --> DSI')
         coor_out = 'dsi'
         rotated_vector = vector_rotate(x0=dat[:, 0], y0=dat[:, 1], z0=dat[:, 2],
-                                       nx=rot_axis[:, 0], ny=rot_axis[:,1], nz=rot_axis[:, 2],
+                                       nx=rot_axis[:, 0], ny=rot_axis[:, 1], nz=rot_axis[:, 2],
                                        theta=-sgix2ssix_angle + spphase)
     else:  # DSI --> SGI (spin)
         print('DSI --> SGI')

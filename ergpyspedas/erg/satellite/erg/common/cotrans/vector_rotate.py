@@ -9,7 +9,7 @@ def vector_rotate(x0, y0, z0, nx, ny, nz, theta):
     the = theta * dtor
     costhe = np.cos(the)
     sinthe = np.sin(the)
-    
+
     # for vector x0 (single component)
     x0_length = 1
     concatenate_axis_x0 = 0

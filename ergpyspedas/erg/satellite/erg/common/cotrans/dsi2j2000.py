@@ -21,13 +21,13 @@ def dsi2j2000(name_in=None,
     Parameters:
 
         name_in : str
-            input tplot variable to be transformed 
+            input tplot variable to be transformed
 
         name_out : str
             Name of the tplot variable in which the transformed data is stored
 
         J20002DSI : bool
-            Set to transform data from J2000 to DSI. If not set, it transforms data from DSI to J2000. 
+            Set to transform data from J2000 to DSI. If not set, it transforms data from DSI to J2000.
 
     Returns:
         None

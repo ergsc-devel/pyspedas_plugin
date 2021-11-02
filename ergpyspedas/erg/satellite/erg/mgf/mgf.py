@@ -26,8 +26,8 @@ def mgf(trange=['2017-03-27', '2017-03-28'],
 
     Parameters:
         trange : list of str
-            time range of interest [starttime, endtime] with the format 
-            'YYYY-MM-DD','YYYY-MM-DD'] or to specify more or less than a day 
+            time range of interest [starttime, endtime] with the format
+            'YYYY-MM-DD','YYYY-MM-DD'] or to specify more or less than a day
             ['YYYY-MM-DD/hh:mm:ss','YYYY-MM-DD/hh:mm:ss']
 
         datatype: str
@@ -37,12 +37,12 @@ def mgf(trange=['2017-03-27', '2017-03-28'],
             Data level; Valid options:
 
         suffix: str
-            The tplot variable names will be given this suffix.  By default, 
+            The tplot variable names will be given this suffix.  By default,
             no suffix is added.
 
         get_support_data: bool
             Data with an attribute "VAR_TYPE" with a value of "support_data"
-            will be loaded into tplot.  By default, only loads in data with a 
+            will be loaded into tplot.  By default, only loads in data with a
             "VAR_TYPE" attribute of "data".
 
         varformat: str
@@ -50,7 +50,7 @@ def mgf(trange=['2017-03-27', '2017-03-28'],
             "*" is accepted.  By default, all variables are loaded in.
 
         downloadonly: bool
-            Set this flag to download the CDF files, but not load them into 
+            Set this flag to download the CDF files, but not load them into
             tplot variables
 
         notplot: bool
@@ -166,48 +166,48 @@ def mgf(trange=['2017-03-27', '2017-03-28'],
         clip(prefix + 'igrf_'+datatype+'_sm'+suffix, -1e+6, +1e+6)
 
         # set yrange
-        times, bdata = get_data(prefix + 'mag_'+datatype+'_dsi'+suffix)
+        _, bdata = get_data(prefix + 'mag_'+datatype+'_dsi'+suffix)
         ylim(prefix + 'mag_'+datatype+'_dsi'+suffix,
              np.nanmin(bdata), np.nanmax(bdata))
-        times, bdata = get_data(prefix + 'mag_'+datatype+'_gse'+suffix)
+        _, bdata = get_data(prefix + 'mag_'+datatype+'_gse'+suffix)
         ylim(prefix + 'mag_'+datatype+'_gse'+suffix,
              np.nanmin(bdata), np.nanmax(bdata))
-        times, bdata = get_data(prefix + 'mag_'+datatype+'_gsm'+suffix)
+        _, bdata = get_data(prefix + 'mag_'+datatype+'_gsm'+suffix)
         ylim(prefix + 'mag_'+datatype+'_gsm'+suffix,
              np.nanmin(bdata), np.nanmax(bdata))
-        times, bdata = get_data(prefix + 'mag_'+datatype+'_sm'+suffix)
+        _, bdata = get_data(prefix + 'mag_'+datatype+'_sm'+suffix)
         ylim(prefix + 'mag_'+datatype+'_sm'+suffix,
              np.nanmin(bdata), np.nanmax(bdata))
 
-        times, bdata = get_data(prefix + 'magt_'+datatype+suffix)
+        _, bdata = get_data(prefix + 'magt_'+datatype+suffix)
         ylim(prefix + 'magt_'+datatype+suffix,
              np.nanmin(bdata), np.nanmax(bdata))
 
-        times, bdata = get_data(prefix + 'rmsd_'+datatype+suffix,)
+        _, bdata = get_data(prefix + 'rmsd_'+datatype+suffix,)
         ylim(prefix + 'rmsd_'+datatype+suffix,
              np.nanmin(bdata), np.nanmax(bdata))
 
-        times, bdata = get_data(prefix + 'rmsd_'+datatype+'_dsi'+suffix)
+        _, bdata = get_data(prefix + 'rmsd_'+datatype+'_dsi'+suffix)
         ylim(prefix + 'rmsd_'+datatype+'_dsi'+suffix,
              np.nanmin(bdata), np.nanmax(bdata))
-        times, bdata = get_data(prefix + 'rmsd_'+datatype+'_gse'+suffix)
+        _, bdata = get_data(prefix + 'rmsd_'+datatype+'_gse'+suffix)
         ylim(prefix + 'rmsd_'+datatype+'_gse'+suffix,
              np.nanmin(bdata), np.nanmax(bdata))
-        times, bdata = get_data(prefix + 'rmsd_'+datatype+'_gsm'+suffix)
+        _, bdata = get_data(prefix + 'rmsd_'+datatype+'_gsm'+suffix)
         ylim(prefix + 'rmsd_'+datatype+'_gsm'+suffix,
              np.nanmin(bdata), np.nanmax(bdata))
-        times, bdata = get_data(prefix + 'rmsd_'+datatype+'_sm'+suffix)
+        _, bdata = get_data(prefix + 'rmsd_'+datatype+'_sm'+suffix)
         ylim(prefix + 'rmsd_'+datatype+'_sm'+suffix,
              np.nanmin(bdata), np.nanmax(bdata))
 
-        times, bdata = get_data(prefix + 'rmsd_'+datatype+suffix)
+        _, bdata = get_data(prefix + 'rmsd_'+datatype+suffix)
         ylim(prefix + 'rmsd_'+datatype+suffix,
              np.nanmin(bdata), np.nanmax(bdata))
 
-        times, bdata = get_data(prefix + 'quality_'+datatype+suffix)
+        _, bdata = get_data(prefix + 'quality_'+datatype+suffix)
         ylim(prefix + 'quality_'+datatype+suffix,
              np.nanmin(bdata), np.nanmax(bdata))
-        times, bdata = get_data(prefix + 'quality_'+datatype+'_gc'+suffix)
+        _, bdata = get_data(prefix + 'quality_'+datatype+'_gc'+suffix)
         ylim(prefix + 'quality_'+datatype+'_gc' +
              suffix, np.nanmin(bdata), np.nanmax(bdata))
 
@@ -272,7 +272,7 @@ def mgf(trange=['2017-03-27', '2017-03-28'],
         # remove -1.0e+30
         clip(prefix + 'mag_'+datatype+'_' + coord + suffix, -1e+6, 1e6)
         # set yrange
-        times, bdata = get_data(prefix + 'mag_'+datatype+'_' + coord + suffix)
+        _, bdata = get_data(prefix + 'mag_'+datatype+'_' + coord + suffix)
         ylim(prefix + 'mag_'+datatype+'_' + coord +
              suffix, np.nanmin(bdata), np.nanmax(bdata))
         # set labels

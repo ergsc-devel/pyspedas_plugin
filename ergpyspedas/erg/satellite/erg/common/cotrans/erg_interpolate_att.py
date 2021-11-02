@@ -20,8 +20,8 @@ def erg_interpolate_att(erg_xxx_in=None, noload=False):
     Returns:
         output_dictionary : dict
             Dictionary which has below keys.
-                spinperiod: output variable in which the interpolated data of ERG spin period is stored 
-                spinphase: output variable in which the interpolated data of ERG spin phase is stored   
+                spinperiod: output variable in which the interpolated data of ERG spin period is stored
+                spinphase: output variable in which the interpolated data of ERG spin phase is stored
                 sgix_j2000, sgiy_j2000, or sgiz_j2000: output interporated SGI axis vector for each component
                 sgax_j2000, sgay_j2000, or sgaz_j2000: output interporated SGA axis vector for each component
 

@@ -15,7 +15,7 @@ def sga2sgi(name_in=None,
     Parameters:
 
         name_in : str
-            input tplot variable to be transformed 
+            input tplot variable to be transformed
 
         name_out : str
             Name of the tplot variable in which the transformed data is stored
