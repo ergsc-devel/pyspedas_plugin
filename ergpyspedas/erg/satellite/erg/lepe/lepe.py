@@ -120,7 +120,8 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
             # --- print PI info and rules of the road
 
             print(' ')
-            print('**************************************************************************')
+            print(
+                '**************************************************************************')
             print(gatt["LOGICAL_SOURCE_DESCRIPTION"])
             print('')
             print('Information about ERG LEPe')
@@ -139,7 +140,8 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
                     'RoR of MGF L2: https://ergsc.isee.nagoya-u.ac.jp/mw/index.php/ErgSat/Mgf')
             print('')
             print('Contact: erg_lepe_info at isee.nagoya-u.ac.jp')
-            print('**************************************************************************')
+            print(
+                '**************************************************************************')
         except:
             print('printing PI info and rules of the road was failed')
 

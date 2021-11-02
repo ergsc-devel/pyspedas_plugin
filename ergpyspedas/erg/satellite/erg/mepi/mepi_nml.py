@@ -94,7 +94,8 @@ def mepi_nml(trange=['2017-03-27', '2017-03-28'],
             # --- print PI info and rules of the road
 
             print(' ')
-            print('**************************************************************************')
+            print(
+                '**************************************************************************')
             print(gatt["LOGICAL_SOURCE_DESCRIPTION"])
             print('')
             print('PI: ', gatt['PI_NAME'])
@@ -103,10 +104,12 @@ def mepi_nml(trange=['2017-03-27', '2017-03-28'],
             print('- The rules of the road (RoR) common to the ERG project:')
             print(
                 '      https://ergsc.isee.nagoya-u.ac.jp/data_info/rules_of_the_road.shtml.en')
-            print('- RoR for MEP-i data: https://ergsc.isee.nagoya-u.ac.jp/mw/index.php/ErgSat/Mepi')
+            print(
+                '- RoR for MEP-i data: https://ergsc.isee.nagoya-u.ac.jp/mw/index.php/ErgSat/Mepi')
             print('')
             print('Contact: erg_mep_info at isee.nagoya-u.ac.jp')
-            print('**************************************************************************')
+            print(
+                '**************************************************************************')
         except:
             print('printing PI info and rules of the road was failed')
 

@@ -67,31 +67,39 @@ def att(trange=['2017-04-01', '2017-04-02'],
 
     if notplot:
         output_dictionary = {}
-        output_dictionary['erg_att_sprate'] = {'x': time_float_array, 'y': Omega_float_array}
-        output_dictionary['erg_att_spphase'] = {'x': time_float_array, 'y': Phase_float_array}
-        output_dictionary['erg_att_izras'] = {'x': time_float_array, 'y': I_Alpha_float_array}
-        output_dictionary['erg_att_izdec'] = {'x': time_float_array, 'y': I_Delta_float_array}
-        output_dictionary['erg_att_gxras'] = {'x': time_float_array, 'y': GX_Alpha_float_array}
-        output_dictionary['erg_att_gxdec'] = {'x': time_float_array, 'y': GX_Delta_float_array}
-        output_dictionary['erg_att_gzras'] = {'x': time_float_array, 'y': GZ_Alpha_float_array}
-        output_dictionary['erg_att_gzdec'] = {'x': time_float_array, 'y': GZ_Delta_float_array}
+        output_dictionary['erg_att_sprate'] = {
+            'x': time_float_array, 'y': Omega_float_array}
+        output_dictionary['erg_att_spphase'] = {
+            'x': time_float_array, 'y': Phase_float_array}
+        output_dictionary['erg_att_izras'] = {
+            'x': time_float_array, 'y': I_Alpha_float_array}
+        output_dictionary['erg_att_izdec'] = {
+            'x': time_float_array, 'y': I_Delta_float_array}
+        output_dictionary['erg_att_gxras'] = {
+            'x': time_float_array, 'y': GX_Alpha_float_array}
+        output_dictionary['erg_att_gxdec'] = {
+            'x': time_float_array, 'y': GX_Delta_float_array}
+        output_dictionary['erg_att_gzras'] = {
+            'x': time_float_array, 'y': GZ_Alpha_float_array}
+        output_dictionary['erg_att_gzdec'] = {
+            'x': time_float_array, 'y': GZ_Delta_float_array}
         return output_dictionary
     else:
         store_data('erg_att_sprate', data={
-                'x': time_float_array, 'y': Omega_float_array})
+            'x': time_float_array, 'y': Omega_float_array})
         store_data('erg_att_spphase', data={
-                'x': time_float_array, 'y': Phase_float_array})
+            'x': time_float_array, 'y': Phase_float_array})
         store_data('erg_att_izras', data={
-                'x': time_float_array, 'y': I_Alpha_float_array})
+            'x': time_float_array, 'y': I_Alpha_float_array})
         store_data('erg_att_izdec', data={
-                'x': time_float_array, 'y': I_Delta_float_array})
+            'x': time_float_array, 'y': I_Delta_float_array})
         store_data('erg_att_gxras', data={
-                'x': time_float_array, 'y': GX_Alpha_float_array})
+            'x': time_float_array, 'y': GX_Alpha_float_array})
         store_data('erg_att_gxdec', data={
-                'x': time_float_array, 'y': GX_Delta_float_array})
+            'x': time_float_array, 'y': GX_Delta_float_array})
         store_data('erg_att_gzras', data={
-                'x': time_float_array, 'y': GZ_Alpha_float_array})
+            'x': time_float_array, 'y': GZ_Alpha_float_array})
         store_data('erg_att_gzdec', data={
-                'x': time_float_array, 'y': GZ_Delta_float_array})
+            'x': time_float_array, 'y': GZ_Delta_float_array})
 
     return None

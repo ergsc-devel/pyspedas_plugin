@@ -123,7 +123,8 @@ def pwe_efd(trange=['2017-04-01', '2017-04-02'],
 
             print(' ')
             print(' ')
-            print('**************************************************************************')
+            print(
+                '**************************************************************************')
             print(gatt["LOGICAL_SOURCE_DESCRIPTION"])
             print('')
             print('Information about ERG PWE EFD')
@@ -136,7 +137,8 @@ def pwe_efd(trange=['2017-04-01', '2017-04-02'],
                 'RoR of PWE/EFD: https://ergsc.isee.nagoya-u.ac.jp/mw/index.php/ErgSat/Pwe/Efd')
             print('')
             print('Contact: erg_pwe_info at isee.nagoya-u.ac.jp')
-            print('**************************************************************************')
+            print(
+                '**************************************************************************')
         except:
             print('printing PI info and rules of the road was failed')
 
@@ -174,7 +176,8 @@ def pwe_efd(trange=['2017-04-01', '2017-04-02'],
             get_data_vars = get_data(t_plot_name)
             dl_in = get_data(t_plot_name, metadata=True)
             time1 = get_data_vars[0]
-            data = np.where(get_data_vars[1] <= -1e+30, np.nan, get_data_vars[1])
+            data = np.where(get_data_vars[1] <= -
+                            1e+30, np.nan, get_data_vars[1])
             dt = get_data_vars[2]
             ndt = dt.size
             ndata = data.size

@@ -140,7 +140,7 @@ def hep(trange=['2017-03-27', '2017-03-28'],
 
     if initial_notplot_flag or downloadonly:
         return loaded_data
-    
+
     if isinstance(loaded_data, dict):
 
         if (level == 'l2') and (datatype == 'omniflux'):

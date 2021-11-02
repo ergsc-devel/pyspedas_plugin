@@ -22,7 +22,7 @@ def vector_rotate(x0, y0, z0, nx, ny, nz, theta):
     nx_length = 1
     concatenate_axis_n = 0
 
-    if isinstance(theta, np.ndarray):# for array theta
+    if isinstance(theta, np.ndarray):  # for array theta
         nx_length = theta.shape[0]
         concatenate_axis_n = 1
 
@@ -43,7 +43,7 @@ def vector_rotate(x0, y0, z0, nx, ny, nz, theta):
         axis=concatenate_axis_n).reshape(nx_length, 3, 3)
 
     inputed_vector = np.concatenate([[x0, y0, z0]], axis=concatenate_axis_x0).T
-    rotated_vector = [] # initialize
+    rotated_vector = []  # initialize
     # For all of (x0, y0, z0), (nx, ny, nz), (and theta) given as arrays.
     if (x0_length > 1) and (nx_length > 1):
         rotated_vector = np.einsum("ijk,ik->ij", rodrigues_mat, inputed_vector)
@@ -57,6 +57,7 @@ def vector_rotate(x0, y0, z0, nx, ny, nz, theta):
 
     # For (x0, y0, z0) given as a single vector and (nx,ny,nz) or theta given as a time siries array
     elif ((x0_length == 1) and (nx_length > 1)):
-        rotated_vector = np.dot(rodrigues_mat, inputed_vector).reshape(nx_length, 3)
+        rotated_vector = np.dot(
+            rodrigues_mat, inputed_vector).reshape(nx_length, 3)
 
     return rotated_vector

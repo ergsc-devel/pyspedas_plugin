@@ -96,7 +96,8 @@ def xep(trange=['2017-06-01', '2017-06-02'],
             # --- print PI info and rules of the road
 
             print(' ')
-            print('**************************************************************************')
+            print(
+                '**************************************************************************')
             print(gatt["LOGICAL_SOURCE_DESCRIPTION"])
             print('')
             print('Information about ERG XEP')
@@ -108,7 +109,8 @@ def xep(trange=['2017-06-01', '2017-06-02'],
             print('RoR of XEP: https://ergsc.isee.nagoya-u.ac.jp/mw/index.php/ErgSat/Xep')
             print('')
             print('Contact: erg_xep_info at isee.nagoya-u.ac.jp')
-            print('**************************************************************************')
+            print(
+                '**************************************************************************')
         except:
             print('printing PI info and rules of the road was failed')
 

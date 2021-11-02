@@ -97,7 +97,8 @@ def pwe_ofa(trange=['2017-04-01', '2017-04-02'],
 
             print(' ')
             print(' ')
-            print('**************************************************************************')
+            print(
+                '**************************************************************************')
             print(gatt["LOGICAL_SOURCE_DESCRIPTION"])
             print('')
             print('Information about ERG PWE OFA')
@@ -110,7 +111,8 @@ def pwe_ofa(trange=['2017-04-01', '2017-04-02'],
                 'RoR of PWE/OFA: https://ergsc.isee.nagoya-u.ac.jp/mw/index.php/ErgSat/Pwe/Ofa')
             print('')
             print('Contact: erg_pwe_info at isee.nagoya-u.ac.jp')
-            print('**************************************************************************')
+            print(
+                '**************************************************************************')
         except:
             print('printing PI info and rules of the road was failed')
 

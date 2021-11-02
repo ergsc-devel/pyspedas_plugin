@@ -66,7 +66,8 @@ def erg_interpolate_att(erg_xxx_in=None, noload=False):
     if reload:
         degap('erg_att_spphase', dt=8., margin=.5)
     sphase = get_data('erg_att_spphase')
-    ph_nn = interpolate.interp1d(sphase[0], sphase[1], kind="nearest")(time_array)
+    ph_nn = interpolate.interp1d(
+        sphase[0], sphase[1], kind="nearest")(time_array)
     per_nn = spinperiod['y']
     dt = time_array - \
         interpolate.interp1d(sphase[0], sphase[0], kind="nearest")(time_array)

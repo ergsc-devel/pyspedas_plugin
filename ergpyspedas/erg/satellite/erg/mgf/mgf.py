@@ -119,7 +119,8 @@ def mgf(trange=['2017-03-27', '2017-03-28'],
 
             # --- print PI info and rules of the road
             print(' ')
-            print('**************************************************************************')
+            print(
+                '**************************************************************************')
             print(gatt["LOGICAL_SOURCE_DESCRIPTION"])
             print('')
             print('Information about ERG MGF')
@@ -128,9 +129,11 @@ def mgf(trange=['2017-03-27', '2017-03-28'],
             print("Affiliation: "+gatt["PI_AFFILIATION"])
             print('')
             print('RoR of ERG project common: https://ergsc.isee.nagoya-u.ac.jp/data_info/rules_of_the_road.shtml.en')
-            print('RoR of MGF L2: https://ergsc.isee.nagoya-u.ac.jp/mw/index.php/ErgSat/Mgf')
+            print(
+                'RoR of MGF L2: https://ergsc.isee.nagoya-u.ac.jp/mw/index.php/ErgSat/Mgf')
             print('Contact: erg_mgf_info at isee.nagoya-u.ac.jp')
-            print('**************************************************************************')
+            print(
+                '**************************************************************************')
         except:
             print('printing PI info and rules of the road was failed')
 
