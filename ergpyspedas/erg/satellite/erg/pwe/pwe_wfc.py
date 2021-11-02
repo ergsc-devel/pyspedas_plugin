@@ -76,6 +76,9 @@ def pwe_wfc(trange=['2017-04-01/12:00:00', '2017-04-01/13:00:00'],
         List of tplot variables created.
 
     """
+    initial_notplot_flag = False
+    if notplot:
+        initial_notplot_flag = True
 
     file_res = 3600.
 
@@ -146,6 +149,9 @@ def pwe_wfc(trange=['2017-04-01/12:00:00', '2017-04-01/13:00:00'],
                 '**************************************************************************')
         except:
             print('printing PI info and rules of the road was failed')
+
+    if initial_notplot_flag or downloadonly:
+        return loaded_data
 
     if notplot:
         return loaded_data

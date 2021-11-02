@@ -77,6 +77,9 @@ def lepi(trange=['2017-07-01', '2017-07-02'],
         List of tplot variables created.
 
     """
+    initial_notplot_flag = False
+    if notplot:
+        initial_notplot_flag = True
 
     if level == 'l3':
         datatype = 'pa'
@@ -121,6 +124,9 @@ def lepi(trange=['2017-07-01', '2017-07-02'],
             print('**************************************************************************')
         except:
             print('printing PI info and rules of the road was failed')
+
+    if initial_notplot_flag or downloadonly:
+        return loaded_data
 
     if (datatype == 'omniflux') and (level == 'l2'):
         tplot_variables = []

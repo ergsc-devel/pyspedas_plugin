@@ -71,6 +71,10 @@ def mepi_tof(trange=['2017-03-27', '2017-03-28'],
         List of tplot variables created.
 
     """
+    initial_notplot_flag = False
+    if notplot:
+        initial_notplot_flag = True
+
     file_res = 3600. * 24
     prefix = 'erg_mepi_'+level+'_tof'+datatype+'_'
 
@@ -106,6 +110,9 @@ def mepi_tof(trange=['2017-03-27', '2017-03-28'],
             print('**************************************************************************')
         except:
             print('printing PI info and rules of the road was failed')
+
+    if initial_notplot_flag or downloadonly:
+        return loaded_data
 
     if 'flux' in datatype:
         original_suffix_list = ['FPDU', 'FHE2DU', 'FHEDU', 'FOPPDU', 'FODU', 'FO2PDU',

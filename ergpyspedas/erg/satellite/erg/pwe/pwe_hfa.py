@@ -72,6 +72,10 @@ def pwe_hfa(trange=['2017-04-01', '2017-04-02'],
 
     """
 
+    initial_notplot_flag = False
+    if notplot:
+        initial_notplot_flag = True
+
     file_res = 3600. * 24
 
     if level == 'l2':
@@ -116,6 +120,9 @@ def pwe_hfa(trange=['2017-04-01', '2017-04-02'],
             print('**************************************************************************')
         except:
             print('printing PI info and rules of the road was failed')
+
+    if initial_notplot_flag or downloadonly:
+        return loaded_data
 
     if (level == 'l2') and (mode == 'low') and (not notplot):
 

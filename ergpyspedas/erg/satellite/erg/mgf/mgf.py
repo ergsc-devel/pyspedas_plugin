@@ -75,6 +75,9 @@ def mgf(trange=['2017-03-27', '2017-03-28'],
         List of tplot variables created.
 
     """
+    initial_notplot_flag = False
+    if notplot:
+        initial_notplot_flag = True
 
     if datatype == '8s' or datatype == '8':
         datatype = '8sec'
@@ -130,6 +133,9 @@ def mgf(trange=['2017-03-27', '2017-03-28'],
             print('**************************************************************************')
         except:
             print('printing PI info and rules of the road was failed')
+
+    if initial_notplot_flag or downloadonly:
+        return loaded_data
 
     if datatype == '8sec':
 

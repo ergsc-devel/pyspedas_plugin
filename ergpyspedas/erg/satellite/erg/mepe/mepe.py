@@ -71,6 +71,9 @@ def mepe(trange=['2017-03-27', '2017-03-28'],
         List of tplot variables created.
 
     """
+    initial_notplot_flag = False
+    if notplot:
+        initial_notplot_flag = True
 
     if level == 'l3':
         datatype = '3dflux'
@@ -79,6 +82,8 @@ def mepe(trange=['2017-03-27', '2017-03-28'],
     prefix = 'erg_mepe_'+level + '_' + datatype + '_'
     pathformat = 'satellite/erg/mepe/'+level+'/'+datatype + \
         '/%Y/%m/erg_mepe_'+level+'_'+datatype+'_%Y%m%d_v??_??.cdf'
+
+
 
     loaded_data = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype, file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
                        varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
@@ -110,6 +115,9 @@ def mepe(trange=['2017-03-27', '2017-03-28'],
             print('**************************************************************************')
         except:
             print('printing PI info and rules of the road was failed')
+
+    if initial_notplot_flag or downloadonly:
+        return loaded_data
 
     if datatype == 'omniflux':
         # set spectrogram plot option

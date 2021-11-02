@@ -94,6 +94,10 @@ def hep(trange=['2017-03-27', '2017-03-28'],
         else:
             pathformat += version + '.cdf'
 
+    initial_notplot_flag = False
+    if notplot:
+        initial_notplot_flag = True
+
     if ((level == 'l2') and (datatype == 'omniflux')) or (datatype == '3dflux') or (level == 'l3'):
         # to avoid failure of creation plot variables (at store_data.py) of hep
         notplot = True
@@ -134,6 +138,9 @@ def hep(trange=['2017-03-27', '2017-03-28'],
         except:
             print('printing PI info and rules of the road was failed')
 
+    if initial_notplot_flag or downloadonly:
+        return loaded_data
+    
     if isinstance(loaded_data, dict):
 
         if (level == 'l2') and (datatype == 'omniflux'):

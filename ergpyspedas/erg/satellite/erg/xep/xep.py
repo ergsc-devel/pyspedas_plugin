@@ -71,6 +71,10 @@ def xep(trange=['2017-06-01', '2017-06-02'],
         List of tplot variables created.
 
     """
+    initial_notplot_flag = False
+    if notplot:
+        initial_notplot_flag = True
+
     if (datatype == 'omniflux') or (datatype == '2dflux'):
         # to avoid failure of creation Tplot variables (at store_data.py) of xep
         notplot = True
@@ -107,6 +111,9 @@ def xep(trange=['2017-06-01', '2017-06-02'],
             print('**************************************************************************')
         except:
             print('printing PI info and rules of the road was failed')
+
+    if initial_notplot_flag or downloadonly:
+        return loaded_data
 
     if isinstance(loaded_data, dict):
 

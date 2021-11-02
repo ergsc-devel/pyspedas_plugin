@@ -85,6 +85,10 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
 
     """
 
+    initial_notplot_flag = False
+    if notplot:
+        initial_notplot_flag = True
+
     if level == 'l3':
         datatype = 'pa'
 
@@ -138,6 +142,9 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
             print('**************************************************************************')
         except:
             print('printing PI info and rules of the road was failed')
+
+    if initial_notplot_flag or downloadonly:
+        return loaded_data
 
     if (isinstance(loaded_data, dict)) and (len(loaded_data) > 0):
         if (level == 'l2') and (datatype == 'omniflux'):

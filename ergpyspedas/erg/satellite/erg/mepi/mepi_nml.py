@@ -70,6 +70,10 @@ def mepi_nml(trange=['2017-03-27', '2017-03-28'],
         List of tplot variables created.
 
     """
+    initial_notplot_flag = False
+    if notplot:
+        initial_notplot_flag = True
+
     file_res = 3600. * 24
     prefix = 'erg_mepi_'+level+'_'+datatype+'_'
 
@@ -105,6 +109,9 @@ def mepi_nml(trange=['2017-03-27', '2017-03-28'],
             print('**************************************************************************')
         except:
             print('printing PI info and rules of the road was failed')
+
+    if initial_notplot_flag or downloadonly:
+        return loaded_data
 
     if (datatype == 'omniflux') and (level == 'l2'):
         original_suffix_list = ['FPDO', 'FHE2DO', 'FHEDO', 'FOPPDO', 'FODO', 'FO2PDO',

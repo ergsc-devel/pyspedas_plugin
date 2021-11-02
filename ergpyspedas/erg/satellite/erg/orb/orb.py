@@ -73,6 +73,10 @@ def orb(trange=['2017-03-27', '2017-03-28'],
         List of tplot variables created.
 
     """
+    initial_notplot_flag = False
+    if notplot:
+        initial_notplot_flag = True
+
     file_res = 3600. * 24
 
     prefix = 'erg_orb_'+level+'_'
@@ -130,6 +134,9 @@ def orb(trange=['2017-03-27', '2017-03-28'],
                 '**************************************************************************')
         except:
             print('printing PI info and rules of the road was failed')
+
+    if initial_notplot_flag or downloadonly:
+        return loaded_data
 
     if (level == 'l2') and (datatype == 'def'):
 
