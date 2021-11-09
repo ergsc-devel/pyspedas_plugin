@@ -153,9 +153,6 @@ def pwe_wfc(trange=['2017-04-01/12:00:00', '2017-04-01/13:00:00'],
     if initial_notplot_flag or downloadonly:
         return loaded_data
 
-    if notplot:
-        return loaded_data
-
     if datatype == 'spec':
         trange_in_float = time_float(trange)
         for i in range(len(prefix_list)):
