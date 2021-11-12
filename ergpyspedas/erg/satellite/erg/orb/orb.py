@@ -1,9 +1,10 @@
 import cdflib
 import numpy as np
 from pytplot import clip, get_data, options, ylim
+from pyspedas import tnames
 
 from ..load import load
-
+from .remove_duplicated_tframe import remove_duplicated_tframe
 
 def orb(trange=['2017-03-27', '2017-03-28'],
         datatype='def',
@@ -138,6 +139,8 @@ def orb(trange=['2017-03-27', '2017-03-28'],
     if initial_notplot_flag or downloadonly:
         return loaded_data
 
+    remove_duplicated_tframe(tnames(prefix + '*pos*'))
+    
     if (level == 'l2') and (datatype == 'def'):
 
         # remove -1.0e+30
