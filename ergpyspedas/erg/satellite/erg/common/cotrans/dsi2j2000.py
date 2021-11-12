@@ -1,4 +1,5 @@
 import numpy as np
+from pyspedas import tinterpol
 from pyspedas.analysis.tcrossp import tcrossp
 from pyspedas.analysis.tnormalize import tnormalize
 from pyspedas.cotrans.cotrans import cotrans
@@ -62,14 +63,8 @@ def dsi2j2000(name_in=None,
         if reload:
             tr = get_timespan(name_in)
             orb(trange=time_string([tr[0] - 60., tr[1] + 60.]))
-            get_data_erg_orb_l2 = get_data('erg_orb_l2_pos_gse')
-            scpos_x = np.interp(
-                time_array, get_data_erg_orb_l2[0], get_data_erg_orb_l2[1][:, 0])
-            scpos_y = np.interp(
-                time_array, get_data_erg_orb_l2[0], get_data_erg_orb_l2[1][:, 1])
-            scpos_z = np.interp(
-                time_array, get_data_erg_orb_l2[0], get_data_erg_orb_l2[1][:, 2])
-            scpos = np.array([scpos_x, scpos_y, scpos_z]).T
+            tinterpol('erg_orb_l2_pos_gse', time_array)
+            scpos = get_data('erg_orb_l2_pos_gse-itrp')[1]
             sunpos = np.array([[1.496e+08, 0., 0.]]*time_length)
             sundir = sunpos - scpos
             store_data('sundir_gse', data={'x': time_array, 'y': sundir})
