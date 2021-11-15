@@ -32,14 +32,20 @@ def remove_duplicated_tframe(tvars=[]):
             if len(get_data_vars) >= 3:
                 element_counts = len(get_data_vars)
                 if element_counts == 3:
-                    input_data_dictionary['v'] = np.delete(
-                        get_data_vars[2], delete_indices_array, axis=0)
+                    if get_data_vars[2].ndim >= 2:
+                        input_data_dictionary['v'] = np.delete(
+                            get_data_vars[2], delete_indices_array, axis=0)
+                    elif get_data_vars[2].ndim == 1:
+                        input_data_dictionary['v'] = get_data_vars[2]
                 elif element_counts > 3:
                     for element_index in range(2, element_counts):
                         v_element_name = f'v{element_index-1}'
-                        input_data_dictionary[v_element_name] = np.delete(
-                            get_data_vars[element_index], delete_indices_array,
-                            axis=0)
+                        if get_data_vars[element_index].ndim >= 2:
+                            input_data_dictionary[v_element_name] = np.delete(
+                                get_data_vars[element_index], delete_indices_array,
+                                axis=0)
+                        elif get_data_vars[element_index].ndim == 1:
+                            input_data_dictionary[v_element_name] = get_data_vars[element_index]
 
             store_data(tvar, data=input_data_dictionary,
                        attr_dict=input_attr_dict)
