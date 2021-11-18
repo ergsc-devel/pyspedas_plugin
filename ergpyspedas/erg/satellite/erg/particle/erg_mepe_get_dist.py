@@ -36,3 +36,12 @@ def erg_mepe_get_dist(tname,
     else:
         print(f'ERROR: given an invalid tplot variable: {input_name}')
         return 0
+
+    # ;; Get a reference to data and metadata
+
+    data_in = get_data(input_name)
+    data_in_metadata = get_data(input_name, metadata=True)
+
+    if data_in is None:
+        print('Problem extracting the mepe 3dflux data.')
+        return 0
