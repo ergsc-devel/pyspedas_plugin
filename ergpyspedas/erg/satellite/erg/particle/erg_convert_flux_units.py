@@ -1,11 +1,13 @@
 import logging
+
 import numpy as np
 
 logging.captureWarnings(True)
-logging.basicConfig(format='%(asctime)s: %(message)s', datefmt='%d-%b-%y %H:%M:%S', level=logging.INFO)
+logging.basicConfig(format='%(asctime)s: %(message)s',
+                    datefmt='%d-%b-%y %H:%M:%S', level=logging.INFO)
+
 
 def erg_convert_flux_units(input_dist, units='flux', relativistic=False):
-
     """
     ; The following unit names are acceptable for units:
     ;   'flux' 'eflux' 'df' 'df_cm'
@@ -16,7 +18,7 @@ def erg_convert_flux_units(input_dist, units='flux', relativistic=False):
     ; "relativistic" keyword is valid only for electron currently.
     ; Using it for ions just messes up the conversion.
     """
-    
+
     output_dist = input_dist
 
     units_out = units.lower()
@@ -70,7 +72,7 @@ def erg_convert_flux_units(input_dist, units='flux', relativistic=False):
     ;; Keyword "relativistic" is valid for only electrons.
     ;; DO NOT USE it for ions. 
     """
-    
+
     flux_to_df = A**2.0 * 0.5447 * 1e6
 
     if relativistic:
@@ -130,7 +132,7 @@ def erg_convert_flux_units(input_dist, units='flux', relativistic=False):
     """
 
     output_dist['data'] = input_dist['data'] * input_dist['energy']**exp[0] * \
-                            (flux_to_df ** exp[1] * cm_to_km ** exp[2])
+        (flux_to_df ** exp[1] * cm_to_km ** exp[2])
 
     output_dist['units_name'] = units_out
 
