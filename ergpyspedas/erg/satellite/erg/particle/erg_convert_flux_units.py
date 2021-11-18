@@ -6,6 +6,17 @@ logging.basicConfig(format='%(asctime)s: %(message)s', datefmt='%d-%b-%y %H:%M:%
 
 def erg_convert_flux_units(input_dist, units='flux', relativistic=False):
 
+    """
+    ; The following unit names are acceptable for units:
+    ;   'flux' 'eflux' 'df' 'df_cm'
+    ;
+    ;   'df_km' and 'psd' are referred to as 'df'.
+    ;
+    ; CAUTION!!!
+    ; "relativistic" keyword is valid only for electron currently.
+    ; Using it for ions just messes up the conversion.
+    """
+    
     output_dist = input_dist
 
     units_out = units.lower()
