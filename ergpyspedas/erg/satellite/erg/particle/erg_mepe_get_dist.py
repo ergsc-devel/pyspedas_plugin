@@ -18,7 +18,7 @@ def erg_mepe_get_dist(tname,
         input_name = tnames(tname)[0]
     else:
         print(f'Variable: {tname} not found!')
-        return
+        return 0
 
     level = level.lower()
     """
