@@ -8,6 +8,28 @@ def erg_pgs_clean_data(data_in,
                        relativistic=False,
                        for_moments=False):
 
+    """
+    Applies phi, theta, and energy limits to data structure(s) by
+    turning off the corresponding bin flags.
+
+    Input:
+        data: dict
+            Particle data structure
+
+    Parameters:
+        phi: np.ndarray
+            Minimum and maximum values for phi
+
+        theta: np.ndarray
+            Minimum and maximum values for theta
+
+        energy: np.ndarray
+            Minimum and maximum values for energy
+
+    Returns:
+        Data structure with limits applied (to the bins array)
+    """
+
     converted_data = erg_convert_flux_units(input_dist=data_in,
                                             units=units,
                                             magf=None,
