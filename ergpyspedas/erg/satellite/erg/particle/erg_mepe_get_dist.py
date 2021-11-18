@@ -11,7 +11,8 @@ logging.basicConfig(format='%(asctime)s: %(message)s', datefmt='%d-%b-%y %H:%M:%
 def erg_mepe_get_dist(tname,
                       index,
                       units='flux',
-                      level = 'l2'):
+                      level = 'l2',
+                      species = 'e'):
     
     if len(tnames(tname)) > 0:
         input_name = tnames(tname)[0]
@@ -30,4 +31,8 @@ def erg_mepe_get_dist(tname,
     level = vn_info[2]
     vn_spph = '_'.join(vn_info[0:4]) + '_spin_phase'
 
-
+    if instrument == 'mepe':
+        species = 'e'
+    else:
+        print(f'ERROR: given an invalid tplot variable: {input_name}')
+        return 0
