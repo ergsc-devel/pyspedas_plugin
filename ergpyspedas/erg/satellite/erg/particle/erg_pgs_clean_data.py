@@ -52,7 +52,7 @@ def erg_pgs_clean_data(data_in,
         output['data'] = np.where(output['bins'] == 0, 0., output['data'])
         output['psd'] = np.where(output['bins'] == 0, 0., output['psd'])
         output['energy'] = np.where(output['bins'] == 0, 1., output['energy'])
-        output['denergy'] = np.where(output['bins'] == 0, 
+        output['denergy'] = np.where(output['bins'] == 0,
                                     1., output['denergy'])
 
     if 'orig_energy' in converted_data.keys():
