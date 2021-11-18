@@ -19,4 +19,15 @@ def erg_mepe_get_dist(tname,
         print(f'Variable: {tname} not found!')
         return
 
-    
+    level = level.lower()
+    """
+    ;; Extract some information from a tplot variable name
+    ;; e.g., erg_mepe_l2_3dflux_FEDU
+    """
+
+    vn_info = input_name.split('_')
+    instrument = vn_info[1]
+    level = vn_info[2]
+    vn_spph = '_'.join(vn_info[0:4]) + '_spin_phase'
+
+
