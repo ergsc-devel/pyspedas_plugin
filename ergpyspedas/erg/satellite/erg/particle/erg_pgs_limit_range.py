@@ -4,6 +4,28 @@ import numpy as np
 def erg_pgs_limit_range(data_in, phi=None, theta=None, energy=None,
                         no_ang_weighting=False):
 
+    """
+    Applies phi, theta, and energy limits to data structure(s) by
+    turning off the corresponding bin flags.
+
+    Input:
+        data: dict
+            Particle data structure
+
+    Parameters:
+        phi: np.ndarray
+            Minimum and maximum values for phi
+
+        theta: np.ndarray
+            Minimum and maximum values for theta
+
+        energy: np.ndarray
+            Minimum and maximum values for energy
+
+    Returns:
+        Data structure with limits applied (to the bins array)
+    """
+
     # Apply phi limits
 
     if phi is not None:
