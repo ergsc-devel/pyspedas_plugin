@@ -198,4 +198,7 @@ def erg_mepe_get_dist(tname,
     elev_rebin2 = np.repeat(elev_rebin1, dim_array[1], axis=1)  # repeated across spin phase(azimuth)
     dist['theta'] = np.repeat(elev_rebin2, dim_array[0], axis=0)  # repeated across energy
 
+    dist['dtheta'] = np.full(shape=np.insert(dim_array, dim_array.shape[0],
+                     n_times), fill_value=11.25)  #  ;; 11.25 deg is set for the moment calculation
+
     return dist
