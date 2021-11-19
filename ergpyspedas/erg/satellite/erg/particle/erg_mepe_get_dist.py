@@ -91,3 +91,50 @@ def erg_mepe_get_dist(tname,
         else:
             n_times = np.array([index]).size
 
+    """
+    ;; --------------------------------------------------------------
+
+    ;; MEPe data arr: [9550(time), 32(spin phase), 16(energy), 16(apd)]
+    ;; Dimensions
+    """
+
+    dim_array = np.array(data_in[1].shape[1:])[[1, 0, 2]]
+    n_sp = dim_array[1]  # ;; # of spin phases in 1 spin
+
+    if species.lower() == 'e':
+        mass = 5.68566e-06
+        charge = -1.
+        data_name = 'MEP-e Electron 3dflux'
+        integ_time = 7.99 / 32 / 16 #  ;; currently hard-coded
+    else:
+        print('given species is not supported by this routine.')
+        return 0
+
+    #  ;; basic template structure compatible with other routines
+
+    dist_template = {
+        'project_name': 'ERG',
+        'spacecraft': 1,  # always 1 as a dummy value
+        'data_name': data_name,
+        'units_name': 'flux',  #   MEP-e data in [/keV-s-sr-cm2] should be converted to [/eV-s-sr-cm2] 
+        'units_procedure': 'erg_convert_flux_units',
+        'species': species,
+        'valid': 1,
+        
+        'charge': charge,
+        'mass': mass,
+        'time': 0,
+        'end_time': 0,
+        
+        'data': np.zeros(shape=dim_array),
+        'bins': np.ones(shape=dim_array, dtype='int8'),  # must be set or data will be consider invalid
+        
+        'energy': np.zeros(shape=dim_array),  #  should be in eV
+        'denergy':  np.zeros(shape=dim_array),
+        'nenergy': dim_array[0],  #   # of energy chs
+        'nbins': dim_array[1] * dim_array[2],   #  # thetas * # phis
+        'phi': np.zeros(shape=dim_array),
+        'dphi': np.zeros(shape=dim_array),
+        'theta': np.zeros(shape=dim_array),
+        'dtheta': np.zeros(shape=dim_array),
+    }
