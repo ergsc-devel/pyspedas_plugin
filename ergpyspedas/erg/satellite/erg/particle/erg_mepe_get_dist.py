@@ -88,4 +88,6 @@ def erg_mepe_get_dist(tname,
             else:
                 n_times = data_in[0].size
                 index = np.arange(n_times)
+        else:
+            n_times = np.array([index]).size
 
