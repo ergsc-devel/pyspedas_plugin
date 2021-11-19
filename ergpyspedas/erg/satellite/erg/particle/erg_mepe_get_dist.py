@@ -123,8 +123,6 @@ def erg_mepe_get_dist(tname,
         
         'charge': charge,
         'mass': mass,
-        'time': 0,
-        'end_time': 0,
 
     }
 
