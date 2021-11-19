@@ -189,5 +189,7 @@ def erg_mepe_get_dist(tname,
     phi_ofst_for_sv = np.repeat(phi_ofst_for_sv_rebin2, dim_array[1], axis=1) # repeated across spin phase(azimuth)
     dist['phi'] = np.fmod((phi0 + phi_ofst_for_sv + 360.), 360.)
 
+    dist['dphi'] = np.full(shape=np.insert(dim_array, dim_array.shape[0],
+                     data_in[1].shape[0]), fill_value=11.25)
 
     return dist
