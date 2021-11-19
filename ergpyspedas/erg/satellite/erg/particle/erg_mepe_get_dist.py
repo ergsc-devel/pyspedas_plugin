@@ -98,7 +98,7 @@ def erg_mepe_get_dist(tname,
     ;; Dimensions
     """
 
-    dim_array = np.array(data_in[1].shape[1:])[[1, 0, 2]]
+    dim_array = np.array(data_in[1].shape[1:])[[1, 0, 2]]  #  ;; to [ energy, spin phase(azimuth), apd(elevation) ]
     n_sp = dim_array[1]  # ;; # of spin phases in 1 spin
 
     if species.lower() == 'e':
