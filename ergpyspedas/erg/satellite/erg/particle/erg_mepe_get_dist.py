@@ -192,4 +192,10 @@ def erg_mepe_get_dist(tname,
     dist['dphi'] = np.full(shape=np.insert(dim_array, dim_array.shape[0],
                      n_times), fill_value=11.25)
 
+    elev = angarr[0, 1, :]  # ;; [(apd)]
+    elev_reform = np.reshape(elev, [1, 1, dim_array[2], 1])
+    elev_rebin1 = np.repeat(elev_reform, n_times, axis=3)  # repeated across n_times
+    elev_rebin2 = np.repeat(elev_rebin1, dim_array[1], axis=1)  # repeated across spin phase(azimuth)
+    dist['theta'] = np.repeat(elev_rebin2, dim_array[0], axis=0)  # repeated across energy
+
     return dist
