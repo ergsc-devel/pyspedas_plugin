@@ -112,7 +112,7 @@ def erg_mepe_get_dist(tname,
 
     #  ;; basic template structure compatible with other routines
 
-    dist_template = {
+    dist = {
         'project_name': 'ERG',
         'spacecraft': 1,  # always 1 as a dummy value
         'data_name': data_name,
@@ -125,16 +125,9 @@ def erg_mepe_get_dist(tname,
         'mass': mass,
         'time': 0,
         'end_time': 0,
-        
-        'data': np.zeros(shape=dim_array),
-        'bins': np.ones(shape=dim_array, dtype='int8'),  # must be set or data will be consider invalid
-        
-        'energy': np.zeros(shape=dim_array),  #  should be in eV
-        'denergy':  np.zeros(shape=dim_array),
-        'nenergy': dim_array[0],  #   # of energy chs
-        'nbins': dim_array[1] * dim_array[2],   #  # thetas * # phis
-        'phi': np.zeros(shape=dim_array),
-        'dphi': np.zeros(shape=dim_array),
-        'theta': np.zeros(shape=dim_array),
-        'dtheta': np.zeros(shape=dim_array),
+
     }
+
+
+
+
