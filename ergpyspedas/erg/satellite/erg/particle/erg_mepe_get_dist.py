@@ -138,5 +138,12 @@ def erg_mepe_get_dist(tname,
     dist['time'] = data_in[0][[index]]
     dist['end_time'] = dist['time'] + integ_time  #  ;; currently hard-coded
 
+    """
+    ;; Shuffle the original data array [time,spin phase,energy,apd] to
+    ;; be energy-azimuth-elevation-time.
+    ;; The factor 1d-3 is to convert [/keV-s-sr-cm2] (default unit of
+    ;; MEP-e Lv2 flux data) to [/eV-s-sr-cm2] 
+    """
+    dist['data'] = data_in[1][[index]].transpose([2, 1, 3, 0]) * 1e-3
 
 
