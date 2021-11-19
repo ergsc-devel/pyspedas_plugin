@@ -85,4 +85,7 @@ def erg_mepe_get_dist(tname,
                     print('No data in time range: ' \
                         + ' '.join(time_string(trange_minmax)))
                     return 0
+            else:
+                n_times = data_in[0].size
+                index = np.arange(n_times)
 
