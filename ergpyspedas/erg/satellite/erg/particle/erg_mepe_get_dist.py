@@ -128,6 +128,15 @@ def erg_mepe_get_dist(tname,
 
     }
 
+    # other keys (members) will added in below processing, sequentially.
+
+    """
+    ;; Then, fill in arrays in the data structure
+    ;;   dim[ nenergy, nspinph(azimuth), napd(elevation), ntime]
+    """
+
+    dist['time'] = data_in[0][[index]]
+    dist['end_time'] = dist['time'] + integ_time  #  ;; currently hard-coded
 
 
 
