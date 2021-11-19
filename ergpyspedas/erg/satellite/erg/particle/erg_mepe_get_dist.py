@@ -70,7 +70,7 @@ def erg_mepe_get_dist(tname,
                         kind="nearest", fill_value='extrapolate')\
                             (single_time_double)
         index = np.where(data_in[0] == nearest_time)[0]
-        n_times = index.shape[0]
+        n_times = index.size
     else:
         # index supersedes time range
         if index is None:
