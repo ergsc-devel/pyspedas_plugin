@@ -146,7 +146,7 @@ def erg_mepe_get_dist(tname,
     """
     dist['data'] = data_in[1][[index]].transpose([2, 1, 3, 0]) * 1e-3
 
-    dist['bins'] = np.ones(shape=np.insert(dim_array, 0,
+    dist['bins'] = np.ones(shape=np.insert(dim_array, dim_array.shape[0],
                      data_in[1].shape[0]), dtype='int8')
                        # must be set or data will be consider invalid
 
@@ -188,5 +188,6 @@ def erg_mepe_get_dist(tname,
     phi_ofst_for_sv_rebin2 = np.repeat(phi_ofst_for_sv_rebin1, dim_array[2], axis=2) # repeated across apd(elevation)
     phi_ofst_for_sv = np.repeat(phi_ofst_for_sv_rebin2, dim_array[1], axis=1) # repeated across spin phase(azimuth)
     dist['phi'] = np.fmod((phi0 + phi_ofst_for_sv + 360.), 360.)
+
 
     return dist
