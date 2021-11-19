@@ -9,6 +9,8 @@ from scipy import interpolate
 from pyspedas.utilities.time_double import time_double
 from pyspedas.utilities.time_string import time_string
 
+from .get_mepe_flux_angle_in_sga import get_mepe_flux_angle_in_sga
+
 logging.captureWarnings(True)
 logging.basicConfig(format='%(asctime)s: %(message)s', datefmt='%d-%b-%y %H:%M:%S', level=logging.INFO)
 
@@ -160,5 +162,31 @@ def erg_mepe_get_dist(tname,
     energy_rebin1 = np.repeat(energy_reform, n_times, axis=3) # repeated across n_times
     energy_rebin2 = np.repeat(energy_rebin1, len(data_in[4]), axis=2) # repeated across apd(elevation)
     dist['energy'] = np.repeat(energy_rebin2, len(data_in[2]), axis=1) # repeated across spin phase(azimuth)
+
+    #  ;; Energy bin width
+
+    #  ;; azimuthal angle in spin direction
+
+    angarr = get_mepe_flux_angle_in_sga()
+    phissi = angarr[1, 1, :] - (90. + 21.6)  #  ;; [(apd)]
+    spinph_ofst = data_in[2] * 11.25
+
+    phi0_1_reform = np.reshape(phissi, [1, 1, dim_array[2], 1])
+    phi0_1_rebin1 = np.repeat(phi0_1_reform, n_times, axis=3)  # repeated across n_times
+    phi0_1_rebin2 = np.repeat(phi0_1_rebin1, dim_array[1], axis=1)  # repeated across spin phase(azimuth)
+    phi0_1 = np.repeat(phi0_1_rebin2, dim_array[0], axis=0)  # repeated across energy
+
+    phi0_2_reform = np.reshape(spinph_ofst, [1, dim_array[1], 1, 1])
+    phi0_2_rebin1 = np.repeat(phi0_2_reform, n_times, axis=3)  # repeated across n_times
+    phi0_2_rebin2 = np.repeat(phi0_2_rebin1, dim_array[2], axis=2)  # repeated across apd(elevation)
+    phi0_2 = np.repeat(phi0_2_rebin2, dim_array[0], axis=0)  # repeated across energy
+    phi0 = phi0_1 + phi0_2
+
+    ofst_sv = (np.arange(dim_array[0]) + 0.5) * 11.25/dim_array[0]  # ;; [(energy)]
+    phi_ofst_for_sv_reform = np.reshape(ofst_sv, [dim_array[0], 1, 1, 1])
+    phi_ofst_for_sv_rebin1 = np.repeat(phi_ofst_for_sv_reform, n_times, axis=3) # repeated across n_times
+    phi_ofst_for_sv_rebin2 = np.repeat(phi_ofst_for_sv_rebin1, dim_array[2], axis=2) # repeated across apd(elevation)
+    phi_ofst_for_sv = np.repeat(phi_ofst_for_sv_rebin2, dim_array[1], axis=1) # repeated across spin phase(azimuth)
+    dist['phi'] = np.fmod((phi0 + phi_ofst_for_sv + 360.), 360.)
 
     return dist
