@@ -13,7 +13,8 @@ def erg_mepe_get_dist(tname,
                       units='flux',
                       level = 'l2',
                       species = 'e',
-                      time_only=False):
+                      time_only=False,
+                      single_time=None):
     
     if len(tnames(tname)) > 0:
         input_name = tnames(tname)[0]
@@ -47,5 +48,6 @@ def erg_mepe_get_dist(tname,
         print('Problem extracting the mepe 3dflux data.')
         return 0
 
+    # ;; Return time labels
     if time_only:
         return data_in[0]
