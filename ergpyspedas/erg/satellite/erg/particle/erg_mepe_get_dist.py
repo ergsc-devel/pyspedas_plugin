@@ -147,7 +147,7 @@ def erg_mepe_get_dist(tname,
     dist['data'] = data_in[1][[index]].transpose([2, 1, 3, 0]) * 1e-3
 
     dist['bins'] = np.ones(shape=np.insert(dim_array, dim_array.shape[0],
-                     data_in[1].shape[0]), dtype='int8')
+                     n_times), dtype='int8')
                        # must be set or data will be consider invalid
 
     """
@@ -190,6 +190,6 @@ def erg_mepe_get_dist(tname,
     dist['phi'] = np.fmod((phi0 + phi_ofst_for_sv + 360.), 360.)
 
     dist['dphi'] = np.full(shape=np.insert(dim_array, dim_array.shape[0],
-                     data_in[1].shape[0]), fill_value=11.25)
+                     n_times), fill_value=11.25)
 
     return dist
