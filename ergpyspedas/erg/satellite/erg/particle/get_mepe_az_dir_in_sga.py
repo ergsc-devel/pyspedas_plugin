@@ -13,7 +13,6 @@ import numpy as np
 
 
 def get_mepe_az_dir_in_sga(fluxdir=False):
-
     """
     ;parameter
     ;channel azimuthal angle
@@ -22,11 +21,11 @@ def get_mepe_az_dir_in_sga(fluxdir=False):
     ;     +X(SGI) direction.
     """
 
-    azi_8 = -39.4 #;[deg] offset of channel 8 from -Z(SGI) axis
-    d_azi = 22.5  #;[deg] interval of each center of aperture
-    
+    azi_8 = -39.4  # ;[deg] offset of channel 8 from -Z(SGI) axis
+    d_azi = 22.5  # ;[deg] interval of each center of aperture
+
     phi_array = azi_8 + (np.arange(16) - 8.) * d_azi
-    
+
     """
     ;inclination of apertures (elevation)
     ; --- This value is based on visual speculation of Fig. 3 in
@@ -38,14 +37,16 @@ def get_mepe_az_dir_in_sga(fluxdir=False):
     ;unit vector of sight direction
     ; --- Note that positive elevation of paertures in MEPe increases
                                     ;     ;X(SGI) component.
-    ;; e_array is a 2-D array [ azch, 3 ] 
+    ;; e_array is a 2-D array [ azch, 3 ]
     """
 
     dtor = np.pi / 180.
 
-    e_array = np.array([+1 * np.sin(theta_array*dtor) \
-            , -1 * np.cos(theta_array*dtor) * np.sin(phi_array*dtor) \
-            , -1 * np.cos(theta_array*dtor) * np.cos(phi_array*dtor)])
+    e_array = np.array([
+     +1 * np.sin(theta_array*dtor),
+     -1 * np.cos(theta_array*dtor) * np.sin(phi_array*dtor),
+     -1 * np.cos(theta_array*dtor) * np.cos(phi_array*dtor)
+     ])
 
     if fluxdir:
         e_array *= -1.  # ;;Flip the direction
