@@ -144,4 +144,12 @@ def erg_mepe_get_dist(tname,
     """
     dist['data'] = data_in[1][[index]].transpose([2, 1, 3, 0]) * 1e-3
 
+    dist['bins'] = np.ones(shape=np.insert(dim_array, 0,
+                     data_in[1].shape[0]), dtype='int8')
+                       # must be set or data will be consider invalid
 
+    """
+    ;; Energy ch. 0 is excluded due to difficulty in defining
+    ;; the representative energy and energy bin width.
+    """
+    dist['bins'][0] = 0
