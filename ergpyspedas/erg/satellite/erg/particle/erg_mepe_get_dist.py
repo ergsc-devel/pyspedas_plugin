@@ -1,8 +1,12 @@
 
 import logging
 import numpy as np
+
 from pytplot import get_data
 from pyspedas import tnames
+from scipy import interpolate
+
+from pyspedas.utilities.time_double import time_double
 
 logging.captureWarnings(True)
 logging.basicConfig(format='%(asctime)s: %(message)s', datefmt='%d-%b-%y %H:%M:%S', level=logging.INFO)
@@ -51,3 +55,17 @@ def erg_mepe_get_dist(tname,
     # ;; Return time labels
     if time_only:
         return data_in[0]
+
+    if single_time is not None:
+        single_time_double = time_double(single_time)
+        if (data_in[0][0] <= single_time_double)\
+        and (single_time_double <= data_in[0][-1]):
+            nearest_time = interpolate.interp1d(data_in[0], data_in[0],
+                        kind="nearest")(single_time_double)
+        elif (single_time_double < data_in[0][0])\
+        or (data_in[0][-1] < single_time_double):
+            nearest_time = interpolate.interp1d(data_in[0], data_in[0],
+                        kind="nearest", fill_value='extrapolate')\
+                            (single_time_double)
+        index = np.where(data_in[0] == nearest_time)[0]
+        n_times = index.shape[0]
