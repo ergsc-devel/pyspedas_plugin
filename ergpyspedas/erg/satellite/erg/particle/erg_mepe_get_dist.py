@@ -7,18 +7,20 @@ from pyspedas import tnames
 from scipy import interpolate
 
 from pyspedas.utilities.time_double import time_double
+from pyspedas.utilities.time_string import time_string
 
 logging.captureWarnings(True)
 logging.basicConfig(format='%(asctime)s: %(message)s', datefmt='%d-%b-%y %H:%M:%S', level=logging.INFO)
 
 
 def erg_mepe_get_dist(tname,
-                      index,
+                      index=None,
                       units='flux',
                       level = 'l2',
                       species = 'e',
                       time_only=False,
-                      single_time=None):
+                      single_time=None,
+                      trange=None):
     
     if len(tnames(tname)) > 0:
         input_name = tnames(tname)[0]
@@ -69,3 +71,18 @@ def erg_mepe_get_dist(tname,
                             (single_time_double)
         index = np.where(data_in[0] == nearest_time)[0]
         n_times = index.shape[0]
+    else:
+        # index supersedes time range
+        if index is None:
+            if trange is not None:
+                trange_double_array = np.array(time_double(trange))
+                trange_minmax = np.array([trange_double_array.min(),
+                                          trange_double_array.max()])
+                index = np.where((data_in[0] >= trange_minmax[0])
+                                 & (data_in[0] <= trange_minmax[1]))[0]
+                n_times = index.size
+                if n_times == 0:
+                    print('No data in time range: ' \
+                        + ' '.join(time_string(trange_minmax)))
+                    return 0
+
