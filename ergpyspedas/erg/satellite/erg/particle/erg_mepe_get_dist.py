@@ -153,3 +153,12 @@ def erg_mepe_get_dist(tname,
     ;; the representative energy and energy bin width.
     """
     dist['bins'][0] = 0
+
+    #  ;; Energy ch
+    e0_array = data_in[3] * 1e+3  #  ;; [keV] (default of MEP-e Lv2 flux data) to [eV]
+    energy_reform = np.reshape(data_in[3], [dim_array[0], 1, 1, 1])
+    energy_rebin1 = np.repeat(energy_reform, n_times, axis=3) # repeated across n_times
+    energy_rebin2 = np.repeat(energy_rebin1, len(data_in[4]), axis=2) # repeated across apd(elevation)
+    dist['energy'] = np.repeat(energy_rebin2, len(data_in[2]), axis=1) # repeated across spin phase(azimuth)
+
+    return dist
