@@ -1,6 +1,8 @@
 import numpy as np
 from pyspedas import tnames
 from pyspedas.particles.spd_part_products.spd_pgs_make_e_spec import spd_pgs_make_e_spec
+from pyspedas.particles.spd_part_products.spd_pgs_make_theta_spec import spd_pgs_make_theta_spec
+from pyspedas.particles.spd_part_products.spd_pgs_progress_update import spd_pgs_progress_update
 from pytplot import get_data
 
 from .erg_pgs_clean_data import erg_pgs_clean_data
