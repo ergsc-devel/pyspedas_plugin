@@ -12,11 +12,19 @@ def erg_mep_part_products(
     in_tvarname,
     spiecies=None,
     outputs=['energy'],
-    no_ang_weighting=False
     ):
 
     if len(tnames(in_tvarname)) < 1:
         print('No input data, please specify tplot variable!')
         return 0
 
-    
+    in_tvarname = tnames(in_tvarname)[0]
+    instnm = in_tvarname.split('_')[1]  #  ;; mepe or mepi
+
+    if isinstance(outputs, str):
+        outputs_lc = outputs.lower()
+        outputs_lc = outputs_lc.split(' ')
+    elif isinstance(outputs, list):
+        outputs_lc = []
+        for output in outputs:
+            outputs_lc.append(output.lower())
