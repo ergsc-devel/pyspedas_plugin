@@ -87,6 +87,7 @@ def erg_mep_part_products(
         out_theta = np.zeros((times_array.shape[0], dist['n_theta']))
         out_theta_y = np.zeros((times_array.shape[0], dist['n_theta']))
 
+    out_vars = []
     last_update_time = None
     """
     ;;-------------------------------------------------
@@ -117,8 +118,12 @@ def erg_mep_part_products(
             out_energy_y[index, :], out_energy[index, :] = spd_pgs_make_e_spec(limited_data)
 
     if 'energy' in outputs_lc:
-        spd_pgs_make_tplot(in_tvarname+'_energy' + suffix, x=times_array, y=out_energy_y, z=out_energy, units=units, ylog=True, ytitle=dist['data_name'] + ' \\ energy (eV)')
-
+        output_tplot_name = in_tvarname+'_energy' + suffix
+        spd_pgs_make_tplot(output_tplot_name, x=times_array, y=out_energy_y, z=out_energy, units=units, ylog=True, ytitle=dist['data_name'] + ' \\ energy (eV)')
+        out_vars.append(output_tplot_name)
     if 'theta' in outputs_lc:
-        spd_pgs_make_tplot(in_tvarname+'_theta' + suffix, x=times_array, y=out_theta_y, z=out_theta, units=units, ylog=False, ytitle=dist['data_name'] + ' \\ theta (deg)')
+        output_tplot_name = in_tvarname+'_theta' + suffix
+        spd_pgs_make_tplot(output_tplot_name, x=times_array, y=out_theta_y, z=out_theta, units=units, ylog=False, ytitle=dist['data_name'] + ' \\ theta (deg)')
+        out_vars.append(output_tplot_name)
 
+    return out_vars
