@@ -12,6 +12,19 @@ def erg_mep_part_products(
     in_tvarname,
     spiecies=None,
     outputs=['energy'],
+    no_ang_weighting=False,
+    suffix='',
+    units='flux',
+    datagap=16.1,
+    regrid=[32, 16],
+    pitch=[0., 180.],
+    theta=[-90., 90.],
+    phi_in=[0., 360.],
+    gyro=[0., 360.],
+    fac_type='mphism',
+    trange=None,
+    mag_name=None,
+    pos_name=None
     ):
 
     if len(tnames(in_tvarname)) < 1:
