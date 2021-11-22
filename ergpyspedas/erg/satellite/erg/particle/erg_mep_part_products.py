@@ -114,3 +114,6 @@ def erg_mep_part_products(
     if 'energy' in outputs_lc:
         spd_pgs_make_tplot(in_tvarname+'_energy' + suffix, x=times_array, y=out_energy_y, z=out_energy, units=units, ylog=True, ytitle=dist['data_name'] + ' \\ energy (eV)')
 
+    if 'theta' in outputs_lc:
+        spd_pgs_make_tplot(in_tvarname+'_theta' + suffix, x=times_array, y=out_theta_y, z=out_theta, units=units, ylog=False, ytitle=dist['data_name'] + ' \\ theta (deg)')
+
