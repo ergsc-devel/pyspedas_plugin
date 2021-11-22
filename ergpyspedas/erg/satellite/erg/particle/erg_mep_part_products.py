@@ -4,6 +4,7 @@ from pyspedas.utilities.time_double import time_double
 from pyspedas.utilities.time_string import time_string
 from pyspedas.particles.spd_part_products.spd_pgs_make_e_spec import spd_pgs_make_e_spec
 from pyspedas.particles.spd_part_products.spd_pgs_make_theta_spec import spd_pgs_make_theta_spec
+from pyspedas.particles.spd_part_products.spd_pgs_make_phi_spec import spd_pgs_make_phi_spec
 from pyspedas.particles.spd_part_products.spd_pgs_progress_update import spd_pgs_progress_update
 from pyspedas.particles.spd_part_products.spd_pgs_make_tplot import spd_pgs_make_tplot
 from pytplot import get_timespan, get_data
@@ -56,6 +57,10 @@ def erg_mep_part_products(
         if abs(phi_in[1] - phi_in[0]) > 360.:
             print('ERROR: Phi restrictions must have range no larger than 360 deg')
             return 0
+        
+        phi = phi_in  # Survey or implement of spd_pgs_map_azimuth() have not conducted yet.
+        if phi[0] == phi[1]:
+            phi = [0., 360.]
 
     #  ;;Preserve the original time range
     tr_org = get_timespan(in_tvarname)
@@ -86,6 +91,10 @@ def erg_mep_part_products(
     if 'theta' in outputs_lc:
         out_theta = np.zeros((times_array.shape[0], dist['n_theta']))
         out_theta_y = np.zeros((times_array.shape[0], dist['n_theta']))
+    if 'phi' in outputs_lc:
+        out_phi = np.zeros((times_array.shape[0], dist['n_phi']))
+        out_phi_y = np.zeros((times_array.shape[0], dist['n_phi']))
+
 
     out_vars = []
     last_update_time = None
@@ -117,6 +126,10 @@ def erg_mep_part_products(
         if 'energy' in outputs_lc:
             out_energy_y[index, :], out_energy[index, :] = spd_pgs_make_e_spec(limited_data)
 
+        #  ;;Build phi spectrogram
+        if 'phi' in outputs_lc:
+            out_phi_y[index, :], out_phi[index, :] = spd_pgs_make_phi_spec(limited_data)
+
     if 'energy' in outputs_lc:
         output_tplot_name = in_tvarname+'_energy' + suffix
         spd_pgs_make_tplot(output_tplot_name, x=times_array, y=out_energy_y, z=out_energy, units=units, ylog=True, ytitle=dist['data_name'] + ' \\ energy (eV)')
@@ -124,6 +137,10 @@ def erg_mep_part_products(
     if 'theta' in outputs_lc:
         output_tplot_name = in_tvarname+'_theta' + suffix
         spd_pgs_make_tplot(output_tplot_name, x=times_array, y=out_theta_y, z=out_theta, units=units, ylog=False, ytitle=dist['data_name'] + ' \\ theta (deg)')
+        out_vars.append(output_tplot_name)
+    if 'theta' in outputs_lc:
+        output_tplot_name = in_tvarname+'_phi' + suffix
+        spd_pgs_make_tplot(output_tplot_name, x=times_array, y=out_phi_y, z=out_phi, units=units, ylog=False, ytitle=dist['data_name'] + ' \\ phi (deg)')
         out_vars.append(output_tplot_name)
 
     return out_vars
