@@ -187,11 +187,16 @@ def erg_mepe_get_dist(tname,
     phi_ofst_for_sv_rebin1 = np.repeat(phi_ofst_for_sv_reform, n_times, axis=3) # repeated across n_times
     phi_ofst_for_sv_rebin2 = np.repeat(phi_ofst_for_sv_rebin1, dim_array[2], axis=2) # repeated across apd(elevation)
     phi_ofst_for_sv = np.repeat(phi_ofst_for_sv_rebin2, dim_array[1], axis=1) # repeated across spin phase(azimuth)
+    """
+    ;;  phi angle for the start of each spin phase
+    ;;    + offset angle foreach sv step
+    """
     dist['phi'] = np.fmod((phi0 + phi_ofst_for_sv + 360.), 360.)
 
     dist['dphi'] = np.full(shape=np.insert(dim_array, dim_array.shape[0],
                      n_times), fill_value=11.25)
 
+    #  ;; elevation angle
     elev = angarr[0, 1, :]  # ;; [(apd)]
     elev_reform = np.reshape(elev, [1, 1, dim_array[2], 1])
     elev_rebin1 = np.repeat(elev_reform, n_times, axis=3)  # repeated across n_times
