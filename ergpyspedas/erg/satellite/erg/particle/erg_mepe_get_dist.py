@@ -192,9 +192,10 @@ def erg_mepe_get_dist(tname,
     ;;    + offset angle foreach sv step
     """
     dist['phi'] = np.fmod((phi0 + phi_ofst_for_sv + 360.), 360.)
-
     dist['dphi'] = np.full(shape=np.insert(dim_array, dim_array.shape[0],
                      n_times), fill_value=11.25)
+
+    del phi0, phi_ofst_for_sv  #  ;; Clean huge arrays
 
     #  ;; elevation angle
     elev = angarr[0, 1, :]  # ;; [(apd)]
