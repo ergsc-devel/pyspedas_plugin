@@ -189,6 +189,10 @@ def erg_mepe_get_dist(tname,
     dist['denergy'] = np.repeat(de_rebin2, dim_array[1], 
                          axis=1)  # repeated across spin phase(azimuth)
 
+    dist['n_energy'] = dim_array[0]
+
+    dist['n_bins'] = dim_array[1] * dim_array[2]  #   # thetas * # phis
+    
     #  ;; azimuthal angle in spin direction
 
     angarr = get_mepe_flux_angle_in_sga()
@@ -232,6 +236,8 @@ def erg_mepe_get_dist(tname,
 
     del phi0, phi_ofst_for_sv  # ;; Clean huge arrays
 
+    dist['n_phi'] = dim_array[2]
+
     #  ;; elevation angle
     elev = angarr[0, 1, :]  # ;; [(apd)]
     elev_reform = np.reshape(elev, [1, 1, dim_array[2], 1])
@@ -244,5 +250,7 @@ def erg_mepe_get_dist(tname,
 
     dist['dtheta'] = np.full(shape=np.insert(dim_array, dim_array.shape[0],
                                              n_times), fill_value=11.25)  # ;; 11.25 deg is set for the moment calculation
+
+    dist['n_theta'] = dim_array[1]
 
     return dist
