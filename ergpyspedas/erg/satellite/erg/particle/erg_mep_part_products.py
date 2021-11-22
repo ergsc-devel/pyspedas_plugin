@@ -52,6 +52,11 @@ def erg_mep_part_products(
 
     units_lc = units.lower()
 
+    if phi_in != [0., 360.]:
+        if abs(phi_in[1] - phi_in[0]) > 360.:
+            print('ERROR: Phi restrictions must have range no larger than 360 deg')
+            return 0
+
     #  ;;Preserve the original time range
     tr_org = get_timespan(in_tvarname)
 
