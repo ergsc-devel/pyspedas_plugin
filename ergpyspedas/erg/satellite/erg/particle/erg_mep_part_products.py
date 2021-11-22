@@ -1,5 +1,5 @@
 import numpy as np
-from pyspedas import tnames
+from pyspedas import tnames, tinterpol
 from pyspedas.utilities.time_double import time_double
 from pyspedas.utilities.time_string import time_string
 from pyspedas.particles.spd_part_products.spd_pgs_make_e_spec import spd_pgs_make_e_spec
@@ -7,7 +7,9 @@ from pyspedas.particles.spd_part_products.spd_pgs_make_theta_spec import spd_pgs
 from pyspedas.particles.spd_part_products.spd_pgs_make_phi_spec import spd_pgs_make_phi_spec
 from pyspedas.particles.spd_part_products.spd_pgs_progress_update import spd_pgs_progress_update
 from pyspedas.particles.spd_part_products.spd_pgs_make_tplot import spd_pgs_make_tplot
-from pytplot import get_timespan, get_data
+from pyspedas.particles.moments.spd_pgs_moments import spd_pgs_moments
+from pyspedas.particles.moments.spd_pgs_moments_tplot import spd_pgs_moments_tplot
+from pytplot import get_timespan, get_data, store_data
 
 from .erg_mepe_get_dist import erg_mepe_get_dist
 from .erg_pgs_clean_data import erg_pgs_clean_data
@@ -95,9 +97,47 @@ def erg_mep_part_products(
         out_phi = np.zeros((times_array.shape[0], dist['n_phi']))
         out_phi_y = np.zeros((times_array.shape[0], dist['n_phi']))
 
+    if 'moments' in outputs_lc:
+        out_density = np.zeros(times_array.shape[0])
+        out_avgtemp = np.zeros(times_array.shape[0])
+        out_vthermal = np.zeros(times_array.shape[0])
+        out_flux = np.zeros([times_array.shape[0], 3])
+        out_velocity = np.zeros([times_array.shape[0], 3])
+        out_mftens = np.zeros([times_array.shape[0], 6])
+        out_ptens = np.zeros([times_array.shape[0], 6])
 
     out_vars = []
     last_update_time = None
+
+    #  ;;create the magnetic field vector array for moment calculation
+    magf = np.array([0., 0., 0.])
+    no_mag_for_moments = False
+
+    if ('moments' in outputs_lc) or ('fac_moments' in outputs_lc):
+
+        no_mag = mag_name is None
+        magnm = tnames(mag_name)
+        if (len(magnm) < 1) or no_mag:
+            print('the magnetic field data is not given!')
+            no_mag_for_moments = True
+        else:
+            magnm = magnm[0]
+
+            """
+            ;; Create magnetic field data with times shifted by half of spin
+            ;; periods
+            """
+
+            mag_data = get_data(magnm)
+            dt_array = mag_data[0][1:] - mag_data[0][:-1]
+            dt_array = np.insert(dt_array, 
+            dt_array.shape[0], dt_array[-1])#;; Note that the last value might not be correct.
+            magnm_sftd = magnm + '_shifted'
+            store_data(magnm_sftd, data={'x':mag_data[0] + dt_array / 2.,
+                                         'y':mag_data[1]})
+            tinterpol(magnm_sftd, times_array, newname=magnm_sftd)
+            magf = get_data(magnm_sftd)[1]  #  ;; [ time, 3] nT
+
     """
     ;;-------------------------------------------------
     ;; Loop over time to build spectrograms and/or moments
@@ -114,9 +154,26 @@ def erg_mep_part_products(
 
             dist = erg_mepe_get_dist(in_tvarname, time_indices[index], species=species, units=units_lc)
 
-        clean_data = erg_pgs_clean_data(dist, units=units_lc,relativistic=relativistic)
+        if magf.ndim == 2:
+            magvec = magf[index]
+        elif magf == np.array([0., 0., 0.]):
+            magvec = magf
+
+        clean_data = erg_pgs_clean_data(dist, units=units_lc,relativistic=relativistic, magf=magvec)
         limited_data = erg_pgs_limit_range(clean_data, phi=phi_in, theta=theta, energy=energy)
 
+        if 'moments' in outputs_lc:
+            clean_data_eflux = erg_convert_flux_units(limited_data, units='eflux')
+            magfarr = np.copy(magf)
+            moments = spd_pgs_moments(clean_data_eflux)
+
+            out_density[index] = moments['density']
+            out_avgtemp[index] = moments['avgtemp']
+            out_vthermal[index] = moments['vthermal']
+            out_flux[index, :] = moments['flux']
+            out_velocity[index, :] = moments['velocity']
+            out_mftens[index, :] = moments['mftens']
+            out_ptens[index, :] = moments['ptens']
 
         #  ;;Build theta spectrogram
         if 'theta' in outputs_lc:
@@ -130,6 +187,8 @@ def erg_mep_part_products(
         if 'phi' in outputs_lc:
             out_phi_y[index, :], out_phi[index, :] = spd_pgs_make_phi_spec(limited_data)
 
+
+
     if 'energy' in outputs_lc:
         output_tplot_name = in_tvarname+'_energy' + suffix
         spd_pgs_make_tplot(output_tplot_name, x=times_array, y=out_energy_y, z=out_energy, units=units, ylog=True, ytitle=dist['data_name'] + ' \\ energy (eV)')
@@ -142,5 +201,18 @@ def erg_mep_part_products(
         output_tplot_name = in_tvarname+'_phi' + suffix
         spd_pgs_make_tplot(output_tplot_name, x=times_array, y=out_phi_y, z=out_phi, units=units, ylog=False, ytitle=dist['data_name'] + ' \\ phi (deg)')
         out_vars.append(output_tplot_name)
+
+    #  ;Moments Variables
+    if 'moments' in outputs_lc:
+        moments = {'density': out_density, 
+              'flux': out_flux, 
+              'mftens': out_mftens, 
+              'velocity': out_velocity, 
+              'ptens': out_ptens,
+              'vthermal': out_vthermal,
+              'avgtemp': out_avgtemp}
+        moments_vars = spd_pgs_moments_tplot(moments, x=times_array, prefix=in_tvarname)
+        out_vars.extend(moments_vars)
+
 
     return out_vars
