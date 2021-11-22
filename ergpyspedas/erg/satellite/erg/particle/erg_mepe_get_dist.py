@@ -164,6 +164,17 @@ def erg_mepe_get_dist(tname,
     dist['energy'] = np.repeat(energy_rebin2, len(data_in[2]), axis=1) # repeated across spin phase(azimuth)
 
     #  ;; Energy bin width
+    e0bnd = np.sqrt(e0_array[:-1] * e0_array[1:])
+    e0bnd_p = np.insert(e0bnd, 0, e0bnd[0])  # ;; [16]  upper boundary of energy bin
+    e0bnd_p[[0, 1]] = e0_array[1] + (e0_array[1]-e0bnd[1])
+    e0bnd_m = np.insert(e0bnd, e0bnd.shape[0], e0bnd[-1])  # ;; [16] lower boundary of energy bin
+    e0bnd_m[0] = e0bnd_m[1]
+    e0bnd_m[15] = e0_array[15] - (e0bnd[14]-e0_array[15])
+    de_array = e0bnd_p-e0bnd_m  #  ;; width of energy bin
+    de_reform = np.reshape(de_array, [dim_array[0], 1, 1, 1])
+    de_rebin1 = np.repeat(de_reform, n_times, axis=3) # repeated across n_times
+    de_rebin2 = np.repeat(de_rebin1, dim_array[2], axis=2) # repeated across apd(elevation)
+    dist['denergy'] = np.repeat(de_rebin2, dim_array[1], axis=1) # repeated across spin phase(azimuth)
 
     #  ;; azimuthal angle in spin direction
 
