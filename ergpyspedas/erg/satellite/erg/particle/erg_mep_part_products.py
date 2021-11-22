@@ -138,7 +138,7 @@ def erg_mep_part_products(
         output_tplot_name = in_tvarname+'_theta' + suffix
         spd_pgs_make_tplot(output_tplot_name, x=times_array, y=out_theta_y, z=out_theta, units=units, ylog=False, ytitle=dist['data_name'] + ' \\ theta (deg)')
         out_vars.append(output_tplot_name)
-    if 'theta' in outputs_lc:
+    if 'phi' in outputs_lc:
         output_tplot_name = in_tvarname+'_phi' + suffix
         spd_pgs_make_tplot(output_tplot_name, x=times_array, y=out_phi_y, z=out_phi, units=units, ylog=False, ytitle=dist['data_name'] + ' \\ phi (deg)')
         out_vars.append(output_tplot_name)
