@@ -156,7 +156,7 @@ def erg_mep_part_products(
 
         if magf.ndim == 2:
             magvec = magf[index]
-        elif magf == np.array([0., 0., 0.]):
+        elif magf.ndim == 1:
             magvec = magf
 
         clean_data = erg_pgs_clean_data(dist, units=units_lc,relativistic=relativistic, magf=magvec)
