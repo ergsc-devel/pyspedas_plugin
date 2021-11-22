@@ -10,7 +10,6 @@ def erg_pgs_clean_data(data_in,
 
     converted_data = erg_convert_flux_units(input_dist=data_in,
                                             units=units,
-                                            magf=None,
                                             relativistic=relativistic)
 
     dims = np.array(converted_data['data'].shape)
