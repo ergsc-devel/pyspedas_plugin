@@ -236,7 +236,7 @@ def erg_mepe_get_dist(tname,
 
     del phi0, phi_ofst_for_sv  # ;; Clean huge arrays
 
-    dist['n_phi'] = dim_array[2]
+    dist['n_phi'] = dim_array[1]
 
     #  ;; elevation angle
     elev = angarr[0, 1, :]  # ;; [(apd)]
@@ -251,6 +251,6 @@ def erg_mepe_get_dist(tname,
     dist['dtheta'] = np.full(shape=np.insert(dim_array, dim_array.shape[0],
                                              n_times), fill_value=11.25)  # ;; 11.25 deg is set for the moment calculation
 
-    dist['n_theta'] = dim_array[1]
+    dist['n_theta'] = dim_array[2]
 
     return dist
