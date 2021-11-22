@@ -15,3 +15,8 @@ def erg_mep_part_products(
     no_ang_weighting=False
     ):
 
+    if len(tnames(in_tvarname)) < 1:
+        print('No input data, please specify tplot variable!')
+        return 0
+
+    
