@@ -38,7 +38,7 @@ def erg_pgs_clean_data(data_in,
     }
 
     # Exclude f_nan values from further calculations
-    bins = int(output['bins'])
+    bins = output['bins'].astype(np.int8)
     output['bins'] = np.where((bins == 0)
                               | (np.isinf(output['data']) == True)
                               | (np.isnan(output['data']) == True)
