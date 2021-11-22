@@ -6,7 +6,9 @@ from .erg_convert_flux_units import erg_convert_flux_units
 def erg_pgs_clean_data(data_in,
                        units='flux',
                        relativistic=False,
-                       for_moments=False):
+                       for_moments=False,
+                       magf=np.array([0., 0., 0.])
+                       ):
 
     converted_data = erg_convert_flux_units(input_dist=data_in,
                                             units=units,
@@ -22,7 +24,7 @@ def erg_pgs_clean_data(data_in,
         'charge': converted_data['charge'],
         'mass': converted_data['mass'],
         'species': converted_data['species'],
-        'magf': np.array([0., 0., 0.]),
+        'magf': magf,
         'sc_pot': 0.,
         'scaling': np.ones(shape=(dims[0], angdims)),
         'units_name': data_in['units_name'],
