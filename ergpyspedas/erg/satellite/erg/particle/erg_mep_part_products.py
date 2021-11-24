@@ -109,6 +109,25 @@ def erg_mep_part_products(
     out_vars = []
     last_update_time = None
 
+    """
+    ;;--------------------------------------------------------
+    ;;Prepare support data
+    ;;--------------------------------------------------------
+    """
+    # ;;create rotation matrix to B-field aligned coordinates if needed
+    
+    fac_outputs = ['pa','gyro','fac_energy', 'fac_moments']
+    fac_requested = len(set(outputs_lc).intersection(fac_outputs)) > 0
+    if fac_requested:
+        """
+        ;; Create magnetic field data with times shifted by half of spin
+        ;; periods
+        """
+        if (mag_name is None) or (len(tnames(mag_name)) < 1):
+            print('Cannot find the magnetic field data given by keyword mag_name! EXIT!')
+            return
+
+
     #  ;;create the magnetic field vector array for moment calculation
     magf = np.array([0., 0., 0.])
     no_mag_for_moments = False
