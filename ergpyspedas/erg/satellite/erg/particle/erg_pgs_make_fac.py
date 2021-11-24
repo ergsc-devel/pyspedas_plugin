@@ -1,5 +1,6 @@
 import numpy as np
 
+from pyspedas import tnames
 from pytplot import get_data, store_data, tplot_copy
 
 from pyspedas.cotrans.cotrans import cotrans
@@ -222,14 +223,14 @@ def erg_pgs_xdsi(
     return (x_basis, y_basis, z_basis)
 
 def erg_pgs_make_fac(
-    times,
+    times_array,
     mag_tvar_in=None,
     pos_tvar_in=None,
     fac_type='mphism'
 ):
     """
     Args:
-        times (Numpy Array): ;the time grid of the particle data.
+        times_array (Numpy Array): ;the time grid of the particle data.
         mag_tvar_in (str): ;tplot variable containing the mag data in DSI. Defaults to None.
         pos_tvar_in (str, optional): ;position variable containing the position data in GSE. Defaults to None.
         fac_type (str, optional): ;field aligned coordinate transform type (only mphigeo, atm). Defaults to 'mphism'.
@@ -246,4 +247,23 @@ def erg_pgs_make_fac(
         print('Please use mag_tvar_in and pos_tvar_in arguments.')
         return
     
+    """
+    ;;--------------------------------------------------------------------       
+    ;;sanitize
+    ;;--------------------------------------------------------------------
     
+    ;;Note this logic could probably be rolled into
+    ;;thm_pgs_clean_support in the future
+    ;; Normnally mag_tvar_in should be erg_mgf_l2_mag_8sec_dsi
+    """
+    
+    if len(tnames(mag_tvar_in)) > 0:
+        mag_tvar = tnames(mag_tvar_in)[0]
+        mag_temp = mag_tvar + '_pgs_temp'
+        #  ;;Right now, magnetic field must be in DSI coordinates
+        tplot_copy(mag_tvar, mag_temp)  # ;;Sanitize it
+        tinterpol(mag_temp, times_array, newname=mag_temp)
+    else:
+        print(f'Magnetic field variable not found: "{mag_tvar_in}"')
+        print('skipping field-aligned outputs')
+        return
