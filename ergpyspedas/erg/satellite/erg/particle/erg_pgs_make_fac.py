@@ -223,14 +223,14 @@ def erg_pgs_xdsi(
 
 def erg_pgs_make_fac(
     times,
-    mag_tvar_in,
+    mag_tvar_in=None,
     pos_tvar_in=None,
     fac_type='mphism'
 ):
     """
     Args:
         times (Numpy Array): ;the time grid of the particle data.
-        mag_tvar_in (str): ;tplot variable containing the mag data in DSI.
+        mag_tvar_in (str): ;tplot variable containing the mag data in DSI. Defaults to None.
         pos_tvar_in (str, optional): ;position variable containing the position data in GSE. Defaults to None.
         fac_type (str, optional): ;field aligned coordinate transform type (only mphigeo, atm). Defaults to 'mphism'.
     """
@@ -240,4 +240,10 @@ def erg_pgs_make_fac(
     if fac_type not in valid_types:
         print(f'Invalid FAC type "{fac_type}"; valid types: {valid_types}')
         return
+    
+    if (mag_tvar_in is None) or (pos_tvar_in is None):
+        print('Magnetic field and/or spacecraft position data not specified.')
+        print('Please use mag_tvar_in and pos_tvar_in arguments.')
+        return
+    
     
