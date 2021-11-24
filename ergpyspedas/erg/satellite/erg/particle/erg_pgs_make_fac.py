@@ -67,3 +67,35 @@ def erg_pgs_phigeo(
 
     return (x_basis, y_basis, z_basis)
 
+# ;so we don't have one long routine of doom, all transforms should be separate helper functions
+def erg_pgs_mphigeo(
+    mag_temp,
+    pos_temp
+):
+    
+    postmp = 'pos_pgs_temp'
+    tplot_copy(pos_temp, postmp)
+    cotrans(postmp, postmp, coord_in='gse', coord_out='geo')
+    pos_data = get_data(postmp)
+
+    # the following is heisted from the IDL version
+    # transformation to generate other_dim dim for mphigeo from thm_fac_matrix_make
+    # All the conversions to polar and trig simplifies to this.  
+    # But the reason the conversion is why this is the conversion that is done, is lost on me.
+    # The conversion swaps the x & y components of position, reflects over x=0,z=0 then projects into the xy plane
+    pos_conv = np.stack((-pos_data.y[:, 1], pos_data.y[:, 0], np.zeros(len(pos_data.times))))
+    pos_conv = np.transpose(pos_conv, [1, 0])
+    store_data(pos_temp, data={'x': pos_data.times, 'y': pos_conv})
+    
+    # ;transform into dsl because particles are in dmpa
+    cotrans(postmp,postmp,coord_in='geo', coord_out='j2000')
+    erg_cotrans(postmp,postmp,in_coord='j2000', out_coord='dsi')
+    
+    # ;create orthonormal basis set
+    z_basis = tnormalize(mag_temp, return_data=True)
+    tinterpol(postmp,mag_temp, newname=postmp)
+    x_basis = tcrossp(z_basis, postmp, return_data=True)
+    x_basis = tnormalize(x_basis, return_data=True)
+    y_basis = tcrossp(z_basis, x_basis, return_data=True)
+    
+    return (x_basis, y_basis, z_basis)
