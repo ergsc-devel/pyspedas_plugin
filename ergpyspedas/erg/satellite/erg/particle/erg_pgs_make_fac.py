@@ -9,6 +9,7 @@ from pyspedas.analysis.tinterpol import tinterpol
 
 from ..common.cotrans.erg_cotrans import erg_cotrans
 
+# ;so we don't have one long routine of doom, all transforms should be separate helper functions
 def erg_pgs_xgse(
     mag_temp,
     pos_tmp=None
@@ -34,6 +35,7 @@ def erg_pgs_xgse(
     
     return (x_basis, y_basis, z_basis)
 
+# ;so we don't have one long routine of doom, all transforms should be separate helper functions
 def erg_pgs_phigeo(
     mag_temp,
     pos_temp
@@ -64,3 +66,4 @@ def erg_pgs_phigeo(
     y_basis = tcrossp(z_basis, x_basis, return_data=True)
 
     return (x_basis, y_basis, z_basis)
+
