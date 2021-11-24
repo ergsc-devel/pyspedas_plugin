@@ -201,3 +201,22 @@ def erg_pgs_mphism(
     store_data( [ postmp, phitmp ], delete=True)
 
     return (x_basis, y_basis, z_basis)
+
+def erg_pgs_xdsi(
+    mag_temp,
+    pos_tmp=None
+):
+    
+    mag_data = get_data(mag_temp)
+
+    # xaxis of this system is X of the gse system. Z is mag field
+    x_axis = np.zeros((len(mag_data.times), 3))
+    x_axis[:, 0] = 1.
+    
+    # ;create orthonormal basis set
+    z_basis = tnormalize(mag_temp, return_data=True)
+    y_basis = tcrossp(z_basis, x_axis, return_data=True)
+    y_basis = tnormalize(y_basis, return_data=True)
+    x_basis = tcrossp(y_basis, z_basis, return_data=True)
+    
+    return (x_basis, y_basis, z_basis)
