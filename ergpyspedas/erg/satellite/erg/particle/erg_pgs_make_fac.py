@@ -83,7 +83,7 @@ def erg_pgs_mphigeo(
     # All the conversions to polar and trig simplifies to this.  
     # But the reason the conversion is why this is the conversion that is done, is lost on me.
     # The conversion swaps the x & y components of position, reflects over x=0,z=0 then projects into the xy plane
-    pos_conv = np.stack((-pos_data.y[:, 1], pos_data.y[:, 0], np.zeros(len(pos_data.times))))
+    pos_conv = np.stack((pos_data.y[:, 1], -pos_data.y[:, 0], np.zeros(len(pos_data.times))))
     pos_conv = np.transpose(pos_conv, [1, 0])
     store_data(pos_temp, data={'x': pos_data.times, 'y': pos_conv})
     
