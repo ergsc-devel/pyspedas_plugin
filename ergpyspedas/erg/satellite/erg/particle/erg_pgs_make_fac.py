@@ -99,3 +99,55 @@ def erg_pgs_mphigeo(
     y_basis = tcrossp(z_basis, x_basis, return_data=True)
     
     return (x_basis, y_basis, z_basis)
+
+
+"""
+;; ERG_PGS_PHISM
+;; To get unit vectors for FAC-phi_sm coordinate system
+;; Z axis: local B-vector dir, usually taken from spin-averaged MGF data
+;; X axis: phi_sm vector x Z, where the phi_sm lies in the azimuthally
+;;         eastward direction at a spacecraft position in the SM coordinate
+;;         system. In a dipole B-field geometry, X axis roughly points
+;;         radially outward. 
+;; Y axis: Z axis x X axis, roughly pointing azimuthally eastward
+;;
+;; Common to the other procedures here, pos_temp is the name of a
+;; tplot variable containing spacecraft's position coordinates
+;; in GSE. "mag_temp" is for the local magnetic field vectors in DSI. 
+"""
+
+def erg_pgs_phism(
+    mag_temp,
+    pos_temp
+):
+    postmp = 'pos_pgs_temp'
+    tplot_copy(pos_temp, postmp)
+    cotrans(postmp, postmp, coord_in='gse', coord_out='sm')
+    pos_data = get_data(postmp)
+    
+    """
+    ;; The conversion swaps the x & y components of position, reflects
+    ;; over x=0,z=0 then projects into the xy plane. In other words, the
+    ;; position vectors projected on the SM-X-Y plane are rotated by +90
+    ;; degrees around the SM-Z axis to get the phi_sm vectors.
+    """
+    
+    phitmp = 'phism_tmp'
+    pos_conv = np.stack((-pos_data.y[:, 1], pos_data.y[:, 0], np.zeros(len(pos_data.times))))
+    pos_conv = np.transpose(pos_conv, [1, 0])
+    store_data(phitmp, data={'x': pos_data.times, 'y': pos_conv})
+    #   SM to DSI 
+    cotrans(phitmp, phitmp, coord_in='sm', coord_out='j2000')
+    erg_cotrans(phitmp, phitmp, in_coord='j2000', out_coord='dsi')
+    
+    # ;; create orthonormal basis set
+    z_basis = tnormalize(mag_temp, return_data=True)
+    tinterpol(phitmp, mag_temp, newname=phitmp)
+    x_basis = tcrossp(phitmp, z_basis, return_data=True)
+    x_basis = tnormalize(x_basis, return_data=True)
+    y_basis = tcrossp(z_basis, x_basis, return_data=True)
+    
+    #  ;; clean up the temporary variables
+    store_data( [ postmp, phitmp ], delete=True)
+
+    return (x_basis, y_basis, z_basis)
