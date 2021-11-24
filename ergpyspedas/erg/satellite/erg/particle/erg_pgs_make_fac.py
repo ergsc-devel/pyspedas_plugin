@@ -278,3 +278,77 @@ def erg_pgs_make_fac(
         print(f'Position variable not found: "{pos_tvar_in}"')
         print('skipping field-aligned outputs')
         return
+    
+    if fac_type == 'mphigeo':
+        
+        """
+        ;;--------------------------------------------------------------------
+        ;;mphigeo
+        ;;--------------------------------------------------------------------
+        """
+    
+        basis = erg_pgs_mphigeo(mag_temp, pos_temp)
+        
+    elif fac_type == 'phigeo':
+        
+        """
+        ;;--------------------------------------------------------------------
+        ;;phigeo
+        ;;--------------------------------------------------------------------
+        """
+        
+        basis = erg_pgs_phigeo(mag_temp, pos_temp)
+        
+    elif fac_type == 'xgse':
+        
+        """
+        ;;--------------------------------------------------------------------
+        ;;xgse
+        ;;--------------------------------------------------------------------
+        """
+        
+        #  ;;position isn't necessary for this one, but uniformity of interface and requirements trumps here
+        basis = erg_pgs_xgse(mag_temp, pos_temp)
+        
+    elif fac_type == 'phism':
+        
+        """
+        ;;--------------------------------------------------------------------
+        ;;phism
+        ;;--------------------------------------------------------------------
+        """
+        
+        basis = erg_pgs_phism(mag_temp, pos_temp)
+        
+    elif fac_type == 'mphism':
+        
+        """
+        ;;--------------------------------------------------------------------
+        ;;mphism
+        ;;--------------------------------------------------------------------
+        """
+        
+        basis = erg_pgs_mphism(mag_temp,pos_temp)
+        
+    elif fac_type == 'xdsi':
+        
+        """
+        ;;--------------------------------------------------------------------
+        ;;xdsi
+        ;;--------------------------------------------------------------------
+        """
+        
+        basis = erg_pgs_xdsi(mag_temp,pos_temp)
+        
+    """
+    ;;--------------------------------------------------------------------
+    ;;create rotation matrix
+    ;;--------------------------------------------------------------------
+    """
+    
+    fac_output = np.zeros((len(times_array), 3, 3))
+    fac_output[:, 0, :] = basis[0]
+    fac_output[:, 1, :] = basis[1]
+    fac_output[:, 2, :] = basis[2]
+
+    return fac_output
