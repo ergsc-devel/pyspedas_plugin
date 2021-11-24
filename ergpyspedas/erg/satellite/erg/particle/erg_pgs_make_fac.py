@@ -1,10 +1,11 @@
 import numpy as np
 
-from pytplot import get_data, store_data
+from pytplot import get_data, store_data, tplot_copy
 
 from pyspedas.cotrans.cotrans import cotrans
 from pyspedas.analysis.tnormalize import tnormalize
 from pyspedas.analysis.tcrossp import tcrossp
+from pyspedas.analysis.tinterpol import tinterpol
 
 from ..common.cotrans.erg_cotrans import erg_cotrans
 
@@ -31,4 +32,35 @@ def erg_pgs_xgse(
     y_basis = tnormalize(y_basis, return_data=True)
     x_basis = tcrossp(y_basis, z_basis, return_data=True)
     
+    return (x_basis, y_basis, z_basis)
+
+def erg_pgs_phigeo(
+    mag_temp,
+    pos_temp
+):
+    
+    postmp = 'pos_pgs_temp'
+    tplot_copy(pos_temp, postmp)
+    cotrans(postmp, postmp, coord_in='gse', coord_out='geo')
+    pos_data = get_data(postmp)
+    
+    # transformation to generate other_dim dim for phigeo from thm_fac_matrix_make
+    # All the conversions to polar and trig simplifies to this.
+    # But the reason the conversion is why this is the conversion that is done, is lost on me.
+    # The conversion swaps the x & y components of position, reflects over x=0,z=0 then projects into the xy plane
+    pos_conv = np.stack((-pos_data.y[:, 1], pos_data.y[:, 0], np.zeros(len(pos_data.times))))
+    pos_conv = np.transpose(pos_conv, [1, 0])
+    store_data(postmp, data={'x': pos_data.times, 'y': pos_conv})
+
+    # ;transform into dsl because particles are in dmpa
+    cotrans(postmp,postmp,coord_in='geo', coord_out='j2000')
+    erg_cotrans(postmp,postmp,in_coord='j2000', out_coord='dsi')
+    
+    # ;create orthonormal basis set
+    z_basis = tnormalize(mag_temp, return_data=True)
+    tinterpol(postmp,mag_temp, newname=postmp)
+    x_basis = tcrossp(postmp,z_basis, return_data=True)
+    x_basis = tnormalize(x_basis, return_data=True)
+    y_basis = tcrossp(z_basis, x_basis, return_data=True)
+
     return (x_basis, y_basis, z_basis)
