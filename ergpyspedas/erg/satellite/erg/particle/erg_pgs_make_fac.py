@@ -267,3 +267,14 @@ def erg_pgs_make_fac(
         print(f'Magnetic field variable not found: "{mag_tvar_in}"')
         print('skipping field-aligned outputs')
         return
+    
+    #  ;; Normally pos_tvar_in should be erg_orb_l2_pos_gse
+    if len(tnames(pos_tvar_in)) > 0:
+        pos_tvar = tnames(pos_tvar_in)[0]
+        pos_temp = pos_tvar + '_pgs_temp'
+        tplot_copy(pos_tvar, pos_temp)  # ;;Sanitize it
+        tinterpol(pos_temp, times_array, newname=mag_temp)
+    else:
+        print(f'Position variable not found: "{pos_tvar_in}"')
+        print('skipping field-aligned outputs')
+        return
