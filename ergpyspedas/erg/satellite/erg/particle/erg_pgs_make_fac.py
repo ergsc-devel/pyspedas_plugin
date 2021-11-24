@@ -220,3 +220,24 @@ def erg_pgs_xdsi(
     x_basis = tcrossp(y_basis, z_basis, return_data=True)
     
     return (x_basis, y_basis, z_basis)
+
+def erg_pgs_make_fac(
+    times,
+    mag_tvar_in,
+    pos_tvar_in=None,
+    fac_type='mphism'
+):
+    """
+    Args:
+        times (Numpy Array): ;the time grid of the particle data.
+        mag_tvar_in (str): ;tplot variable containing the mag data in DSI.
+        pos_tvar_in (str, optional): ;position variable containing the position data in GSE. Defaults to None.
+        fac_type (str, optional): ;field aligned coordinate transform type (only mphigeo, atm). Defaults to 'mphism'.
+    """
+    
+    valid_types = ['mphigeo', 'phigeo', 'xgse', 'phism', 'mphism', 'xdsi']
+    
+    if fac_type not in valid_types:
+        print(f'Invalid FAC type "{fac_type}"; valid types: {valid_types}')
+        return
+    
