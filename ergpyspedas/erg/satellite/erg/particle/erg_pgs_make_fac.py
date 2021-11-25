@@ -273,7 +273,7 @@ def erg_pgs_make_fac(
         pos_tvar = tnames(pos_tvar_in)[0]
         pos_temp = pos_tvar + '_pgs_temp'
         tplot_copy(pos_tvar, pos_temp)  # ;;Sanitize it
-        tinterpol(pos_temp, times_array, newname=mag_temp)
+        tinterpol(pos_temp, times_array, newname=pos_temp)
     else:
         print(f'Position variable not found: "{pos_tvar_in}"')
         print('skipping field-aligned outputs')
