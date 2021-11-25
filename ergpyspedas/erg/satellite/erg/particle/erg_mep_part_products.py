@@ -8,14 +8,13 @@ from pyspedas.particles.spd_part_products.spd_pgs_make_phi_spec import spd_pgs_m
 from pyspedas.particles.spd_part_products.spd_pgs_progress_update import spd_pgs_progress_update
 from pyspedas.particles.spd_part_products.spd_pgs_make_tplot import spd_pgs_make_tplot
 from pyspedas.particles.moments.spd_pgs_moments import spd_pgs_moments
-from pyspedas.particles.moments.spd_pgs_moments_tplot import spd_pgs_moments_tplot
 from pytplot import get_timespan, get_data, store_data
 
 from .erg_mepe_get_dist import erg_mepe_get_dist
 from .erg_pgs_clean_data import erg_pgs_clean_data
 from .erg_pgs_limit_range import erg_pgs_limit_range
 from .erg_convert_flux_units import erg_convert_flux_units
-
+from .erg_pgs_moments_tplot import erg_pgs_moments_tplot
 
 def erg_mep_part_products(
     in_tvarname,
@@ -233,7 +232,7 @@ def erg_mep_part_products(
               'ttens': out_ttens,
               'vthermal': out_vthermal,
               'avgtemp': out_avgtemp}
-        moments_vars = spd_pgs_moments_tplot(moments, x=times_array, prefix=in_tvarname)
+        moments_vars = erg_pgs_moments_tplot(moments, x=times_array, prefix=in_tvarname)
         out_vars.extend(moments_vars)
 
 
