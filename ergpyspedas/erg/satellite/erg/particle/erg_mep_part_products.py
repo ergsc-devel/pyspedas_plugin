@@ -7,6 +7,7 @@ from pyspedas.particles.spd_part_products.spd_pgs_make_theta_spec import spd_pgs
 from pyspedas.particles.spd_part_products.spd_pgs_make_phi_spec import spd_pgs_make_phi_spec
 from pyspedas.particles.spd_part_products.spd_pgs_progress_update import spd_pgs_progress_update
 from pyspedas.particles.spd_part_products.spd_pgs_make_tplot import spd_pgs_make_tplot
+from pyspedas.particles.spd_part_products.spd_pgs_do_fac import spd_pgs_do_fac
 from pyspedas.particles.moments.spd_pgs_moments import spd_pgs_moments
 from pytplot import get_timespan, get_data, store_data
 
@@ -15,6 +16,7 @@ from .erg_pgs_clean_data import erg_pgs_clean_data
 from .erg_pgs_limit_range import erg_pgs_limit_range
 from .erg_convert_flux_units import erg_convert_flux_units
 from .erg_pgs_moments_tplot import erg_pgs_moments_tplot
+from .erg_pgs_make_fac import erg_pgs_make_fac
 
 def erg_mep_part_products(
     in_tvarname,
@@ -96,6 +98,10 @@ def erg_mep_part_products(
         out_phi = np.zeros((times_array.shape[0], dist['n_phi']))
         out_phi_y = np.zeros((times_array.shape[0], dist['n_phi']))
 
+    if 'pa' in outputs_lc:
+        out_pad = np.zeros((times_array.shape[0], dist['n_theta']))
+        out_pad_y = np.zeros((times_array.shape[0], dist['n_theta']))
+
     if 'moments' in outputs_lc:
         out_density = np.zeros(times_array.shape[0])
         out_avgtemp = np.zeros(times_array.shape[0])
@@ -126,7 +132,23 @@ def erg_mep_part_products(
         if (mag_name is None) or (len(tnames(mag_name)) < 1):
             print('Cannot find the magnetic field data given by keyword mag_name! EXIT!')
             return
+        mag_data = get_data(mag_name)
+        dt_array = mag_data[0][1:] - mag_data[0][:-1]
+        dt_array = np.insert(dt_array, dt_array.shape[0], dt_array[-1])  # ;; Note that the last value might not be correct.
+        mag_name_sftd = mag_name + '_shifted'
+        store_data(mag_name_sftd, data={'x':mag_data[0] + dt_array/2.,
+                                        'y':mag_data[1]})
+        """
+        ;;The time shift applied above assumes that the time labels of MGF
+        ;;data correspond to the spin start times. Otherwise this should
+        ;;be modified properly.
+        """
 
+        fac_matrix = erg_pgs_make_fac(times_array, mag_name_sftd, pos_name, fac_type=fac_type)
+
+        if fac_matrix is None:
+            # problem creating the FAC matrices
+            fac_requested = False
 
     #  ;;create the magnetic field vector array for moment calculation
     magf = np.array([0., 0., 0.])
@@ -179,6 +201,10 @@ def erg_mep_part_products(
             magvec = magf
 
         clean_data = erg_pgs_clean_data(dist, units=units_lc,relativistic=relativistic, magf=magvec)
+
+        if fac_requested:
+            pre_limit_bins = np.copy(clean_data['bins'])
+
         limited_data = erg_pgs_limit_range(clean_data, phi=phi_in, theta=theta, energy=energy)
 
         if 'moments' in outputs_lc:
@@ -207,6 +233,26 @@ def erg_mep_part_products(
         if 'phi' in outputs_lc:
             out_phi_y[index, :], out_phi[index, :] = spd_pgs_make_phi_spec(limited_data)
 
+        #  ;;Perform transformation to FAC, (regrid data), and apply limits in new coords
+        
+        if fac_requested:
+            
+            # ;limits will be applied to energy-aligned bins
+            clean_data['bins'] = np.copy(pre_limit_bins)
+            limited_data = erg_pgs_limit_range(clean_data, phi=phi_in, theta=theta, energy=energy, no_ang_weighting=no_ang_weighting)
+
+            # ;perform FAC transformation and interpolate onto a new, regular grid 
+            fac_data = spd_pgs_do_fac(limited_data, fac_matrix[index, :, :])
+
+            fac_data['theta'] = 90.0-fac_data['theta']  #  ;pitch angle is specified in co-latitude
+
+            # ;apply gyro & pitch angle limits(identical to phi & theta, just in new coords)
+            fac_data = erg_pgs_limit_range(fac_data, theta=pitch, phi=gyro)
+
+            if 'pa' in outputs_lc:
+                # ;Build pitch angle spectrogram
+                out_pad_y[index, :], out_pad[index, :] = spd_pgs_make_theta_spec(fac_data, colatitude=True, resolution=dist['n_theta'])
+
 
 
     if 'energy' in outputs_lc:
@@ -220,6 +266,12 @@ def erg_mep_part_products(
     if 'phi' in outputs_lc:
         output_tplot_name = in_tvarname+'_phi' + suffix
         spd_pgs_make_tplot(output_tplot_name, x=times_array, y=out_phi_y, z=out_phi, units=units, ylog=False, ytitle=dist['data_name'] + ' \\ phi (deg)')
+        out_vars.append(output_tplot_name)
+
+    #  ;;Pitch Angle Spectrograms
+    if 'pa' in outputs_lc:
+        output_tplot_name = in_tvarname+'_pa' + suffix
+        spd_pgs_make_tplot(output_tplot_name, x=times_array, y=out_pad_y, z=out_pad, units=units, ylog=False, ytitle=dist['data_name'] + ' \\ PA (deg)')
         out_vars.append(output_tplot_name)
 
     #  ;Moments Variables
