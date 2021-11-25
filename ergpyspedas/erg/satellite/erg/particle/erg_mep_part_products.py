@@ -105,6 +105,7 @@ def erg_mep_part_products(
         out_velocity = np.zeros([times_array.shape[0], 3])
         out_mftens = np.zeros([times_array.shape[0], 6])
         out_ptens = np.zeros([times_array.shape[0], 6])
+        out_ttens = np.zeros([times_array.shape[0], 3, 3])
 
     out_vars = []
     last_update_time = None
@@ -193,6 +194,7 @@ def erg_mep_part_products(
             out_velocity[index, :] = moments['velocity']
             out_mftens[index, :] = moments['mftens']
             out_ptens[index, :] = moments['ptens']
+            out_ttens[index, :] = moments['ttens']
 
         #  ;;Build theta spectrogram
         if 'theta' in outputs_lc:
@@ -228,6 +230,7 @@ def erg_mep_part_products(
               'mftens': out_mftens, 
               'velocity': out_velocity, 
               'ptens': out_ptens,
+              'ttens': out_ttens,
               'vthermal': out_vthermal,
               'avgtemp': out_avgtemp}
         moments_vars = spd_pgs_moments_tplot(moments, x=times_array, prefix=in_tvarname)
