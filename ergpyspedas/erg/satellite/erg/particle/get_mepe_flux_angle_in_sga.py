@@ -7,8 +7,7 @@ from .get_mepe_az_dir_in_sga import get_mepe_az_dir_in_sga
 
 def get_mepe_flux_angle_in_sga(looking_dir=False):
 
-    fluxdir = looking_dir
-
+    fluxdir = not looking_dir
     sgajdir = get_mepe_az_dir_in_sga(fluxdir=fluxdir)
 
     spherical_data = cartesian_to_spherical(
@@ -23,7 +22,7 @@ def get_mepe_flux_angle_in_sga(looking_dir=False):
 
     anglarr = np.zeros(shape=(2, 3, 16))  # ;[ elev/phi, min/cnt/max, apd_no ]
 
-    for ch in range(15):
+    for ch in range(16):
         anglarr[0, :, ch] = elev_array[ch]
         anglarr[1, :, ch] = phi_array[ch]
 
