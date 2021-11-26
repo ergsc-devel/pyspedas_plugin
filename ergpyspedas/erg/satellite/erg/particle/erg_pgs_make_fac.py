@@ -61,7 +61,6 @@ def erg_pgs_phigeo(
     
     # ;create orthonormal basis set
     z_basis = tnormalize(mag_temp, return_data=True)
-    tinterpol(postmp,mag_temp, newname=postmp)
     x_basis = tcrossp(postmp,z_basis, return_data=True)
     x_basis = tnormalize(x_basis, return_data=True)
     y_basis = tcrossp(z_basis, x_basis, return_data=True)
@@ -94,7 +93,6 @@ def erg_pgs_mphigeo(
     
     # ;create orthonormal basis set
     z_basis = tnormalize(mag_temp, return_data=True)
-    tinterpol(postmp,mag_temp, newname=postmp)
     x_basis = tcrossp(z_basis, postmp, return_data=True)
     x_basis = tnormalize(x_basis, return_data=True)
     y_basis = tcrossp(z_basis, x_basis, return_data=True)
@@ -143,7 +141,6 @@ def erg_pgs_phism(
     
     # ;; create orthonormal basis set
     z_basis = tnormalize(mag_temp, return_data=True)
-    tinterpol(phitmp, mag_temp, newname=phitmp)
     x_basis = tcrossp(phitmp, z_basis, return_data=True)
     x_basis = tnormalize(x_basis, return_data=True)
     y_basis = tcrossp(z_basis, x_basis, return_data=True)
@@ -193,7 +190,6 @@ def erg_pgs_mphism(
     
     # ;; create orthonormal basis set
     z_basis = tnormalize(mag_temp, return_data=True)
-    tinterpol(phitmp, mag_temp, newname=phitmp)
     x_basis = tcrossp(phitmp, z_basis, return_data=True)
     x_basis = tnormalize(x_basis, return_data=True)
     y_basis = tcrossp(z_basis, x_basis, return_data=True)
