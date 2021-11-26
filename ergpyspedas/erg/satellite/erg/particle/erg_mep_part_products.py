@@ -231,7 +231,7 @@ def erg_mep_part_products(
 
         #  ;;Build phi spectrogram
         if 'phi' in outputs_lc:
-            out_phi_y[index, :], out_phi[index, :] = spd_pgs_make_phi_spec(limited_data)
+            out_phi_y[index, :], out_phi[index, :] = spd_pgs_make_phi_spec(limited_data, resolution=dist['n_phi'])
 
         #  ;;Perform transformation to FAC, (regrid data), and apply limits in new coords
         
@@ -251,7 +251,7 @@ def erg_mep_part_products(
 
             if 'pa' in outputs_lc:
                 # ;Build pitch angle spectrogram
-                out_pad_y[index, :], out_pad[index, :] = spd_pgs_make_theta_spec(fac_data, colatitude=True, resolution=dist['n_theta'])
+                out_pad_y[index, :], out_pad[index, :] = spd_pgs_make_theta_spec(fac_data, colatitude=True, resolution=regrid[1])
 
 
 
