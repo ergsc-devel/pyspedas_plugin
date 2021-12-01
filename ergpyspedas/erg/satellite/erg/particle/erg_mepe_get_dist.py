@@ -119,7 +119,7 @@ def erg_mepe_get_dist(tname,
         'project_name': 'ERG',
         'spacecraft': 1,  # always 1 as a dummy value
         'data_name': data_name,
-        'units_name': 'flux',  # MEP-e data in [/keV-s-sr-cm2] 
+        'units_name': 'flux',  # MEP-e data in [/keV-s-sr-cm2]
                                # should be converted to [/eV-s-sr-cm2]
         'units_procedure': 'erg_convert_flux_units',
         'species': species,
@@ -144,7 +144,7 @@ def erg_mepe_get_dist(tname,
     ;; Shuffle the original data array [time,spin phase,energy,apd] to
     ;; be energy-azimuth-elevation-time.
     ;; The factor 1d-3 is to convert [/keV-s-sr-cm2] (default unit of
-    ;; MEP-e Lv2 flux data) to [/eV-s-sr-cm2] 
+    ;; MEP-e Lv2 flux data) to [/eV-s-sr-cm2]
     """
     dist['data'] = data_in[1][[index]].transpose([2, 1, 3, 0]) * 1e-3
 
@@ -159,7 +159,7 @@ def erg_mepe_get_dist(tname,
     dist['bins'][0] = 0
 
     #  ;; Energy ch
-    e0_array = data_in[3] * 1e+3  # ;; [keV]  
+    e0_array = data_in[3] * 1e+3  # ;; [keV] 
                             #(default of MEP-e Lv2 flux data) to [eV]
     energy_reform = np.reshape(e0_array, [dim_array[0], 1, 1, 1])
     energy_rebin1 = np.repeat(energy_reform, n_times,
@@ -182,17 +182,17 @@ def erg_mepe_get_dist(tname,
 
     de_array = e0bnd_p-e0bnd_m  # ;; width of energy bin
     de_reform = np.reshape(de_array, [dim_array[0], 1, 1, 1])
-    de_rebin1 = np.repeat(de_reform, n_times,
-                         axis=3)  # repeated across n_times
-    de_rebin2 = np.repeat(de_rebin1, dim_array[2], 
+    de_rebin1 = np.repeat(de_reform, dim_array[2],
                          axis=2)  # repeated across apd(elevation)
-    dist['denergy'] = np.repeat(de_rebin2, dim_array[1], 
+    de_rebin2 = np.repeat(de_rebin1, dim_array[1],
                          axis=1)  # repeated across spin phase(azimuth)
+    dist['denergy'] = np.repeat(de_rebin2, n_times,
+                         axis=3)  # repeated across n_times
 
     dist['n_energy'] = dim_array[0]
 
     dist['n_bins'] = dim_array[1] * dim_array[2]  #   # thetas * # phis
-    
+   
     #  ;; azimuthal angle in spin direction
 
     angarr = get_mepe_flux_angle_in_sga()
@@ -200,32 +200,35 @@ def erg_mepe_get_dist(tname,
     spinph_ofst = data_in[2] * 11.25
 
     phi0_1_reform = np.reshape(phissi, [1, 1, dim_array[2], 1])
-    phi0_1_rebin1 = np.repeat(phi0_1_reform, n_times,
-                              axis=3)  # repeated across n_times
-    phi0_1_rebin2 = np.repeat(phi0_1_rebin1, dim_array[1], 
+    phi0_1_rebin1 = np.repeat(phi0_1_reform, dim_array[1],
                              axis=1)  # repeated across spin phase(azimuth)
-    phi0_1 = np.repeat(phi0_1_rebin2, dim_array[0],
+
+    phi0_1_rebin2 = np.repeat(phi0_1_rebin1, dim_array[0],
                              axis=0)  # repeated across energy
-    phi0_2_reform = np.reshape(spinph_ofst, [1, dim_array[1], 1, 1])
-    phi0_2_rebin1 = np.repeat(phi0_2_reform, n_times,
+    phi0_1 = np.repeat(phi0_1_rebin2,     n_times,
                               axis=3)  # repeated across n_times
-    phi0_2_rebin2 = np.repeat(phi0_2_rebin1, dim_array[2],
+    phi0_2_reform = np.reshape(spinph_ofst, [1, dim_array[1], 1, 1])
+    phi0_2_rebin1 = np.repeat(phi0_2_reform, dim_array[2],
                              axis=2)  # repeated across apd(elevation)
-    phi0_2 = np.repeat(phi0_2_rebin2, dim_array[0],
+   
+    phi0_2_rebin2 = np.repeat(phi0_2_rebin1, dim_array[0],
                              axis=0)  # repeated across energy
+    phi0_2 = np.repeat(phi0_2_rebin2, n_times,
+                              axis=3)  # repeated across n_times
     phi0 = phi0_1 + phi0_2
 
     ofst_sv = (np.arange(dim_array[0]) + 0.5) * \
         11.25/dim_array[0]  # ;; [(energy)]
     phi_ofst_for_sv_reform = np.reshape(ofst_sv, [dim_array[0], 1, 1, 1])
     phi_ofst_for_sv_rebin1 = np.repeat(
-        phi_ofst_for_sv_reform, n_times,
-                                 axis=3)  # repeated across n_times
-    phi_ofst_for_sv_rebin2 = np.repeat(
-        phi_ofst_for_sv_rebin1, dim_array[2],
+        phi_ofst_for_sv_reform, dim_array[2],
                                  axis=2)  # repeated across apd(elevation)
-    phi_ofst_for_sv = np.repeat(phi_ofst_for_sv_rebin2, dim_array[1],
+
+    phi_ofst_for_sv_rebin2 = np.repeat(
+        phi_ofst_for_sv_rebin1,dim_array[1],
                                  axis=1)  # repeated across spin phase(azimuth)
+    phi_ofst_for_sv = np.repeat(phi_ofst_for_sv_rebin2,         n_times,
+                                 axis=3)  # repeated across n_times
     """
     ;;  phi angle for the start of each spin phase
     ;;    + offset angle foreach sv step
@@ -241,12 +244,12 @@ def erg_mepe_get_dist(tname,
     #  ;; elevation angle
     elev = angarr[0, 1, :]  # ;; [(apd)]
     elev_reform = np.reshape(elev, [1, 1, dim_array[2], 1])
-    elev_rebin1 = np.repeat(elev_reform, n_times,
-                             axis=3)  # repeated across n_times
-    elev_rebin2 = np.repeat(elev_rebin1, dim_array[1],
+    elev_rebin1 = np.repeat(elev_reform, dim_array[1],
                              axis=1)  # repeated across spin phase(azimuth)
-    dist['theta'] = np.repeat(elev_rebin2, dim_array[0],
+    elev_rebin2 = np.repeat(elev_rebin1, dim_array[0],
                              axis=0)  # repeated across energy
+    dist['theta'] = np.repeat(elev_rebin2, n_times,
+                             axis=3)  # repeated across n_times
 
     dist['dtheta'] = np.full(shape=np.insert(dim_array, dim_array.shape[0],
                                              n_times), fill_value=11.25)  # ;; 11.25 deg is set for the moment calculation
