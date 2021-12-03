@@ -84,7 +84,7 @@ def erg_mep_part_products(
     """
     if (gyro != [0., 360.]) or (pitch != [0.,180.]):
         idx = np.where(np.array(outputs_lc) == 'energy')[0]
-        if idx.shape[0] > 0:
+        if (idx.shape[0] > 0) and ('fac_energy' not in outputs_lc):
             idx = idx[0]
             outputs_lc[idx] = 'fac_energy'
 
@@ -116,7 +116,7 @@ def erg_mep_part_products(
 
 
     dist = erg_mepe_get_dist(in_tvarname, 0, species=species, units=units_lc)
-    if ('energy' in outputs_lc) or ('fac_energy' in outputs_lc):
+    if 'energy' in outputs_lc:
         out_energy = np.zeros((times_array.shape[0], dist['n_energy']))
         out_energy_y = np.zeros((times_array.shape[0], dist['n_energy']))
     if 'theta' in outputs_lc:
@@ -143,6 +143,10 @@ def erg_mep_part_products(
         out_mftens = np.zeros([times_array.shape[0], 6])
         out_ptens = np.zeros([times_array.shape[0], 6])
         out_ttens = np.zeros([times_array.shape[0], 3, 3])
+
+    if 'fac_energy' in outputs_lc:
+        out_fac_energy = np.zeros((times_array.shape[0], dist['n_energy']))
+        out_fac_energy_y = np.zeros((times_array.shape[0], dist['n_energy']))
 
     if 'fac_moments' in outputs_lc:
         out_fac_density = np.zeros(times_array.shape[0])
@@ -304,7 +308,7 @@ def erg_mep_part_products(
                 out_gyro_y[index, :], out_gyro[index, :] = spd_pgs_make_phi_spec(clean_data, resolution=regrid[0])
 
             if 'fac_energy' in outputs_lc:
-                out_energy_y[index, :], out_energy[index, :] = spd_pgs_make_e_spec(clean_data)
+                out_fac_energy_y[index, :], out_fac_energy[index, :] = spd_pgs_make_e_spec(clean_data)
 
             if 'fac_moments' in outputs_lc:
                 clean_data['theta'] = 90. - clean_data['theta'] # ;convert back to latitude for moments calc
@@ -331,7 +335,7 @@ def erg_mep_part_products(
 
 
 
-    if ('energy' in outputs_lc) or ('fac_energy' in outputs_lc):
+    if 'energy' in outputs_lc:
         output_tplot_name = in_tvarname+'_energy' + suffix
         spd_pgs_make_tplot(output_tplot_name, x=times_array, y=out_energy_y, z=out_energy, units=units, ylog=True, ytitle=dist['data_name'] + ' \\ energy (eV)')
         out_vars.append(output_tplot_name)
@@ -368,6 +372,12 @@ def erg_mep_part_products(
               'avgtemp': out_avgtemp}
         moments_vars = erg_pgs_moments_tplot(moments, x=times_array, prefix=in_tvarname)
         out_vars.extend(moments_vars)
+
+    if 'fac_energy' in outputs_lc:
+
+        output_tplot_name = in_tvarname+'_energy_mag' + suffix
+        spd_pgs_make_tplot(output_tplot_name, x=times_array, y=out_fac_energy_y, z=out_fac_energy, units=units, ylog=True, ytitle=dist['data_name'] + ' \\ energy (eV)')
+        out_vars.append(output_tplot_name)
 
     #  ;FAC Moments Variables
     if 'fac_moments' in outputs_lc:
