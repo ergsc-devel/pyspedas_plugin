@@ -206,10 +206,10 @@ def erg_mep_part_products(
         if fac_requested:
             pre_limit_bins = np.copy(clean_data['bins'])
 
-        limited_data = erg_pgs_limit_range(clean_data, phi=phi_in, theta=theta, energy=energy)
+        clean_data = erg_pgs_limit_range(clean_data, phi=phi_in, theta=theta, energy=energy)
 
         if 'moments' in outputs_lc:
-            clean_data_eflux = erg_convert_flux_units(limited_data, units='eflux')
+            clean_data_eflux = erg_convert_flux_units(clean_data, units='eflux')
             magfarr = np.copy(magf)
             moments = spd_pgs_moments(clean_data_eflux)
 
@@ -224,15 +224,15 @@ def erg_mep_part_products(
 
         #  ;;Build theta spectrogram
         if 'theta' in outputs_lc:
-            out_theta_y[index, :], out_theta[index, :] = spd_pgs_make_theta_spec(limited_data)
+            out_theta_y[index, :], out_theta[index, :] = spd_pgs_make_theta_spec(clean_data)
 
         #  ;;Build energy spectrogram
         if 'energy' in outputs_lc:
-            out_energy_y[index, :], out_energy[index, :] = spd_pgs_make_e_spec(limited_data)
+            out_energy_y[index, :], out_energy[index, :] = spd_pgs_make_e_spec(clean_data)
 
         #  ;;Build phi spectrogram
         if 'phi' in outputs_lc:
-            out_phi_y[index, :], out_phi[index, :] = spd_pgs_make_phi_spec(limited_data, resolution=dist['n_phi'])
+            out_phi_y[index, :], out_phi[index, :] = spd_pgs_make_phi_spec(clean_data, resolution=dist['n_phi'])
 
         #  ;;Perform transformation to FAC, (regrid data), and apply limits in new coords
         
@@ -240,21 +240,21 @@ def erg_mep_part_products(
             
             # ;limits will be applied to energy-aligned bins
             clean_data['bins'] = np.copy(pre_limit_bins)
-            limited_data = erg_pgs_limit_range(clean_data, phi=phi_in, theta=theta, energy=energy, no_ang_weighting=no_ang_weighting)
+            clean_data = erg_pgs_limit_range(clean_data, phi=phi_in, theta=theta, energy=energy, no_ang_weighting=no_ang_weighting)
 
             # ;perform FAC transformation and interpolate onto a new, regular grid 
-            fac_data = spd_pgs_do_fac(limited_data, fac_matrix[index, :, :])
+            clean_data = spd_pgs_do_fac(clean_data, fac_matrix[index, :, :])
 
-            fac_data = spd_pgs_regrid(fac_data, regrid)
+            clean_data = spd_pgs_regrid(clean_data, regrid)
 
-            fac_data['theta'] = 90.0-fac_data['theta']  #  ;pitch angle is specified in co-latitude
+            clean_data['theta'] = 90.0-clean_data['theta']  #  ;pitch angle is specified in co-latitude
 
             # ;apply gyro & pitch angle limits(identical to phi & theta, just in new coords)
-            fac_data = erg_pgs_limit_range(fac_data, theta=pitch, phi=gyro)
+            clean_data = erg_pgs_limit_range(clean_data, theta=pitch, phi=gyro)
 
             if 'pa' in outputs_lc:
                 # ;Build pitch angle spectrogram
-                out_pad_y[index, :], out_pad[index, :] = spd_pgs_make_theta_spec(fac_data, colatitude=True, resolution=regrid[1])
+                out_pad_y[index, :], out_pad[index, :] = spd_pgs_make_theta_spec(clean_data, colatitude=True, resolution=regrid[1])
 
 
 
