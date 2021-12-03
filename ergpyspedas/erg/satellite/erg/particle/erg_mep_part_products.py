@@ -37,7 +37,8 @@ def erg_mep_part_products(
     trange=None,
     mag_name=None,
     pos_name=None,
-    relativistic=False
+    relativistic=False,
+    no_regrid=False
     ):
 
     if len(tnames(in_tvarname)) < 1:
@@ -49,8 +50,6 @@ def erg_mep_part_products(
 
     if no_ang_weighting:
         no_regrid = True
-    else:
-        no_regrid = False
 
     if isinstance(outputs, str):
         outputs_lc = outputs.lower()
