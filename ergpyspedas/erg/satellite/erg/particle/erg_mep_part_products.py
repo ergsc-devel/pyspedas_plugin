@@ -6,7 +6,6 @@ from pyspedas.particles.spd_part_products.spd_pgs_make_theta_spec import spd_pgs
 from pyspedas.particles.spd_part_products.spd_pgs_make_phi_spec import spd_pgs_make_phi_spec
 from pyspedas.particles.spd_part_products.spd_pgs_progress_update import spd_pgs_progress_update
 from pyspedas.particles.spd_part_products.spd_pgs_make_tplot import spd_pgs_make_tplot
-from pyspedas.particles.spd_part_products.spd_pgs_do_fac import spd_pgs_do_fac
 from pyspedas.particles.moments.spd_pgs_moments import spd_pgs_moments
 from pyspedas.particles.spd_part_products.spd_pgs_regrid import spd_pgs_regrid
 from pytplot import get_timespan, get_data, store_data
@@ -18,6 +17,7 @@ from .erg_convert_flux_units import erg_convert_flux_units
 from .erg_pgs_moments_tplot import erg_pgs_moments_tplot
 from .erg_pgs_make_fac import erg_pgs_make_fac
 from .erg_pgs_make_e_spec import erg_pgs_make_e_spec
+from .erg_pgs_do_fac import erg_pgs_do_fac
 
 def erg_mep_part_products(
     in_tvarname,
@@ -288,7 +288,7 @@ def erg_mep_part_products(
             clean_data = erg_pgs_limit_range(clean_data, phi=phi_in, theta=theta, energy=energy, no_ang_weighting=no_ang_weighting)
 
             # ;perform FAC transformation and interpolate onto a new, regular grid 
-            clean_data = spd_pgs_do_fac(clean_data, fac_matrix[index, :, :])
+            clean_data = erg_pgs_do_fac(clean_data, fac_matrix[index, :, :])
 
             #;nearest neighbor interpolation to regular grid in FAC
             if not no_regrid:
