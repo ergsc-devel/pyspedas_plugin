@@ -4,7 +4,6 @@ from pyspedas.utilities.time_double import time_double
 from pyspedas.utilities.time_string import time_string
 from pyspedas.particles.spd_part_products.spd_pgs_make_theta_spec import spd_pgs_make_theta_spec
 from pyspedas.particles.spd_part_products.spd_pgs_make_phi_spec import spd_pgs_make_phi_spec
-from pyspedas.particles.spd_part_products.spd_pgs_progress_update import spd_pgs_progress_update
 from pyspedas.particles.spd_part_products.spd_pgs_make_tplot import spd_pgs_make_tplot
 from pyspedas.particles.moments.spd_pgs_moments import spd_pgs_moments
 from pyspedas.particles.spd_part_products.spd_pgs_regrid import spd_pgs_regrid
@@ -18,6 +17,7 @@ from .erg_pgs_moments_tplot import erg_pgs_moments_tplot
 from .erg_pgs_make_fac import erg_pgs_make_fac
 from .erg_pgs_make_e_spec import erg_pgs_make_e_spec
 from .erg_pgs_do_fac import erg_pgs_do_fac
+from .erg_pgs_progress_update import erg_pgs_progress_update
 
 def erg_mep_part_products(
     in_tvarname,
@@ -231,7 +231,7 @@ def erg_mep_part_products(
     """
     for index in range(time_indices.shape[0]):
 
-        last_update_time = spd_pgs_progress_update(last_update_time=last_update_time,
+        last_update_time = erg_pgs_progress_update(last_update_time=last_update_time,
              current_sample=index, total_samples=time_indices.shape[0], type_string=in_tvarname)
 
         #  ;; Get the data structure for this sample
