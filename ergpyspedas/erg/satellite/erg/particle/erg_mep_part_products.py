@@ -47,6 +47,11 @@ def erg_mep_part_products(
     in_tvarname = tnames(in_tvarname)[0]
     instnm = in_tvarname.split('_')[1]  #  ;; mepe or mepi
 
+    if no_ang_weighting:
+        no_regrid = True
+    else:
+        no_regrid = False
+
     if isinstance(outputs, str):
         outputs_lc = outputs.lower()
         outputs_lc = outputs_lc.split(' ')
@@ -245,7 +250,9 @@ def erg_mep_part_products(
             # ;perform FAC transformation and interpolate onto a new, regular grid 
             clean_data = spd_pgs_do_fac(clean_data, fac_matrix[index, :, :])
 
-            clean_data = spd_pgs_regrid(clean_data, regrid)
+            #;nearest neighbor interpolation to regular grid in FAC
+            if not no_regrid:
+                clean_data = spd_pgs_regrid(clean_data, regrid)
 
             clean_data['theta'] = 90.0-clean_data['theta']  #  ;pitch angle is specified in co-latitude
 
