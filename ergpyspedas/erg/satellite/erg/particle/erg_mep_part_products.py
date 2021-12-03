@@ -78,6 +78,18 @@ def erg_mep_part_products(
         gyro = [0., 360.]
 
 
+    """
+    ;;Create energy spectrogram after FAC transformation if limits are not 
+    ;;identical to the default.
+    """
+    if (gyro != [0., 360.]) or (pitch != [0.,180.]):
+        idx = np.where(np.array(outputs_lc) == 'energy')[0]
+        if idx.shape[0] > 0:
+            idx = idx[0]
+            outputs_lc[idx] = 'fac_energy'
+            print(outputs_lc)
+
+
     #  ;;Preserve the original time range
     tr_org = get_timespan(in_tvarname)
 
@@ -101,7 +113,7 @@ def erg_mep_part_products(
 
 
     dist = erg_mepe_get_dist(in_tvarname, 0, species=species, units=units_lc)
-    if 'energy' in outputs_lc:
+    if ('energy' in outputs_lc) or ('fac_energy' in outputs_lc):
         out_energy = np.zeros((times_array.shape[0], dist['n_energy']))
         out_energy_y = np.zeros((times_array.shape[0], dist['n_energy']))
     if 'theta' in outputs_lc:
@@ -278,9 +290,12 @@ def erg_mep_part_products(
                 # ;Build gyrophase spectrogram
                 out_gyro_y[index, :], out_gyro[index, :] = spd_pgs_make_phi_spec(clean_data, resolution=regrid[0])
 
+            if 'fac_energy' in outputs_lc:
+                out_energy_y[index, :], out_energy[index, :] = spd_pgs_make_e_spec(clean_data)
 
 
-    if 'energy' in outputs_lc:
+
+    if ('energy' in outputs_lc) or ('fac_energy' in outputs_lc):
         output_tplot_name = in_tvarname+'_energy' + suffix
         spd_pgs_make_tplot(output_tplot_name, x=times_array, y=out_energy_y, z=out_energy, units=units, ylog=True, ytitle=dist['data_name'] + ' \\ energy (eV)')
         out_vars.append(output_tplot_name)
