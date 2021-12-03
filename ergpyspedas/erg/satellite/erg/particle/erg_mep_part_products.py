@@ -2,7 +2,6 @@ import numpy as np
 from pyspedas import tnames, tinterpol
 from pyspedas.utilities.time_double import time_double
 from pyspedas.utilities.time_string import time_string
-from pyspedas.particles.spd_part_products.spd_pgs_make_e_spec import spd_pgs_make_e_spec
 from pyspedas.particles.spd_part_products.spd_pgs_make_theta_spec import spd_pgs_make_theta_spec
 from pyspedas.particles.spd_part_products.spd_pgs_make_phi_spec import spd_pgs_make_phi_spec
 from pyspedas.particles.spd_part_products.spd_pgs_progress_update import spd_pgs_progress_update
@@ -18,6 +17,7 @@ from .erg_pgs_limit_range import erg_pgs_limit_range
 from .erg_convert_flux_units import erg_convert_flux_units
 from .erg_pgs_moments_tplot import erg_pgs_moments_tplot
 from .erg_pgs_make_fac import erg_pgs_make_fac
+from .erg_pgs_make_e_spec import erg_pgs_make_e_spec
 
 def erg_mep_part_products(
     in_tvarname,
@@ -273,7 +273,7 @@ def erg_mep_part_products(
 
         #  ;;Build energy spectrogram
         if 'energy' in outputs_lc:
-            out_energy_y[index, :], out_energy[index, :] = spd_pgs_make_e_spec(clean_data)
+            out_energy_y[index, :], out_energy[index, :] = erg_pgs_make_e_spec(clean_data)
 
         #  ;;Build phi spectrogram
         if 'phi' in outputs_lc:
@@ -308,7 +308,7 @@ def erg_mep_part_products(
                 out_gyro_y[index, :], out_gyro[index, :] = spd_pgs_make_phi_spec(clean_data, resolution=regrid[0])
 
             if 'fac_energy' in outputs_lc:
-                out_fac_energy_y[index, :], out_fac_energy[index, :] = spd_pgs_make_e_spec(clean_data)
+                out_fac_energy_y[index, :], out_fac_energy[index, :] = erg_pgs_make_e_spec(clean_data)
 
             if 'fac_moments' in outputs_lc:
                 clean_data['theta'] = 90. - clean_data['theta'] # ;convert back to latitude for moments calc
