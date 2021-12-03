@@ -87,8 +87,11 @@ def erg_mep_part_products(
         if idx.shape[0] > 0:
             idx = idx[0]
             outputs_lc[idx] = 'fac_energy'
-            print(outputs_lc)
 
+        idx = np.where(np.array(outputs_lc) == 'moments')[0]
+        if idx.shape[0] > 0 and ('fac_moments' not in outputs_lc):
+            idx = idx[0]
+            outputs_lc[idx] = 'fac_moments'
 
     #  ;;Preserve the original time range
     tr_org = get_timespan(in_tvarname)
@@ -141,6 +144,15 @@ def erg_mep_part_products(
         out_ptens = np.zeros([times_array.shape[0], 6])
         out_ttens = np.zeros([times_array.shape[0], 3, 3])
 
+    if 'fac_moments' in outputs_lc:
+        out_fac_density = np.zeros(times_array.shape[0])
+        out_fac_avgtemp = np.zeros(times_array.shape[0])
+        out_fac_vthermal = np.zeros(times_array.shape[0])
+        out_fac_flux = np.zeros([times_array.shape[0], 3])
+        out_fac_velocity = np.zeros([times_array.shape[0], 3])
+        out_fac_mftens = np.zeros([times_array.shape[0], 6])
+        out_fac_ptens = np.zeros([times_array.shape[0], 6])
+        out_fac_ttens = np.zeros([times_array.shape[0], 3, 3])
     out_vars = []
     last_update_time = None
 
@@ -236,19 +248,20 @@ def erg_mep_part_products(
 
         clean_data = erg_pgs_limit_range(clean_data, phi=phi_in, theta=theta, energy=energy)
 
-        if 'moments' in outputs_lc:
+        if ('moments' in outputs_lc) or ('fac_moments' in outputs_lc):
             clean_data_eflux = erg_convert_flux_units(clean_data, units='eflux')
             magfarr = np.copy(magf)
             moments = spd_pgs_moments(clean_data_eflux)
 
-            out_density[index] = moments['density']
-            out_avgtemp[index] = moments['avgtemp']
-            out_vthermal[index] = moments['vthermal']
-            out_flux[index, :] = moments['flux']
-            out_velocity[index, :] = moments['velocity']
-            out_mftens[index, :] = moments['mftens']
-            out_ptens[index, :] = moments['ptens']
-            out_ttens[index, :] = moments['ttens']
+            if 'moments' in outputs_lc:
+                out_density[index] = moments['density']
+                out_avgtemp[index] = moments['avgtemp']
+                out_vthermal[index] = moments['vthermal']
+                out_flux[index, :] = moments['flux']
+                out_velocity[index, :] = moments['velocity']
+                out_mftens[index, :] = moments['mftens']
+                out_ptens[index, :] = moments['ptens']
+                out_ttens[index, :] = moments['ttens']
 
         #  ;;Build theta spectrogram
         if 'theta' in outputs_lc:
@@ -293,6 +306,29 @@ def erg_mep_part_products(
             if 'fac_energy' in outputs_lc:
                 out_energy_y[index, :], out_energy[index, :] = spd_pgs_make_e_spec(clean_data)
 
+            if 'fac_moments' in outputs_lc:
+                clean_data['theta'] = 90. - clean_data['theta'] # ;convert back to latitude for moments calc
+                temp_dict = {'charge': dist['charge'],
+                             'magf': magvec,
+                             'species': dist['species'],
+                             'sc_pot': 0.,
+                             'units_name': units_lc}
+                temp_dict.update(clean_data)
+                clean_data = temp_dict.copy()
+                del temp_dict
+                clean_data_eflux = erg_convert_flux_units(clean_data, units='eflux')
+
+                fac_moments = spd_pgs_moments(clean_data_eflux)
+
+                out_fac_density[index] = fac_moments['density']
+                out_fac_avgtemp[index] = fac_moments['avgtemp']
+                out_fac_vthermal[index] = fac_moments['vthermal']
+                out_fac_flux[index, :] = fac_moments['flux']
+                out_fac_velocity[index, :] = fac_moments['velocity']
+                out_fac_mftens[index, :] = fac_moments['mftens']
+                out_fac_ptens[index, :] = fac_moments['ptens']
+                out_fac_ttens[index, :] = fac_moments['ttens']
+
 
 
     if ('energy' in outputs_lc) or ('fac_energy' in outputs_lc):
@@ -333,5 +369,18 @@ def erg_mep_part_products(
         moments_vars = erg_pgs_moments_tplot(moments, x=times_array, prefix=in_tvarname)
         out_vars.extend(moments_vars)
 
+    #  ;FAC Moments Variables
+    if 'fac_moments' in outputs_lc:
+        fac_moments = {'density': out_fac_density, 
+              'flux': out_fac_flux, 
+              'mftens': out_fac_mftens, 
+              'velocity': out_fac_velocity, 
+              'ptens': out_fac_ptens,
+              'ttens': out_fac_ttens,
+              'vthermal': out_fac_vthermal,
+              'avgtemp': out_fac_avgtemp}
+        fac_mom_suffix = '_mag' + suffix
+        fac_moments_vars = erg_pgs_moments_tplot(fac_moments, x=times_array, prefix=in_tvarname, suffix=fac_mom_suffix)
+        out_vars.extend(fac_moments_vars)
 
     return out_vars
