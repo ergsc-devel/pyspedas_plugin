@@ -9,6 +9,7 @@ from pyspedas.particles.spd_part_products.spd_pgs_progress_update import spd_pgs
 from pyspedas.particles.spd_part_products.spd_pgs_make_tplot import spd_pgs_make_tplot
 from pyspedas.particles.spd_part_products.spd_pgs_do_fac import spd_pgs_do_fac
 from pyspedas.particles.moments.spd_pgs_moments import spd_pgs_moments
+from pyspedas.particles.spd_part_products.spd_pgs_regrid import spd_pgs_regrid
 from pytplot import get_timespan, get_data, store_data
 
 from .erg_mepe_get_dist import erg_mepe_get_dist
@@ -243,6 +244,8 @@ def erg_mep_part_products(
 
             # ;perform FAC transformation and interpolate onto a new, regular grid 
             fac_data = spd_pgs_do_fac(limited_data, fac_matrix[index, :, :])
+
+            fac_data = spd_pgs_regrid(fac_data, regrid)
 
             fac_data['theta'] = 90.0-fac_data['theta']  #  ;pitch angle is specified in co-latitude
 
