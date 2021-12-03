@@ -89,7 +89,7 @@ def erg_mep_part_products(
             outputs_lc[idx] = 'fac_energy'
 
         idx = np.where(np.array(outputs_lc) == 'moments')[0]
-        if idx.shape[0] > 0 and ('fac_moments' not in outputs_lc):
+        if (idx.shape[0] > 0) and ('fac_moments' not in outputs_lc):
             idx = idx[0]
             outputs_lc[idx] = 'fac_moments'
 
