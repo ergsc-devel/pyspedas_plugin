@@ -71,6 +71,14 @@ def erg_mep_part_products(
         if phi[0] == phi[1]:
             phi = [0., 360.]
 
+
+    if abs(gyro[1] - gyro[0]) > 360.:
+        print('ERROR: Gyro restrictions must have range no larger than 360 deg')
+        return 0
+    if gyro[0] == gyro[1]:
+        gyro = [0., 360.]
+
+
     #  ;;Preserve the original time range
     tr_org = get_timespan(in_tvarname)
 
@@ -103,6 +111,10 @@ def erg_mep_part_products(
     if 'phi' in outputs_lc:
         out_phi = np.zeros((times_array.shape[0], dist['n_phi']))
         out_phi_y = np.zeros((times_array.shape[0], dist['n_phi']))
+
+    if 'gyro' in outputs_lc:
+        out_gyro = np.zeros((times_array.shape[0], dist['n_phi']))
+        out_gyro_y = np.zeros((times_array.shape[0], dist['n_phi']))
 
     if 'pa' in outputs_lc:
         out_pad = np.zeros((times_array.shape[0], dist['n_theta']))
@@ -263,6 +275,10 @@ def erg_mep_part_products(
                 # ;Build pitch angle spectrogram
                 out_pad_y[index, :], out_pad[index, :] = spd_pgs_make_theta_spec(clean_data, colatitude=True, resolution=regrid[1])
 
+            if 'gyro' in outputs_lc:
+                # ;Build gyrophase spectrogram
+                out_gyro_y[index, :], out_gyro[index, :] = spd_pgs_make_phi_spec(clean_data, resolution=regrid[0])
+
 
 
     if 'energy' in outputs_lc:
@@ -283,6 +299,12 @@ def erg_mep_part_products(
         output_tplot_name = in_tvarname+'_pa' + suffix
         spd_pgs_make_tplot(output_tplot_name, x=times_array, y=out_pad_y, z=out_pad, units=units, ylog=False, ytitle=dist['data_name'] + ' \\ PA (deg)')
         out_vars.append(output_tplot_name)
+
+    if 'gyro' in outputs_lc:
+        output_tplot_name = in_tvarname+'_gyro' + suffix
+        spd_pgs_make_tplot(output_tplot_name, x=times_array, y=out_gyro_y, z=out_gyro, units=units, ylog=False, ytitle=dist['data_name'] + ' \\ gyro (deg)')
+        out_vars.append(output_tplot_name)
+
 
     #  ;Moments Variables
     if 'moments' in outputs_lc:
