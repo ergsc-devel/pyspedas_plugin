@@ -250,7 +250,7 @@ def erg_mep_part_products(
         if fac_requested:
             pre_limit_bins = np.copy(clean_data['bins'])
 
-        clean_data = erg_pgs_limit_range(clean_data, phi=phi_in, theta=theta, energy=energy)
+        clean_data = erg_pgs_limit_range(clean_data, phi=phi_in, theta=theta, energy=energy, no_ang_weighting=no_ang_weighting)
 
         if ('moments' in outputs_lc) or ('fac_moments' in outputs_lc):
             clean_data_eflux = erg_convert_flux_units(clean_data, units='eflux')
@@ -297,7 +297,7 @@ def erg_mep_part_products(
             clean_data['theta'] = 90.0-clean_data['theta']  #  ;pitch angle is specified in co-latitude
 
             # ;apply gyro & pitch angle limits(identical to phi & theta, just in new coords)
-            clean_data = erg_pgs_limit_range(clean_data, theta=pitch, phi=gyro)
+            clean_data = erg_pgs_limit_range(clean_data, theta=pitch, phi=gyro, no_ang_weighting=no_ang_weighting)
 
             if 'pa' in outputs_lc:
                 # ;Build pitch angle spectrogram
