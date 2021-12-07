@@ -19,7 +19,7 @@ def erg_convert_flux_units(input_dist, units='flux', relativistic=False):
     ; Using it for ions just messes up the conversion.
     """
 
-    output_dist = input_dist
+    output_dist = input_dist.copy()
 
     units_out = units.lower()
     species_lc = input_dist['species'].lower()
