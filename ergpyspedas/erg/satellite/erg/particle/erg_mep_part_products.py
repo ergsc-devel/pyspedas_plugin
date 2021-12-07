@@ -1,4 +1,7 @@
 import numpy as np
+
+from copy import deepcopy
+
 from pyspedas import tnames, tinterpol
 from pyspedas.utilities.time_double import time_double
 from pyspedas.utilities.time_string import time_string
@@ -248,13 +251,13 @@ def erg_mep_part_products(
         clean_data = erg_pgs_clean_data(dist, units=units_lc,relativistic=relativistic, magf=magvec)
 
         if fac_requested:
-            pre_limit_bins = np.copy(clean_data['bins'])
+            pre_limit_bins = deepcopy(clean_data['bins'])
 
         clean_data = erg_pgs_limit_range(clean_data, phi=phi_in, theta=theta, energy=energy, no_ang_weighting=no_ang_weighting)
 
         if ('moments' in outputs_lc) or ('fac_moments' in outputs_lc):
             clean_data_eflux = erg_convert_flux_units(clean_data, units='eflux')
-            magfarr = np.copy(magf)
+            magfarr = deepcopy(magf)
             moments = spd_pgs_moments(clean_data_eflux)
 
             if 'moments' in outputs_lc:
@@ -284,7 +287,7 @@ def erg_mep_part_products(
         if fac_requested:
             
             # ;limits will be applied to energy-aligned bins
-            clean_data['bins'] = np.copy(pre_limit_bins)
+            clean_data['bins'] = deepcopy(pre_limit_bins)
             clean_data = erg_pgs_limit_range(clean_data, phi=phi_in, theta=theta, energy=energy, no_ang_weighting=no_ang_weighting)
 
             # ;perform FAC transformation and interpolate onto a new, regular grid 
@@ -318,7 +321,7 @@ def erg_mep_part_products(
                              'sc_pot': 0.,
                              'units_name': units_lc}
                 temp_dict.update(clean_data)
-                clean_data = temp_dict.copy()
+                clean_data = deepcopy(temp_dict)
                 del temp_dict
                 clean_data_eflux = erg_convert_flux_units(clean_data, units='eflux')
 

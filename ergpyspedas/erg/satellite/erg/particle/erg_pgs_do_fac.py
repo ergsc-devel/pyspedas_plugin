@@ -1,3 +1,4 @@
+from copy import deepcopy
 
 import numpy as np
 from astropy.coordinates import spherical_to_cartesian, cartesian_to_spherical
@@ -17,7 +18,7 @@ def erg_pgs_do_fac(data_in, mat, by_spin_phase =False):
         Rotated particle data structure
     """
 
-    data_out = data_in.copy()
+    data_out = deepcopy(data_in)
     rvals = np.ones(data_in['data'].shape)
     cart_data = spherical_to_cartesian(rvals, data_in['theta']*np.pi/180.0, data_in['phi']*np.pi/180.0)
 
