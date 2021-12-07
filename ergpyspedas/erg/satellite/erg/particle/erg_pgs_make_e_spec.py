@@ -1,5 +1,6 @@
 
 import numpy as np
+from copy import deepcopy
 
 # use nanmean from bottleneck if it's installed, otherwise use the numpy one
 try:
@@ -21,7 +22,7 @@ def erg_pgs_make_e_spec(data_in):
 
     """
 
-    data = data_in.copy()
+    data = deepcopy(data_in)
 
     # zero inactive bins to ensure areas with no data are represented as NaN
     zero_bins = np.argwhere(data['bins'] == 0)
