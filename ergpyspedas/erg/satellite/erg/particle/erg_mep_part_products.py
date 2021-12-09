@@ -6,7 +6,7 @@ from pyspedas import tnames, tinterpol
 from pyspedas.utilities.time_double import time_double
 from pyspedas.utilities.time_string import time_string
 
-from pyspedas.particles.spd_part_products.spd_pgs_make_tplot import spd_pgs_make_tplot
+#from pyspedas.particles.spd_part_products.spd_pgs_make_tplot import spd_pgs_make_tplot
 from pyspedas.particles.moments.spd_pgs_moments import spd_pgs_moments
 from pyspedas.particles.spd_part_products.spd_pgs_regrid import spd_pgs_regrid
 from pytplot import get_timespan, get_data, store_data
@@ -22,6 +22,7 @@ from .erg_pgs_make_theta_spec import erg_pgs_make_theta_spec
 from .erg_pgs_make_phi_spec import erg_pgs_make_phi_spec
 from .erg_pgs_do_fac import erg_pgs_do_fac
 from .erg_pgs_progress_update import erg_pgs_progress_update
+from .erg_pgs_make_tplot import erg_pgs_make_tplot
 
 def erg_mep_part_products(
     in_tvarname,
@@ -341,26 +342,26 @@ def erg_mep_part_products(
 
     if 'energy' in outputs_lc:
         output_tplot_name = in_tvarname+'_energy' + suffix
-        spd_pgs_make_tplot(output_tplot_name, x=times_array, y=out_energy_y, z=out_energy, units=units, ylog=True, ytitle=dist['data_name'] + ' \\ energy (eV)')
+        erg_pgs_make_tplot(output_tplot_name, x=times_array, y=out_energy_y, z=out_energy, units=units, ylog=True, ytitle=dist['data_name'] + ' \\ energy (eV)',relativistic=relativistic)
         out_vars.append(output_tplot_name)
     if 'theta' in outputs_lc:
         output_tplot_name = in_tvarname+'_theta' + suffix
-        spd_pgs_make_tplot(output_tplot_name, x=times_array, y=out_theta_y, z=out_theta, units=units, ylog=False, ytitle=dist['data_name'] + ' \\ theta (deg)')
+        erg_pgs_make_tplot(output_tplot_name, x=times_array, y=out_theta_y, z=out_theta, units=units, ylog=False, ytitle=dist['data_name'] + ' \\ theta (deg)',relativistic=relativistic)
         out_vars.append(output_tplot_name)
     if 'phi' in outputs_lc:
         output_tplot_name = in_tvarname+'_phi' + suffix
-        spd_pgs_make_tplot(output_tplot_name, x=times_array, y=out_phi_y, z=out_phi, units=units, ylog=False, ytitle=dist['data_name'] + ' \\ phi (deg)')
+        erg_pgs_make_tplot(output_tplot_name, x=times_array, y=out_phi_y, z=out_phi, units=units, ylog=False, ytitle=dist['data_name'] + ' \\ phi (deg)',relativistic=relativistic)
         out_vars.append(output_tplot_name)
 
     #  ;;Pitch Angle Spectrograms
     if 'pa' in outputs_lc:
         output_tplot_name = in_tvarname+'_pa' + suffix
-        spd_pgs_make_tplot(output_tplot_name, x=times_array, y=out_pad_y, z=out_pad, units=units, ylog=False, ytitle=dist['data_name'] + ' \\ PA (deg)')
+        erg_pgs_make_tplot(output_tplot_name, x=times_array, y=out_pad_y, z=out_pad, units=units, ylog=False, ytitle=dist['data_name'] + ' \\ PA (deg)',relativistic=relativistic)
         out_vars.append(output_tplot_name)
 
     if 'gyro' in outputs_lc:
         output_tplot_name = in_tvarname+'_gyro' + suffix
-        spd_pgs_make_tplot(output_tplot_name, x=times_array, y=out_gyro_y, z=out_gyro, units=units, ylog=False, ytitle=dist['data_name'] + ' \\ gyro (deg)')
+        erg_pgs_make_tplot(output_tplot_name, x=times_array, y=out_gyro_y, z=out_gyro, units=units, ylog=False, ytitle=dist['data_name'] + ' \\ gyro (deg)',relativistic=relativistic)
         out_vars.append(output_tplot_name)
 
 
@@ -380,7 +381,7 @@ def erg_mep_part_products(
     if 'fac_energy' in outputs_lc:
 
         output_tplot_name = in_tvarname+'_energy_mag' + suffix
-        spd_pgs_make_tplot(output_tplot_name, x=times_array, y=out_fac_energy_y, z=out_fac_energy, units=units, ylog=True, ytitle=dist['data_name'] + ' \\ energy (eV)')
+        erg_pgs_make_tplot(output_tplot_name, x=times_array, y=out_fac_energy_y, z=out_fac_energy, units=units, ylog=True, ytitle=dist['data_name'] + ' \\ energy (eV)',relativistic=relativistic)
         out_vars.append(output_tplot_name)
 
     #  ;FAC Moments Variables
