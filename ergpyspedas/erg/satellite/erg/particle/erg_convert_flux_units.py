@@ -2,6 +2,8 @@ import logging
 
 import numpy as np
 
+from copy import deepcopy
+
 logging.captureWarnings(True)
 logging.basicConfig(format='%(asctime)s: %(message)s',
                     datefmt='%d-%b-%y %H:%M:%S', level=logging.INFO)
@@ -19,7 +21,7 @@ def erg_convert_flux_units(input_dist, units='flux', relativistic=False):
     ; Using it for ions just messes up the conversion.
     """
 
-    output_dist = input_dist.copy()
+    output_dist = deepcopy(input_dist)
 
     units_out = units.lower()
     species_lc = input_dist['species'].lower()
@@ -79,8 +81,8 @@ def erg_convert_flux_units(input_dist, units='flux', relativistic=False):
         # Conversion here is based on those adopted by Hilmer+JGR,2000.
 
         mc2 = 5.10999-1.0  # Electron rest energy [MeV]
-        ene = input_dist['energy']  # [eV]
-        MeV_ene = input_dist['energy'] * 1e-6  # [MeV]
+        ene = deepcopy(input_dist['energy'])  # [eV]
+        MeV_ene = ene * 1e-6  # [MeV]
         p2c2 = MeV_ene * (MeV_ene + 2.0 * mc2)  # [MeV^2]
 
         """
