@@ -37,10 +37,6 @@ def erg_pgs_make_theta_spec(data_in, resolution=None, colatitude=False, no_ang_w
     data = deepcopy(data_in)
 
     # zero inactive bins to ensure areas with no data are represented as NaN
-    """zero_bins = np.argwhere(data['bins'] == 0)
-    if zero_bins.size != 0:
-        for item in zero_bins:
-            data['data'][item[0], item[1]] = 0.0"""
     data['data'] = np.where(data['bins'] == 0,np.nan,data['data'])
     # get number of theta values
     if resolution is None:
