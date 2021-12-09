@@ -273,7 +273,7 @@ def erg_mep_part_products(
 
         #  ;;Build theta spectrogram
         if 'theta' in outputs_lc:
-            out_theta_y[index, :], out_theta[index, :] = erg_pgs_make_theta_spec(clean_data)
+            out_theta_y[index, :], out_theta[index, :] = erg_pgs_make_theta_spec(clean_data,no_ang_weighting=no_ang_weighting)
 
         #  ;;Build energy spectrogram
         if 'energy' in outputs_lc:

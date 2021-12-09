@@ -106,7 +106,7 @@ def erg_pgs_make_theta_spec(data_in, resolution=None, colatitude=False, no_ang_w
                      & (theta_array < theta_grid[i+1]))
 
             if len(id_array) > 0:
-                ave[i] = np.nanmean(data['data'][idx[:, 0].tolist(), idx[:, 1].tolist()])
+                ave[i] = np.nanmean(data['data'][id_array[:, 0].tolist(), id_array[:, 1].tolist()])
 
     # get y axis
     y = (theta_grid+shift(theta_grid, 1))/2.0
