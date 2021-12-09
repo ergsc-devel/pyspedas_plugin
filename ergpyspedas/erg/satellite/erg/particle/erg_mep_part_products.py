@@ -5,7 +5,7 @@ from copy import deepcopy
 from pyspedas import tnames, tinterpol
 from pyspedas.utilities.time_double import time_double
 from pyspedas.utilities.time_string import time_string
-from pyspedas.particles.spd_part_products.spd_pgs_make_theta_spec import spd_pgs_make_theta_spec
+
 from pyspedas.particles.spd_part_products.spd_pgs_make_phi_spec import spd_pgs_make_phi_spec
 from pyspedas.particles.spd_part_products.spd_pgs_make_tplot import spd_pgs_make_tplot
 from pyspedas.particles.moments.spd_pgs_moments import spd_pgs_moments
@@ -19,6 +19,7 @@ from .erg_convert_flux_units import erg_convert_flux_units
 from .erg_pgs_moments_tplot import erg_pgs_moments_tplot
 from .erg_pgs_make_fac import erg_pgs_make_fac
 from .erg_pgs_make_e_spec import erg_pgs_make_e_spec
+from .erg_pgs_make_theta_spec import erg_pgs_make_theta_spec
 from .erg_pgs_do_fac import erg_pgs_do_fac
 from .erg_pgs_progress_update import erg_pgs_progress_update
 
@@ -272,7 +273,7 @@ def erg_mep_part_products(
 
         #  ;;Build theta spectrogram
         if 'theta' in outputs_lc:
-            out_theta_y[index, :], out_theta[index, :] = spd_pgs_make_theta_spec(clean_data)
+            out_theta_y[index, :], out_theta[index, :] = erg_pgs_make_theta_spec(clean_data)
 
         #  ;;Build energy spectrogram
         if 'energy' in outputs_lc:
@@ -304,7 +305,7 @@ def erg_mep_part_products(
 
             if 'pa' in outputs_lc:
                 # ;Build pitch angle spectrogram
-                out_pad_y[index, :], out_pad[index, :] = spd_pgs_make_theta_spec(clean_data, colatitude=True, resolution=regrid[1])
+                out_pad_y[index, :], out_pad[index, :] = erg_pgs_make_theta_spec(clean_data, colatitude=True, resolution=regrid[1], no_ang_weighting=no_ang_weighting)
 
             if 'gyro' in outputs_lc:
                 # ;Build gyrophase spectrogram
