@@ -2,9 +2,19 @@
 import numpy as np
 from pytplot import store_data, options
 
-from pyspedas.particles.spd_units_string import spd_units_string
+from .erg_units_string import erg_units_string
 
-def erg_pgs_make_tplot(name, x=None, y=None, z=None, units='', ylog=False, zlog=True, colorbar='jet', ytitle=None):
+def erg_pgs_make_tplot(
+    name,
+    x=None,
+    y=None,
+    z=None,
+    units='flux',
+    ylog=False,
+    zlog=True,
+    colorbar='jet',
+    ytitle=None,
+    relativistic=False):
     """
     Create tplot variable with standard spectrogram settings
 
@@ -51,6 +61,6 @@ def erg_pgs_make_tplot(name, x=None, y=None, z=None, units='', ylog=False, zlog=
     options(name, 'zlog', zlog)
     options(name, 'Spec', True)
     options(name, 'ytitle', ytitle)
-    options(name, 'ztitle', spd_units_string(units, units_only=True))
+    options(name, 'ztitle', erg_units_string(units, units_only=True, relativistic=relativistic))
     options(name, 'Colormap', colorbar)
     return name
