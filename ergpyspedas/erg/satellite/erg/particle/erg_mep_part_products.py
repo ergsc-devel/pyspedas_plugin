@@ -6,7 +6,6 @@ from pyspedas import tnames, tinterpol
 from pyspedas.utilities.time_double import time_double
 from pyspedas.utilities.time_string import time_string
 
-from pyspedas.particles.spd_part_products.spd_pgs_make_phi_spec import spd_pgs_make_phi_spec
 from pyspedas.particles.spd_part_products.spd_pgs_make_tplot import spd_pgs_make_tplot
 from pyspedas.particles.moments.spd_pgs_moments import spd_pgs_moments
 from pyspedas.particles.spd_part_products.spd_pgs_regrid import spd_pgs_regrid
@@ -20,6 +19,7 @@ from .erg_pgs_moments_tplot import erg_pgs_moments_tplot
 from .erg_pgs_make_fac import erg_pgs_make_fac
 from .erg_pgs_make_e_spec import erg_pgs_make_e_spec
 from .erg_pgs_make_theta_spec import erg_pgs_make_theta_spec
+from .erg_pgs_make_phi_spec import erg_pgs_make_phi_spec
 from .erg_pgs_do_fac import erg_pgs_do_fac
 from .erg_pgs_progress_update import erg_pgs_progress_update
 
@@ -281,7 +281,7 @@ def erg_mep_part_products(
 
         #  ;;Build phi spectrogram
         if 'phi' in outputs_lc:
-            out_phi_y[index, :], out_phi[index, :] = spd_pgs_make_phi_spec(clean_data, resolution=dist['n_phi'])
+            out_phi_y[index, :], out_phi[index, :] = erg_pgs_make_phi_spec(clean_data, resolution=dist['n_phi'],no_ang_weighting=no_ang_weighting)
 
         #  ;;Perform transformation to FAC, (regrid data), and apply limits in new coords
         
@@ -309,7 +309,7 @@ def erg_mep_part_products(
 
             if 'gyro' in outputs_lc:
                 # ;Build gyrophase spectrogram
-                out_gyro_y[index, :], out_gyro[index, :] = spd_pgs_make_phi_spec(clean_data, resolution=regrid[0])
+                out_gyro_y[index, :], out_gyro[index, :] = erg_pgs_make_phi_spec(clean_data, resolution=regrid[0], no_ang_weighting=no_ang_weighting)
 
             if 'fac_energy' in outputs_lc:
                 out_fac_energy_y[index, :], out_fac_energy[index, :] = erg_pgs_make_e_spec(clean_data)
