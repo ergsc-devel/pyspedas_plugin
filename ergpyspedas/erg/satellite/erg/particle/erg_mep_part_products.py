@@ -385,7 +385,7 @@ def erg_mep_part_products(
               'ttens': out_ttens,
               'vthermal': out_vthermal,
               'avgtemp': out_avgtemp}
-        moments_vars = erg_pgs_moments_tplot(moments, x=times_array, prefix=in_tvarname)
+        moments_vars = erg_pgs_moments_tplot(moments, x=times_array, prefix=in_tvarname, suffix=suffix)
         out_vars.extend(moments_vars)
 
     if 'fac_energy' in outputs_lc:
