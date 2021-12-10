@@ -80,7 +80,7 @@ def erg_convert_flux_units(input_dist, units='flux', relativistic=False):
     if relativistic:
         # Conversion here is based on those adopted by Hilmer+JGR,2000.
 
-        mc2 = 5.10999-1.0  # Electron rest energy [MeV]
+        mc2 = 5.10999e-1  # Electron rest energy [MeV]
         ene = deepcopy(input_dist['energy'])  # [eV]
         MeV_ene = ene * 1e-6  # [MeV]
         p2c2 = MeV_ene * (MeV_ene + 2.0 * mc2)  # [MeV^2]
@@ -92,7 +92,7 @@ def erg_convert_flux_units(input_dist, units='flux', relativistic=False):
         ;; The multiplication of energy [eV] is to be consistent
         ;; with the conversion below. 
         """
-        flux_to_df = 1.0 + 3 / p2c2 * 1.66 - 10 * 200.3 * ene
+        flux_to_df = 1.0e+3 / p2c2 * 1.66e-10 * 200.3 * ene
 
     # factor between km^6 and cm^6 for df
     cm_to_km = 1e+30
