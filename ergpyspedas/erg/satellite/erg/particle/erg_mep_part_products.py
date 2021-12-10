@@ -12,6 +12,7 @@ from pyspedas.particles.spd_part_products.spd_pgs_regrid import spd_pgs_regrid
 from pytplot import get_timespan, get_data, store_data
 
 from .erg_mepe_get_dist import erg_mepe_get_dist
+from .erg_mepi_get_dist import erg_mepi_get_dist
 from .erg_pgs_clean_data import erg_pgs_clean_data
 from .erg_pgs_limit_range import erg_pgs_limit_range
 from .erg_convert_flux_units import erg_convert_flux_units
@@ -103,6 +104,8 @@ def erg_mep_part_products(
 
     if instnm == 'mepe':
         times_array = erg_mepe_get_dist(in_tvarname, species=species, units=units_lc, time_only=True)
+    elif instnm == 'mepi':
+        times_array = erg_mepi_get_dist(in_tvarname, species=species, units=units_lc, time_only=True)
 
     if trange is not None:
         
@@ -120,7 +123,11 @@ def erg_mep_part_products(
 
 
 
-    dist = erg_mepe_get_dist(in_tvarname, 0, species=species, units=units_lc)
+    if instnm == 'mepe':
+        dist = erg_mepe_get_dist(in_tvarname, 0, species=species, units=units_lc)
+    elif instnm == 'mepi':
+        dist = erg_mepi_get_dist(in_tvarname, 0, species=species, units=units_lc)
+
     if 'energy' in outputs_lc:
         out_energy = np.zeros((times_array.shape[0], dist['n_energy']))
         out_energy_y = np.zeros((times_array.shape[0], dist['n_energy']))
@@ -244,6 +251,9 @@ def erg_mep_part_products(
         if instnm == 'mepe':
 
             dist = erg_mepe_get_dist(in_tvarname, time_indices[index], species=species, units=units_lc)
+
+        elif instnm == 'mepi':
+            dist = erg_mepi_get_dist(in_tvarname, time_indices[index], species=species, units=units_lc)
 
         if magf.ndim == 2:
             magvec = magf[index]
