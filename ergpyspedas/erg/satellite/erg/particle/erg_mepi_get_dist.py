@@ -44,9 +44,11 @@ def erg_mepi_get_dist(tname,
     vn_spph = '_'.join(vn_info[0:4]) + '_spin_phase'
 
     if instrument == 'mepi':
+        if species is None:
+            species='hplus'
         if species not in acceptable_species:
             print(f'Species {species} not acceptable currently!')
-            print(f'species supported: {' '.join(acceptable_species)}')
+            print(f'species supported: {" " .join(acceptable_species)}')
     else:
         print(f'ERROR: given an invalid tplot variable: {input_name}')
         return 0
