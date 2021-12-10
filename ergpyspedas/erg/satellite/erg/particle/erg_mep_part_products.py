@@ -139,12 +139,12 @@ def erg_mep_part_products(
         out_phi_y = np.zeros((times_array.shape[0], dist['n_phi']))
 
     if 'gyro' in outputs_lc:
-        out_gyro = np.zeros((times_array.shape[0], dist['n_phi']))
-        out_gyro_y = np.zeros((times_array.shape[0], dist['n_phi']))
+        out_gyro = np.zeros((times_array.shape[0], regrid[0]))
+        out_gyro_y = np.zeros((times_array.shape[0], regrid[0]))
 
     if 'pa' in outputs_lc:
-        out_pad = np.zeros((times_array.shape[0], dist['n_theta']))
-        out_pad_y = np.zeros((times_array.shape[0], dist['n_theta']))
+        out_pad = np.zeros((times_array.shape[0], regrid[1]))
+        out_pad_y = np.zeros((times_array.shape[0], regrid[1]))
 
     if 'moments' in outputs_lc:
         out_density = np.zeros(times_array.shape[0])
