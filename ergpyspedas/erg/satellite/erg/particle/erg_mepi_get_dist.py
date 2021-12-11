@@ -59,7 +59,7 @@ def erg_mepi_get_dist(tname,
     data_in_metadata = get_data(input_name, metadata=True)
 
     if data_in is None:
-        print('Problem extracting the mepe 3dflux data.')
+        print('Problem extracting the mepi 3dflux data.')
         return 0
 
     # ;; Return time labels
@@ -177,7 +177,6 @@ def erg_mepi_get_dist(tname,
     ;; converted to [eV] by multiplying (1000 * charge number) 
     """
     e0_array = data_in[3] * 1e+3 * abs(charge)  # ;; [keV] 
-                            #(default of MEP-e Lv2 flux data) to [eV]
     energy_reform = np.reshape(e0_array, [dim_array[0], 1, 1, 1])
     energy_rebin1 = np.repeat(energy_reform, dim_array[2],
                              axis=2)  # repeated across apd(elevation)
