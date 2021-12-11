@@ -8,23 +8,22 @@ from pyspedas.utilities.time_string import time_string
 from pytplot import get_data
 from scipy import interpolate
 
-from .get_mepi_flux_angle_in_sga import get_mepi_flux_angle_in_sga
+from .get_lepi_flux_angle_in_sga import get_lepi_flux_angle_in_sga
 
 logging.captureWarnings(True)
 logging.basicConfig(format='%(asctime)s: %(message)s',
                     datefmt='%d-%b-%y %H:%M:%S', level=logging.INFO)
 
 
-def erg_mepi_get_dist(tname,
+def erg_lepi_get_dist(tname,
                       index=None,
                       units='flux',
                       level='l2',
-                      species='hplus',
+                      species='proton',
                       time_only=False,
                       single_time=None,
                       trange=None):
 
-    acceptable_species = ['hplus', 'proton', 'oplus']
     
     if len(tnames(tname)) > 0:
         input_name = tnames(tname)[0]
@@ -35,23 +34,23 @@ def erg_mepi_get_dist(tname,
     level = level.lower()
     """
     ;; Extract some information from a tplot variable name
-    ;; e.g., erg_mepi_l2_3dflux_FPDU
+    ;; e.g., erg_lepi_l2_3dflux_FPDU
     """
 
     vn_info = input_name.split('_')
     instrument = vn_info[1]
     level = vn_info[2]
-    vn_spph = '_'.join(vn_info[0:4]) + '_spin_phase'
+    arrnm = vn_info[4]
 
-    if instrument == 'mepi':
-        if species is None:
-            species='hplus'
-        if species not in acceptable_species:
-            print(f'Species {species} not acceptable currently!')
-            print(f'species supported: {" " .join(acceptable_species)}')
-    else:
-        print(f'ERROR: given an invalid tplot variable: {input_name}')
-        return 0
+    if species is None:
+        if arrnm == 'FPDU':
+            species = 'proton'
+        elif arrnm == 'FHEDU':
+            species = 'heplus'
+        elif arrnm == 'FODU':
+            species = 'oplus'
+        else:
+            print(f'RROR: given an invalid tplot variable: {input_name}')
 
     # ;; Get a reference to data and metadata
 
@@ -101,27 +100,31 @@ def erg_mepi_get_dist(tname,
     """
     ;; --------------------------------------------------------------
 
-    ;; MEPi data arr: [9550(time), 16(spin phase), 16(energy), 16(apd)]
-    ;; Dimensions
+    ;; LEP-i Lv2 normal mode data for the wide channels
+    ;; Array[3922(time), 30(energy), 8(anode: ch0-7), 16(spin phase)]
     """
 
     # ;; to [ energy, spin phase(azimuth), apd(elevation) ]
-    dim_array = np.array(data_in[1].shape[1:])[[1, 0, 2]]
+    dim_array = np.array(data_in[1].shape[1:])[[0, 2, 1]]
 
     if species.lower() == 'hplus':
         mass = 1.04535e-2
         charge = 1.
-        data_name = 'MEP-i Proton 3dflux'
+        data_name = 'LEP-i Proton 3dflux'
     elif species.lower() == 'proton':
         mass = 1.04535e-2
         charge = 1.
-        data_name = 'MEP-i Proton 3dflux'
+        data_name = 'LEP-i Proton 3dflux'
+    elif species.lower() == 'heplus':
+        mass = 1.04535e-2 * 4.
+        charge = 1.
+        data_name = 'LEP-i He+ ion 3dflux'
     elif species.lower() == 'oplus':
         mass = 1.04535e-2 * 16.
         charge = 1.
-        data_name = 'MEP-i O+ ion 3dflux'
+        data_name = 'LEP-i O+ ion 3dflux'
     else:
-        print('given species is not supported currently!')
+        print('given species is not supported by this routine.')
         return 0
 
     integ_time = 7.99 / 32 / 16  # ;; currently hard-coded
@@ -132,8 +135,7 @@ def erg_mepi_get_dist(tname,
         'project_name': 'ERG',
         'spacecraft': 1,  # always 1 as a dummy value
         'data_name': data_name,
-        'units_name': 'flux',  # ; [/keV-s-sr-cm2] (default unit of MEP-? Lv2 flux data) 
-                               #should be converted to [/eV-s-sr-cm2].
+        'units_name': 'flux',  # ; LEP-i data in [/keV/q-s-sr-cm2]
         'units_procedure': 'erg_convert_flux_units',
         'species': species,
         'valid': 1,
@@ -147,36 +149,35 @@ def erg_mepi_get_dist(tname,
 
     """
     ;; Then, fill in arrays in the data structure
-    ;;   dim[ nenergy, nspinph(azimuth), napd(elevation), ntime]
+    ;;   dim[ nenergy, nspinph(azimuth), nanode(elevation), ntime]
     """
 
     dist['time'] = data_in[0][[index]]
     dist['end_time'] = dist['time'] + integ_time  # ;; currently hard-coded
 
     """
-    ;; Shuffle the original data array [time,spin phase,energy,apd] to
-    ;; be energy-azimuth-elevation-time
-    ;; The factor 1e-3/charge is to convert [/keV/q-s-sr-cm2] (default unit of
-    ;; MEP-i Lv2 flux data) to [eV-s-sr-cm2].
+    ;; Shuffle the original data array [time,energy, anode, spin phase] to
+    ;; be energy-azimuth(spin phase)-elevation(anod)-time.
+    ;; The factor 1e-3/charge is to convert [/keV/q-s-sr-cm2] (default
+    ;; unit of LEP-i Lv2 flux data) to [eV-s-sr-cm2].
     """
-    dist['data'] = data_in[1][[index]].transpose([2, 1, 3, 0]) * 1e-3 / abs(charge)
+    dist['data'] = data_in[1][[index]].transpose([1, 3, 2, 0]) * 1e-3 / abs(charge)
 
     dist['bins'] = np.ones(shape=np.insert(dim_array, dim_array.shape[0],
                                            n_times), dtype='int8')
     # must be set or data will be consider invalid
 
-    """
-    ;; Energy ch. 0 is excluded due to difficulty in defining
-    ;; the representative energy and energy bin width.
-    """
-    dist['bins'][0] = 0
+    # ;; fishy negative flux values are all replaced with zero.
+    dist['data'] = np.where(dist['data'] < 0.,0.,dist['data'])
+
+
 
     #  ;; Energy ch
     """
-    ;; Default unit of V2 in F?DU tplot variables [keV/q] should be
-    ;; converted to [eV] by multiplying (1000 * charge number) 
+    ;; Default unit of v in F?DU tplot variables [keV/q] should be
+    ;; converted to [eV] by multiplying (1000 * charge number).
     """
-    e0_array = data_in[3] * 1e+3 * abs(charge)  # ;; [keV] 
+    e0_array = data_in[2] * 1e+3 * abs(charge)  # ;; [30] 
                             #(default of MEP-e Lv2 flux data) to [eV]
     energy_reform = np.reshape(e0_array, [dim_array[0], 1, 1, 1])
     energy_rebin1 = np.repeat(energy_reform, dim_array[2],
@@ -187,15 +188,15 @@ def erg_mepi_get_dist(tname,
                               axis=3)  # repeated across n_times
 
     #  ;; Energy bin width
-    e0bnd = np.sqrt(e0_array[:-1] * e0_array[1:])
-    # ;; [16]  upper boundary of energy bin
+    e0bnd = np.sqrt(e0_array[:-1] * e0_array[1:])  # ;; [29]
+    # ;; [30]  upper boundary of energy bin
     e0bnd_p = np.insert(e0bnd, 0, e0bnd[0])
     e0bnd_p[[0, 1]] = e0_array[1] + (e0_array[1]-e0bnd[1])
 
-    # ;; [16] lower boundary of energy bin
+    # ;; [30] lower boundary of energy bin
     e0bnd_m = np.insert(e0bnd, e0bnd.shape[0], e0bnd[-1])
     e0bnd_m[0] = e0bnd_m[1]
-    e0bnd_m[15] = e0_array[15] - (e0bnd[14]-e0_array[15])
+    e0bnd_m[29] = e0_array[29] - (e0bnd[28]-e0_array[29])
 
     de_array = e0bnd_p-e0bnd_m  # ;; width of energy bin
     de_reform = np.reshape(de_array, [dim_array[0], 1, 1, 1])
@@ -210,11 +211,22 @@ def erg_mepi_get_dist(tname,
 
     dist['n_bins'] = dim_array[1] * dim_array[2]  #   # thetas * # phis
    
-    #  ;; azimuthal angle in spin direction
+    """
+    ;; Array elements containing NaN are excluded from the further
+    ;; calculations, by setting bins to be zero. 
+    """
+    dist['bins'][0] = np.where((np.finite(dist['data']))
+                               &(np.finite(dist['energy'])),
+                               1,0)
+    dist['bins'][0] = 0  # ;; Energy ch. 0 is not used.. 
+   
+    #  ;; angle array of the flux (particle-going) directions
 
-    angarr = get_mepi_flux_angle_in_sga() # ;;[elev/phi, min/cnt/max, (apd)] in SGA
-    phissi = angarr[1, 1, :] - (90. + 21.6)  # ;; [(apd)]
-    spinph_ofst = data_in[2] * 22.5
+    angarr = get_lepi_flux_angle_in_sga() # ;;[elev/phi, min/cnt/max, (anode)] in SGA
+    angarr = angarr[:, 1, 0:8]  # ;; --> [elv/phi, ch0-7] 
+    
+    phissi = angarr[1] - (90. + 21.6)  # ;; [(anode)] 
+    spinph_ofst = data_in[4] * 22.5
 
     phi0_1_reform = np.reshape(phissi, [1, 1, dim_array[2], 1])
     phi0_1_rebin1 = np.repeat(phi0_1_reform, dim_array[1],
@@ -235,7 +247,7 @@ def erg_mepi_get_dist(tname,
     phi0 = phi0_1 + phi0_2
 
     ofst_sv = (np.arange(dim_array[0]) + 0.5) * \
-        22.5/dim_array[0]  # ;; [(energy)]
+        22.5/32  # ;; [(energy)]
     phi_ofst_for_sv_reform = np.reshape(ofst_sv, [dim_array[0], 1, 1, 1])
     phi_ofst_for_sv_rebin1 = np.repeat(
         phi_ofst_for_sv_reform, dim_array[2],
@@ -252,14 +264,14 @@ def erg_mepi_get_dist(tname,
     """
     dist['phi'] = np.fmod((phi0 + phi_ofst_for_sv + 360.), 360.)
     dist['dphi'] = np.full(shape=np.insert(dim_array, dim_array.shape[0],
-                                           n_times), fill_value=22.5)
+                                           n_times), fill_value=22.5)  # ;; 22.5 deg as a constant
 
     del phi0, phi_ofst_for_sv  # ;; Clean huge arrays
 
     dist['n_phi'] = dim_array[1]
 
     #  ;; elevation angle
-    elev = angarr[0, 1, :]  # ;; [(apd)]
+    elev = angarr[0]  # ;; [(anode)]
     elev_reform = np.reshape(elev, [1, 1, dim_array[2], 1])
     elev_rebin1 = np.repeat(elev_reform, dim_array[1],
                              axis=1)  # repeated across spin phase(azimuth)
@@ -269,11 +281,7 @@ def erg_mepi_get_dist(tname,
                              axis=3)  # repeated across n_times
 
     dist['dtheta'] = np.full(shape=np.insert(dim_array, dim_array.shape[0],
-                                             n_times), fill_value=22.5/2.)
-    """
-    ;; 11.25 deg for dtheta is set to give a 4-pi solid angle by 
-    ;; integrating dphi x dtheta * sin(dtheta) over azimuth and elevation. 
-    """
+                                             n_times), fill_value=22.5)  #  ;; Fill all with 22.5 
 
     dist['n_theta'] = dim_array[2]
 
