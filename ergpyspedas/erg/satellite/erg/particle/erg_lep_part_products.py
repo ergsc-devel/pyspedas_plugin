@@ -6,13 +6,12 @@ from pyspedas import tnames, tinterpol
 from pyspedas.utilities.time_double import time_double
 from pyspedas.utilities.time_string import time_string
 
-#from pyspedas.particles.spd_part_products.spd_pgs_make_tplot import spd_pgs_make_tplot
 from pyspedas.particles.moments.spd_pgs_moments import spd_pgs_moments
 from pyspedas.particles.spd_part_products.spd_pgs_regrid import spd_pgs_regrid
-from pytplot import get_timespan, get_data, store_data
+from pytplot import get_timespan, get_data, store_data, tplot_copy, ylim
 
-from .erg_mepe_get_dist import erg_mepe_get_dist
-from .erg_mepi_get_dist import erg_mepi_get_dist
+#from .erg_lepe_get_dist import erg_lepe_get_dist
+from .erg_lepi_get_dist import erg_lepi_get_dist
 from .erg_pgs_clean_data import erg_pgs_clean_data
 from .erg_pgs_limit_range import erg_pgs_limit_range
 from .erg_convert_flux_units import erg_convert_flux_units
@@ -25,15 +24,15 @@ from .erg_pgs_do_fac import erg_pgs_do_fac
 from .erg_pgs_progress_update import erg_pgs_progress_update
 from .erg_pgs_make_tplot import erg_pgs_make_tplot
 
-def erg_mep_part_products(
+def erg_lep_part_products(
     in_tvarname,
     species=None,
     outputs=['energy'],
     no_ang_weighting=False,
     suffix='',
     units='flux',
-    datagap=16.1,
-    regrid=[32, 16],
+    datagap=32.1,
+    regrid=[16, 16],
     pitch=[0., 180.],
     theta=[-90., 90.],
     phi_in=[0., 360.],
@@ -52,7 +51,16 @@ def erg_mep_part_products(
         return 0
 
     in_tvarname = tnames(in_tvarname)[0]
-    instnm = in_tvarname.split('_')[1]  #  ;; mepe or mepi
+    vn_info = in_tvarname.split('_')
+    instnm = vn_info[1]  #  ;; should be 'lepe' or 'lepi'
+    lvl = vn_info[2]  #  ;; 'l2'
+    datnm = vn_info[3]  #  ;; '3dflux'
+
+    #  ;; Check if a tplot variable given is acceptable
+    if (instnm != 'lepe') and (instnm != 'lepi') or (datnm != '3dflux'):
+        print('The tplot variable given as an argument is not valid!')
+        print(f'varname: {in_tvarname}')
+        return
 
     if no_ang_weighting:
         no_regrid = True
@@ -102,10 +110,10 @@ def erg_mep_part_products(
     #  ;;Preserve the original time range
     tr_org = get_timespan(in_tvarname)
 
-    if instnm == 'mepe':
-        times_array = erg_mepe_get_dist(in_tvarname, species=species, units=units_lc, time_only=True)
-    elif instnm == 'mepi':
-        times_array = erg_mepi_get_dist(in_tvarname, species=species, units=units_lc, time_only=True)
+  #  if instnm == 'lepe':
+ #       times_array = erg_lepe_get_dist(in_tvarname, species=species, units=units_lc, time_only=True)
+    if instnm == 'lepi':
+        times_array = erg_lepi_get_dist(in_tvarname, species=species, units=units_lc, time_only=True)
 
     if trange is not None:
         
@@ -123,10 +131,10 @@ def erg_mep_part_products(
 
 
 
-    if instnm == 'mepe':
-        dist = erg_mepe_get_dist(in_tvarname, 0, species=species, units=units_lc)
-    elif instnm == 'mepi':
-        dist = erg_mepi_get_dist(in_tvarname, 0, species=species, units=units_lc)
+    #if instnm == 'lepe':
+    #    dist = erg_lepe_get_dist(in_tvarname, 0, species=species, units=units_lc)
+    if instnm == 'lepi':
+        dist = erg_lepi_get_dist(in_tvarname, 0, species=species, units=units_lc)
 
     if 'energy' in outputs_lc:
         out_energy = np.zeros((times_array.shape[0], dist['n_energy']))
@@ -183,25 +191,12 @@ def erg_mep_part_products(
     fac_requested = len(set(outputs_lc).intersection(fac_outputs)) > 0
     if fac_requested:
         """
-        ;; Create magnetic field data with times shifted by half of spin
-        ;; periods
+        ;; Currently triangulation fails, so forcidly no_regrid is set for
+        ;; spectum generation in FAC coordinates.
         """
-        if (mag_name is None) or (len(tnames(mag_name)) < 1):
-            print('Cannot find the magnetic field data given by keyword mag_name! EXIT!')
-            return
-        mag_data = get_data(mag_name)
-        dt_array = mag_data[0][1:] - mag_data[0][:-1]
-        dt_array = np.insert(dt_array, dt_array.shape[0], dt_array[-1])  # ;; Note that the last value might not be correct.
-        mag_name_sftd = mag_name + '_shifted'
-        store_data(mag_name_sftd, data={'x':mag_data[0] + dt_array/2.,
-                                        'y':mag_data[1]})
-        """
-        ;;The time shift applied above assumes that the time labels of MGF
-        ;;data correspond to the spin start times. Otherwise this should
-        ;;be modified properly.
-        """
+        no_regrid = True
 
-        fac_matrix = erg_pgs_make_fac(times_array, mag_name_sftd, pos_name, fac_type=fac_type)
+        fac_matrix = erg_pgs_make_fac(times_array, mag_name, pos_name, fac_type=fac_type)
 
         if fac_matrix is None:
             # problem creating the FAC matrices
@@ -226,15 +221,10 @@ def erg_mep_part_products(
             ;; periods
             """
 
-            mag_data = get_data(magnm)
-            dt_array = mag_data[0][1:] - mag_data[0][:-1]
-            dt_array = np.insert(dt_array, 
-            dt_array.shape[0], dt_array[-1])#;; Note that the last value might not be correct.
-            magnm_sftd = magnm + '_shifted'
-            store_data(magnm_sftd, data={'x':mag_data[0] + dt_array / 2.,
-                                         'y':mag_data[1]})
-            tinterpol(magnm_sftd, times_array, newname=magnm_sftd)
-            magf = get_data(magnm_sftd)[1]  #  ;; [ time, 3] nT
+            magtmp = magnm+'_pgs_temp'
+            tplot_copy(magnm, magtmp)
+            tinterpol(magtmp, times_array, newname=magtmp)
+            magf = get_data(magtmp)[1]  #  ;; [ time, 3] nT
 
     """
     ;;-------------------------------------------------
@@ -248,19 +238,23 @@ def erg_mep_part_products(
 
         #  ;; Get the data structure for this sample
 
-        if instnm == 'mepe':
+        #if instnm == 'lepe':
 
-            dist = erg_mepe_get_dist(in_tvarname, time_indices[index], species=species, units=units_lc)
+        #    dist = erg_lepe_get_dist(in_tvarname, time_indices[index], species=species, units=units_lc)
 
-        elif instnm == 'mepi':
-            dist = erg_mepi_get_dist(in_tvarname, time_indices[index], species=species, units=units_lc)
+        if instnm == 'lepi':
+            dist = erg_lepi_get_dist(in_tvarname, time_indices[index], species=species, units=units_lc)
 
         if magf.ndim == 2:
             magvec = magf[index]
         elif magf.ndim == 1:
             magvec = magf
 
-        clean_data = erg_pgs_clean_data(dist, units=units_lc,relativistic=relativistic, magf=magvec)
+        if ('moments' in outputs_lc) or ('fac_moments' in outputs_lc):
+            clean_data = erg_pgs_clean_data(dist, units=units_lc, magf=magvec,
+                                            for_moments=True)  #;; invalid values are zero-padded. 
+        else:
+            clean_data = erg_pgs_clean_data(dist, units=units_lc, magf=magvec)
 
         if fac_requested:
             pre_limit_bins = deepcopy(clean_data['bins'])
@@ -348,30 +342,31 @@ def erg_mep_part_products(
                 out_fac_ptens[index, :] = fac_moments['ptens']
                 out_fac_ttens[index, :] = fac_moments['ttens']
 
-
+    made_et_spec = ('energy' in outputs_lc) or ('fac_energy' in outputs_lc)
 
     if 'energy' in outputs_lc:
         output_tplot_name = in_tvarname+'_energy' + suffix
-        erg_pgs_make_tplot(output_tplot_name, x=times_array, y=out_energy_y, z=out_energy, units=units, ylog=True, ytitle=dist['data_name'] + ' \\ energy (eV)',relativistic=relativistic)
+        erg_pgs_make_tplot(output_tplot_name, x=times_array, y=out_energy_y, z=out_energy, units=units, ylog=True, ytitle=dist['data_name'] + ' \\ energy (eV)')
+        ylim(output_tplot_name,  1e+1, 3e+4) #  ;; default yrange: [10 eV, 30 keV]
         out_vars.append(output_tplot_name)
     if 'theta' in outputs_lc:
         output_tplot_name = in_tvarname+'_theta' + suffix
-        erg_pgs_make_tplot(output_tplot_name, x=times_array, y=out_theta_y, z=out_theta, units=units, ylog=False, ytitle=dist['data_name'] + ' \\ theta (deg)',relativistic=relativistic)
+        erg_pgs_make_tplot(output_tplot_name, x=times_array, y=out_theta_y, z=out_theta, units=units, ylog=False, ytitle=dist['data_name'] + ' \\ theta (deg)')
         out_vars.append(output_tplot_name)
     if 'phi' in outputs_lc:
         output_tplot_name = in_tvarname+'_phi' + suffix
-        erg_pgs_make_tplot(output_tplot_name, x=times_array, y=out_phi_y, z=out_phi, units=units, ylog=False, ytitle=dist['data_name'] + ' \\ phi (deg)',relativistic=relativistic)
+        erg_pgs_make_tplot(output_tplot_name, x=times_array, y=out_phi_y, z=out_phi, units=units, ylog=False, ytitle=dist['data_name'] + ' \\ phi (deg)')
         out_vars.append(output_tplot_name)
 
     #  ;;Pitch Angle Spectrograms
     if 'pa' in outputs_lc:
         output_tplot_name = in_tvarname+'_pa' + suffix
-        erg_pgs_make_tplot(output_tplot_name, x=times_array, y=out_pad_y, z=out_pad, units=units, ylog=False, ytitle=dist['data_name'] + ' \\ PA (deg)',relativistic=relativistic)
+        erg_pgs_make_tplot(output_tplot_name, x=times_array, y=out_pad_y, z=out_pad, units=units, ylog=False, ytitle=dist['data_name'] + ' \\ PA (deg)')
         out_vars.append(output_tplot_name)
 
     if 'gyro' in outputs_lc:
         output_tplot_name = in_tvarname+'_gyro' + suffix
-        erg_pgs_make_tplot(output_tplot_name, x=times_array, y=out_gyro_y, z=out_gyro, units=units, ylog=False, ytitle=dist['data_name'] + ' \\ gyro (deg)',relativistic=relativistic)
+        erg_pgs_make_tplot(output_tplot_name, x=times_array, y=out_gyro_y, z=out_gyro, units=units, ylog=False, ytitle=dist['data_name'] + ' \\ gyro (deg)')
         out_vars.append(output_tplot_name)
 
 
@@ -391,7 +386,8 @@ def erg_mep_part_products(
     if 'fac_energy' in outputs_lc:
 
         output_tplot_name = in_tvarname+'_energy_mag' + suffix
-        erg_pgs_make_tplot(output_tplot_name, x=times_array, y=out_fac_energy_y, z=out_fac_energy, units=units, ylog=True, ytitle=dist['data_name'] + ' \\ energy (eV)',relativistic=relativistic)
+        erg_pgs_make_tplot(output_tplot_name, x=times_array, y=out_fac_energy_y, z=out_fac_energy, units=units, ylog=True, ytitle=dist['data_name'] + ' \\ energy (eV)')
+        ylim(output_tplot_name, 1e+1, 3e+4)  # ;; default yrange: [10 eV, 30 keV]
         out_vars.append(output_tplot_name)
 
     #  ;FAC Moments Variables
