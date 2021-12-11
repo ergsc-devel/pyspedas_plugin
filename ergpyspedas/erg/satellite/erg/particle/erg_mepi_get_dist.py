@@ -124,7 +124,7 @@ def erg_mepi_get_dist(tname,
         print('given species is not supported currently!')
         return 0
 
-    integ_time = 7.99 / 32 / 16  # ;; currently hard-coded
+    integ_time = 7.99 / 16 / 16  # ;; currently hard-coded
 
     #  ;; basic template structure compatible with other routines
 
