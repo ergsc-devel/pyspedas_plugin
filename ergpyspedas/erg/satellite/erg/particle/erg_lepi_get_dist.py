@@ -215,8 +215,8 @@ def erg_lepi_get_dist(tname,
     ;; Array elements containing NaN are excluded from the further
     ;; calculations, by setting bins to be zero. 
     """
-    dist['bins'][0] = np.where((np.finite(dist['data']))
-                               &(np.finite(dist['energy'])),
+    dist['bins'] = np.where((np.isfinite(dist['data']))
+                               &(np.isfinite(dist['energy'])),
                                1,0)
     dist['bins'][0] = 0  # ;; Energy ch. 0 is not used.. 
    
