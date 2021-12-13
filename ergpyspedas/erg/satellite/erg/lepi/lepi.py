@@ -208,26 +208,27 @@ def lepi(trange=['2017-07-01', '2017-07-02'],
         
         for vns_pattarn in vns_list:
             t_plot_name = prefix + vns_pattarn + suffix
-            tplot_copy(t_plot_name, t_plot_name + '_raw')
-            get_data_vars_temporal = get_data(t_plot_name)
-            meta_data_in = get_data(t_plot_name, metadata=True)
-            if 'sub' in t_plot_name:
-                store_data(t_plot_name,data={'x':get_data_vars_temporal[0],
-                                             'y':get_data_vars_temporal[1][:,0:30,:,:],
-                                             'v1':get_data_vars_temporal[2][0:30],
-                                             'v2':v2_array_for_sub,
-                                             'v3':v3_array},
-                           attr_dict=meta_data_in)
-            else:
-                store_data(t_plot_name,data={'x':get_data_vars_temporal[0],
-                                             'y':get_data_vars_temporal[1][:,0:30,:,:],
-                                             'v1':get_data_vars_temporal[2][0:30],
-                                             'v2':v2_array_for_not_sub,
-                                             'v3':v3_array},
-                           attr_dict=meta_data_in)
-            ylim(t_plot_name,  0.01, 30.)
-            options(t_plot_name, 'ylog', 1)
-            options(t_plot_name, 'zlog', 1)
+            if t_plot_name in loaded_data:
+                tplot_copy(t_plot_name, t_plot_name + '_raw')
+                get_data_vars_temporal = get_data(t_plot_name)
+                meta_data_in = get_data(t_plot_name, metadata=True)
+                if 'sub' in t_plot_name:
+                    store_data(t_plot_name,data={'x':get_data_vars_temporal[0],
+                                                'y':get_data_vars_temporal[1][:,0:30,:,:],
+                                                'v1':get_data_vars_temporal[2][0:30],
+                                                'v2':v2_array_for_sub,
+                                                'v3':v3_array},
+                            attr_dict=meta_data_in)
+                else:
+                    store_data(t_plot_name,data={'x':get_data_vars_temporal[0],
+                                                'y':get_data_vars_temporal[1][:,0:30,:,:],
+                                                'v1':get_data_vars_temporal[2][0:30],
+                                                'v2':v2_array_for_not_sub,
+                                                'v3':v3_array},
+                            attr_dict=meta_data_in)
+                ylim(t_plot_name,  0.01, 30.)
+                options(t_plot_name, 'ylog', 1)
+                options(t_plot_name, 'zlog', 1)
         
         if prefix + 'FPDU' + suffix in loaded_data:
             clip(prefix + 'FPDU' + suffix, -1.0e+10, 1.0e+10)
