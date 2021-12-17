@@ -230,12 +230,13 @@ def lepi(trange=['2017-07-01', '2017-07-02'],
                 options(t_plot_name, 'ylog', 1)
                 options(t_plot_name, 'zlog', 1)
         
+        """comment out in order to match the result of part_product of IDL.
         if prefix + 'FPDU' + suffix in loaded_data:
             clip(prefix + 'FPDU' + suffix, -1.0e+10, 1.0e+10)
         if prefix + 'FHEDU' + suffix in loaded_data:
             clip(prefix + 'FHEDU' + suffix, -1.0e+10, 1.0e+10)
         if prefix + 'FODU' + suffix in loaded_data:
-            clip(prefix + 'FODU' + suffix, -1.0e+10, 1.0e+10)
+            clip(prefix + 'FODU' + suffix, -1.0e+10, 1.0e+10)"""
 
     elif level == 'l3':
         tplot_variables = []
