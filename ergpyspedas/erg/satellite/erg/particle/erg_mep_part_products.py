@@ -269,7 +269,10 @@ def erg_mep_part_products(
         if ('moments' in outputs_lc) or ('fac_moments' in outputs_lc):
             clean_data_eflux = erg_convert_flux_units(clean_data, units='eflux')
             magfarr = deepcopy(magf)
-            moments = spd_pgs_moments(clean_data_eflux)
+            clean_data_eflux_for_moments = deepcopy(clean_data_eflux)
+            clean_data_eflux_for_moments['data'] = np.where(clean_data_eflux_for_moments['bins'] == 0,
+                                                            0,clean_data_eflux_for_moments['data'])
+            moments = spd_pgs_moments(clean_data_eflux_for_moments)
 
             if 'moments' in outputs_lc:
                 out_density[index] = moments['density']
@@ -335,8 +338,10 @@ def erg_mep_part_products(
                 clean_data = deepcopy(temp_dict)
                 del temp_dict
                 clean_data_eflux = erg_convert_flux_units(clean_data, units='eflux')
-
-                fac_moments = spd_pgs_moments(clean_data_eflux)
+                clean_data_eflux_for_moments = deepcopy(clean_data_eflux)
+                clean_data_eflux_for_moments['data'] = np.where(clean_data_eflux_for_moments['bins'] == 0,
+                                                            0,clean_data_eflux_for_moments['data'])
+                fac_moments = spd_pgs_moments(clean_data_eflux_for_moments)
 
                 out_fac_density[index] = fac_moments['density']
                 out_fac_avgtemp[index] = fac_moments['avgtemp']
