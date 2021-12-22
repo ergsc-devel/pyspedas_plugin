@@ -153,7 +153,8 @@ def hep(trange=['2017-03-27', '2017-03-28'],
                     10., (np.log10(v_vars_min) + np.log10(v_vars_max)) / 2.)
                 store_data(prefix + 'FEDO_L' + suffix, data={'x': loaded_data[prefix + 'FEDO_L' + suffix]['x'],
                                                              'y': loaded_data[prefix + 'FEDO_L' + suffix]['y'],
-                                                             'v': v_vars})
+                                                             'v': v_vars},
+                           attr_dict={'CDF':loaded_data[prefix + 'FEDO_L' + suffix]['CDF']})
                 tplot_variables.append(prefix + 'FEDO_L' + suffix)
 
             if prefix + 'FEDO_H' + suffix in loaded_data:
@@ -164,7 +165,8 @@ def hep(trange=['2017-03-27', '2017-03-28'],
                     10., (np.log10(v_vars_min) + np.log10(v_vars_max)) / 2.)
                 store_data(prefix + 'FEDO_H' + suffix, data={'x': loaded_data[prefix + 'FEDO_H' + suffix]['x'],
                                                              'y': loaded_data[prefix + 'FEDO_H' + suffix]['y'],
-                                                             'v': v_vars})
+                                                             'v': v_vars},
+                           attr_dict={'CDF':loaded_data[prefix + 'FEDO_H' + suffix]['CDF']})
                 tplot_variables.append(prefix + 'FEDO_H' + suffix)
 
             # remove minus valuse of y array
@@ -237,7 +239,8 @@ def hep(trange=['2017-03-27', '2017-03-28'],
                                                              'y': loaded_data[prefix + 'FEDU_L' + suffix]['y'],
                                                              'v1': np.sqrt(loaded_data[prefix + 'FEDU_L' + suffix]['v'][0, :] *
                                                                            loaded_data[prefix + 'FEDU_L' + suffix]['v'][1, :]),  # geometric mean for 'v1'
-                                                             'v2': v2_array})
+                                                             'v2': v2_array},
+                           attr_dict={'CDF':loaded_data[prefix + 'FEDU_L' + suffix]['CDF']})
                 tplot_variables.append(prefix + 'FEDU_L' + suffix)
                 clip(prefix + 'FEDU_L' + suffix, -1.0e+10, 1.0e+10)
 
@@ -247,7 +250,8 @@ def hep(trange=['2017-03-27', '2017-03-28'],
                                                              'y': loaded_data[prefix + 'FEDU_H' + suffix]['y'],
                                                              'v1': np.sqrt(loaded_data[prefix + 'FEDU_H' + suffix]['v'][0, :] *
                                                                            loaded_data[prefix + 'FEDU_H' + suffix]['v'][1, :]),  # geometric mean for 'v1'
-                                                             'v2': v2_array})
+                                                             'v2': v2_array},
+                           attr_dict={'CDF':loaded_data[prefix + 'FEDU_H' + suffix]['CDF']})
                 tplot_variables.append(prefix + 'FEDU_H' + suffix)
                 clip(prefix + 'FEDU_H' + suffix, -1.0e+10, 1.0e+10)
 
@@ -269,7 +273,8 @@ def hep(trange=['2017-03-27', '2017-03-28'],
                 store_data(prefix + 'FEDU_L' + suffix, data={'x': loaded_data[prefix + 'FEDU_L' + suffix]['x'],
                                                              'y': non_negative_y_array,
                                                              'v1': L_energy_array_ave,
-                                                             'v2': loaded_data[prefix + 'FEDU_L' + suffix]['v2']})
+                                                             'v2': loaded_data[prefix + 'FEDU_L' + suffix]['v2']},
+                           attr_dict={'CDF':loaded_data[prefix + 'FEDU_L' + suffix]['CDF']})
 
                 options(prefix + 'FEDU_L' + suffix, 'spec', 1)
                 # set ylim
@@ -285,7 +290,8 @@ def hep(trange=['2017-03-27', '2017-03-28'],
                         str(i).zfill(2) + suffix
                     store_data(tplot_name, data={'x': loaded_data[prefix + 'FEDU_L' + suffix]['x'],
                                                  'y': non_negative_y_array[:, i, :],
-                                                 'v': loaded_data[prefix + 'FEDU_L' + suffix]['v2']})
+                                                 'v': loaded_data[prefix + 'FEDU_L' + suffix]['v2']},
+                               attr_dict={'CDF':loaded_data[prefix + 'FEDU_L' + suffix]['CDF']})
 
                     options(tplot_name, 'spec', 1)
                     # set ylim
@@ -310,7 +316,8 @@ def hep(trange=['2017-03-27', '2017-03-28'],
                 store_data(prefix + 'FEDU_H' + suffix, data={'x': loaded_data[prefix + 'FEDU_H' + suffix]['x'],
                                                              'y': non_negative_y_array,
                                                              'v1': H_energy_array_ave,
-                                                             'v2': loaded_data[prefix + 'FEDU_H' + suffix]['v2']})
+                                                             'v2': loaded_data[prefix + 'FEDU_H' + suffix]['v2']},
+                           attr_dict={'CDF':loaded_data[prefix + 'FEDU_H' + suffix]['CDF']})
 
                 options(prefix + 'FEDU_H' + suffix, 'spec', 1)
                 # set ylim
@@ -326,7 +333,8 @@ def hep(trange=['2017-03-27', '2017-03-28'],
                         str(i).zfill(2) + suffix
                     store_data(tplot_name, data={'x': loaded_data[prefix + 'FEDU_H' + suffix]['x'],
                                                  'y': non_negative_y_array[:, i, :],
-                                                 'v': loaded_data[prefix + 'FEDU_H' + suffix]['v2']})
+                                                 'v': loaded_data[prefix + 'FEDU_H' + suffix]['v2']},
+                               attr_dict={'CDF':loaded_data[prefix + 'FEDU_H' + suffix]['CDF']})
 
                     options(tplot_name, 'spec', 1)
                     # set ylim
