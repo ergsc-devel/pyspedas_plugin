@@ -309,7 +309,8 @@ def erg_mep_part_products(
 
             #;nearest neighbor interpolation to regular grid in FAC
             if not no_regrid:
-                clean_data = spd_pgs_regrid(clean_data, regrid)
+                if (not np.all(np.isnan(clean_data['theta']))) and (not np.all(np.isnan(clean_data['phi']))):
+                    clean_data = spd_pgs_regrid(clean_data, regrid)
 
             clean_data['theta'] = 90.0-clean_data['theta']  #  ;pitch angle is specified in co-latitude
 
