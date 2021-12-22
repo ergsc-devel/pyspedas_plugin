@@ -210,7 +210,7 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
                                                * loaded_data[prefix + 'FEDU' + suffix]['v'][:, 1, :]),  # geometric mean
                                  'v2': ['01', '02', '03', '04', '05', 'A', 'B', '18', '19', '20', '21', '22'],
                                  'v3': [i for i in range(16)]},
-                       attr_dict={'CDF':loaded_data[prefix + 'FEDU' + suffix]})
+                       attr_dict={'CDF':loaded_data[prefix + 'FEDU' + suffix]['CDF']})
 
                 tplot_variables.append(prefix + 'FEDU' + suffix)
 
