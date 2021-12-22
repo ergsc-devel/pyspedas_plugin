@@ -162,7 +162,8 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
             store_data(prefix + 'FEDO' + suffix,
                        data={'x': np.delete(loaded_data[prefix + 'FEDO' + suffix]['x'], all_nan_v_indices_array, axis=0),
                              'y': np.delete(loaded_data[prefix + 'FEDO' + suffix]['y'], all_nan_v_indices_array, axis=0),
-                             'v': np.delete(v_array, all_nan_v_indices_array, 0)})
+                             'v': np.delete(v_array, all_nan_v_indices_array, 0)},
+                       attr_dict={'CDF':loaded_data[prefix + 'FEDO' + suffix]['CDF']})
             tplot_variables.append(prefix + 'FEDO' + suffix)
 
             # set spectrogram plot option
@@ -208,7 +209,8 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
                                  'v1': np.sqrt(loaded_data[prefix + 'FEDU' + suffix]['v'][:, 0, :]
                                                * loaded_data[prefix + 'FEDU' + suffix]['v'][:, 1, :]),  # geometric mean
                                  'v2': ['01', '02', '03', '04', '05', 'A', 'B', '18', '19', '20', '21', '22'],
-                                 'v3': [i for i in range(16)]})
+                                 'v3': [i for i in range(16)]},
+                       attr_dict={'CDF':loaded_data[prefix + 'FEDU' + suffix]})
 
                 tplot_variables.append(prefix + 'FEDU' + suffix)
 
@@ -240,7 +242,8 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
                                  'y': loaded_data[prefix + 'FEDU' + suffix]['y'],
                                  'v1': (loaded_data[prefix + 'FEDU' + suffix]['v1'][:, 0, :]
                                         + loaded_data[prefix + 'FEDU' + suffix]['v1'][:, 1, :]) / 2.,  # arithmetic mean
-                                 'v2': loaded_data[prefix + 'FEDU' + suffix]['v2']})
+                                 'v2': loaded_data[prefix + 'FEDU' + suffix]['v2']},
+                       attr_dict={'CDF':loaded_data[prefix + 'FEDU' + suffix]['CDF']})
                 tplot_variables.append(prefix + 'FEDU' + suffix)
 
                 options(prefix + 'FEDU' + suffix, 'spec', 1)
@@ -254,6 +257,7 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
                 options(prefix + 'FEDU' + suffix, 'ysubtitle', '[eV]')
 
                 FEDU_get_data = get_data(prefix + 'FEDU' + suffix)
+                FEDU_CDF_data = loaded_data[prefix + 'FEDU' + suffix]['CDF']
 
                 if not only_fedu:
 
@@ -265,7 +269,8 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
                             str(i + 1).zfill(2) + '_FEDU' + suffix
                         store_data(tplot_name, data={'x': FEDU_get_data[0],
                                                      'y': FEDU_get_data[1][:, i, :],
-                                                     'v': FEDU_get_data[3]})
+                                                     'v': FEDU_get_data[3]},
+                                    attr_dict={'CDF':FEDU_CDF_data})
                         options(tplot_name, 'spec', 1)
                         ylim(tplot_name, 0, 180)
                         zlim(tplot_name, 1, 1e6)
@@ -297,7 +302,8 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
                             str(i + 1).zfill(2) + '_FEDU' + suffix
                         store_data(tplot_name, data={'x': x_all_nan_deleted_array,
                                                      'y': y_all_nan_deleted_array[:, :, i],
-                                                     'v': v_all_nan_deleted_array})
+                                                     'v': v_all_nan_deleted_array},
+                                    attr_dict={'CDF':FEDU_CDF_data})
                         options(tplot_name, 'spec', 1)
                         ylim(tplot_name,  19, 21*1e3)
                         zlim(tplot_name, 1, 1e6)
