@@ -69,9 +69,9 @@ def load(trange=['2017-03-27', '2017-03-28'],
         all_cdf_variables = cdf_info['rVariables'] + cdf_info['zVariables']
         gatt = cdf_file.globalattsget()
         for var in all_cdf_variables:
-            vatt = cdf_file.varattsget(var)
             t_plot_name = prefix + var + suffix
             if t_plot_name in tvars:
+                vatt = cdf_file.varattsget(var)
                 tvars[t_plot_name]['CDF'] = {'VATT':vatt,
                                              'GATT':gatt,
                                              'FILENAME':out_files[-1]}
