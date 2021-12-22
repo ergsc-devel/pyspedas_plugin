@@ -129,7 +129,8 @@ def xep(trange=['2017-06-01', '2017-06-02'],
 
                 store_data(prefix + 'FEDO_SSD' + suffix, data={'x': loaded_data[prefix + 'FEDO_SSD' + suffix]['x'],
                                                                'y': loaded_data[prefix + 'FEDO_SSD' + suffix]['y'],
-                                                               'v': v_vars})
+                                                               'v': v_vars},
+                           attr_dict={'CDF':loaded_data[prefix + 'FEDO_SSD' + suffix]['CDF']})
                 tplot_variables.append(prefix + 'FEDO_SSD' + suffix)
 
                 if prefix + 'FEDO_SSD' + suffix in tplot_variables:
@@ -173,7 +174,8 @@ def xep(trange=['2017-06-01', '2017-06-02'],
                                  'y': loaded_data[prefix + 'FEDU_SSD' + suffix]['y'],
                                  'v1': np.sqrt(loaded_data[prefix + 'FEDU_SSD' + suffix]['v'][:, 0]
                                                * loaded_data[prefix + 'FEDU_SSD' + suffix]['v'][:, 1]),  # Geometric mean of 'v'
-                                 'v2': [i for i in range(16)]})  # [0, 1, 2, .., 15]
+                                 'v2': [i for i in range(16)]},  # [0, 1, 2, .., 15]
+                           attr_dict={'CDF':loaded_data[prefix + 'FEDU_SSD' + suffix]['CDF']})
 
                 tplot_variables.append(prefix + 'FEDU_SSD' + suffix)
 
