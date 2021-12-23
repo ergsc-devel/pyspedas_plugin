@@ -28,7 +28,7 @@ def erg_mep_part_products(
     in_tvarname,
     species=None,
     outputs=['energy'],
-    no_ang_weighting=False,
+    no_ang_weighting=True,
     suffix='',
     units='flux',
     datagap=16.1,
