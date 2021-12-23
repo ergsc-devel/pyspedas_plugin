@@ -107,12 +107,16 @@ def hep(trange=['2017-03-27', '2017-03-28'],
 
     if (len(loaded_data) > 0) and ror:
 
-
         try:
             if isinstance(loaded_data, list):
-                gatt = get_data(loaded_data[-1], metadata=True)['CDF']['GATT']
+                if downloadonly:
+                    cdf_file = cdflib.CDF(loaded_data[-1])
+                    gatt = cdf_file.globalattsget()
+                else:
+                    gatt = get_data(loaded_data[-1], metadata=True)['CDF']['GATT']
             elif isinstance(loaded_data, dict):
                 gatt = loaded_data[list(loaded_data.keys())[-1]]['CDF']['GATT']
+                
             # --- print PI info and rules of the road
 
             print(' ')

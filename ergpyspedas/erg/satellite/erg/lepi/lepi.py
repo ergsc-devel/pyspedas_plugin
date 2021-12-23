@@ -98,12 +98,15 @@ def lepi(trange=['2017-07-01', '2017-07-02'],
                        varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
 
     if (len(loaded_data) > 0) and ror:
-
-        out_files = load(pathformat=pathformat, trange=trange, file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
-                         varformat=varformat, varnames=varnames, downloadonly=True, notplot=notplot, time_clip=time_clip, no_update=True, uname=uname, passwd=passwd)
-        cdf_file = cdflib.CDF(out_files[0])
         try:
-            gatt = cdf_file.globalattsget()
+            if isinstance(loaded_data, list):
+                if downloadonly:
+                    cdf_file = cdflib.CDF(loaded_data[-1])
+                    gatt = cdf_file.globalattsget()
+                else:
+                    gatt = get_data(loaded_data[-1], metadata=True)['CDF']['GATT']
+            elif isinstance(loaded_data, dict):
+                gatt = loaded_data[list(loaded_data.keys())[-1]]['CDF']['GATT']
 
             # --- print PI info and rules of the road
 
