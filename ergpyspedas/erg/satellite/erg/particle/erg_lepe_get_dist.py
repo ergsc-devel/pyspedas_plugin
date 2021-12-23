@@ -2,6 +2,7 @@ import cdflib
 import logging
 import numpy as np
 
+
 from copy import deepcopy
 from scipy.spatial import KDTree
 from pyspedas import tnames
@@ -9,7 +10,9 @@ from pyspedas.utilities.time_double import time_double
 from pyspedas.utilities.time_string import time_string
 from pytplot import get_data
 from scipy import interpolate
-from .get_lepi_flux_angle_in_sga import get_lepi_flux_angle_in_sga
+
+from astropy.coordinates import spherical_to_cartesian, cartesian_to_spherical
+
 logging.captureWarnings(True)
 logging.basicConfig(format='%(asctime)s: %(message)s',
                     datefmt='%d-%b-%y %H:%M:%S', level=logging.INFO)
@@ -187,10 +190,30 @@ def erg_lepe_get_dist(tname,
                                &(np.isfinite(dist['energy'])),
                                1,0)
     dist['bins'][0] = 0  # ;; Energy ch. 0 is not used..
-    #  ;; angle array of the flux (particle-going) directions
-    angarr = get_lepi_flux_angle_in_sga() # ;;[elev/phi, min/cnt/max, (anode)] in SGA
-    angarr = angarr[:, 1, 0:8]  # ;; --> [elv/phi, ch0-7]
-    phissi = angarr[1] - (90. + 21.6)  # ;; [(anode)]
+    
+    #  ;; azimuthal angle in spin direction
+    angarr = cdf_file.varget('FEDU_Angle_SGA') # ;;[elev/phi, (anode)] in SGA  (looking dir)
+
+    # ;; Flip the looking dirs to the flux dirs
+    n_anode = angarr[0].size
+    r_array = np.ones(n_anode)
+    elev_array = deepcopy(angarr[0])
+    phi_array = deepcopy(angarr[1])
+    deg_to_rad = np.pi / 180.
+    x_array, y_array, z_array = spherical_to_cartesian(
+                                     r_array,
+                                     elev_array * deg_to_rad,
+                                     phi_array* deg_to_rad
+                                     )
+    r_array, elev_array, phi_array = cartesian_to_spherical(
+                                        -x_array,
+                                        -y_array,
+                                        -z_array)
+    elev_array = elev_array.value / deg_to_rad
+    phi_array = phi_array.value / deg_to_rad
+    angarr = np.array([elev_array, phi_array])
+
+    phissi = angarr[1] - (90. + 21.6)  # ;; [(anode)] (21.6 = degree between sun senser and satellite coordinate)
     spinph_ofst = data_in[4] * 22.5
     phi0_1_reform = np.reshape(phissi, [1, 1, dim_array[2], 1])
     phi0_1_rebin1 = np.repeat(phi0_1_reform, dim_array[1],
@@ -208,7 +231,7 @@ def erg_lepe_get_dist(tname,
                               axis=3)  # repeated across n_times
     phi0 = phi0_1 + phi0_2
     ofst_sv = (np.arange(dim_array[0]) + 0.5) * \
-        22.5/32  # ;; [(energy)]
+        22.5/dim_array[0]  # ;; [(energy)]
     phi_ofst_for_sv_reform = np.reshape(ofst_sv, [dim_array[0], 1, 1, 1])
     phi_ofst_for_sv_rebin1 = np.repeat(
         phi_ofst_for_sv_reform, dim_array[2],
@@ -236,7 +259,10 @@ def erg_lepe_get_dist(tname,
                              axis=0)  # repeated across energy
     dist['theta'] = np.repeat(elev_rebin2, n_times,
                              axis=3)  # repeated across n_times
-    dist['dtheta'] = np.full(shape=np.insert(dim_array, dim_array.shape[0],
-                                             n_times), fill_value=22.5)  #  ;; Fill all with 22.5
+
+
+
+
+
     dist['n_theta'] = dim_array[2]
     return dist
