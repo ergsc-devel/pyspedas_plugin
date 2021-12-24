@@ -129,7 +129,11 @@ def erg_lepe_get_dist(tname,
     # must be set or data will be consider invalid
     # ;; fishy negative flux values are all replaced with zero.
     # ;; dist['data'] = np.where(dist['data'] < 0.,0.,dist['data'])
-    cdf_path = get_data(input_name, metadata=True)['CDF']['FILENAME']
+    file_name_raw= get_data(input_name, metadata=True)['CDF']['FILENAME']
+    if isinstance(file_name_raw, str):
+        cdf_path = file_name_raw
+    elif isinstance(file_name_raw, list):
+        cdf_path = file_name_raw[-1]
 
     if angrarr_input is None:
         cdf_file = cdflib.CDF(cdf_path)
