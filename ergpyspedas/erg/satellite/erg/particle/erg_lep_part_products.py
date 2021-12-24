@@ -10,7 +10,7 @@ from pyspedas.particles.moments.spd_pgs_moments import spd_pgs_moments
 from pyspedas.particles.spd_part_products.spd_pgs_regrid import spd_pgs_regrid
 from pytplot import get_timespan, get_data, store_data, tplot_copy, ylim
 
-#from .erg_lepe_get_dist import erg_lepe_get_dist
+from .erg_lepe_get_dist import erg_lepe_get_dist
 from .erg_lepi_get_dist import erg_lepi_get_dist
 from .erg_pgs_clean_data import erg_pgs_clean_data
 from .erg_pgs_limit_range import erg_pgs_limit_range
@@ -110,8 +110,8 @@ def erg_lep_part_products(
     #  ;;Preserve the original time range
     tr_org = get_timespan(in_tvarname)
 
-  #  if instnm == 'lepe':
- #       times_array = erg_lepe_get_dist(in_tvarname, species=species, units=units_lc, time_only=True)
+    if instnm == 'lepe':
+        times_array = erg_lepe_get_dist(in_tvarname, species=species, units=units_lc, time_only=True)
     if instnm == 'lepi':
         times_array = erg_lepi_get_dist(in_tvarname, species=species, units=units_lc, time_only=True)
 
@@ -131,8 +131,8 @@ def erg_lep_part_products(
 
 
 
-    #if instnm == 'lepe':
-    #    dist = erg_lepe_get_dist(in_tvarname, 0, species=species, units=units_lc)
+    if instnm == 'lepe':
+        dist, angarr_loaded_raw = erg_lepe_get_dist(in_tvarname, 0, species=species, units=units_lc)
     if instnm == 'lepi':
         dist = erg_lepi_get_dist(in_tvarname, 0, species=species, units=units_lc)
 
@@ -140,8 +140,13 @@ def erg_lep_part_products(
         out_energy = np.zeros((times_array.shape[0], dist['n_energy']))
         out_energy_y = np.zeros((times_array.shape[0], dist['n_energy']))
     if 'theta' in outputs_lc:
-        out_theta = np.zeros((times_array.shape[0], dist['n_theta']))
-        out_theta_y = np.zeros((times_array.shape[0], dist['n_theta']))
+        if instnm == 'lepe':
+            n_theta_unique = len(np.unique(dist['theta']))
+            out_theta = np.zeros((times_array.shape[0], n_theta_unique))
+            out_theta_y = np.zeros((times_array.shape[0], n_theta_unique))
+        elif  instnm == 'lepi':
+            out_theta = np.zeros((times_array.shape[0], dist['n_theta']))
+            out_theta_y = np.zeros((times_array.shape[0], dist['n_theta']))
     if 'phi' in outputs_lc:
         out_phi = np.zeros((times_array.shape[0], dist['n_phi']))
         out_phi_y = np.zeros((times_array.shape[0], dist['n_phi']))
@@ -232,15 +237,14 @@ def erg_lep_part_products(
     ;;-------------------------------------------------
     """
     for index in range(time_indices.shape[0]):
-
         last_update_time = erg_pgs_progress_update(last_update_time=last_update_time,
              current_sample=index, total_samples=time_indices.shape[0], type_string=in_tvarname)
 
         #  ;; Get the data structure for this sample
 
-        #if instnm == 'lepe':
+        if instnm == 'lepe':
 
-        #    dist = erg_lepe_get_dist(in_tvarname, time_indices[index], species=species, units=units_lc)
+            dist, angarr_loaded_raw = erg_lepe_get_dist(in_tvarname, time_indices[index], species=species, units=units_lc, angrarr_input=angarr_loaded_raw)
 
         if instnm == 'lepi':
             dist = erg_lepi_get_dist(in_tvarname, time_indices[index], species=species, units=units_lc)
@@ -281,7 +285,10 @@ def erg_lep_part_products(
 
         #  ;;Build theta spectrogram
         if 'theta' in outputs_lc:
-            out_theta_y[index, :], out_theta[index, :] = erg_pgs_make_theta_spec(clean_data, resolution=dist['n_theta'],no_ang_weighting=no_ang_weighting)
+            if  instnm == 'lepe':
+                out_theta_y[index, :], out_theta[index, :] = erg_pgs_make_theta_spec(clean_data, no_ang_weighting=no_ang_weighting)
+            elif instnm == 'lepi':
+                out_theta_y[index, :], out_theta[index, :] = erg_pgs_make_theta_spec(clean_data, resolution=dist['n_theta'],no_ang_weighting=no_ang_weighting)
 
         #  ;;Build energy spectrogram
         if 'energy' in outputs_lc:
