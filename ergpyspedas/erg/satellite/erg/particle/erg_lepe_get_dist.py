@@ -193,8 +193,6 @@ def erg_lepe_get_dist(tname,
     dist['bins'] = np.where((np.isfinite(dist['data']))
                                &(np.isfinite(dist['energy'])),
                                1,0)
-    dist['bins'][0] = 0  # ;; Energy ch. 0 is not used..
-    
     
     #  ;; azimuthal angle in spin direction
     if angrarr_input is None:
