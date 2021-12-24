@@ -23,7 +23,8 @@ def erg_lepe_get_dist(tname,
                       species='proton',
                       time_only=False,
                       single_time=None,
-                      trange=None):
+                      trange=None,
+                      angrarr_input=None):
     if len(tnames(tname)) > 0:
         input_name = tnames(tname)[0]
     else:
@@ -129,7 +130,10 @@ def erg_lepe_get_dist(tname,
     # ;; fishy negative flux values are all replaced with zero.
     # ;; dist['data'] = np.where(dist['data'] < 0.,0.,dist['data'])
     cdf_path = get_data(input_name, metadata=True)['CDF']['FILENAME']
-    cdf_file = cdflib.CDF(cdf_path)
+
+    if angrarr_input is None:
+        cdf_file = cdflib.CDF(cdf_path)
+
     #  ;; Energy ch
     """
     ;; Default unit of v in F?DU tplot variables [keV/q] should be
@@ -172,7 +176,7 @@ def erg_lepe_get_dist(tname,
         tree = KDTree(enec_array_repeat, leafsize=1)
         _, id_array = tree.query(enec0_array_temp_repeat)
         # getting nearest neighbor indices, 'id = nn( enec, enec0 ) ' in IDL
-        de_array[i] = de_array_i[id_array].T
+        de_array[:, i] = de_array_i[id_array].T
 
     de_reform = np.reshape(de_array, [dim_array[0], 1, 1, n_times])
     de_rebin1 = np.repeat(de_reform, dim_array[2],
@@ -191,8 +195,14 @@ def erg_lepe_get_dist(tname,
                                1,0)
     dist['bins'][0] = 0  # ;; Energy ch. 0 is not used..
     
+    
     #  ;; azimuthal angle in spin direction
-    angarr = cdf_file.varget('FEDU_Angle_SGA') # ;;[elev/phi, (anode)] in SGA  (looking dir)
+    if angrarr_input is None:
+        angarr = cdf_file.varget('FEDU_Angle_SGA') # ;;[elev/phi, (anode)] in SGA  (looking dir)
+        angarr_loaded_raw = deepcopy(angarr)
+    else:
+        angarr = deepcopy(angrarr_input)
+        angarr_loaded_raw = None
 
     # ;; Flip the looking dirs to the flux dirs
     n_anode = angarr[0].size
@@ -275,4 +285,7 @@ def erg_lepe_get_dist(tname,
             dist['dtheta'][:, :, 5:17, :] = 22.5/6
 
     dist['n_theta'] = dim_array[2]
-    return dist
+    if angrarr_input is None:
+        return dist, angarr_loaded_raw
+    else:
+        return dist, angrarr_input
