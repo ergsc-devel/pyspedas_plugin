@@ -1,7 +1,7 @@
 import numpy as np
 
-from pyspedas import tnames
-from pytplot import get_data, store_data, tplot_copy
+from pyspedas import tnames, tcopy
+from pytplot import get_data, store_data
 
 from pyspedas.cotrans.cotrans import cotrans
 from pyspedas.analysis.tnormalize import tnormalize
@@ -43,7 +43,7 @@ def erg_pgs_phigeo(
 ):
     
     postmp = 'pos_pgs_temp'
-    tplot_copy(pos_temp, postmp)
+    tcopy(pos_temp, postmp)
     cotrans(postmp, postmp, coord_in='gse', coord_out='geo')
     pos_data = get_data(postmp)
     
@@ -74,7 +74,7 @@ def erg_pgs_mphigeo(
 ):
     
     postmp = 'pos_pgs_temp'
-    tplot_copy(pos_temp, postmp)
+    tcopy(pos_temp, postmp)
     cotrans(postmp, postmp, coord_in='gse', coord_out='geo')
     pos_data = get_data(postmp)
 
@@ -120,7 +120,7 @@ def erg_pgs_phism(
     pos_temp
 ):
     postmp = 'pos_pgs_temp'
-    tplot_copy(pos_temp, postmp)
+    tcopy(pos_temp, postmp)
     cotrans(postmp, postmp, coord_in='gse', coord_out='sm')
     pos_data = get_data(postmp)
     
@@ -170,7 +170,7 @@ def erg_pgs_mphism(
 ):
     
     postmp = 'pos_pgs_temp'
-    tplot_copy(pos_temp, postmp)
+    tcopy(pos_temp, postmp)
     cotrans(postmp, postmp, coord_in='gse', coord_out='sm')
     pos_data = get_data(postmp)
     
@@ -257,7 +257,7 @@ def erg_pgs_make_fac(
         mag_tvar = tnames(mag_tvar_in)[0]
         mag_temp = mag_tvar + '_pgs_temp'
         #  ;;Right now, magnetic field must be in DSI coordinates
-        tplot_copy(mag_tvar, mag_temp)  # ;;Sanitize it
+        tcopy(mag_tvar, mag_temp)  # ;;Sanitize it
         tinterpol(mag_temp, times_array, newname=mag_temp)
     else:
         print(f'Magnetic field variable not found: "{mag_tvar_in}"')
@@ -268,7 +268,7 @@ def erg_pgs_make_fac(
     if len(tnames(pos_tvar_in)) > 0:
         pos_tvar = tnames(pos_tvar_in)[0]
         pos_temp = pos_tvar + '_pgs_temp'
-        tplot_copy(pos_tvar, pos_temp)  # ;;Sanitize it
+        tcopy(pos_tvar, pos_temp)  # ;;Sanitize it
         tinterpol(pos_temp, times_array, newname=pos_temp)
     else:
         print(f'Position variable not found: "{pos_tvar_in}"')

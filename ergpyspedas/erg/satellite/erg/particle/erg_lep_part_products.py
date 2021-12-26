@@ -2,13 +2,13 @@ import numpy as np
 
 from copy import deepcopy
 
-from pyspedas import tnames, tinterpol
+from pyspedas import tnames, tinterpol, tcopy
 from pyspedas.utilities.time_double import time_double
 from pyspedas.utilities.time_string import time_string
 
 from pyspedas.particles.moments.spd_pgs_moments import spd_pgs_moments
 from pyspedas.particles.spd_part_products.spd_pgs_regrid import spd_pgs_regrid
-from pytplot import get_timespan, get_data, store_data, tplot_copy, ylim
+from pytplot import get_timespan, get_data, store_data, ylim
 
 from .erg_lepe_get_dist import erg_lepe_get_dist
 from .erg_lepi_get_dist import erg_lepi_get_dist
@@ -228,7 +228,7 @@ def erg_lep_part_products(
             """
 
             magtmp = magnm+'_pgs_temp'
-            tplot_copy(magnm, magtmp)
+            tcopy(magnm, magtmp)
             tinterpol(magtmp, times_array, newname=magtmp)
             magf = get_data(magtmp)[1]  #  ;; [ time, 3] nT
 
