@@ -169,7 +169,7 @@ def erg_lepe_get_dist(tname,
         logdem_array[1:] = deepcopy(logmn_array)
         logdem_array[0] = logenec_array[0] - (logmn_array[0] - logenec_array[0])
         logdep_array[-1] = logenec_array[-1] + (logenec_array[-1] - logmn_array[-1])
-        de_array_i= 10.**logdep_array + 10.**logdem_array
+        de_array_i= 10.**logdep_array - 10.**logdem_array
 
         # getting nearest neighbor indices, 'id = nn( enec, enec0 ) ' in IDL
         enec0_array_temp = np.nan_to_num(enec0_array, copy=True,nan=np.nanmin(enec0_array))
