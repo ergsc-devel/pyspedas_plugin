@@ -23,8 +23,7 @@ def erg_lepe_get_dist(tname,
                       species='proton',
                       time_only=False,
                       single_time=None,
-                      trange=None,
-                      angrarr_input=None):
+                      trange=None):
     if len(tnames(tname)) > 0:
         input_name = tnames(tname)[0]
     else:
@@ -135,8 +134,7 @@ def erg_lepe_get_dist(tname,
     elif isinstance(file_name_raw, list):
         cdf_path = file_name_raw[-1]
 
-    if angrarr_input is None:
-        cdf_file = cdflib.CDF(cdf_path)
+    cdf_file = cdflib.CDF(cdf_path)
 
     #  ;; Energy ch
     """
@@ -199,12 +197,7 @@ def erg_lepe_get_dist(tname,
                                1,0)
     
     #  ;; azimuthal angle in spin direction
-    if angrarr_input is None:
-        angarr = cdf_file.varget('FEDU_Angle_SGA') # ;;[elev/phi, (anode)] in SGA  (looking dir)
-        angarr_loaded_raw = deepcopy(angarr)
-    else:
-        angarr = deepcopy(angrarr_input)
-        angarr_loaded_raw = None
+    angarr = cdf_file.varget('FEDU_Angle_SGA') # ;;[elev/phi, (anode)] in SGA  (looking dir)
 
     # ;; Flip the looking dirs to the flux dirs
     n_anode = angarr[0].size
@@ -287,7 +280,5 @@ def erg_lepe_get_dist(tname,
             dist['dtheta'][:, :, 5:17, :] = 22.5/6
 
     dist['n_theta'] = dim_array[2]
-    if angrarr_input is None:
-        return dist, angarr_loaded_raw
-    else:
-        return dist, angrarr_input
+    
+    return dist
