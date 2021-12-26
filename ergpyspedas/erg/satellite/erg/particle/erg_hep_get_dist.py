@@ -50,15 +50,31 @@ def erg_hep_get_dist(tname,
     instrument = vn_info[1]  #  ;;hep
     level = vn_info[2]       #  ;;l2
     dtype = vn_info[3]       #  ;;FEDU or rawcnt
+    suf = vn_info[4]        #  ;; L or H 
     arrnm = vn_info[4]
     if species is None:
-        if instrument == 'lepe':
+        if instrument == 'hep':
             species = 'e'
         else:
             print(f'RROR: given an invalid tplot variable: {input_name}')
     # ;; Get a reference to data and metadata
     data_in = get_data(input_name)
     data_in_metadata = get_data(input_name, metadata=True)
+    fedu_time_array = deepcopy(data_in[0])
+    fedu_y_array = deepcopy(data_in[1])
+    vn_angsga = '_'.join(vn_info[0:3] +['FEDU', suf, 'Angle_sga'])
+    if get_data(vn_angsga) is not None:
+        angsga = deepcopy(get_data(vn_angsga)[1])
+    else:
+        print(f'Cannot find variable {vn_angsga}, which is essential for this routine to work.')
+        return 0
+
+    vn_sctno = '_'.join(vn_info[0:3] +['sctno', suf])
+    if len(tnames(vn_sctno)) < 1:
+        print(f'Cannot find variable {vn_sctno}, which is essential for this routine to work.')
+        return 0
+    else:
+        
     if data_in is None:
         print('Problem extracting the mepe 3dflux data.')
         return 0
