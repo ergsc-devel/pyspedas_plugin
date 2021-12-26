@@ -301,6 +301,26 @@ def hep(trange=['2017-03-27', '2017-03-28'],
                            attr_dict={'CDF':loaded_data[prefix + 'sctno_H' + suffix]['CDF']})
                 tplot_variables.append(prefix + 'sctno_H' + suffix)
 
+            if prefix + 'rawcnt_H' + suffix in loaded_data:
+    
+                store_data(prefix + 'rawcnt_H' + suffix, data={'x': loaded_data[prefix + 'rawcnt_H' + suffix]['x'],
+                                                             'y': loaded_data[prefix + 'rawcnt_H' + suffix]['y'],
+                                                             'v1': np.sqrt(loaded_data[prefix + 'rawcnt_H' + suffix]['v'][0, :] *
+                                                                           loaded_data[prefix + 'rawcnt_H' + suffix]['v'][1, :]),  # geometric mean for 'v1'
+                                                             'v2': [i for i in range(15)]},
+                           attr_dict={'CDF':loaded_data[prefix + 'rawcnt_H' + suffix]['CDF']})
+                tplot_variables.append(prefix + 'rawcnt_H' + suffix)
+
+            if prefix + 'rawcnt_L' + suffix in loaded_data:
+    
+                store_data(prefix + 'rawcnt_L' + suffix, data={'x': loaded_data[prefix + 'rawcnt_L' + suffix]['x'],
+                                                             'y': loaded_data[prefix + 'rawcnt_L' + suffix]['y'],
+                                                             'v1': np.sqrt(loaded_data[prefix + 'rawcnt_L' + suffix]['v'][0, :] *
+                                                                           loaded_data[prefix + 'rawcnt_L' + suffix]['v'][1, :]),  # geometric mean for 'v1'
+                                                             'v2': [i for i in range(15)]},
+                           attr_dict={'CDF':loaded_data[prefix + 'rawcnt_L' + suffix]['CDF']})
+                tplot_variables.append(prefix + 'rawcnt_L' + suffix)
+
             return tplot_variables
 
         if level == 'l3':  # implementation for level = 'l3'
