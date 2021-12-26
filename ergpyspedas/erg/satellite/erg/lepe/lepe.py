@@ -237,8 +237,10 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
                 options(prefix + 'FEDU' + suffix, 'ylog', 1)
                 options(prefix + 'FEDU' + suffix, 'ysubtitle', '[eV]')
 
+            if prefix + 'Count_Rate' + suffix in loaded_data:
                 other_variables_dict[prefix + 'Count_Rate' +
                                      suffix] = loaded_data[prefix + 'Count_Rate' + suffix]
+            if prefix + 'Count_Rate_BG' + suffix in loaded_data:
                 other_variables_dict[prefix + 'Count_Rate_BG' +
                                      suffix] = loaded_data[prefix + 'Count_Rate_BG' + suffix]
 
