@@ -20,11 +20,10 @@ def erg_hep_get_dist(tname,
                       index=None,
                       units='flux',
                       level='l2',
-                      species='proton',
+                      species='e',
                       time_only=False,
                       single_time=None,
                       trange=None,
-                      corrected_azim_ch_angle=False,
                       new_effic=False,
                       w_sct015=False,
                       exclude_azms=False,
@@ -35,13 +34,22 @@ def erg_hep_get_dist(tname,
         print(f'Variable: {tname} not found!')
         return 0
     level = level.lower()
+    
+    #  ;; only erg_hep_l2_3dflux_FEDU is acceptable for this routine
+    if ('erg_hep_l2_FEDU_L' not in input_name) \
+    and ('erg_hep_l2_FEDU_H' not in input_name) \
+    and ('erg_hep_l2_rawcnt_H' not in input_name) \
+    and ('erg_hep_l2_rawcnt_L' not in input_name):
+        print(f'Variable {input_name}  is not acceptable. This routine can take only erg_hep_l2_(FEDU/rawcnt)_? as the argument.')
+        return 0
     """
     ;; Extract some information from a tplot variable name
     ;; e.g., erg_lepi_l2_3dflux_FPDU
     """
     vn_info = input_name.split('_')
-    instrument = vn_info[1]
-    level = vn_info[2]
+    instrument = vn_info[1]  #  ;;hep
+    level = vn_info[2]       #  ;;l2
+    dtype = vn_info[3]       #  ;;FEDU or rawcnt
     arrnm = vn_info[4]
     if species is None:
         if instrument == 'lepe':
