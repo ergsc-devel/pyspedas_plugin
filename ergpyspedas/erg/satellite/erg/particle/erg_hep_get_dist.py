@@ -23,7 +23,12 @@ def erg_hep_get_dist(tname,
                       species='proton',
                       time_only=False,
                       single_time=None,
-                      trange=None):
+                      trange=None,
+                      corrected_azim_ch_angle=False,
+                      new_effic=False,
+                      w_sct015=False,
+                      exclude_azms=False,
+                      flip_the_of_ssd3=False):
     if len(tnames(tname)) > 0:
         input_name = tnames(tname)[0]
     else:
