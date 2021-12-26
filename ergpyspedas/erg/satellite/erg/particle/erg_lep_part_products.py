@@ -132,7 +132,8 @@ def erg_lep_part_products(
 
 
     if instnm == 'lepe':
-        dist, angarr_loaded_raw = erg_lepe_get_dist(in_tvarname, 0, species=species, units=units_lc)
+        dist_all_time_range =  erg_lepe_get_dist(in_tvarname, time_indices, species=species, units=units_lc)
+        dist = deepcopy(dist_all_time_range)
     if instnm == 'lepi':
         dist = erg_lepi_get_dist(in_tvarname, 0, species=species, units=units_lc)
 
@@ -244,7 +245,31 @@ def erg_lep_part_products(
 
         if instnm == 'lepe':
 
-            dist, angarr_loaded_raw = erg_lepe_get_dist(in_tvarname, time_indices[index], species=species, units=units_lc, angrarr_input=angarr_loaded_raw)
+            dist = {
+                'project_name': deepcopy(dist_all_time_range['project_name']),
+                'spacecraft': deepcopy(dist_all_time_range['spacecraft']),
+                'data_name': deepcopy(dist_all_time_range['data_name']),
+                'units_name': deepcopy(dist_all_time_range['units_name']),
+                'units_procedure': deepcopy(dist_all_time_range['units_procedure']),
+                'species': deepcopy(dist_all_time_range['species']),
+                'valid': deepcopy(dist_all_time_range['valid']),
+                'charge': deepcopy(dist_all_time_range['charge']),
+                'mass': deepcopy(dist_all_time_range['mass']),
+                'time': deepcopy(dist_all_time_range['time'][index]),
+                'end_time':  deepcopy(dist_all_time_range['end_time'][index]),
+                'data':  deepcopy(dist_all_time_range['data'][:, :, :, index]),
+                'bins':  deepcopy(dist_all_time_range['bins'][:, :, :, index]),
+                'energy':  deepcopy(dist_all_time_range['energy'][:, :, :, index]),
+                'denergy':  deepcopy(dist_all_time_range['denergy'][:, :, :, index]),
+                'n_energy': deepcopy(dist_all_time_range['n_energy']),
+                'n_bins': deepcopy(dist_all_time_range['n_bins']),
+                'phi':  deepcopy(dist_all_time_range['phi'][:, :, :, index]),
+                'dphi':  deepcopy(dist_all_time_range['dphi'][:, :, :, index]),
+                'n_phi': deepcopy(dist_all_time_range['n_phi']),
+                'theta':  deepcopy(dist_all_time_range['theta'][:, :, :, index]),
+                'dtheta':  deepcopy(dist_all_time_range['dtheta'][:, :, :, index]),
+                'n_theta': deepcopy(dist_all_time_range['n_theta'])
+            }
 
         if instnm == 'lepi':
             dist = erg_lepi_get_dist(in_tvarname, time_indices[index], species=species, units=units_lc)
