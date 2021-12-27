@@ -284,44 +284,20 @@ def erg_hep_get_dist(tname,
     energy_rebin2 = np.repeat(energy_rebin1, dim_array[1],
                               axis=1)  # repeated across spin phase(azimuth)
     dist['energy'] = np.repeat(energy_rebin2, n_times,
-                              axis=3)  # repeated across spin phase(azimuth)
+                              axis=3)  # repeated across n_time
 
     # denergy member
     
-    de_array = e0_array + np.nan  #  ;; initialized as [ time, 32 ]  
-    for i in range(n_times):
-        enec0_array = deepcopy(e0_array[:, i])
-        id_array = np.argwhere(np.isfinite(enec0_array))
-        if len(id_array) < 2:
-            continue
-        enec_array = np.sort(np.unique(enec0_array[id_array[:,0].tolist()]))
-        n_enec = enec_array.size
-        if (n_enec < 3) or (np.nansum(enec_array) < 0.):
-            continue  # ;; invalid energy value found
-        logenec_array = np.log10(enec_array)
-        logmn_array = (logenec_array[1:] + logenec_array[:-1]) / 2.
-        logdep_array = enec_array * 0.
-        logdem_array = enec_array * 0.
-        logdep_array[:-1] = deepcopy(logmn_array)
-        logdem_array[1:] = deepcopy(logmn_array)
-        logdem_array[0] = logenec_array[0] - (logmn_array[0] - logenec_array[0])
-        logdep_array[-1] = logenec_array[-1] + (logenec_array[-1] - logmn_array[-1])
-        de_array_i= 10.**logdep_array - 10.**logdem_array
+    de_array = (enearr[1, :] - enearr[0, :]) * 1.e+03
 
-        # getting nearest neighbor indices, 'id = nn( enec, enec0 ) ' in IDL
-        enec0_array_temp = np.nan_to_num(enec0_array, copy=True,nan=np.nanmin(enec0_array))
-        enec0_array_temp_repeat= np.repeat(np.array([enec0_array_temp]).T, 2, 1)
-        enec_array_repeat= np.repeat(np.array([enec_array]).T, 2, 1)
-        tree = KDTree(enec_array_repeat, leafsize=1)
-        _, id_array = tree.query(enec0_array_temp_repeat)
-        # getting nearest neighbor indices, 'id = nn( enec, enec0 ) ' in IDL
-        de_array[:, i] = de_array_i[id_array].T
-
-    de_reform = np.reshape(de_array, [dim_array[0], 1, 1, n_times])
+    de_reform = np.reshape(de_array, [dim_array[0], 1, 1, 1])
     de_rebin1 = np.repeat(de_reform, dim_array[2],
                          axis=2)  # repeated across apd(elevation)
-    dist['denergy'] = np.repeat(de_rebin1, dim_array[1],
+    de_rebin2 = np.repeat(de_rebin1, dim_array[1],
                          axis=1)  # repeated across spin phase(azimuth)
+    dist['denergy'] = np.repeat(de_rebin2, n_times,
+                         axis=3)  # repeated across n_times
+
 
     dist['n_energy'] = dim_array[0]
     dist['n_bins'] = dim_array[1] * dim_array[2]  #   # thetas * # phis
