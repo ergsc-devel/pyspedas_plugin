@@ -138,21 +138,25 @@ def erg_hep_get_dist(tname,
     'y':fedu_arr  # ;; [ time, 16(sct), 16(energu), 15(azm) ]
     }
 
+    if p_structure['y'].ndim != 4:
+        print(f'Variable: {input_name} contains wrong number of elements!')
+        return 0
 
-    # ;; Return time labels
+    # ;; Return time labels corresponding the middle time of each spin
     if time_only:
-        return data_in[0]
+        return p_structure['x']
+    
     if single_time is not None:
         single_time_double = time_double(single_time)
-        if (data_in[0][0] <= single_time_double)\
-                and (single_time_double <= data_in[0][-1]):
-            nearest_time = interpolate.interp1d(data_in[0], data_in[0],
+        if (p_structure['x'][0] <= single_time_double)\
+                and (single_time_double <= p_structure['x'][-1]):
+            nearest_time = interpolate.interp1d(p_structure['x'], p_structure['x'],
                                                 kind="nearest")(single_time_double)
-        elif (single_time_double < data_in[0][0])\
-                or (data_in[0][-1] < single_time_double):
-            nearest_time = interpolate.interp1d(data_in[0], data_in[0],
+        elif (single_time_double < p_structure['x'][0])\
+                or (p_structure['x'][-1] < single_time_double):
+            nearest_time = interpolate.interp1d(p_structure['x'], p_structure['x'],
                                                 kind="nearest", fill_value='extrapolate')(single_time_double)
-        index = np.where(data_in[0] == nearest_time)[0]
+        index = np.where(p_structure['x'] == nearest_time)[0]
         n_times = index.size
     else:
         # index supersedes time range
@@ -161,31 +165,32 @@ def erg_hep_get_dist(tname,
                 trange_double_array = np.array(time_double(trange))
                 trange_minmax = np.array([trange_double_array.min(),
                                           trange_double_array.max()])
-                index = np.where((data_in[0] >= trange_minmax[0])
-                                 & (data_in[0] <= trange_minmax[1]))[0]
+                index = np.where((p_structure['x'] >= trange_minmax[0])
+                                 & (p_structure['x'] <= trange_minmax[1]))[0]
                 n_times = index.size
                 if n_times == 0:
                     print('No data in time range: '
                           + ' '.join(time_string(trange_minmax)))
                     return 0
             else:
-                n_times = data_in[0].size
+                n_times = p_structure['x'].size
                 index = np.arange(n_times)
         else:
             n_times = np.array([index]).size
     """
     ;; --------------------------------------------------------------
-    ;; LEP-e data Array[10269(time), 32(energy), 12(anode), 16(spin
-    ;; phase)] for the normal 3-D flux mode (fine channels are averaged
-    ;;into two coarse channels)
+    ;; HEP data arr: [9550(time), 16(spin phase), 16(energy), 15(azimuth ch )]
+    ;; Dimensions
     """
-    # ;; to [ energy, spin phase(azimuth), apd(elevation) ]
-    dim_array = np.array(data_in[1].shape[1:])[[0, 2, 1]]
+    # ;; to [ energy, spin phase, azimuth ch(elevation) ]
+    dim_array = np.array(data_in[1].shape[1:])[[1, 0, 2]]
     if species.lower() == 'e':
         mass = 5.68566e-06
         charge = -1.
-        data_name = 'LEP-e Electron 3dflux'
-        integ_time = 7.99 / 32 / 16  # ;; currently hard-coded
+        data_name = f'HEP-{suf} Electron 3dflux'
+        if dtype == 'rawcnt':
+            data_name = f'HEP-{suf} Electron raw count/sample'
+        integ_time = 7.99 / 16  # ;; currently hard-coded, but practically not used.
     else:
         print('given species is not supported by this routine.')
         return 0
@@ -194,7 +199,7 @@ def erg_hep_get_dist(tname,
         'project_name': 'ERG',
         'spacecraft': 1,  # always 1 as a dummy value
         'data_name': data_name,
-        'units_name': 'flux',  # ; LEP-e data in [/eV-s-sr-cm2
+        'units_name': 'flux',  # ; HEP data in [/keV-s-sr-cm2] should be converted to [/eV-s-sr-cm2]
         'units_procedure': 'erg_convert_flux_units',
         'species': species,
         'valid': 1,
@@ -206,8 +211,8 @@ def erg_hep_get_dist(tname,
     ;; Then, fill in arrays in the data structure
     ;;   dim[ nenergy, nspinph(azimuth), nanode(elevation), ntime]
     """
-    dist['time'] = data_in[0][[index]]
-    dist['end_time'] = dist['time'] + integ_time  # ;; currently hard-coded
+    dist['time'] = p_structure['x'][[index]]  # ;; the start time of spin
+    dist['end_time'] = dist['time'] + sc0_dt[[index]]  # ;; the end time of spin
     """
     ;; Shuffle the original data array [time,energy, anode, spin phase] to
     ;; be energy-azimuth(spin phase)-elevation-time.
