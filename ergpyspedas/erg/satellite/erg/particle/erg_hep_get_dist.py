@@ -59,6 +59,10 @@ def erg_hep_get_dist(tname,
             print(f'RROR: given an invalid tplot variable: {input_name}')
     # ;; Reform a data array so that it is grouped for each spin
     data_in = get_data(input_name)
+    
+    if data_in is None:
+        print('Problem extracting the mepe 3dflux data.')
+        return 0
     data_in_metadata = get_data(input_name, metadata=True)
     t_fedu = deepcopy(data_in[0])
     fedu = deepcopy(data_in[1])
@@ -74,11 +78,11 @@ def erg_hep_get_dist(tname,
         print(f'Cannot find variable {vn_sctno}, which is essential for this routine to work.')
         return 0
     else:
-        time_scno, y_scno = get_data(tnames(vn_sctno)[0])
+        time_scno, scno = get_data(tnames(vn_sctno)[0])
 
-    id_scno_0=np.argwhere(y_scno == 0)
-    
-    if len(id_scno_0) < 5:
+    id_scno_0=np.argwhere(scno == 0)
+    sc0num = len(id_scno_0)
+    if sc0num < 5:
         print(f'Only data for less than 5 spins are loaded for HEP_{suf}!!')
         return 0
     
@@ -99,10 +103,42 @@ def erg_hep_get_dist(tname,
     id_t_fedu = np.where((t_fedu - sc0_t[id_t_fedu_nn.tolist()]) < 0., id_t_fedu_nn-1, id_t_fedu_nn)
     #  processing for 'id_t_fedu = value_locate()' in IDL.
 
+    #  ;; Genrate angarr by picking up angle values at each spin start
+    angarr = angsga[id_scno_0_list, :, :]
 
-    if data_in is None:
-        print('Problem extracting the mepe 3dflux data.')
-        return 0
+    #  ;; fedu_arr:[ time, spin sct, energy, azm ]
+    #   ;; by default
+    nene = 16
+    nazm = 15
+    nsct = 16
+    #   ;; by default
+
+    if suf == 'H':  # ;; Lv2 HEP-H flux array has 11 elements for energy bin currently.
+        nene = 11
+    fedu_arr = np.full(shape=(sc0num, nsct, nene, nazm ), fill_value=np.nan)  # ;; padded with NaN
+    intgt = np.full(shape=(sc0num, nsct), fill_value=np.nan)  # ;; padded with NaN
+    
+    for i in range(sc0num):
+        id_array = np.argwhere( (id_t_fedu == i) & (scno >= 0) & (scno <= 15))
+        if len(id_array) < 2:
+            continue
+        id_list = id_array[:, 0].tolist()
+        datarr = fedu[id_list, :, :]  # ;; usually [16(time), 16(energy), 15(azm)]
+        tarr = t_fedu[id_list]
+        sctarr = scno[id_list]
+        sctarr_list = sctarr.tolist()
+        nsct = len(sctarr_list)
+        inttarr = sctintgt[id_list]
+
+        fedu_arr[i, sctarr_list, :, :] = datarr.reshape(1, nsct, nene, nazm)
+        intgt[i, sctarr_list] = inttarr.reshape(1, nsct)
+
+    p_structure = {
+    'x':sc0_t,  # ;; Put the start time of each spin
+    'y':fedu_arr  # ;; [ time, 16(sct), 16(energu), 15(azm) ]
+    }
+
+
     # ;; Return time labels
     if time_only:
         return data_in[0]
