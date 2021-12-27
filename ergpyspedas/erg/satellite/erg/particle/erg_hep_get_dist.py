@@ -57,11 +57,11 @@ def erg_hep_get_dist(tname,
             species = 'e'
         else:
             print(f'RROR: given an invalid tplot variable: {input_name}')
-    # ;; Get a reference to data and metadata
+    # ;; Reform a data array so that it is grouped for each spin
     data_in = get_data(input_name)
     data_in_metadata = get_data(input_name, metadata=True)
-    fedu_time_array = deepcopy(data_in[0])
-    fedu_y_array = deepcopy(data_in[1])
+    t_fedu = deepcopy(data_in[0])
+    fedu = deepcopy(data_in[1])
     vn_angsga = '_'.join(vn_info[0:3] +['FEDU', suf, 'Angle_sga'])
     if get_data(vn_angsga) is not None:
         angsga = deepcopy(get_data(vn_angsga)[1])
@@ -74,7 +74,32 @@ def erg_hep_get_dist(tname,
         print(f'Cannot find variable {vn_sctno}, which is essential for this routine to work.')
         return 0
     else:
-        
+        time_scno, y_scno = get_data(tnames(vn_sctno)[0])
+
+    id_scno_0=np.argwhere(y_scno == 0)
+    
+    if len(id_scno_0) < 5:
+        print(f'Only data for less than 5 spins are loaded for HEP_{suf}!!')
+        return 0
+    
+    # ;; integration time for each spin sector
+    sctdt = time_scno[1:] - time_scno[:-1]
+    sctintgt=np.insert(sctdt, sctdt.shape[0],sctdt[-1])
+
+    id_scno_0_list = id_scno_0[:,0].tolist()
+    sc0_t = time_scno[id_scno_0_list]  # ;; times of spin sector #0, namely the start of each spin
+    dt_array = sc0_t[1:] - sc0_t[:-1]
+    sc0_dt = np.insert(dt_array, dt_array.shape[0], dt_array[-1])
+
+    #  processing for 'id_t_fedu = value_locate()' in IDL.
+    sc0_t_repeat = np.repeat(np.array([sc0_t]).T, 2, 1)
+    t_fedu_repeat = np.repeat(np.array([t_fedu]).T, 2, 1)
+    tree = KDTree(sc0_t_repeat)
+    _, id_t_fedu_nn = tree.query(t_fedu_repeat)
+    id_t_fedu = np.where((t_fedu - sc0_t[id_t_fedu_nn.tolist()]) < 0., id_t_fedu_nn-1, id_t_fedu_nn)
+    #  processing for 'id_t_fedu = value_locate()' in IDL.
+
+
     if data_in is None:
         print('Problem extracting the mepe 3dflux data.')
         return 0
