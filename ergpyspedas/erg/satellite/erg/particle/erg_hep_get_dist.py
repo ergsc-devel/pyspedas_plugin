@@ -266,16 +266,25 @@ def erg_hep_get_dist(tname,
 
     #  ;; Energy ch
     """
-    ;; Default unit of v in F?DU tplot variables [keV/q] should be
-    ;; converted to [eV] by multiplying (1000 * charge number).
+    ;;; Extract necessary information from the Lv2 data CDF file
     """
-    e0_array_raw = data_in[2][[index]]# ;; [time, 32]
-    e0_array = e0_array_raw.T
-    energy_reform = np.reshape(e0_array, [dim_array[0], 1, 1, n_times])
+    enearr = cdf_file.varget('FEDU_'+suf+'_Energy')  # ;; [2(min,max), 16 (ene ch) ]
+    # ;; enearr[0, 0] = 30                 #   ;; the effective lowest energy limit is assumed to be 30 keV
+
+    """
+    ;; Calculate averages, which may be replaced with a more
+    ;; appropriate averaging method for representative energies. 
+    ;; Currently the geometric average is adopted. 
+    ;; 1e3 is to convert [keV] (default of HEP Lv2 flux data) to [eV]
+    """
+    e0_array = np.sqrt(enearr[0, :] * enearr[1, :]) * 1.e+03
+    energy_reform = np.reshape(e0_array, [dim_array[0], 1, 1, 1])
     energy_rebin1 = np.repeat(energy_reform, dim_array[2],
                              axis=2)  # repeated across apd(elevation)
-    dist['energy'] = np.repeat(energy_rebin1, dim_array[1],
+    energy_rebin2 = np.repeat(energy_rebin1, dim_array[1],
                               axis=1)  # repeated across spin phase(azimuth)
+    dist['energy'] = np.repeat(energy_rebin2, n_times,
+                              axis=3)  # repeated across spin phase(azimuth)
 
     # denergy member
     
