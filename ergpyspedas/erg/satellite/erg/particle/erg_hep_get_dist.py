@@ -182,8 +182,9 @@ def erg_hep_get_dist(tname,
     ;; HEP data arr: [9550(time), 16(spin phase), 16(energy), 15(azimuth ch )]
     ;; Dimensions
     """
+    # ;; Dimensions
     # ;; to [ energy, spin phase, azimuth ch(elevation) ]
-    dim_array = np.array(data_in[1].shape[1:])[[1, 0, 2]]
+    dim_array = np.array(p_structure['y'].shape[1:])[[1, 0, 2]]
     if species.lower() == 'e':
         mass = 5.68566e-06
         charge = -1.
@@ -214,15 +215,47 @@ def erg_hep_get_dist(tname,
     dist['time'] = p_structure['x'][[index]]  # ;; the start time of spin
     dist['end_time'] = dist['time'] + sc0_dt[[index]]  # ;; the end time of spin
     """
-    ;; Shuffle the original data array [time,energy, anode, spin phase] to
-    ;; be energy-azimuth(spin phase)-elevation-time.
+    ;; Shuffle the original data array [time,spin phase,energy,apd] to
+    ;; be energy-azimuth-elevation-time.
+    ;; The factor 1d-3 is to convert [/keV-s-sr-cm2] (default unit of
+    ;; HEP Lv2 flux data) to [/eV-s-sr-cm2] 
     """
-    dist['data'] = data_in[1][[index]].transpose([1, 3, 2, 0])
+    if 'cnt' not in dtype:
+        dist['data'] = p_structure['y'][[index]].transpose([2, 1, 3, 0]) * 1.e-03
+    else:
+        dist['data'] = p_structure['y'][[index]].transpose([2, 1, 3, 0])  # ;; for count/sample, count/sec
+    
     dist['bins'] = np.ones(shape=np.insert(dim_array, dim_array.shape[0],
                                            n_times), dtype='int8')
-    # must be set or data will be consider invalid
-    # ;; fishy negative flux values are all replaced with zero.
-    # ;; dist['data'] = np.where(dist['data'] < 0.,0.,dist['data'])
+
+    """
+    ;; Exclude spin phases #0 and #15 currently from spectrum
+    ;; calculations
+    """
+    if not w_sct015:
+        dist['bins'][:, 0, :, :] = 0
+        dist['bins'][:, 15, :, :] = 0
+    
+    #  ;; Exclude invalid azimuth channels
+    if exclude_azms:
+        invalid_azms = [0, 4, 5, 9, 10, 11, 14]
+        dist['bins'][:, :, invalid_azms, :] = 0
+
+    #  ;; Apply the empiricallly-derived efficiency (only for cnt/cntrate/dtcntrate)
+    if (new_effic) and ('cnt' in dtype):
+        """
+        ;; efficiency for each azim. ch. based on the inter-ch. calibration
+        ;; Only valid for 2017-06-21 through 2019-02-07 
+        """
+        effic = [
+          0.171, 0.460, 1.013, 0.411, 0.158, 
+          0.162, 0.450, 1.000, 0.399, 0.158, 
+          0.120, 0.170, 0.629, 0.346, 0.132
+        ]
+        for i in range(15):
+            dist['data'][:, :, i, :] /= effic[i]
+        print(' new_effic has been applied!')
+
     file_name_raw= get_data(input_name, metadata=True)['CDF']['FILENAME']
     if isinstance(file_name_raw, str):
         cdf_path = file_name_raw
