@@ -369,28 +369,15 @@ def erg_hep_get_dist(tname,
     del phi0  # ;; Clean huge arrays
     dist['n_phi'] = dim_array[1]
     #  ;; elevation angle
-    elev = angarr[0]  # ;; [(anode)]
-    elev_reform = np.reshape(elev, [1, 1, dim_array[2], 1])
+    elev = angarr[:, 0, :]  # ;; [ (time), (Az.ch)]
+    elev_reform = np.reshape(elev, [1, 1, dim_array[2], n_times])
     elev_rebin1 = np.repeat(elev_reform, dim_array[1],
                              axis=1)  # repeated across spin phase(azimuth)
-    elev_rebin2 = np.repeat(elev_rebin1, dim_array[0],
+    dist['theta'] = np.repeat(elev_rebin1, dim_array[0],
                              axis=0)  # repeated across energy
-    dist['theta'] = np.repeat(elev_rebin2, n_times,
-                             axis=3)  # repeated across n_times
 
-    #  ;; elevation angle for fine channel  
-    
-    if 'fine_ch' in vn_info:
-        dist['dtheta'] = np.full(shape=np.insert(dim_array, dim_array.shape[0],
-                                             n_times), fill_value=22.5/6.)  #  ;; Fill all with 22.5/6.
-    else:
-        dist['dtheta'] = np.full(shape=np.insert(dim_array, dim_array.shape[0],
-                                             n_times), fill_value=22.5)  #  ;; Fill all with 22.5. first
-        #  ;; give half weight for ch1,2,3,4, 19,20,21,22
-        dist['dtheta'][:, :, 0:4, :] = 11.25
-        dist['dtheta'][:, :, dim_array[2]-4:dim_array[2], :] = 11.25
-        if dim_array[2] == 22:  #  ;; with full fine channels
-            dist['dtheta'][:, :, 5:17, :] = 22.5/6
+    dist['dtheta'] = np.full(shape=np.insert(dim_array, dim_array.shape[0],
+                                           n_times), fill_value=12.0)
 
     dist['n_theta'] = dim_array[2]
     
