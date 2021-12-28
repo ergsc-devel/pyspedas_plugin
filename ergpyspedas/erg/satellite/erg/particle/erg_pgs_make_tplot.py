@@ -14,7 +14,8 @@ def erg_pgs_make_tplot(
     zlog=True,
     colorbar='jet',
     ytitle=None,
-    relativistic=False):
+    relativistic=False,
+    ysubtitle=None):
     """
     Create tplot variable with standard spectrogram settings
 
@@ -61,6 +62,8 @@ def erg_pgs_make_tplot(
     options(name, 'zlog', zlog)
     options(name, 'Spec', True)
     options(name, 'ytitle', ytitle)
+    if ysubtitle is not None:
+        options(name, 'ysubtitle', ysubtitle)
     options(name, 'ztitle', erg_units_string(units, units_only=True, relativistic=relativistic))
     options(name, 'Colormap', colorbar)
     return name
