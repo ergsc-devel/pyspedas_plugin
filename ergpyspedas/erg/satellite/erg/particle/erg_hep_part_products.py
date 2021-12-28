@@ -142,29 +142,11 @@ def erg_hep_part_products(
         out_pad = np.zeros((times_array.shape[0], regrid[1]))
         out_pad_y = np.zeros((times_array.shape[0], regrid[1]))
 
-    if 'moments' in outputs_lc:
-        out_density = np.zeros(times_array.shape[0])
-        out_avgtemp = np.zeros(times_array.shape[0])
-        out_vthermal = np.zeros(times_array.shape[0])
-        out_flux = np.zeros([times_array.shape[0], 3])
-        out_velocity = np.zeros([times_array.shape[0], 3])
-        out_mftens = np.zeros([times_array.shape[0], 6])
-        out_ptens = np.zeros([times_array.shape[0], 6])
-        out_ttens = np.zeros([times_array.shape[0], 3, 3])
 
     if 'fac_energy' in outputs_lc:
         out_fac_energy = np.zeros((times_array.shape[0], dist['n_energy']))
         out_fac_energy_y = np.zeros((times_array.shape[0], dist['n_energy']))
 
-    if 'fac_moments' in outputs_lc:
-        out_fac_density = np.zeros(times_array.shape[0])
-        out_fac_avgtemp = np.zeros(times_array.shape[0])
-        out_fac_vthermal = np.zeros(times_array.shape[0])
-        out_fac_flux = np.zeros([times_array.shape[0], 3])
-        out_fac_velocity = np.zeros([times_array.shape[0], 3])
-        out_fac_mftens = np.zeros([times_array.shape[0], 6])
-        out_fac_ptens = np.zeros([times_array.shape[0], 6])
-        out_fac_ttens = np.zeros([times_array.shape[0], 3, 3])
     out_vars = []
     last_update_time = None
 
@@ -349,20 +331,6 @@ def erg_hep_part_products(
         erg_pgs_make_tplot(output_tplot_name, x=times_array, y=out_fac_energy_y, z=out_fac_energy, units=units, ylog=True, ytitle=dist['data_name'] + ' \\ energy (eV)',
                             relativistic=relativistic, ysubtitle=ysubtitle)
         out_vars.append(output_tplot_name)
-
-    #  ;FAC Moments Variables
-    if 'fac_moments' in outputs_lc:
-        fac_moments = {'density': out_fac_density, 
-              'flux': out_fac_flux, 
-              'mftens': out_fac_mftens, 
-              'velocity': out_fac_velocity, 
-              'ptens': out_fac_ptens,
-              'ttens': out_fac_ttens,
-              'vthermal': out_fac_vthermal,
-              'avgtemp': out_fac_avgtemp}
-        fac_mom_suffix = '_mag' + suffix
-        fac_moments_vars = erg_pgs_moments_tplot(fac_moments, x=times_array, prefix=in_tvarname, suffix=fac_mom_suffix)
-        out_vars.extend(fac_moments_vars)
 
     
     #  ;;Sort a data array by energy for (fac-)energy spectra
