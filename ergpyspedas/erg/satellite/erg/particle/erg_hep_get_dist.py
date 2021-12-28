@@ -176,7 +176,7 @@ def erg_hep_get_dist(tname,
                 n_times = p_structure['x'].size
                 index = np.arange(n_times)
         else:
-            n_times = np.array([index]).size
+            n_times = np.array(tuple([index])).size
     """
     ;; --------------------------------------------------------------
     ;; HEP data arr: [9550(time), 16(spin phase), 16(energy), 15(azimuth ch )]
@@ -212,8 +212,8 @@ def erg_hep_get_dist(tname,
     ;; Then, fill in arrays in the data structure
     ;;   dim[ nenergy, nspinph(azimuth), nanode(elevation), ntime]
     """
-    dist['time'] = p_structure['x'][[index]]  # ;; the start time of spin
-    dist['end_time'] = dist['time'] + sc0_dt[[index]]  # ;; the end time of spin
+    dist['time'] = p_structure['x'][tuple([index])]  # ;; the start time of spin
+    dist['end_time'] = dist['time'] + sc0_dt[tuple([index])]  # ;; the end time of spin
     """
     ;; Shuffle the original data array [time,spin phase,energy,apd] to
     ;; be energy-azimuth-elevation-time.
@@ -221,9 +221,9 @@ def erg_hep_get_dist(tname,
     ;; HEP Lv2 flux data) to [/eV-s-sr-cm2] 
     """
     if 'cnt' not in dtype:
-        dist['data'] = p_structure['y'][[index]].transpose([2, 1, 3, 0]) * 1.e-03
+        dist['data'] = p_structure['y'][tuple([index])].transpose([2, 1, 3, 0]) * 1.e-03
     else:
-        dist['data'] = p_structure['y'][[index]].transpose([2, 1, 3, 0])  # ;; for count/sample, count/sec
+        dist['data'] = p_structure['y'][tuple([index])].transpose([2, 1, 3, 0])  # ;; for count/sample, count/sec
     
     dist['bins'] = np.ones(shape=np.insert(dim_array, dim_array.shape[0],
                                            n_times), dtype='int8')
