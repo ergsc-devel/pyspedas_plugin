@@ -8,10 +8,9 @@ from pyspedas.utilities.time_string import time_string
 
 from pyspedas.particles.moments.spd_pgs_moments import spd_pgs_moments
 from pyspedas.particles.spd_part_products.spd_pgs_regrid import spd_pgs_regrid
-from pytplot import get_timespan, get_data, store_data, ylim
+from pytplot import get_timespan, get_data, store_data
 
-from .erg_lepe_get_dist import erg_lepe_get_dist
-from .erg_lepi_get_dist import erg_lepi_get_dist
+from .erg_hep_get_dist import erg_hep_get_dist
 from .erg_pgs_clean_data import erg_pgs_clean_data
 from .erg_pgs_limit_range import erg_pgs_limit_range
 from .erg_convert_flux_units import erg_convert_flux_units
@@ -31,19 +30,21 @@ def erg_hep_part_products(
     no_ang_weighting=True,
     suffix='',
     units='flux',
-    datagap=32.1,
+    datagap=8.1,
     regrid=[16, 16],
     pitch=[0., 180.],
     theta=[-90., 90.],
     phi_in=[0., 360.],
     gyro=[0., 360.],
     energy=None,
-    fac_type='mphism',
+    fac_type='phigeo',
     trange=None,
     mag_name=None,
     pos_name=None,
     relativistic=False,
-    no_regrid=False
+    no_regrid=True,
+    include_allazms=False,
+    muconv=False
     ):
 
     if len(tnames(in_tvarname)) < 1:
@@ -52,15 +53,7 @@ def erg_hep_part_products(
 
     in_tvarname = tnames(in_tvarname)[0]
     vn_info = in_tvarname.split('_')
-    instnm = vn_info[1]  #  ;; should be 'lepe' or 'lepi'
-    lvl = vn_info[2]  #  ;; 'l2'
-    datnm = vn_info[3]  #  ;; '3dflux'
-
-    #  ;; Check if a tplot variable given is acceptable
-    if (instnm != 'lepe') and (instnm != 'lepi') or (datnm != '3dflux'):
-        print('The tplot variable given as an argument is not valid!')
-        print(f'varname: {in_tvarname}')
-        return
+    instnm = vn_info[1]  #  ;; 'hep' 
 
     if no_ang_weighting:
         no_regrid = True
@@ -74,6 +67,9 @@ def erg_hep_part_products(
             outputs_lc.append(output.lower())
 
     units_lc = units.lower()
+
+    #  ;; Currently no_regrid is always on and regrid is just ignored. 
+    no_regrid = True
 
     if phi_in != [0., 360.]:
         if abs(phi_in[1] - phi_in[0]) > 360.:
@@ -102,18 +98,11 @@ def erg_hep_part_products(
             idx = idx[0]
             outputs_lc[idx] = 'fac_energy'
 
-        idx = np.where(np.array(outputs_lc) == 'moments')[0]
-        if (idx.shape[0] > 0) and ('fac_moments' not in outputs_lc):
-            idx = idx[0]
-            outputs_lc[idx] = 'fac_moments'
-
     #  ;;Preserve the original time range
     tr_org = get_timespan(in_tvarname)
 
-    if instnm == 'lepe':
-        times_array = erg_lepe_get_dist(in_tvarname, species=species, units=units_lc, time_only=True)
-    if instnm == 'lepi':
-        times_array = erg_lepi_get_dist(in_tvarname, species=species, units=units_lc, time_only=True)
+    times_array = erg_hep_get_dist(in_tvarname, species=species, units=units_lc, time_only=True)
+
 
     if trange is not None:
         
@@ -131,23 +120,16 @@ def erg_hep_part_products(
 
 
 
-    if instnm == 'lepe':
-        dist_all_time_range =  erg_lepe_get_dist(in_tvarname, time_indices, species=species, units=units_lc)
-        dist = deepcopy(dist_all_time_range)
-    if instnm == 'lepi':
-        dist = erg_lepi_get_dist(in_tvarname, 0, species=species, units=units_lc)
+    dist_all_time_range =  erg_hep_get_dist(in_tvarname, time_indices, species=species, units=units_lc, exclude_azms= not include_allazms)
+    dist = deepcopy(dist_all_time_range)
 
     if 'energy' in outputs_lc:
         out_energy = np.zeros((times_array.shape[0], dist['n_energy']))
         out_energy_y = np.zeros((times_array.shape[0], dist['n_energy']))
     if 'theta' in outputs_lc:
-        if instnm == 'lepe':
-            n_theta_unique = len(np.unique(dist['theta']))
-            out_theta = np.zeros((times_array.shape[0], n_theta_unique))
-            out_theta_y = np.zeros((times_array.shape[0], n_theta_unique))
-        elif  instnm == 'lepi':
-            out_theta = np.zeros((times_array.shape[0], dist['n_theta']))
-            out_theta_y = np.zeros((times_array.shape[0], dist['n_theta']))
+        n_theta_unique = len(np.unique(dist['theta']))
+        out_theta = np.zeros((times_array.shape[0], n_theta_unique))
+        out_theta_y = np.zeros((times_array.shape[0], n_theta_unique))
     if 'phi' in outputs_lc:
         out_phi = np.zeros((times_array.shape[0], dist['n_phi']))
         out_phi_y = np.zeros((times_array.shape[0], dist['n_phi']))
@@ -193,7 +175,7 @@ def erg_hep_part_products(
     """
     # ;;create rotation matrix to B-field aligned coordinates if needed
     
-    fac_outputs = ['pa','gyro','fac_energy', 'fac_moments']
+    fac_outputs = ['pa','gyro','fac_energy']
     fac_requested = len(set(outputs_lc).intersection(fac_outputs)) > 0
     if fac_requested:
         """
@@ -208,17 +190,16 @@ def erg_hep_part_products(
             # problem creating the FAC matrices
             fac_requested = False
 
-    #  ;;create the magnetic field vector array for moment calculation
+    #  ;;create the magnetic field vector array for mu conversion
     magf = np.array([0., 0., 0.])
     no_mag_for_moments = False
-
-    if ('moments' in outputs_lc) or ('fac_moments' in outputs_lc):
+    
+    if muconv:
 
         no_mag = mag_name is None
         magnm = tnames(mag_name)
         if (len(magnm) < 1) or no_mag:
             print('the magnetic field data is not given!')
-            no_mag_for_moments = True
         else:
             magnm = magnm[0]
 
@@ -234,7 +215,7 @@ def erg_hep_part_products(
 
     """
     ;;-------------------------------------------------
-    ;; Loop over time to build spectrograms and/or moments
+    ;; Loop over time to build the spectragrams
     ;;-------------------------------------------------
     """
     for index in range(time_indices.shape[0]):
@@ -243,77 +224,54 @@ def erg_hep_part_products(
 
         #  ;; Get the data structure for this sample
 
-        if instnm == 'lepe':
-
-            dist = {
-                'project_name': deepcopy(dist_all_time_range['project_name']),
-                'spacecraft': deepcopy(dist_all_time_range['spacecraft']),
-                'data_name': deepcopy(dist_all_time_range['data_name']),
-                'units_name': deepcopy(dist_all_time_range['units_name']),
-                'units_procedure': deepcopy(dist_all_time_range['units_procedure']),
-                'species': deepcopy(dist_all_time_range['species']),
-                'valid': deepcopy(dist_all_time_range['valid']),
-                'charge': deepcopy(dist_all_time_range['charge']),
-                'mass': deepcopy(dist_all_time_range['mass']),
-                'time': deepcopy(dist_all_time_range['time'][index]),
-                'end_time':  deepcopy(dist_all_time_range['end_time'][index]),
-                'data':  deepcopy(dist_all_time_range['data'][:, :, :, index]),
-                'bins':  deepcopy(dist_all_time_range['bins'][:, :, :, index]),
-                'energy':  deepcopy(dist_all_time_range['energy'][:, :, :, index]),
-                'denergy':  deepcopy(dist_all_time_range['denergy'][:, :, :, index]),
-                'n_energy': deepcopy(dist_all_time_range['n_energy']),
-                'n_bins': deepcopy(dist_all_time_range['n_bins']),
-                'phi':  deepcopy(dist_all_time_range['phi'][:, :, :, index]),
-                'dphi':  deepcopy(dist_all_time_range['dphi'][:, :, :, index]),
-                'n_phi': deepcopy(dist_all_time_range['n_phi']),
-                'theta':  deepcopy(dist_all_time_range['theta'][:, :, :, index]),
-                'dtheta':  deepcopy(dist_all_time_range['dtheta'][:, :, :, index]),
-                'n_theta': deepcopy(dist_all_time_range['n_theta'])
-            }
-
-        if instnm == 'lepi':
-            dist = erg_lepi_get_dist(in_tvarname, time_indices[index], species=species, units=units_lc)
+        dist = {
+            'project_name': deepcopy(dist_all_time_range['project_name']),
+            'spacecraft': deepcopy(dist_all_time_range['spacecraft']),
+            'data_name': deepcopy(dist_all_time_range['data_name']),
+            'units_name': deepcopy(dist_all_time_range['units_name']),
+            'units_procedure': deepcopy(dist_all_time_range['units_procedure']),
+            'species': deepcopy(dist_all_time_range['species']),
+            'valid': deepcopy(dist_all_time_range['valid']),
+            'charge': deepcopy(dist_all_time_range['charge']),
+            'mass': deepcopy(dist_all_time_range['mass']),
+            'time': deepcopy(dist_all_time_range['time'][index]),
+            'end_time':  deepcopy(dist_all_time_range['end_time'][index]),
+            'data':  deepcopy(dist_all_time_range['data'][:, :, :, index]),
+            'bins':  deepcopy(dist_all_time_range['bins'][:, :, :, index]),
+            'energy':  deepcopy(dist_all_time_range['energy'][:, :, :, index]),
+            'denergy':  deepcopy(dist_all_time_range['denergy'][:, :, :, index]),
+            'n_energy': deepcopy(dist_all_time_range['n_energy']),
+            'n_bins': deepcopy(dist_all_time_range['n_bins']),
+            'phi':  deepcopy(dist_all_time_range['phi'][:, :, :, index]),
+            'dphi':  deepcopy(dist_all_time_range['dphi'][:, :, :, index]),
+            'n_phi': deepcopy(dist_all_time_range['n_phi']),
+            'theta':  deepcopy(dist_all_time_range['theta'][:, :, :, index]),
+            'dtheta':  deepcopy(dist_all_time_range['dtheta'][:, :, :, index]),
+            'n_theta': deepcopy(dist_all_time_range['n_theta'])
+        }
 
         if magf.ndim == 2:
             magvec = magf[index]
         elif magf.ndim == 1:
             magvec = magf
 
-        if ('moments' in outputs_lc) or ('fac_moments' in outputs_lc):
-            clean_data = erg_pgs_clean_data(dist, units=units_lc, magf=magvec,
-                                            for_moments=True)  #;; invalid values are zero-padded. 
+        clean_data = erg_pgs_clean_data(dist, units=units_lc, relativistic=relativistic ,magf=magvec, muconv=muconv)
+
+
+        if 'mu_unit' in clean_data:
+            val = clean_data['mu_unit']
+            ysubtitle = val
         else:
-            clean_data = erg_pgs_clean_data(dist, units=units_lc, magf=magvec)
+            ysubtitle = None
 
         if fac_requested:
             pre_limit_bins = deepcopy(clean_data['bins'])
 
         clean_data = erg_pgs_limit_range(clean_data, phi=phi_in, theta=theta, energy=energy, no_ang_weighting=no_ang_weighting)
 
-        if ('moments' in outputs_lc) or ('fac_moments' in outputs_lc):
-            clean_data_eflux = erg_convert_flux_units(clean_data, units='eflux')
-            magfarr = deepcopy(magf)
-            clean_data_eflux_for_moments = deepcopy(clean_data_eflux)
-            clean_data_eflux_for_moments['data'] = np.where(clean_data_eflux_for_moments['bins'] == 0,
-                                                            0,clean_data_eflux_for_moments['data'])
-            moments = spd_pgs_moments(clean_data_eflux_for_moments)
-
-            if 'moments' in outputs_lc:
-                out_density[index] = moments['density']
-                out_avgtemp[index] = moments['avgtemp']
-                out_vthermal[index] = moments['vthermal']
-                out_flux[index, :] = moments['flux']
-                out_velocity[index, :] = moments['velocity']
-                out_mftens[index, :] = moments['mftens']
-                out_ptens[index, :] = moments['ptens']
-                out_ttens[index, :] = moments['ttens']
-
         #  ;;Build theta spectrogram
         if 'theta' in outputs_lc:
-            if  instnm == 'lepe':
-                out_theta_y[index, :], out_theta[index, :] = erg_pgs_make_theta_spec(clean_data, no_ang_weighting=no_ang_weighting)
-            elif instnm == 'lepi':
-                out_theta_y[index, :], out_theta[index, :] = erg_pgs_make_theta_spec(clean_data, resolution=dist['n_theta'],no_ang_weighting=no_ang_weighting)
+            out_theta_y[index, :], out_theta[index, :] = erg_pgs_make_theta_spec(clean_data, no_ang_weighting=no_ang_weighting)
 
         #  ;;Build energy spectrogram
         if 'energy' in outputs_lc:
@@ -323,7 +281,7 @@ def erg_hep_part_products(
         if 'phi' in outputs_lc:
             out_phi_y[index, :], out_phi[index, :] = erg_pgs_make_phi_spec(clean_data, resolution=dist['n_phi'],no_ang_weighting=no_ang_weighting)
 
-        #  ;;Perform transformation to FAC, (regrid data), and apply limits in new coords
+        #  ;;Perform transformation to FAC, regrid data, and apply limits in new coords
         
         if fac_requested:
             
@@ -355,77 +313,41 @@ def erg_hep_part_products(
             if 'fac_energy' in outputs_lc:
                 out_fac_energy_y[index, :], out_fac_energy[index, :] = erg_pgs_make_e_spec(clean_data)
 
-            if 'fac_moments' in outputs_lc:
-                clean_data['theta'] = 90. - clean_data['theta'] # ;convert back to latitude for moments calc
-                temp_dict = {'charge': dist['charge'],
-                             'magf': magvec,
-                             'species': dist['species'],
-                             'sc_pot': 0.,
-                             'units_name': units_lc}
-                temp_dict.update(clean_data)
-                clean_data = deepcopy(temp_dict)
-                del temp_dict
-                clean_data_eflux = erg_convert_flux_units(clean_data, units='eflux')
-                clean_data_eflux_for_moments = deepcopy(clean_data_eflux)
-                clean_data_eflux_for_moments['data'] = np.where(clean_data_eflux_for_moments['bins'] == 0,
-                                                                0,clean_data_eflux_for_moments['data'])
-                fac_moments = spd_pgs_moments(clean_data_eflux_for_moments)
-
-                out_fac_density[index] = fac_moments['density']
-                out_fac_avgtemp[index] = fac_moments['avgtemp']
-                out_fac_vthermal[index] = fac_moments['vthermal']
-                out_fac_flux[index, :] = fac_moments['flux']
-                out_fac_velocity[index, :] = fac_moments['velocity']
-                out_fac_mftens[index, :] = fac_moments['mftens']
-                out_fac_ptens[index, :] = fac_moments['ptens']
-                out_fac_ttens[index, :] = fac_moments['ttens']
-
-    made_et_spec = ('energy' in outputs_lc) or ('fac_energy' in outputs_lc)
-
     if 'energy' in outputs_lc:
         output_tplot_name = in_tvarname+'_energy' + suffix
-        erg_pgs_make_tplot(output_tplot_name, x=times_array, y=out_energy_y, z=out_energy, units=units, ylog=True, ytitle=dist['data_name'] + ' \\ energy (eV)')
-        ylim(output_tplot_name,  1e+1, 3e+4) #  ;; default yrange: [10 eV, 30 keV]
+        erg_pgs_make_tplot(output_tplot_name, x=times_array, y=out_energy_y, z=out_energy, units=units, ylog=True, ytitle=dist['data_name'] + ' \\ energy (eV)',
+                            relativistic=relativistic, ysubtitle=ysubtitle)
         out_vars.append(output_tplot_name)
     if 'theta' in outputs_lc:
         output_tplot_name = in_tvarname+'_theta' + suffix
-        erg_pgs_make_tplot(output_tplot_name, x=times_array, y=out_theta_y, z=out_theta, units=units, ylog=False, ytitle=dist['data_name'] + ' \\ theta (deg)')
+        erg_pgs_make_tplot(output_tplot_name, x=times_array, y=out_theta_y, z=out_theta, units=units, ylog=False, ytitle=dist['data_name'] + ' \\ theta (deg)',
+                            relativistic=relativistic)
         out_vars.append(output_tplot_name)
     if 'phi' in outputs_lc:
         output_tplot_name = in_tvarname+'_phi' + suffix
-        erg_pgs_make_tplot(output_tplot_name, x=times_array, y=out_phi_y, z=out_phi, units=units, ylog=False, ytitle=dist['data_name'] + ' \\ phi (deg)')
+        erg_pgs_make_tplot(output_tplot_name, x=times_array, y=out_phi_y, z=out_phi, units=units, ylog=False, ytitle=dist['data_name'] + ' \\ phi (deg)',
+                            relativistic=relativistic)
         out_vars.append(output_tplot_name)
 
     #  ;;Pitch Angle Spectrograms
     if 'pa' in outputs_lc:
         output_tplot_name = in_tvarname+'_pa' + suffix
-        erg_pgs_make_tplot(output_tplot_name, x=times_array, y=out_pad_y, z=out_pad, units=units, ylog=False, ytitle=dist['data_name'] + ' \\ PA (deg)')
+        erg_pgs_make_tplot(output_tplot_name, x=times_array, y=out_pad_y, z=out_pad, units=units, ylog=False, ytitle=dist['data_name'] + ' \\ PA (deg)',
+                            relativistic=relativistic)
         out_vars.append(output_tplot_name)
 
     if 'gyro' in outputs_lc:
         output_tplot_name = in_tvarname+'_gyro' + suffix
-        erg_pgs_make_tplot(output_tplot_name, x=times_array, y=out_gyro_y, z=out_gyro, units=units, ylog=False, ytitle=dist['data_name'] + ' \\ gyro (deg)')
+        erg_pgs_make_tplot(output_tplot_name, x=times_array, y=out_gyro_y, z=out_gyro, units=units, ylog=False, ytitle=dist['data_name'] + ' \\ gyro (deg)',
+                            relativistic=relativistic)
         out_vars.append(output_tplot_name)
 
-
-    #  ;Moments Variables
-    if 'moments' in outputs_lc:
-        moments = {'density': out_density, 
-              'flux': out_flux, 
-              'mftens': out_mftens, 
-              'velocity': out_velocity, 
-              'ptens': out_ptens,
-              'ttens': out_ttens,
-              'vthermal': out_vthermal,
-              'avgtemp': out_avgtemp}
-        moments_vars = erg_pgs_moments_tplot(moments, x=times_array, prefix=in_tvarname, suffix=suffix)
-        out_vars.extend(moments_vars)
 
     if 'fac_energy' in outputs_lc:
 
         output_tplot_name = in_tvarname+'_energy_mag' + suffix
-        erg_pgs_make_tplot(output_tplot_name, x=times_array, y=out_fac_energy_y, z=out_fac_energy, units=units, ylog=True, ytitle=dist['data_name'] + ' \\ energy (eV)')
-        ylim(output_tplot_name, 1e+1, 3e+4)  # ;; default yrange: [10 eV, 30 keV]
+        erg_pgs_make_tplot(output_tplot_name, x=times_array, y=out_fac_energy_y, z=out_fac_energy, units=units, ylog=True, ytitle=dist['data_name'] + ' \\ energy (eV)',
+                            relativistic=relativistic, ysubtitle=ysubtitle)
         out_vars.append(output_tplot_name)
 
     #  ;FAC Moments Variables
