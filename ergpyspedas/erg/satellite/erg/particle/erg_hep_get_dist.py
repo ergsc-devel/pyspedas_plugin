@@ -305,68 +305,68 @@ def erg_hep_get_dist(tname,
     ;; Array elements containing NaN are excluded from the further
     ;; calculations, by setting bins to be zero.
     """
-    dist['bins'] = np.where((np.isfinite(dist['data']))
-                               &(np.isfinite(dist['energy'])),
-                               1,0)
-    
-    #  ;; azimuthal angle in spin direction
-    angarr = cdf_file.varget('FEDU_Angle_SGA') # ;;[elev/phi, (anode)] in SGA  (looking dir)
 
-    # ;; Flip the looking dirs to the flux dirs
-    n_anode = angarr[0].size
-    r_array = np.ones(n_anode)
-    elev_array = deepcopy(angarr[0])
-    phi_array = deepcopy(angarr[1])
+    # ;; converted to the flux dirs
+    unitvec = np.ones_like(angarr[:, 0, :])
+
     deg_to_rad = np.pi / 180.
-    x_array, y_array, z_array = spherical_to_cartesian(
-                                     r_array,
-                                     elev_array * deg_to_rad,
-                                     phi_array* deg_to_rad
+    ex_array, ey_array, ez_array = spherical_to_cartesian(
+                                     unitvec,
+                                     angarr[:, 0, :] * deg_to_rad,
+                                     angarr[:, 1, :] * deg_to_rad
                                      )
-    r_array, elev_array, phi_array = cartesian_to_spherical(
-                                        -x_array,
-                                        -y_array,
-                                        -z_array)
-    elev_array = elev_array.value / deg_to_rad
+    r_array, theta_array, phi_array = cartesian_to_spherical(
+                                        -ex_array,
+                                        -ey_array,
+                                        -ez_array)
+    theta_array = theta_array.value / deg_to_rad
     phi_array = phi_array.value / deg_to_rad
-    angarr = np.array([elev_array, phi_array])
 
-    phissi = angarr[1] - (90. + 21.6)  # ;; [(anode)] (21.6 = degree between sun senser and satellite coordinate)
-    spinph_ofst = data_in[4] * 22.5
-    phi0_1_reform = np.reshape(phissi, [1, 1, dim_array[2], 1])
+    #  ;; --> [(time), 2, 15]
+    angarr[:,0,:] = theta_array
+    angarr[:,1,:] = phi_array
+    #  ;; --> [(time), 2, 15]
+
+    spinper=sc0_dt[tuple([index])]
+    if len(spinper) == 1:
+        spinper = spinper[0]
+
+    rel_sct_time = np.zeros_like(intgt[tuple(index), :])
+    #  ;; Elapsed time from spin start through the center of each spin sector
+    for i in range(16):
+        if i == 0:
+            rel_sct_time[:, i] = 0. + intgt[tuple(index), i]/2
+        elif i == 1:
+            rel_sct_time[:, i] = intgt[tuple(index), 0] + intgt[tuple(index), i]/2
+        else:
+            rel_sct_time[:, i] = np.nansum(intgt[tuple(index), 0:(i)], axis=1) + intgt[tuple(index), i]/2
+
+
+
+    phissi = angarr[:, 1, :] - (90. + 21.6)  #;; [ (time), (azm)]
+    spinper_rebin = np.repeat(spinper.reshape(n_times, 1), 16, axis=1)
+    spinph_ofst = rel_sct_time / spinper_rebin * 360.
+    phi0_1_reform = np.reshape(phissi, [1, 1, dim_array[2], n_times])
     phi0_1_rebin1 = np.repeat(phi0_1_reform, dim_array[1],
                              axis=1)  # repeated across spin phase(azimuth)
-    phi0_1_rebin2 = np.repeat(phi0_1_rebin1, dim_array[0],
+    phi0_1 = np.repeat(phi0_1_rebin1, dim_array[0],
                              axis=0)  # repeated across energy
-    phi0_1 = np.repeat(phi0_1_rebin2,     n_times,
-                              axis=3)  # repeated across n_times
-    phi0_2_reform = np.reshape(spinph_ofst, [1, dim_array[1], 1, 1])
+    phi0_2_reform = np.reshape(spinph_ofst, [n_times, 1, dim_array[1], 1])
     phi0_2_rebin1 = np.repeat(phi0_2_reform, dim_array[2],
-                             axis=2)  # repeated across apd(elevation)
-    phi0_2_rebin2 = np.repeat(phi0_2_rebin1, dim_array[0],
-                             axis=0)  # repeated across energy
-    phi0_2 = np.repeat(phi0_2_rebin2, n_times,
-                              axis=3)  # repeated across n_times
-    phi0 = phi0_1 + phi0_2
-    ofst_sv = (np.arange(dim_array[0]) + 0.5) * \
-        22.5/dim_array[0]  # ;; [(energy)]
-    phi_ofst_for_sv_reform = np.reshape(ofst_sv, [dim_array[0], 1, 1, 1])
-    phi_ofst_for_sv_rebin1 = np.repeat(
-        phi_ofst_for_sv_reform, dim_array[2],
-                                 axis=2)  # repeated across apd(elevation)
-    phi_ofst_for_sv_rebin2 = np.repeat(
-        phi_ofst_for_sv_rebin1,dim_array[1],
-                                 axis=1)  # repeated across spin phase(azimuth)
-    phi_ofst_for_sv = np.repeat(phi_ofst_for_sv_rebin2,         n_times,
-                                 axis=3)  # repeated across n_times
+                             axis=3)  # repeated across apd(elevation)
+    phi0_2 = np.repeat(phi0_2_rebin1, dim_array[0],
+                             axis=1)  # repeated across energy
+
+    phi0 = phi0_1 + phi0_2.transpose(1, 2, 3, 0)
+
     """
     ;;  phi angle for the start of each spin phase
-    ;;    + offset angle foreach sv step
+    ;;    + offset angle 
     """
-    dist['phi'] = np.fmod((phi0 + phi_ofst_for_sv + 360.), 360.)
+    dist['phi'] = np.fmod((phi0 + 360.), 360.)
     dist['dphi'] = np.full(shape=np.insert(dim_array, dim_array.shape[0],
                                            n_times), fill_value=22.5)  # ;; 22.5 deg as a constant
-    del phi0, phi_ofst_for_sv  # ;; Clean huge arrays
+    del phi0  # ;; Clean huge arrays
     dist['n_phi'] = dim_array[1]
     #  ;; elevation angle
     elev = angarr[0]  # ;; [(anode)]
