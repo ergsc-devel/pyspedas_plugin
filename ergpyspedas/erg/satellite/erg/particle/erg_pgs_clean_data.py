@@ -7,7 +7,8 @@ def erg_pgs_clean_data(data_in,
                        units='flux',
                        relativistic=False,
                        for_moments=False,
-                       magf=np.array([0., 0., 0.])
+                       magf=np.array([0., 0., 0.]),
+                       muconv=False
                        ):
 
     converted_data = erg_convert_flux_units(input_dist=data_in,
