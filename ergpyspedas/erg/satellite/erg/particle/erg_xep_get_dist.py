@@ -200,7 +200,7 @@ def erg_xep_get_dist(tname,
 
     dist['n_energy'] = dim_array[0]
 
-    dist['n_bins'] = dim_array[1] * dim_array[2]  #   # thetas * # phis
+    dist['n_bins'] = np.product(dim_array[1:])  #   # phis
    
     #  ;; azimuthal angle in spin direction
 
