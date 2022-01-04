@@ -255,7 +255,7 @@ def erg_xep_get_dist(tname,
                              axis=2)  # repeated across n_times
 
     dist['dtheta'] = np.full(shape=np.insert(dim_array, dim_array.shape[0],
-                                             n_times), fill_value=11.25)  # ;; 11.25 deg is set for the moment calculation
+                                             n_times), fill_value=20.)  # ;; 20 deg (+/- 10 deg)  as a constant
 
     dist['n_theta'] = dim_array[2]
 
