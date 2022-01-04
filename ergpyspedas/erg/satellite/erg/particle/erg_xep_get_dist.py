@@ -237,9 +237,9 @@ def erg_xep_get_dist(tname,
     """
     dist['phi'] = np.fmod((phi0 + 360.), 360.)
     dist['dphi'] = np.full(shape=np.insert(dim_array, dim_array.shape[0],
-                                           n_times), fill_value=11.25)
+                                           n_times), fill_value=22.5)
 
-    del phi0, phi_ofst_for_sv  # ;; Clean huge arrays
+    del phi0  # ;; Clean huge arrays
 
     dist['n_phi'] = dim_array[1]
 
