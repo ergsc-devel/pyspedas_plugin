@@ -141,22 +141,22 @@ def erg_xep_get_dist(tname,
     dist['end_time'] = dist['time'] + integ_time  # ;; currently hard-coded
 
     """
-    ;; Shuffle the original data array [time,spin phase,energy,apd] to
-    ;; be energy-azimuth-elevation-time.
+    ;; Shuffle the original data array [time,energy,spin phase] to
+    ;; be energy-azimuth-time.
     ;; The factor 1d-3 is to convert [/keV-s-sr-cm2] (default unit of
-    ;; MEP-e Lv2 flux data) to [/eV-s-sr-cm2]
+    ;; XEP Lv2 2dflux data) to [/eV-s-sr-cm2].
+    ;; Again only SSD channels are used (0:11 for ene. ch.).
     """
-    dist['data'] = data_in[1][[index]].transpose([2, 1, 3, 0]) * 1e-3
+    dist['data'] = data_in[1][tuple([index])].transpose([1, 2, 0]) * 1e-3
 
     dist['bins'] = np.ones(shape=np.insert(dim_array, dim_array.shape[0],
                                            n_times), dtype='int8')
     # must be set or data will be consider invalid
 
     """
-    ;; Energy ch. 0 is excluded due to difficulty in defining
-    ;; the representative energy and energy bin width.
+    ;; No invalid ch is set for XEP currently.
     """
-    dist['bins'][0] = 0
+    #  ;; dist['bins'][0] = 0
 
     #  ;; Energy ch
     e0_array = data_in[3] * 1e+3  # ;; [keV] 
