@@ -193,12 +193,10 @@ def erg_xep_get_dist(tname,
 
     de_array = e0bnd_p-e0bnd_m  # ;; width of energy bin [9]
     de_reform = np.reshape(de_array, [dim_array[0], 1, 1])
-    de_rebin1 = np.repeat(de_reform, dim_array[2],
-                         axis=2)  # repeated across apd(elevation)
-    de_rebin2 = np.repeat(de_rebin1, dim_array[1],
+    de_rebin1 = np.repeat(de_reform, dim_array[1],
                          axis=1)  # repeated across spin phase(azimuth)
-    dist['denergy'] = np.repeat(de_rebin2, n_times,
-                         axis=3)  # repeated across n_times
+    dist['denergy'] = np.repeat(de_rebin1, n_times,
+                         axis=2)  # repeated across n_times
 
     dist['n_energy'] = dim_array[0]
 
