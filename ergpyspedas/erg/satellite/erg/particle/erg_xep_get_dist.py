@@ -9,7 +9,6 @@ from pyspedas.utilities.time_string import time_string
 from pytplot import get_data
 from scipy import interpolate
 
-from .get_mepe_flux_angle_in_sga import get_mepe_flux_angle_in_sga
 
 logging.captureWarnings(True)
 logging.basicConfig(format='%(asctime)s: %(message)s',
