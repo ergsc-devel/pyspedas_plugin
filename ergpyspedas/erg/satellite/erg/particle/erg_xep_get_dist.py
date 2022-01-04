@@ -238,20 +238,21 @@ def erg_xep_get_dist(tname,
     dist['phi'] = np.fmod((phi0 + 360.), 360.)
     dist['dphi'] = np.full(shape=np.insert(dim_array, dim_array.shape[0],
                                            n_times), fill_value=22.5)
+    #  ;; 22.5 deg as a constant
 
     del phi0  # ;; Clean huge arrays
 
     dist['n_phi'] = dim_array[1]
 
     #  ;; elevation angle
-    elev = angarr[0, 1, :]  # ;; [(apd)]
-    elev_reform = np.reshape(elev, [1, 1, dim_array[2], 1])
+    elev = np.array([angarr[0, 1]])  # ;; [(1)]
+    elev_reform = np.reshape(elev, [1, 1, 1])
     elev_rebin1 = np.repeat(elev_reform, dim_array[1],
                              axis=1)  # repeated across spin phase(azimuth)
     elev_rebin2 = np.repeat(elev_rebin1, dim_array[0],
                              axis=0)  # repeated across energy
     dist['theta'] = np.repeat(elev_rebin2, n_times,
-                             axis=3)  # repeated across n_times
+                             axis=2)  # repeated across n_times
 
     dist['dtheta'] = np.full(shape=np.insert(dim_array, dim_array.shape[0],
                                              n_times), fill_value=11.25)  # ;; 11.25 deg is set for the moment calculation
