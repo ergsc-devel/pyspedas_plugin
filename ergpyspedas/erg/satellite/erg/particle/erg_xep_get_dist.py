@@ -100,7 +100,7 @@ def erg_xep_get_dist(tname,
     """
 
     # ;; to [ energy, spin phase(azimuth), apd(elevation) ]
-    dim_array = np.array(data_in[1].shape[1:])[[1, 0, 2]]
+    dim_array = np.array(data_in[1].shape[1:])
 
     n_sp = dim_array[1]  # ;; # of spin phases in 1 spin
 
@@ -159,15 +159,13 @@ def erg_xep_get_dist(tname,
     #  ;; dist['bins'][0] = 0
 
     #  ;; Energy ch
-    e0_array = data_in[3] * 1e+3  # ;; [keV] 
-                            #(default of MEP-e Lv2 flux data) to [eV]
-    energy_reform = np.reshape(e0_array, [dim_array[0], 1, 1, 1])
-    energy_rebin1 = np.repeat(energy_reform, dim_array[2],
-                             axis=2)  # repeated across apd(elevation)
-    energy_rebin2 = np.repeat(energy_rebin1, dim_array[1],
-                              axis=1)  # repeated across spin phase(azimuth)
-    dist['energy'] = np.repeat(energy_rebin2, n_times,
-                              axis=3)  # repeated across n_times
+    e0_array = data_in[2] * 1e+3  # ;; [MeV] 
+                            # (default of XEP Lv2 FEDU tplot var) to [eV]
+    energy_reform = np.reshape(e0_array, [dim_array[0], 1, 1])
+    energy_rebin1 = np.repeat(energy_reform, dim_array[1],
+                             axis=1)  # repeated across apd(elevation)
+    dist['energy'] =  np.repeat(energy_rebin1, n_times,
+                              axis=2)  # repeated across n_times
 
     #  ;; Energy bin width
     e0bnd = np.sqrt(e0_array[:-1] * e0_array[1:])
