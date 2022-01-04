@@ -56,7 +56,7 @@ def erg_xep_get_dist(tname,
         print('Problem extracting the mepe 3dflux data.')
         return 0
     else:
-        if len(data_in) != 3:
+        if len(data_in) != 4:
             print(f'Variable: {input_name} contains wrong number of elements!')
 
     # ;; Return time labels
@@ -150,7 +150,7 @@ def erg_xep_get_dist(tname,
     ;;   dim[ nenergy, nspinph(azimuth), napd(elevation), ntime]
     """
 
-    dist['time'] = data_in[0][[index]]
+    dist['time'] = data_in[0][tuple([index])]
     dist['end_time'] = dist['time'] + integ_time  # ;; currently hard-coded
 
     """
