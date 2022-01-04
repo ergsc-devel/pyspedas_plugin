@@ -159,7 +159,8 @@ def erg_xep_get_dist(tname,
     ;; XEP Lv2 2dflux data) to [/eV-s-sr-cm2].
     ;; Again only SSD channels are used (0:11 for ene. ch.).
     """
-    dist['data'] = data_in[1][tuple([index])].transpose([1, 2, 0]) * 1e-3
+    dist['data'] = data_in[1][tuple([index])].reshape(
+                    n_times, dim_array[0], dim_array[1]).transpose([1, 2, 0]) * 1e-3
 
     dist['bins'] = np.ones(shape=np.insert(dim_array, dim_array.shape[0],
                                            n_times), dtype='int8')
