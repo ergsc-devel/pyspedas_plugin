@@ -115,6 +115,7 @@ def erg_xep_get_dist(tname,
     """
 
     dim_array = np.array(data_in[1].shape[1:])  #  ;; [energy, spin phase(azimuth) ]
+    # ;;dim_array[0] = 12  #  ;; Use only the SSD channels for now
 
     if species.lower() == 'e':
         mass = 5.68566e-06
