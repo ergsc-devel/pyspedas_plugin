@@ -2,6 +2,7 @@
 import logging
 
 import numpy as np
+from copy import deepcopy
 from pyspedas import tnames
 from pyspedas.utilities.time_double import time_double
 from pyspedas.utilities.time_string import time_string
@@ -33,15 +34,14 @@ def erg_xep_get_dist(tname,
     level = level.lower()
     """
     ;; Extract some information from a tplot variable name
-    ;; e.g., erg_mepe_l2_3dflux_FEDU
+    ;; e.g., erg_xep_l2_FEDU_SSD
     """
 
     vn_info = input_name.split('_')
     instrument = vn_info[1]
     level = vn_info[2]
-    vn_spph = '_'.join(vn_info[0:4]) + '_spin_phase'
 
-    if instrument == 'mepe':
+    if instrument == 'xep':
         species = 'e'
     else:
         print(f'ERROR: given an invalid tplot variable: {input_name}')
@@ -55,10 +55,25 @@ def erg_xep_get_dist(tname,
     if data_in is None:
         print('Problem extracting the mepe 3dflux data.')
         return 0
+    else:
+        if len(data_in) != 3:
+            print(f'Variable: {input_name} contains wrong number of elements!')
 
     # ;; Return time labels
     if time_only:
         return data_in[0]
+
+    #  ;; Estimate the spin periods
+    t_phtime = deepcopy(data_in[0])
+    sc0_dt = t_phtime[1:] - t_phtime[:-1]
+    sc0_dt = np.insert(sc0_dt, sc0_dt.shape[0], sc0_dt[-1])
+    n_times = len(t_phtime)
+    sctintgt = np.repeat(np.array([sc0_dt / 16.]).T, 16, axis=1)
+    phtime = np.repeat(np.array([t_phtime]).T, 16, axis=1)\
+            + sctintgt\
+            * np.repeat(np.array([np.arange(16,dtype = 'float')]),
+                        n_times, axis=0)
+
 
     if single_time is not None:
         single_time_double = time_double(single_time)
@@ -95,20 +110,17 @@ def erg_xep_get_dist(tname,
     """
     ;; --------------------------------------------------------------
 
-    ;; MEPe data arr: [9550(time), 32(spin phase), 16(energy), 16(apd)]
+    ;; XEP data arr: [10080(time), 9(energy), 16(spin ph)]
     ;; Dimensions
     """
 
-    # ;; to [ energy, spin phase(azimuth), apd(elevation) ]
-    dim_array = np.array(data_in[1].shape[1:])
-
-    n_sp = dim_array[1]  # ;; # of spin phases in 1 spin
+    dim_array = np.array(data_in[1].shape[1:])  #  ;; [energy, spin phase(azimuth) ]
 
     if species.lower() == 'e':
         mass = 5.68566e-06
         charge = -1.
-        data_name = 'MEP-e Electron 3dflux'
-        integ_time = 7.99 / 32 / 16  # ;; currently hard-coded
+        data_name = 'XEP Electron 2dflux'
+        integ_time = 7.99 / 16  # ;; currently hard-coded
     else:
         print('given species is not supported by this routine.')
         return 0
