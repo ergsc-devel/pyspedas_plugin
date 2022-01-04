@@ -204,45 +204,38 @@ def erg_xep_get_dist(tname,
    
     #  ;; azimuthal angle in spin direction
 
-    angarr = get_mepe_flux_angle_in_sga()
-    phissi = angarr[1, 1, :] - (90. + 21.6)  # ;; [(apd)]
-    spinph_ofst = data_in[2] * 11.25
+    angarr = np.zeros(shape=(2,3))
+    angarr[1] = 90.-10.  # ;; these angles should be given as particle flux dirs.
+    
+    spinper = sc0_dt[tuple([index])]  # ;; spin period [n_times]
+    if spinper.size == 1:
+        spinper = np.array([spinper])
+    rel_sct_time = np.zeros(shape=(n_times, 16))
+    rel_sct_time = phtime[tuple([index])] + sctintgt[tuple([index])] / 2.\
+                    - np.repeat(np.reshape( phtime[tuple([index]), 0],
+                                    (n_times, 1)), 16, axis=1)
+    
+    phissi = np.array([angarr[1, 1]]) - (90. + 21.6)  # ;; [(1)]
+    
+    spinph_ofst = (rel_sct_time / np.repeat(spinper.reshape(n_times, 1), 16, axis=1)).T * 360.
 
-    phi0_1_reform = np.reshape(phissi, [1, 1, dim_array[2], 1])
+    phi0_1_reform = np.reshape(phissi, [1, 1, 1])
     phi0_1_rebin1 = np.repeat(phi0_1_reform, dim_array[1],
                              axis=1)  # repeated across spin phase(azimuth)
-
     phi0_1_rebin2 = np.repeat(phi0_1_rebin1, dim_array[0],
                              axis=0)  # repeated across energy
     phi0_1 = np.repeat(phi0_1_rebin2,     n_times,
-                              axis=3)  # repeated across n_times
-    phi0_2_reform = np.reshape(spinph_ofst, [1, dim_array[1], 1, 1])
-    phi0_2_rebin1 = np.repeat(phi0_2_reform, dim_array[2],
-                             axis=2)  # repeated across apd(elevation)
-   
-    phi0_2_rebin2 = np.repeat(phi0_2_rebin1, dim_array[0],
+                              axis=2)  # repeated across n_times
+    phi0_2_reform = np.reshape(spinph_ofst, [1, dim_array[1], n_times])
+    phi0_2 = np.repeat(phi0_2_reform, dim_array[0],
                              axis=0)  # repeated across energy
-    phi0_2 = np.repeat(phi0_2_rebin2, n_times,
-                              axis=3)  # repeated across n_times
     phi0 = phi0_1 + phi0_2
 
-    ofst_sv = (np.arange(dim_array[0]) + 0.5) * \
-        11.25/dim_array[0]  # ;; [(energy)]
-    phi_ofst_for_sv_reform = np.reshape(ofst_sv, [dim_array[0], 1, 1, 1])
-    phi_ofst_for_sv_rebin1 = np.repeat(
-        phi_ofst_for_sv_reform, dim_array[2],
-                                 axis=2)  # repeated across apd(elevation)
-
-    phi_ofst_for_sv_rebin2 = np.repeat(
-        phi_ofst_for_sv_rebin1,dim_array[1],
-                                 axis=1)  # repeated across spin phase(azimuth)
-    phi_ofst_for_sv = np.repeat(phi_ofst_for_sv_rebin2,         n_times,
-                                 axis=3)  # repeated across n_times
     """
     ;;  phi angle for the start of each spin phase
-    ;;    + offset angle foreach sv step
+    ;;    + offset angle for each spin phase
     """
-    dist['phi'] = np.fmod((phi0 + phi_ofst_for_sv + 360.), 360.)
+    dist['phi'] = np.fmod((phi0 + 360.), 360.)
     dist['dphi'] = np.full(shape=np.insert(dim_array, dim_array.shape[0],
                                            n_times), fill_value=11.25)
 
