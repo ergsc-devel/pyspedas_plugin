@@ -181,18 +181,18 @@ def erg_xep_get_dist(tname,
                               axis=2)  # repeated across n_times
 
     #  ;; Energy bin width
-    e0bnd = np.sqrt(e0_array[:-1] * e0_array[1:])
-    # ;; [16]  upper boundary of energy bin
-    e0bnd_p = np.insert(e0bnd, 0, e0bnd[0])
-    e0bnd_p[[0, 1]] = e0_array[1] + (e0_array[1]-e0bnd[1])
+    e0bnd = np.sqrt(e0_array[:-1] * e0_array[1:])  # ;;[8]
+    # ;; [9]  upper boundary of energy bin
+    e0bnd_p = np.insert(e0bnd, e0bnd.shape[0], e0bnd[7])
+    e0bnd_p[8] = e0_array[8] + (e0_array[8]-e0bnd[7])
 
-    # ;; [16] lower boundary of energy bin
-    e0bnd_m = np.insert(e0bnd, e0bnd.shape[0], e0bnd[-1])
+    # ;; [9] lower boundary of energy bin
+    e0bnd_m = np.insert(e0bnd, 0, e0bnd[0])
     e0bnd_m[0] = e0bnd_m[1]
-    e0bnd_m[15] = e0_array[15] - (e0bnd[14]-e0_array[15])
+    e0bnd_m[0] = e0_array[0] - (e0bnd[0]-e0_array[0])
 
-    de_array = e0bnd_p-e0bnd_m  # ;; width of energy bin
-    de_reform = np.reshape(de_array, [dim_array[0], 1, 1, 1])
+    de_array = e0bnd_p-e0bnd_m  # ;; width of energy bin [9]
+    de_reform = np.reshape(de_array, [dim_array[0], 1, 1])
     de_rebin1 = np.repeat(de_reform, dim_array[2],
                          axis=2)  # repeated across apd(elevation)
     de_rebin2 = np.repeat(de_rebin1, dim_array[1],
