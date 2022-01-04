@@ -257,6 +257,6 @@ def erg_xep_get_dist(tname,
     dist['dtheta'] = np.full(shape=np.insert(dim_array, dim_array.shape[0],
                                              n_times), fill_value=20.)  # ;; 20 deg (+/- 10 deg)  as a constant
 
-    dist['n_theta'] = dim_array[2]
+    dist['n_theta'] = 1
 
     return dist
