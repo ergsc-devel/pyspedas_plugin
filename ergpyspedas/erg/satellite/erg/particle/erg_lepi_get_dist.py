@@ -50,7 +50,7 @@ def erg_lepi_get_dist(tname,
         elif arrnm == 'FODU':
             species = 'oplus'
         else:
-            print(f'RROR: given an invalid tplot variable: {input_name}')
+            print(f'ERROR: given an invalid tplot variable: {input_name}')
 
     # ;; Get a reference to data and metadata
 
