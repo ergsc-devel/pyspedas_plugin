@@ -20,7 +20,7 @@ def erg_lepe_get_dist(tname,
                       index=None,
                       units='flux',
                       level='l2',
-                      species='proton',
+                      species='e',
                       time_only=False,
                       single_time=None,
                       trange=None):
