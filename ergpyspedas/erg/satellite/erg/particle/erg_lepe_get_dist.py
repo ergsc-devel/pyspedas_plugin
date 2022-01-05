@@ -157,6 +157,7 @@ def erg_lepe_get_dist(tname,
         id_array = np.argwhere(np.isfinite(enec0_array))
         if len(id_array) < 2:
             continue
+        #  ;sorting and picks up only uniq elements. nominally 30, 28, 5, 4.
         enec_array = np.sort(np.unique(enec0_array[id_array[:,0].tolist()]))
         n_enec = enec_array.size
         if (n_enec < 3) or (np.nansum(enec_array) < 0.):
