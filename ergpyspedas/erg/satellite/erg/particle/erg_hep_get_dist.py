@@ -26,8 +26,7 @@ def erg_hep_get_dist(tname,
                       trange=None,
                       new_effic=False,
                       w_sct015=False,
-                      exclude_azms=False,
-                      flip_the_of_ssd3=False):
+                      exclude_azms=False):
     if len(tnames(tname)) > 0:
         input_name = tnames(tname)[0]
     else:
