@@ -71,13 +71,13 @@ def gmag_isee_fluxgate(
         for data_type_in in datatype:
             fres = data_type_in
             if fres == '64hz':
-                file_res = 3600. * 24
+                file_res = 3600.
                 pathformat = 'ground/geomag/isee/fluxgate/'+fres+'/'+site_input\
                                 +'/%Y/%m/isee_fluxgate_'+fres+'_'+site_input+'_%Y%m%d%H_v??.cdf'
             if fres == '1h':
                 fres = '1min'
             if (fres == '1sec') or (fres == '1min'):
-                file_res = 3600.
+                file_res = 3600. * 24
                 pathformat = 'ground/geomag/isee/fluxgate/'+fres+'/'+site_input\
                                 +'/%Y/isee_fluxgate_'+fres+'_'+site_input+'_%Y%m%d_v??.cdf'
             if notplot:
