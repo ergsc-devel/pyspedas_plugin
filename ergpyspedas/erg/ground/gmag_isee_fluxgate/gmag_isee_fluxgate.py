@@ -7,9 +7,9 @@ from ...satellite.erg.load import load
 
 
 def gmag_isee_fluxgate(
-    trange=['2006-11-20', '2006-11-21'],
+    trange=['2020-08-01', '2020-08-02'],
     suffix='',
-    site='msr kag',
+    site='all',
     datatype='1min',
     get_support_data=False,
     varformat=None,
@@ -51,8 +51,11 @@ def gmag_isee_fluxgate(
 
     
     if isinstance(site, str):
-        site_code = site.lower()
-        site_code = site.split(' ')
+        if site == 'all':
+            site_code = site_code_all
+        else:
+            site_code = site.lower()
+            site_code = site.split(' ')
     elif isinstance(site, list):
         site_code = []
         for i in range(len(site)):
