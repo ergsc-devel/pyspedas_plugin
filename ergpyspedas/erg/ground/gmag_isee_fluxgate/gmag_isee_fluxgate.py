@@ -115,17 +115,23 @@ def gmag_isee_fluxgate(
                     print('printing PI info and rules of the road was failed')
                 
             if (not downloadonly) and (not notplot):
-                current_tplot_name = prefix+'hdz_'+fres+'_' + site_input+suffix
-                if current_tplot_name in loaded_data:
-                    get_data_vars = get_data(current_tplot_name)
-                    if get_data_vars is None:
-                        store_data(current_tplot_name, delete=True)
-                    else:
-                        new_tplot_name = prefix+'mag_'+site_input+'_'+fres+'_hdz'+suffix
-                        store_data(prefix+'hdz_'+fres+'_' + site_input+suffix, newname=new_tplot_name)
-                        clip(new_tplot_name, -1e+4, 1e+4)
-                        options(new_tplot_name, 'legend_names', ['H','D','Z'])
-                        options(new_tplot_name, 'Color', ['b', 'g', 'r'])
-                        options(new_tplot_name, 'ytitle', '\n'.join(new_tplot_name.split('_')))
+                if fres == '1min':
+                    fres_list = ['1min', '1h']
+                else:
+                    fres_list = [fres]
+                for fres_in in fres_list:
+                    current_tplot_name = prefix+'hdz_'+fres_in+'_' + site_input+suffix
+                    if current_tplot_name in loaded_data:
+                        get_data_vars = get_data(current_tplot_name)
+                        if get_data_vars is None:
+                            store_data(current_tplot_name, delete=True)
+                        else:
+                            new_tplot_name = prefix+'mag_'+site_input+'_'+fres_in+'_hdz'+suffix
+                            store_data(prefix+'hdz_'+fres_in+'_' + site_input+suffix, newname=new_tplot_name)
+                            clip(new_tplot_name, -1e+4, 1e+4)
+                            options(new_tplot_name, 'legend_names', ['H','D','Z'])
+                            options(new_tplot_name, 'Color', ['b', 'g', 'r'])
+                            options(new_tplot_name, 'ytitle', '\n'.join(new_tplot_name.split('_')))
+
 
     return loaded_data
