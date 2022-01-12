@@ -1,6 +1,7 @@
 import cdflib
 import numpy as np
 
+from copy import deepcopy
 from pytplot import get_data, store_data, options, clip, ylim
 
 from ...satellite.erg.load import load
@@ -19,10 +20,12 @@ def gmag_isee_induction(
     uname=None,
     passwd=None,
     time_clip=False,
-    ror=True
+    ror=True,
+    frequency_dependent=False
 ):
 
     site_code_all = ['ath', 'gak', 'hus', 'kap', 'lcl', 'mgd', 'msr', 'nai', 'ptk', 'rik', 'sta', 'zgn']
+
 
 
     if isinstance(site, str):
@@ -36,6 +39,17 @@ def gmag_isee_induction(
         for i in range(len(site)):
             site_code.append(site[i].lower())
     site_code = list(set(site_code).intersection(site_code_all))
+
+    if frequency_dependent:
+        frequency_dependent_structure = {}
+        for site_in in site_code:
+            frequency_dependent_structure[site_in] = {
+                'site_code':'',
+                'nfreq':0,
+                'frequency':np.zeros(shape=(64)),
+                'sensitivity':np.zeros(shape=(64,3)),
+                'phase_difference':np.zeros(shape=(64,3))
+            }
 
     prefix = 'isee_induction_'
     if notplot:
@@ -83,6 +97,7 @@ def gmag_isee_induction(
             except:
                 print('printing PI info and rules of the road was failed')
             
+        
         if (not downloadonly) and (not notplot):
 
             tplot_name = prefix+'db_dt_' + site_input+suffix
@@ -93,6 +108,24 @@ def gmag_isee_induction(
                 options(tplot_name, 'legend_names', ['dH/dt','dD/dt','dZ/dt'])
                 options(tplot_name, 'Color', ['b', 'g', 'r'])
                 options(tplot_name, 'ytitle', '\n'.join(tplot_name.split('_')))
+                
+                if frequency_dependent:
+                    
+                    meta_data_var = get_data(tplot_name,metadata=True)
 
+                    if meta_data_var is not None:
+                        cdf_file = cdflib.CDF(meta_data_var['CDF']['FILENAME'])
+                        cdfcont = cdf_file.varget('frequency', inq=True)
+                        ffreq = cdf_file.varget('frequency')
+                        ssensi=cdf_file.varget('sensitivity')
+                        pphase=cdf_file.varget('phase_difference')
+                        frequency_dependent_structure[site_in]['site_code'] = site_in
+                        frequency_dependent_structure[site_in]['nfreq'] = cdfcont['max_records'] + 1
+                        frequency_dependent_structure[site_in]['frequency'][0:ffreq.shape[0]] = deepcopy(ffreq)
+                        frequency_dependent_structure[site_in]['sensitivity'][0:ssensi.shape[0]] = deepcopy(ssensi)
+                        frequency_dependent_structure[site_in]['phase_difference'][0:pphase.shape[0]] = deepcopy(pphase)
 
-    return loaded_data
+    if frequency_dependent:
+        return frequency_dependent_structure
+    else:
+        return loaded_data
