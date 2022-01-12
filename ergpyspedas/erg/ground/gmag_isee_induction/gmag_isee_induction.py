@@ -7,7 +7,7 @@ from ...satellite.erg.load import load
 
 
 def gmag_isee_induction(
-    trange=['2008-02-28/00:00:00','2008-02-28/02:00:00'],
+    trange=['2018-10-18/00:00:00','2018-10-18/02:00:00'],
     suffix='',
     site='all',
     get_support_data=False,
