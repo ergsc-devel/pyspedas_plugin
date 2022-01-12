@@ -72,13 +72,13 @@ def gmag_isee_induction(
                 print('PI and Host PI(s):')
                 print(gatt["PI_name"])
                 print('')
-                print('Affiliations: ')
+                print('Affiliation: ')
                 print(gatt["PI_affiliation"])
                 print('')
-                print('Rules of the Road for ISEE Fluxgate Data Use:')
+                print('Rules of the Road for ISEE Induction Magnetometer Data Use:')
                 for gatt_text in gatt["TEXT"]:
                     print(gatt_text)
-                print(f'{gatt["LINK_TEXT"]} {gatt["HTTP_LINK"]}')
+                print(gatt["LINK_TEXT"])
                 print('**************************************************************************')
             except:
                 print('printing PI info and rules of the road was failed')
