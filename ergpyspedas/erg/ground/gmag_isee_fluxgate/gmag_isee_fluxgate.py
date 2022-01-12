@@ -55,7 +55,7 @@ def gmag_isee_fluxgate(
             site_code = site_code_all
         else:
             site_code = site.lower()
-            site_code = site.split(' ')
+            site_code = site_code.split(' ')
     elif isinstance(site, list):
         site_code = []
         for i in range(len(site)):
