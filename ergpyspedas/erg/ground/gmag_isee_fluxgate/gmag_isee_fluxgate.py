@@ -1,7 +1,7 @@
 import cdflib
 import numpy as np
 
-from pytplot import get_data, store_data, options, clip
+from pytplot import get_data, store_data, options, clip, ylim
 
 from ...satellite.erg.load import load
 
@@ -129,6 +129,8 @@ def gmag_isee_fluxgate(
                             new_tplot_name = prefix+'mag_'+site_input+'_'+fres_in+'_hdz'+suffix
                             store_data(prefix+'hdz_'+fres_in+'_' + site_input+suffix, newname=new_tplot_name)
                             clip(new_tplot_name, -1e+4, 1e+4)
+                            get_data_vars = get_data(new_tplot_name)
+                            ylim(new_tplot_name, np.nanmin(get_data_vars[1]), np.nanmax(get_data_vars[1]))
                             options(new_tplot_name, 'legend_names', ['H','D','Z'])
                             options(new_tplot_name, 'Color', ['b', 'g', 'r'])
                             options(new_tplot_name, 'ytitle', '\n'.join(new_tplot_name.split('_')))
