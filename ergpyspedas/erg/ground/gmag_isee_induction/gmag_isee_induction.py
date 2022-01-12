@@ -1,7 +1,7 @@
 import cdflib
 import numpy as np
 
-from pytplot import get_data, store_data, options, clip
+from pytplot import get_data, store_data, options, clip, ylim
 
 from ...satellite.erg.load import load
 
@@ -83,24 +83,16 @@ def gmag_isee_induction(
             except:
                 print('printing PI info and rules of the road was failed')
             
-        """if (not downloadonly) and (not notplot):
-            if fres == '1min':
-                fres_list = ['1min', '1h']
-            else:
-                fres_list = [fres]
-            for fres_in in fres_list:
-                current_tplot_name = prefix+'hdz_'+fres_in+'_' + site_input+suffix
-                if current_tplot_name in loaded_data:
-                    get_data_vars = get_data(current_tplot_name)
-                    if get_data_vars is None:
-                        store_data(current_tplot_name, delete=True)
-                    else:
-                        new_tplot_name = prefix+'mag_'+site_input+'_'+fres_in+'_hdz'+suffix
-                        store_data(prefix+'hdz_'+fres_in+'_' + site_input+suffix, newname=new_tplot_name)
-                        clip(new_tplot_name, -1e+4, 1e+4)
-                        options(new_tplot_name, 'legend_names', ['H','D','Z'])
-                        options(new_tplot_name, 'Color', ['b', 'g', 'r'])
-                        options(new_tplot_name, 'ytitle', '\n'.join(new_tplot_name.split('_')))"""
+        if (not downloadonly) and (not notplot):
+
+            tplot_name = prefix+'db_dt_' + site_input+suffix
+            if tplot_name in loaded_data:
+                clip(tplot_name, -1e+4, 1e+4)
+                get_data_vars = get_data(tplot_name)
+                ylim(tplot_name, np.nanmin(get_data_vars[1]), np.nanmax(get_data_vars[1]))
+                options(tplot_name, 'legend_names', ['dH/dt','dD/dt','dZ/dt'])
+                options(tplot_name, 'Color', ['b', 'g', 'r'])
+                options(tplot_name, 'ytitle', '\n'.join(tplot_name.split('_')))
 
 
     return loaded_data
