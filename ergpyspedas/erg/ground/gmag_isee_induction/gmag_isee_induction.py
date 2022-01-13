@@ -42,8 +42,8 @@ def gmag_isee_induction(
 
     if frequency_dependent:
         frequency_dependent_structure = {}
-        for site_in in site_code:
-            frequency_dependent_structure[site_in] = {
+        for site_input in site_code:
+            frequency_dependent_structure[site_input] = {
                 'site_code':'',
                 'nfreq':0,
                 'frequency':np.zeros(shape=(64)),
@@ -119,11 +119,11 @@ def gmag_isee_induction(
                         ffreq = cdf_file.varget('frequency')
                         ssensi=cdf_file.varget('sensitivity')
                         pphase=cdf_file.varget('phase_difference')
-                        frequency_dependent_structure[site_in]['site_code'] = site_in
-                        frequency_dependent_structure[site_in]['nfreq'] = cdfcont['max_records'] + 1
-                        frequency_dependent_structure[site_in]['frequency'][0:ffreq.shape[0]] = deepcopy(ffreq)
-                        frequency_dependent_structure[site_in]['sensitivity'][0:ssensi.shape[0]] = deepcopy(ssensi)
-                        frequency_dependent_structure[site_in]['phase_difference'][0:pphase.shape[0]] = deepcopy(pphase)
+                        frequency_dependent_structure[site_input]['site_code'] = site_input
+                        frequency_dependent_structure[site_input]['nfreq'] = cdfcont['max_records'] + 1
+                        frequency_dependent_structure[site_input]['frequency'][0:ffreq.shape[0]] = deepcopy(ffreq)
+                        frequency_dependent_structure[site_input]['sensitivity'][0:ssensi.shape[0]] = deepcopy(ssensi)
+                        frequency_dependent_structure[site_input]['phase_difference'][0:pphase.shape[0]] = deepcopy(pphase)
 
     if frequency_dependent:
         return frequency_dependent_structure
