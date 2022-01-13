@@ -4,7 +4,7 @@ import numpy as np
 from copy import deepcopy
 from pytplot import get_data, store_data, options, clip, ylim
 
-from ...satellite.erg.load import load
+from ....satellite.erg.load import load
 
 
 def sdfit(
@@ -20,17 +20,19 @@ def sdfit(
     uname=None,
     passwd=None,
     time_clip=False,
-    ror=True,
-    frequency_dependent=False
+    ror=True
 ):
 
-    site_code_all = ['ath', 'gak', 'hus', 'kap', 'lcl', 'mgd', 'msr', 'nai', 'ptk', 'rik', 'sta', 'zgn']
+    valid_sites = [ 'ade', 'adw', 'bks', 'bpk', 'cly', 'cve', 'cvw', 'dce', 'fhe',
+    'fhw', 'fir', 'gbr', 'hal', 'han', 'hok', 'hkw', 'inv', 'kap', 'ker', 'kod',
+    'ksr', 'mcm', 'pgr', 'pyk', 'rkn', 'san', 'sas', 'sps', 'sto', 'sye',
+    'sys', 'tig', 'unw', 'wal', 'zho', 'lyr' ]
 
 
 
     if isinstance(site, str):
         if site == 'all':
-            site_code = site_code_all
+            site_code = valid_sites
         else:
             site_code = site.lower()
             site_code = site_code.split(' ')
@@ -38,20 +40,8 @@ def sdfit(
         site_code = []
         for i in range(len(site)):
             site_code.append(site[i].lower())
-    site_code = list(set(site_code).intersection(site_code_all))
+    site_code = list(set(site_code).intersection(valid_sites))
 
-    if frequency_dependent:
-        frequency_dependent_structure = {}
-        for site_input in site_code:
-            frequency_dependent_structure[site_input] = {
-                'site_code':'',
-                'nfreq':0,
-                'frequency':np.zeros(shape=(64)),
-                'sensitivity':np.zeros(shape=(64,3)),
-                'phase_difference':np.zeros(shape=(64,3))
-            }
-
-    prefix = 'isee_induction_'
     if notplot:
         loaded_data = {}
     else:
@@ -59,9 +49,10 @@ def sdfit(
     
     for site_input in site_code:
 
-        file_res = 3600.
-        pathformat = 'ground/geomag/isee/induction/'+site_input\
-                        +'/%Y/%m/isee_induction_'+site_input+'_%Y%m%d%H_v??.cdf'
+        prefix = 'sd_' + site_input + '_'
+        file_res = 3600. * 24.
+        pathformat = 'ground/radar/sd/fitacf/'+site_input\
+                        +'/%Y/sd_fitacf_l2_'+site_input+'_%Y%m%d*.cdf'
 
         if notplot:
             loaded_data.update(load(pathformat=pathformat, file_res=file_res, trange=trange, prefix=prefix, suffix='_'+site_input+suffix, get_support_data=get_support_data,
@@ -69,7 +60,7 @@ def sdfit(
         else:
             loaded_data += load(pathformat=pathformat, file_res=file_res, trange=trange, prefix=prefix, suffix='_'+site_input+suffix, get_support_data=get_support_data,
                         varformat=varformat, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
-        if (len(loaded_data) > 0) and ror:
+        """if (len(loaded_data) > 0) and ror:
             try:
                 if isinstance(loaded_data, list):
                     if downloadonly:
@@ -107,25 +98,6 @@ def sdfit(
                 ylim(tplot_name, np.nanmin(get_data_vars[1]), np.nanmax(get_data_vars[1]))
                 options(tplot_name, 'legend_names', ['dH/dt','dD/dt','dZ/dt'])
                 options(tplot_name, 'Color', ['b', 'g', 'r'])
-                options(tplot_name, 'ytitle', '\n'.join(tplot_name.split('_')))
-                
-                if frequency_dependent:
-                    
-                    meta_data_var = get_data(tplot_name,metadata=True)
+                options(tplot_name, 'ytitle', '\n'.join(tplot_name.split('_')))"""
 
-                    if meta_data_var is not None:
-                        cdf_file = cdflib.CDF(meta_data_var['CDF']['FILENAME'])
-                        cdfcont = cdf_file.varget('frequency', inq=True)
-                        ffreq = cdf_file.varget('frequency')
-                        ssensi=cdf_file.varget('sensitivity')
-                        pphase=cdf_file.varget('phase_difference')
-                        frequency_dependent_structure[site_input]['site_code'] = site_input
-                        frequency_dependent_structure[site_input]['nfreq'] = cdfcont['max_records'] + 1
-                        frequency_dependent_structure[site_input]['frequency'][0:ffreq.shape[0]] = deepcopy(ffreq)
-                        frequency_dependent_structure[site_input]['sensitivity'][0:ssensi.shape[0]] = deepcopy(ssensi)
-                        frequency_dependent_structure[site_input]['phase_difference'][0:pphase.shape[0]] = deepcopy(pphase)
-
-    if frequency_dependent:
-        return frequency_dependent_structure
-    else:
-        return loaded_data
+    return loaded_data
