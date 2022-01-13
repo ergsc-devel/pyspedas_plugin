@@ -148,9 +148,10 @@ def sdfit(
                 options(prefix + 'vlos_err_' + number_string + suffix, 'ytitle', site_input_upper+'\nall beams')
                 options(prefix + 'vlos_err_' + number_string + suffix, 'ysubtitle', '[range gate]')
                 options(prefix + 'vlos_err_' + number_string + suffix, 'ztitle', 'Vlos err [m/s]')
-                options(prefix + 'elev_angle_' + number_string + suffix, 'ytitle', site_input_upper+'\nall beams')
-                options(prefix + 'elev_angle_' + number_string + suffix, 'ysubtitle', '[range gate]')
-                options(prefix + 'elev_angle_' + number_string + suffix, 'ztitle', 'Elev. angle [deg]')
+                if prefix + 'elev_angle_' + number_string + suffix in loaded_data:  # one of get_support_data
+                    options(prefix + 'elev_angle_' + number_string + suffix, 'ytitle', site_input_upper+'\nall beams')
+                    options(prefix + 'elev_angle_' + number_string + suffix, 'ysubtitle', '[range gate]')
+                    options(prefix + 'elev_angle_' + number_string + suffix, 'ztitle', 'Elev. angle [deg]')
                 options(prefix + 'echo_flag_' + number_string + suffix, 'ytitle', site_input_upper+'\nall beams')
                 options(prefix + 'echo_flag_' + number_string + suffix, 'ysubtitle', '[range gate]')
                 options(prefix + 'echo_flag_' + number_string + suffix, 'ztitle', '1: iono. echo')
