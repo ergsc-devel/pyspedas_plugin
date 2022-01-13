@@ -12,5 +12,5 @@ from .satellite.erg.pwe.pwe_ofa import pwe_ofa
 from .satellite.erg.pwe.pwe_wfc import pwe_wfc
 from .satellite.erg.xep.xep import xep
 
-from .ground.gmag_isee_fluxgate.gmag_isee_fluxgate import gmag_isee_fluxgate
-from .ground.gmag_isee_induction.gmag_isee_induction import gmag_isee_induction
+from .ground.geomag.gmag_isee_fluxgate import gmag_isee_fluxgate
+from .ground.geomag.gmag_isee_induction import gmag_isee_induction
