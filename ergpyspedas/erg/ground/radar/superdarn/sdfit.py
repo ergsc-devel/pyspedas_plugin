@@ -138,6 +138,7 @@ def sdfit(
                                     'v2':np.arange(vlos_notplot_dictionary[vlos_tplot_name]['y'].shape[2])},
                                 attr_dict={'CDF':vlos_notplot_dictionary[vlos_tplot_name]['CDF']})
 
+                        options(vlos_tplot_name, 'spec', 1)
                         loaded_data.append(vlos_tplot_name)
                 options(prefix + 'vlos_' + number_string + suffix, 'ytitle', site_input_upper+'\nall beams')
                 options(prefix + 'vlos_' + number_string + suffix, 'ysubtitle', '[range gate]')
@@ -159,5 +160,28 @@ def sdfit(
                 options(prefix + 'quality_flag_' + number_string + suffix, 'ysubtitle', '[range gate]')
                 options(prefix + 'quality_flag_' + number_string + suffix, 'ztitle', 'quality flg')
 
+                #;Split vlos_? tplot variable into 3 components
+                get_data_vlos = get_data(prefix + 'vlos_' + number_string + suffix)
+                get_metadata_vlos = get_data(prefix + 'vlos_' + number_string + suffix, metadata=True)
+                store_data(prefix + 'vlos_' + number_string + suffix,
+                            data={'x':get_data_vlos[0],
+                                  'y':get_data_vlos[1][:, :, 2],
+                                  'v':get_data_vlos[2]},
+                            attr_dict=get_metadata_vlos)
+                options(prefix + 'vlos_' + number_string + suffix, 'ztitle', 'LOS Doppler vel. [m/s]')
+                store_data(prefix + 'vnorth_' + number_string + suffix,
+                            data={'x':get_data_vlos[0],
+                                  'y':get_data_vlos[1][:, :, 0],
+                                  'v':get_data_vlos[2]},
+                            attr_dict=get_metadata_vlos)
+                options(prefix + 'vnorth_' + number_string + suffix, 'ztitle', 'LOS V Northward [m/s]')
+                loaded_data.append(prefix + 'vnorth_' + number_string + suffix)
+                store_data(prefix + 'veast_' + number_string + suffix,
+                            data={'x':get_data_vlos[0],
+                                  'y':get_data_vlos[1][:, :, 1],
+                                  'v':get_data_vlos[2]},
+                            attr_dict=get_metadata_vlos)
+                options(prefix + 'veast_' + number_string + suffix, 'ztitle', 'LOS V Eastward [m/s]')
+                loaded_data.append(prefix + 'veast_' + number_string + suffix)
 
     return loaded_data
