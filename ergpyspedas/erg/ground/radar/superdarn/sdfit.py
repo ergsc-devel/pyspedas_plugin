@@ -138,6 +138,7 @@ def sdfit(
                                     'v2':np.arange(vlos_notplot_dictionary[vlos_tplot_name]['y'].shape[2])},
                                 attr_dict={'CDF':vlos_notplot_dictionary[vlos_tplot_name]['CDF']})
 
+                        clip(vlos_tplot_name, -9000, 9000)
                         options(vlos_tplot_name, 'spec', 1)
                         loaded_data.append(vlos_tplot_name)
                 options(prefix + 'vlos_' + number_string + suffix, 'ytitle', site_input_upper+'\nall beams')
