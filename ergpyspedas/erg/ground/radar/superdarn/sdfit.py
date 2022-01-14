@@ -44,7 +44,8 @@ def sdfit(
     uname=None,
     passwd=None,
     time_clip=False,
-    ror=True
+    ror=True,
+    compact=False
 ):
 
     valid_sites = [ 'ade', 'adw', 'bks', 'bpk', 'cly', 'cve', 'cvw', 'dce', 'fhe',
@@ -373,6 +374,19 @@ def sdfit(
                             store_data(t_plot_name, data={'x':input_tplot_time_array,
                                             'y':position_tbl_dictionary[t_plot_suffix_number]['cnttbl_input']})
                             loaded_data.append(t_plot_name)
+
+
+    if compact:  #;Leave only minimal set of the variables if compact=True.
+        search_var_list = ['*cpid*', '*channel*', '*int_time*', '*azim_no*', '*pwr_err*', '*spec_width_err*',
+                            '*vlos_err*', '*elev_angle*', '*elev_angle_err*', '*phi0*', '*phi0_err*', 
+                            '*echo_flag*', '*quality*', '*quality_flag*', '*scanno*', '*scanstartflag*',
+                            '*lagfr*', '*smsep*', '*nrang_max*', '*tfreq*', '*noise*', '*num_ave*', '*txpl*',
+                            '*vnorth*', '*veast*', '*vlos_bothscat*', '*vlos_iscat*', '*vlos_gscat*',
+                            '*vnorth_iscat*', '*vnorth_gscat*', '*vnorth_bothscat*', '*veast_iscat*',
+                            '*veast_gscat*', '*veast_bothscat*', '*position_tbl*', '*positioncnt_tbl*']
+        delete_tplot_name_list = list(set(tnames(search_var_list)).intersection(loaded_data))
+        store_data(delete_tplot_name_list, delete=True)
+        loaded_data = list(set(loaded_data).difference(delete_tplot_name_list))
 
 
     return loaded_data
