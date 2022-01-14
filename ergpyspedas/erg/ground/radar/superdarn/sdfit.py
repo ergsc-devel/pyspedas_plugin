@@ -205,16 +205,17 @@ def sdfit(
                     options(prefix + v_var + 'iscat_' + number_string + suffix, 'ztitle', ' ')
                     options(prefix + v_var + 'iscat_' + number_string + suffix, 'spec', 1)
                     loaded_data.append(prefix + v_var + 'iscat_' + number_string + suffix)
+                    metadata_for_gscat = deepcopy(v_var_metadata)
+                    metadata_for_gscat['plot_options']['extras']['fill_color'] = 5  #options like, 'fill_color:5' in IDL, have not implemented.
                     store_data(prefix + v_var + 'gscat_' + number_string + suffix,
                             data={'x':v_var_data[0],
                                   'y':g_data_y,
                                   'v':v_var_data[2]},
-                            attr_dict=v_var_metadata)
+                            attr_dict=metadata_for_gscat)
                     options(prefix + v_var + 'gscat_' + number_string + suffix, 'ytitle', ' ')
                     options(prefix + v_var + 'gscat_' + number_string + suffix, 'ysubtitle', ' ')
                     options(prefix + v_var + 'gscat_' + number_string + suffix, 'ztitle', ' ')
                     options(prefix + v_var + 'gscat_' + number_string + suffix, 'spec', 1)
-                    #  options like, 'fill_color:5' in IDL, have not implemented.
                     loaded_data.append(prefix + v_var + 'gscat_' + number_string + suffix)
                     store_data(prefix + v_var + 'bothscat_' + number_string + suffix,
                             data=[prefix + v_var + 'iscat_' + number_string + suffix,
