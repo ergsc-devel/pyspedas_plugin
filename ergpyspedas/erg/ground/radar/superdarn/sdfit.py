@@ -2,7 +2,7 @@ import cdflib
 import numpy as np
 
 from copy import deepcopy
-from pytplot import get_data, store_data, options, clip, ylim
+from pytplot import get_data, store_data, options, clip, ylim, zlim
 from pyspedas import tnames
 
 from ....satellite.erg.load import load
@@ -226,6 +226,33 @@ def sdfit(
                     Because, options like, 'fill_color:5' of IDL for '*gscat_*' have not implemented.
                     """
 
-
+                #;Set the z range explicitly for some tplot variables
+                zlim(prefix + 'pwr_' + number_string + suffix, 0., 30.)
+                zlim(prefix + 'pwr_err_' + number_string + suffix, 0., 30.)
+                zlim(prefix + 'spec_width_' + number_string + suffix, 0., 200.)
+                zlim(prefix + 'spec_width_err_' + number_string + suffix, 0., 300.)
+                
+                # zlim for '*vlos_*scat_*'
+                t_names_raw = tnames(prefix + 'vlos_*scat_' + number_string + suffix)
+                t_names_remove_space = [t_name.split(' ')[0] for t_name in t_names_raw]
+                t_plot_name_list = list(set(t_names_remove_space).intersection(loaded_data))
+                for t_plot_name in t_plot_name_list:
+                    zlim(t_plot_name, -400., 400.)
+                
+                # zlim for '*vnorth_*scat_*'
+                t_names_raw = tnames(prefix + 'vnorth_*scat_' + number_string + suffix)
+                t_names_remove_space = [t_name.split(' ')[0] for t_name in t_names_raw]
+                t_plot_name_list = list(set(t_names_remove_space).intersection(loaded_data))
+                for t_plot_name in t_plot_name_list:
+                    zlim(t_plot_name, -400., 400.)
+                
+                # zlim for '*veast_*scat_*'
+                t_names_raw = tnames(prefix + 'veast_*scat_' + number_string + suffix)
+                t_names_remove_space = [t_name.split(' ')[0] for t_name in t_names_raw]
+                t_plot_name_list = list(set(t_names_remove_space).intersection(loaded_data))
+                for t_plot_name in t_plot_name_list:
+                    zlim(t_plot_name, -400., 400.)
+                
+                zlim(prefix + 'vlos_err_' + number_string + suffix, 0., 300.)
 
     return loaded_data
