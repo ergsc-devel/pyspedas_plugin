@@ -255,4 +255,23 @@ def sdfit(
                 
                 zlim(prefix + 'vlos_err_' + number_string + suffix, 0., 300.)
 
+                # ;Fill values --> NaN
+                get_data_vars_pwr = get_data(prefix + 'pwr_' + number_string + suffix)
+                if get_data_vars_pwr is not None:
+                    pwr_y = deepcopy(get_data_vars_pwr[1])
+                    indices_array_tuple = np.where(np.isfinite(pwr_y) == False)
+                    var_name_list = ['echo_flag_', 'quality_', 'quality_flag_']
+                    for var_name in var_name_list:
+                        t_plot_name = prefix + var_name + number_string + suffix
+                        get_data_vars = get_data(t_plot_name)
+                        get_metadata_vars = get_data(t_plot_name, metadata=True)
+                        if get_data_vars is not None:
+                            val_array = deepcopy(get_data_vars[1].astype(np.float64))
+                            val_array[indices_array_tuple] = np.nan
+                            store_data(t_plot_name, data={'x':get_data_vars[0],
+                                                        'y':val_array,
+                                                        'v':get_data_vars[2]},
+                                    attr_dict=get_metadata_vars)
+
+
     return loaded_data
