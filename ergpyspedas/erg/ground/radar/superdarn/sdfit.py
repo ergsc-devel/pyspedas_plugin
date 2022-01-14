@@ -273,5 +273,29 @@ def sdfit(
                                                         'v':get_data_vars[2]},
                                     attr_dict=get_metadata_vars)
 
+                #;Reassign scan numbers for the combined data
+                if (prefix + 'scanstartflag_' + number_string + suffix in loaded_data)\
+                   and (prefix + 'scanno_' + number_string + suffix in loaded_data):  # need to get_support_data=True
+                    t_plot_name = prefix + 'scanstartflag_' + number_string + suffix
+                    scanstartflag_data = get_data(t_plot_name)
+                    if scanstartflag_data is not None:
+                        scflg = abs(scanstartflag_data[1])
+                        try:
+                            scno = np.full(shape=scflg.shape, fill_value=-1, dtype=np.int64)
+                        except:
+                            scno = np.full(shape=scflg.shape, fill_value=-1, dtype=np.int32)
+                        scno_t = 0
+                        scno[0] = scno_t
+                        gt_1_indices_array = np.where(scflg > 0)[0]
+                        for i in range(gt_1_indices_array.size - 1):
+                            scno[gt_1_indices_array[i]:gt_1_indices_array[i+1]] = i
+                        scno[gt_1_indices_array[i+1]:] = i + 1
+                        t_plot_name = prefix + 'scanno_' + number_string + suffix
+                        get_data_var_scanno = get_data(t_plot_name)
+                        if get_data_var_scanno is not None:
+                            get_metadata_var_scanno = get_data(t_plot_name, metadata=True)
+                            store_data(t_plot_name, data={'x':get_data_var_scanno[0],
+                                                          'y':scno},
+                                                    attr_dict=get_metadata_var_scanno)
 
     return loaded_data
