@@ -148,7 +148,7 @@ def sdfit(
                 options(prefix + 'vlos_err_' + number_string + suffix, 'ytitle', site_input_upper+'\nall beams')
                 options(prefix + 'vlos_err_' + number_string + suffix, 'ysubtitle', '[range gate]')
                 options(prefix + 'vlos_err_' + number_string + suffix, 'ztitle', 'Vlos err [m/s]')
-                if prefix + 'elev_angle_' + number_string + suffix in loaded_data:  # one of get_support_data
+                if prefix + 'elev_angle_' + number_string + suffix in loaded_data:  # need to get_support_data=True
                     options(prefix + 'elev_angle_' + number_string + suffix, 'ytitle', site_input_upper+'\nall beams')
                     options(prefix + 'elev_angle_' + number_string + suffix, 'ysubtitle', '[range gate]')
                     options(prefix + 'elev_angle_' + number_string + suffix, 'ztitle', 'Elev. angle [deg]')
