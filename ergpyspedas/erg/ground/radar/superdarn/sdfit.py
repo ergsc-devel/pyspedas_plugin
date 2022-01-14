@@ -334,6 +334,13 @@ def sdfit(
             get_metadata_vars = get_data(loaded_data[-1], metadata=True)
             if get_metadata_vars is not None:
                 datfiles = deepcopy(get_metadata_vars['CDF']['FILENAME'])
+                position_tbl_dictionary = {}
+                for i in range(10):
+                    position_tbl_dictionary[str(i)] = {
+                        'time_input':[],
+                        'tbl_input':[],
+                        'cnttbl_input':[]
+                    }
                 if len(datfiles) > 0:
                     for file_name in datfiles:
                         cdf_file = cdflib.CDF(file_name)
@@ -343,9 +350,43 @@ def sdfit(
                         ptblvn = fnmatch.filter(all_cdf_variables, 'position_tbl_?')
                         timevn.sort()
                         ptblvn.sort()
-                        tv_name = timevn[0]
-                        pv_name = ptblvn[0]
-                        time_array = cdf_file.varget(tv_name)
-                        tbl_array = cdf_file.varget(pv_name)
+                        for j in range(len(ptblvn)):
+                            tv_name = timevn[j]
+                            stblno = tv_name.split('_')[-1]
+                            pv_name = ptblvn[j]
+                            time_array = cdf_file.varget(tv_name)
+                            tbl_array = cdf_file.varget(pv_name)
+                            cnttbl = get_pixel_cntr(tbl_array)
+                            position_tbl_dictionary[stblno]['time_input'] += [time_array[0], time_array[-1]]
+                            dim_tuple = tbl_array.shape
+                            tbl2_array = tbl_array.reshape(1, dim_tuple[0], dim_tuple[1], dim_tuple[2])
+                            cnttbl2_array = cnttbl.reshape(1, dim_tuple[0] - 1, dim_tuple[1] - 1, dim_tuple[2])
+                            if len(position_tbl_dictionary[stblno]['tbl_input']) == 0:
+                                position_tbl_dictionary[stblno]['tbl_input'] = np.concatenate(
+                                                                                [tbl2_array,tbl2_array],
+                                                                                axis=0)
+                            else:
+                                position_tbl_dictionary[stblno]['tbl_input'] = np.concatenate([position_tbl_dictionary[stblno]['tbl_input']
+                                                                                            ,tbl2_array,tbl2_array],axis=0)
+                            if len(position_tbl_dictionary[stblno]['cnttbl_input']) == 0:
+                                position_tbl_dictionary[stblno]['cnttbl_input'] = np.concatenate([cnttbl2_array,cnttbl2_array],axis=0)
+                            else:
+                                position_tbl_dictionary[stblno]['cnttbl_input'] = np.concatenate([position_tbl_dictionary[stblno]['cnttbl_input']
+                                                                                            ,cnttbl2_array,cnttbl2_array],axis=0)
+    
+                    #######
+                    for t_plot_suffix_number in position_tbl_dictionary.keys():
+                        if len(position_tbl_dictionary[t_plot_suffix_number]['time_input']) >= 2:
+                            input_tplot_time_array= np.array(position_tbl_dictionary[t_plot_suffix_number]['time_input'])\
+                                                    / 1000. - 719528. * 24.* 3600.
+                            t_plot_name = prefix + 'position_tbl_' + t_plot_suffix_number + suffix
+                            store_data(t_plot_name, data={'x':input_tplot_time_array,
+                                            'y':position_tbl_dictionary[t_plot_suffix_number]['tbl_input']})
+                            loaded_data.append(t_plot_name)
+                            t_plot_name = prefix + 'positioncnt_tbl_' + t_plot_suffix_number + suffix
+                            store_data(t_plot_name, data={'x':input_tplot_time_array,
+                                            'y':position_tbl_dictionary[t_plot_suffix_number]['cnttbl_input']})
+                            loaded_data.append(t_plot_name)
+
 
     return loaded_data
