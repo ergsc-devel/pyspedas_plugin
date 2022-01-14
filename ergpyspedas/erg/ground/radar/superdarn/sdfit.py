@@ -9,6 +9,27 @@ from pyspedas import tnames
 
 from ....satellite.erg.load import load
 
+from .get_sphcntr import get_sphcntr
+
+"""
+;Internal routine to get the table of the pixel
+;centers from the table of the pixel corners.
+"""
+def get_pixel_cntr(tbl_array):
+    dim_tuple = tbl_array.shape
+    rgmax = dim_tuple[0] - 1
+    azmax = dim_tuple[1] - 1
+    cnttbl = np.zeros(shape=(rgmax, azmax, 2))
+    for i in range(rgmax):
+        for j in range(azmax):
+            axis_0_indices_array = np.repeat(np.array([[i, i + 1, i + 1, i]]).T,4,1).T.reshape(16)
+            axis_1_indices_array = np.array([j] * 8 + [j + 1] * 8)
+            lonarr=tbl_array[tuple([axis_0_indices_array, axis_1_indices_array, 0])].reshape(4,4)
+            latarr=tbl_array[tuple([axis_0_indices_array, axis_1_indices_array, 1])].reshape(4,4)
+            pos_array = get_sphcntr(latarr, lonarr)
+            cnttbl[i, j, 1] = pos_array[0]
+            cnttbl[i, j, 0] = pos_array[1]
+    return cnttbl
 
 def sdfit(
     trange=['2018-10-18/00:00:00','2018-10-18/02:00:00'],
