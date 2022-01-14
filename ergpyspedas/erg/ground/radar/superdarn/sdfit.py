@@ -1,4 +1,6 @@
 import cdflib
+import fnmatch
+
 import numpy as np
 
 from copy import deepcopy
@@ -298,5 +300,31 @@ def sdfit(
                             store_data(t_plot_name, data={'x':get_data_var_scanno[0],
                                                           'y':scno},
                                                     attr_dict=get_metadata_var_scanno)
+
+            """
+            ;Load the position table(s) ;;;;;;;;;;;;;;;;;;
+            ;Currently supports SD fitacf CDFs containing up to 4 pos. tables.
+            """
+            tbllist = ['tbl_0', 'tbl_1' , 'tbl_2', 'tbl_3', 'tbl_4',
+            'tbl_5', 'tbl_6' , 'tbl_7', 'tbl_8', 'tbl_9' ]
+            timelist = ['time_0','time_1','time_2','time_3', 'time_4',
+            'time_5','time_6','time_7','time_8','time_9']
+
+            get_metadata_vars = get_data(loaded_data[-1], metadata=True)
+            if get_metadata_vars is not None:
+                datfiles = deepcopy(get_metadata_vars['CDF']['FILENAME'])
+                if len(datfiles) > 0:
+                    for file_name in datfiles:
+                        cdf_file = cdflib.CDF(file_name)
+                        cdf_info = cdf_file.cdf_info()
+                        all_cdf_variables = cdf_info['rVariables'] + cdf_info['zVariables']
+                        timevn = fnmatch.filter(all_cdf_variables, 'Epoch_?')
+                        ptblvn = fnmatch.filter(all_cdf_variables, 'position_tbl_?')
+                        timevn.sort()
+                        ptblvn.sort()
+                        tv_name = timevn[0]
+                        pv_name = ptblvn[0]
+                        time_array = cdf_file.varget(tv_name)
+                        tbl_array = cdf_file.varget(pv_name)
 
     return loaded_data
