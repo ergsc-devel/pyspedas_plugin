@@ -374,7 +374,6 @@ def sdfit(
                                 position_tbl_dictionary[stblno]['cnttbl_input'] = np.concatenate([position_tbl_dictionary[stblno]['cnttbl_input']
                                                                                             ,cnttbl2_array,cnttbl2_array],axis=0)
     
-                    #######
                     for t_plot_suffix_number in position_tbl_dictionary.keys():
                         if len(position_tbl_dictionary[t_plot_suffix_number]['time_input']) >= 2:
                             input_tplot_time_array= np.array(position_tbl_dictionary[t_plot_suffix_number]['time_input'])\
