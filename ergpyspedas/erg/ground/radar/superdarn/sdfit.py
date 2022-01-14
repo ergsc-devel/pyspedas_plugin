@@ -78,41 +78,28 @@ def sdfit(
         pathformat = 'ground/radar/sd/fitacf/'+site_input\
                         +'/%Y/sd_fitacf_l2_'+site_input+'_%Y%m%d*.cdf'
 
+        loaded_data_temp = load(pathformat=pathformat, file_res=file_res, trange=trange, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
+                    varformat=varformat, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
         if notplot:
-            loaded_data.update(load(pathformat=pathformat, file_res=file_res, trange=trange, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
-                        varformat=varformat, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd))
+            loaded_data.update(loaded_data_temp)
         else:
-            loaded_data += load(pathformat=pathformat, file_res=file_res, trange=trange, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
-                        varformat=varformat, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
-        """if (len(loaded_data) > 0) and ror:
+            loaded_data += loaded_data_temp
+        if (len(loaded_data_temp) > 0) and ror:
             try:
-                if isinstance(loaded_data, list):
+                if isinstance(loaded_data_temp, list):
                     if downloadonly:
-                        cdf_file = cdflib.CDF(loaded_data[-1])
+                        cdf_file = cdflib.CDF(loaded_data_temp[-1])
                         gatt = cdf_file.globalattsget()
                     else:
-                        gatt = get_data(loaded_data[-1], metadata=True)['CDF']['GATT']
-                elif isinstance(loaded_data, dict):
-                    gatt = loaded_data[list(loaded_data.keys())[-1]]['CDF']['GATT']
-                print('**************************************************************************')
-                print(gatt["Logical_source_description"])
-                print('')
-                print(f'Information about {gatt["Station_code"]}')
-                print('PI and Host PI(s):')
-                print(gatt["PI_name"])
-                print('')
-                print('Affiliation: ')
-                print(gatt["PI_affiliation"])
-                print('')
-                print('Rules of the Road for ISEE Induction Magnetometer Data Use:')
-                for gatt_text in gatt["TEXT"]:
-                    print(gatt_text)
-                print(gatt["LINK_TEXT"])
-                print('**************************************************************************')
+                        gatt = get_data(loaded_data_temp[-1], metadata=True)['CDF']['GATT']
+                elif isinstance(loaded_data_temp, dict):
+                    gatt = loaded_data_temp[list(loaded_data_temp.keys())[-1]]['CDF']['GATT']
+                print('############## RULES OF THE ROAD ################')
+                print(gatt["Rules_of_use"])
+                print('############## RULES OF THE ROAD ################')
             except:
                 print('printing PI info and rules of the road was failed')
-            
-        """
+
 
         if (not downloadonly) and (not notplot):
 
