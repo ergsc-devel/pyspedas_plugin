@@ -29,15 +29,15 @@ def gmag_isee_induction(
 
 
     if isinstance(site, str):
-        if site == 'all':
-            site_code = site_code_all
-        else:
-            site_code = site.lower()
-            site_code = site_code.split(' ')
+        site_code = site.lower()
+        site_code = site_code.split(' ')
     elif isinstance(site, list):
         site_code = []
         for i in range(len(site)):
             site_code.append(site[i].lower())
+    if 'all' in site_code:
+        site_code = site_code_all
+
     site_code = list(set(site_code).intersection(site_code_all))
 
     if frequency_dependent:
