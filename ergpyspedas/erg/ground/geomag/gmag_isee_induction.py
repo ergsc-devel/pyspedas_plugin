@@ -63,22 +63,23 @@ def gmag_isee_induction(
         pathformat = 'ground/geomag/isee/induction/'+site_input\
                         +'/%Y/%m/isee_induction_'+site_input+'_%Y%m%d%H_v??.cdf'
 
-        if notplot:
-            loaded_data.update(load(pathformat=pathformat, file_res=file_res, trange=trange, prefix=prefix, suffix='_'+site_input+suffix, get_support_data=get_support_data,
-                        varformat=varformat, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd))
-        else:
-            loaded_data += load(pathformat=pathformat, file_res=file_res, trange=trange, prefix=prefix, suffix='_'+site_input+suffix, get_support_data=get_support_data,
+        loaded_data_temp = load(pathformat=pathformat, file_res=file_res, trange=trange, prefix=prefix, suffix='_'+site_input+suffix, get_support_data=get_support_data,
                         varformat=varformat, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
-        if (len(loaded_data) > 0) and ror:
+        
+        if notplot:
+            loaded_data.update(loaded_data_temp)
+        else:
+            loaded_data += loaded_data_temp
+        if (len(loaded_data_temp) > 0) and ror:
             try:
-                if isinstance(loaded_data, list):
+                if isinstance(loaded_data_temp, list):
                     if downloadonly:
-                        cdf_file = cdflib.CDF(loaded_data[-1])
+                        cdf_file = cdflib.CDF(loaded_data_temp[-1])
                         gatt = cdf_file.globalattsget()
                     else:
-                        gatt = get_data(loaded_data[-1], metadata=True)['CDF']['GATT']
-                elif isinstance(loaded_data, dict):
-                    gatt = loaded_data[list(loaded_data.keys())[-1]]['CDF']['GATT']
+                        gatt = get_data(loaded_data_temp[-1], metadata=True)['CDF']['GATT']
+                elif isinstance(loaded_data_temp, dict):
+                    gatt = loaded_data_temp[list(loaded_data_temp.keys())[-1]]['CDF']['GATT']
                 print('**************************************************************************')
                 print(gatt["Logical_source_description"])
                 print('')
