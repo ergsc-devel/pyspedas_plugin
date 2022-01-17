@@ -385,8 +385,9 @@ def sdfit(
                             '*vnorth_iscat*', '*vnorth_gscat*', '*vnorth_bothscat*', '*veast_iscat*',
                             '*veast_gscat*', '*veast_bothscat*', '*position_tbl*', '*positioncnt_tbl*']
         delete_tplot_name_list = list(set(tnames(search_var_list)).intersection(loaded_data))
-        store_data(delete_tplot_name_list, delete=True)
-        loaded_data = list(set(loaded_data).difference(delete_tplot_name_list))
+        if len(delete_tplot_name_list) > 0:
+            store_data(delete_tplot_name_list, delete=True)
+            loaded_data = list(set(loaded_data).difference(delete_tplot_name_list))
 
 
     return loaded_data
