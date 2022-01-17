@@ -56,15 +56,14 @@ def sdfit(
 
 
     if isinstance(site, str):
-        if site == 'all':
-            site_code = valid_sites
-        else:
-            site_code = site.lower()
-            site_code = site_code.split(' ')
+        site_code = site.lower()
+        site_code = site_code.split(' ')
     elif isinstance(site, list):
         site_code = []
         for i in range(len(site)):
             site_code.append(site[i].lower())
+    if 'all' in site_code:
+        site_code = valid_sites
     site_code = list(set(site_code).intersection(valid_sites))
 
     if notplot:
