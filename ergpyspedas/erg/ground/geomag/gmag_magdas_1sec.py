@@ -28,15 +28,14 @@ def gmag_magdas_1sec(
                      'onw', 'ptk', 'wad', 'yap']
     tres_all=['1sec']
     if isinstance(datatype, str):
-        if datatype == 'all':
-            datatype=tres_all
-        else:
-            datatype = datatype.lower()
-            datatype = datatype.split(' ')
+        datatype = datatype.lower()
+        datatype = datatype.split(' ')
     elif isinstance(datatype, list):
         for i in range(len(datatype)):
             datatype[i] = datatype[i].lower()
 
+    if 'all' in datatype:
+        datatype=tres_all
     datatype = list(set(datatype).intersection(tres_all))
     if len(datatype) < 1:
         return
@@ -46,15 +45,14 @@ def gmag_magdas_1sec(
         datatype[index] = '1sec'
     
     if isinstance(site, str):
-        if site == 'all':
-            site_code = site_code_all
-        else:
-            site_code = site.lower()
-            site_code = site_code.split(' ')
+        site_code = site.lower()
+        site_code = site_code.split(' ')
     elif isinstance(site, list):
         site_code = []
         for i in range(len(site)):
             site_code.append(site[i].lower())
+    if 'all' in site_code:
+        site_code = site_code_all
     site_code = list(set(site_code).intersection(site_code_all))
 
     prefix = 'magdas_'
