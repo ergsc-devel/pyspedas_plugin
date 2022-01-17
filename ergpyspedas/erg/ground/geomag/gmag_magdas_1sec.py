@@ -104,27 +104,25 @@ def gmag_magdas_1sec(
                     print('**************************************************************************')
                 except:
                     print('printing PI info and rules of the road was failed')
-                
+                """
             if (not downloadonly) and (not notplot):
-                if fres == '1min':
-                    fres_list = ['1min', '1h']
-                else:
-                    fres_list = [fres]
-                for fres_in in fres_list:
-                    current_tplot_name = prefix+'hdz_'+fres_in+'_' + site_input+suffix
-                    if current_tplot_name in loaded_data:
-                        get_data_vars = get_data(current_tplot_name)
-                        if get_data_vars is None:
-                            store_data(current_tplot_name, delete=True)
-                        else:
-                            new_tplot_name = prefix+'mag_'+site_input+'_'+fres_in+'_hdz'+suffix
-                            store_data(prefix+'hdz_'+fres_in+'_' + site_input+suffix, newname=new_tplot_name)
-                            clip(new_tplot_name, -1e+4, 1e+4)
-                            get_data_vars = get_data(new_tplot_name)
-                            ylim(new_tplot_name, np.nanmin(get_data_vars[1]), np.nanmax(get_data_vars[1]))
-                            options(new_tplot_name, 'legend_names', ['H','D','Z'])
-                            options(new_tplot_name, 'Color', ['b', 'g', 'r'])
-                            options(new_tplot_name, 'ytitle', '\n'.join(new_tplot_name.split('_')))"""
+                current_tplot_name = prefix+'hdz_'+fres+'_' + site_input+suffix
+                if current_tplot_name in loaded_data:
+                    #;--- Rename *** HDZ
+                    new_tplot_name = prefix+'mag_'+site_input+'_'+fres+'_hdz'+suffix
+                    store_data(current_tplot_name, newname=new_tplot_name)
+                    loaded_data.remove(current_tplot_name)
+                    loaded_data.append(new_tplot_name)
+                    #;--- Missing data -1.e+31 --> NaN
+                    clip(new_tplot_name, -7e+4, 7e+4)
+                    get_data_vars = get_data(new_tplot_name)
+                    ylim(new_tplot_name, -np.nanmax(abs(get_data_vars[1])) * 1.1, np.nanmax(abs(get_data_vars[1])) * 1.1)
+                    #;--- Labels
+                    options(new_tplot_name, 'legend_names', ['H','D','Z'])
+                    options(new_tplot_name, 'Color', ['b', 'g', 'r'])
+                    options(new_tplot_name, 'ytitle', '\n'.join(new_tplot_name.split('_')))
+                
+
 
 
     return loaded_data
