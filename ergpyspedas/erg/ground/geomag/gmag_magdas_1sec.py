@@ -28,7 +28,7 @@ def gmag_magdas_1sec(
                      'onw', 'ptk', 'wad', 'yap']
     tres_all=['1sec']
     if isinstance(datatype, str):
-        if site == 'all':
+        if datatype == 'all':
             datatype=tres_all
         else:
             datatype = datatype.lower()
