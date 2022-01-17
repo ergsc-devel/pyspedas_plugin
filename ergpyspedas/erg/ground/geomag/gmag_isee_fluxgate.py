@@ -10,7 +10,7 @@ def gmag_isee_fluxgate(
     trange=['2020-08-01', '2020-08-02'],
     suffix='',
     site='all',
-    datatype='1min',
+    datatype='all',
     get_support_data=False,
     varformat=None,
     varnames=[],
@@ -26,8 +26,11 @@ def gmag_isee_fluxgate(
     site_code_all = ['msr', 'rik', 'kag', 'ktb', 'lcl', 'mdm', 'tew']
     tres_all=['64hz', '1sec', '1min', '1h']
     if isinstance(datatype, str):
-        datatype = datatype.lower()
-        datatype = datatype.split(' ')
+        if site == 'all':
+            datatype=tres_all
+        else:
+            datatype = datatype.lower()
+            datatype = datatype.split(' ')
     elif isinstance(datatype, list):
         for i in range(len(datatype)):
             datatype[i] = datatype[i].lower()
