@@ -122,7 +122,19 @@ def gmag_magdas_1sec(
                     options(new_tplot_name, 'Color', ['b', 'g', 'r'])
                     options(new_tplot_name, 'ytitle', '\n'.join(new_tplot_name.split('_')))
                 
-
-
+                current_tplot_name = prefix+'f_'+fres+'_' + site_input+suffix
+                if current_tplot_name in loaded_data:
+                    #; --- Rename *** F
+                    new_tplot_name = prefix+'mag_'+site_input+'_'+fres+'_f'+suffix
+                    store_data(current_tplot_name, newname=new_tplot_name)
+                    loaded_data.remove(current_tplot_name)
+                    loaded_data.append(new_tplot_name)
+                    #;--- Missing data -1.e+31 --> NaN
+                    clip(new_tplot_name, -7e+4, 7e+4)
+                    get_data_vars = get_data(new_tplot_name)
+                    ylim(new_tplot_name, -np.nanmax(abs(get_data_vars[1])) * 1.1, np.nanmax(abs(get_data_vars[1])) * 1.1)
+                    #;--- Labels
+                    options(new_tplot_name, 'legend_names', ['F'])
+                    options(new_tplot_name, 'ytitle', '\n'.join(new_tplot_name.split('_')))
 
     return loaded_data
