@@ -14,4 +14,5 @@ from .satellite.erg.xep.xep import xep
 
 from .ground.geomag.gmag_isee_fluxgate import gmag_isee_fluxgate
 from .ground.geomag.gmag_isee_induction import gmag_isee_induction
+from .ground.geomag.gmag_stel_fluxgate import gmag_stel_fluxgate
 from .ground.radar.superdarn.sdfit import sdfit
