@@ -26,7 +26,7 @@ def gmag_isee_fluxgate(
     site_code_all = ['msr', 'rik', 'kag', 'ktb', 'lcl', 'mdm', 'tew']
     tres_all=['64hz', '1sec', '1min', '1h']
     if isinstance(datatype, str):
-        if site == 'all':
+        if datatype == 'all':
             datatype=tres_all
         else:
             datatype = datatype.lower()
@@ -132,7 +132,9 @@ def gmag_isee_fluxgate(
                             store_data(current_tplot_name, delete=True)
                         else:
                             new_tplot_name = prefix+'mag_'+site_input+'_'+fres_in+'_hdz'+suffix
-                            store_data(prefix+'hdz_'+fres_in+'_' + site_input+suffix, newname=new_tplot_name)
+                            store_data(current_tplot_name, newname=new_tplot_name)
+                            loaded_data.remove(current_tplot_name)
+                            loaded_data.append(new_tplot_name)
                             clip(new_tplot_name, -1e+4, 1e+4)
                             get_data_vars = get_data(new_tplot_name)
                             ylim(new_tplot_name, np.nanmin(get_data_vars[1]), np.nanmax(get_data_vars[1]))
