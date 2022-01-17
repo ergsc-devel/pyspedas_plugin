@@ -4,7 +4,7 @@ def gmag_stel_fluxgate(
     trange=['2020-08-01', '2020-08-02'],
     suffix='',
     site='all',
-    datatype='1min',
+    datatype='all',
     get_support_data=False,
     varformat=None,
     varnames=[],
