@@ -143,7 +143,7 @@ def gmag_nipr(
                 loaded_data.update(loaded_data_temp)
             else:
                 loaded_data += loaded_data_temp
-            """if (len(loaded_data_temp) > 0) and ror:
+            if (len(loaded_data_temp) > 0) and ror:
                 try:
                     if isinstance(loaded_data_temp, list):
                         if downloadonly:
@@ -157,20 +157,18 @@ def gmag_nipr(
                     print(gatt["Logical_source_description"])
                     print('')
                     print(f'Information about {gatt["Station_code"]}')
-                    print('PI and Host PI(s):')
-                    print(gatt["PI_name"])
+                    print(f'PI :{gatt["PI_name"]}')
                     print('')
-                    print('Affiliations: ')
-                    print(gatt["PI_affiliation"])
+                    print(f'Affiliations: {gatt["PI_affiliation"]}')
                     print('')
-                    print('Rules of the Road for ISEE Fluxgate Data Use:')
-                    for gatt_text in gatt["TEXT"]:
-                        print(gatt_text)
+                    print('Rules of the Road for NIPR Fluxgate Magnetometer Data:')
+                    print('')
+                    print(gatt["TEXT"])
                     print(f'{gatt["LINK_TEXT"]} {gatt["HTTP_LINK"]}')
                     print('**************************************************************************')
                 except:
                     print('printing PI info and rules of the road was failed')
-                """
+                
             if (not downloadonly) and (not notplot):
 
                 current_tplot_name = prefix+'hdz_'+fres+'_' + site_input+suffix
