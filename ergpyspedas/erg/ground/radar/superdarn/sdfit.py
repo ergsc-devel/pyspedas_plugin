@@ -114,7 +114,7 @@ def sdfit(
                 for t_plot_name in t_plot_name_list:
                     clip(t_plot_name, -9000, 9000)
 
-            azim_no_name_list = list(set(tnames('*azim_no_?' + suffix)).intersection(loaded_data))
+            azim_no_name_list = list(set(tnames(prefix + '*azim_no_?' + suffix)).intersection(loaded_data))
             number_string_list = []
             for azim_no_name in azim_no_name_list:
                 number_string_list.append(azim_no_name.split('_')[4][0])
