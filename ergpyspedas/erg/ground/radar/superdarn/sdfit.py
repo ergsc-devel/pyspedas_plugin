@@ -192,54 +192,55 @@ def sdfit(
                                         attr_dict=get_metadata_vlos)
                             options(prefix + 'veast_' + number_string + suffix, 'ztitle', 'LOS V Eastward [m/s]')
                             loaded_data.append(prefix + 'veast_' + number_string + suffix)
-                        if get_data_vlos[1].shape[2] >= 2:
-                            store_data(prefix + 'vlos_' + number_string + suffix,
-                                        data={'x':get_data_vlos[0],
-                                            'y':get_data_vlos[1][:, :, 2],
-                                            'v':get_data_vlos[2]},
-                                        attr_dict=get_metadata_vlos)
-                            options(prefix + 'vlos_' + number_string + suffix, 'ztitle', 'LOS Doppler vel. [m/s]')
+                            if get_data_vlos[1].shape[2] >= 2:
+                                store_data(prefix + 'vlos_' + number_string + suffix,
+                                            data={'x':get_data_vlos[0],
+                                                'y':get_data_vlos[1][:, :, 2],
+                                                'v':get_data_vlos[2]},
+                                            attr_dict=get_metadata_vlos)
+                                options(prefix + 'vlos_' + number_string + suffix, 'ztitle', 'LOS Doppler vel. [m/s]')
 
                     #;Combine iono. echo and ground echo for vlos
                     v_var_names = ['vlos_','vnorth_','veast_']
                     flag_data = get_data(prefix + 'echo_flag_' + number_string + suffix)
                     for v_var in v_var_names:
                         v_var_data = get_data(prefix + v_var + number_string + suffix)
-                        v_var_metadata = get_data(prefix + v_var + number_string + suffix, metadata=True)
-                        g_data_y = np.where(flag_data[1] == 1., np.nan, v_var_data[1])
-                        v_var_data_y = np.where(flag_data[1] != 1., np.nan, v_var_data[1])
-                        max_rg = np.nanmax(v_var_data[2]) + 1
-                        store_data(prefix + v_var + 'iscat_' + number_string + suffix,
-                                data={'x':v_var_data[0],
-                                    'y':v_var_data_y,
-                                    'v':v_var_data[2]},
-                                attr_dict=v_var_metadata)
-                        options(prefix + v_var + 'iscat_' + number_string + suffix, 'ytitle', ' ')
-                        options(prefix + v_var + 'iscat_' + number_string + suffix, 'ysubtitle', ' ')
-                        options(prefix + v_var + 'iscat_' + number_string + suffix, 'ztitle', ' ')
-                        options(prefix + v_var + 'iscat_' + number_string + suffix, 'spec', 1)
-                        loaded_data.append(prefix + v_var + 'iscat_' + number_string + suffix)
-                        metadata_for_gscat = deepcopy(v_var_metadata)
-                        metadata_for_gscat['plot_options']['extras']['fill_color'] = 5  #options like, 'fill_color:5' in IDL, have not implemented.
-                        store_data(prefix + v_var + 'gscat_' + number_string + suffix,
-                                data={'x':v_var_data[0],
-                                    'y':g_data_y,
-                                    'v':v_var_data[2]},
-                                attr_dict=metadata_for_gscat)
-                        options(prefix + v_var + 'gscat_' + number_string + suffix, 'ytitle', ' ')
-                        options(prefix + v_var + 'gscat_' + number_string + suffix, 'ysubtitle', ' ')
-                        options(prefix + v_var + 'gscat_' + number_string + suffix, 'ztitle', ' ')
-                        options(prefix + v_var + 'gscat_' + number_string + suffix, 'spec', 1)
-                        loaded_data.append(prefix + v_var + 'gscat_' + number_string + suffix)
-                        store_data(prefix + v_var + 'bothscat_' + number_string + suffix,
-                                data=[prefix + v_var + 'iscat_' + number_string + suffix,
-                                    prefix + v_var + 'gscat_' + number_string + suffix])
-                        options(prefix + v_var + 'bothscat_' + number_string + suffix, 'yrange', [0,max_rg])
-                        loaded_data.append(prefix + v_var + 'bothscat_' + number_string + suffix)
-                        """
-                        Currently, '*iscat_*' and '*bothscat_*' are almost same plot outputs.
-                        Because, options like, 'fill_color:5' of IDL for '*gscat_*' have not implemented.
-                        """
+                        if v_var_data is not None:
+                            v_var_metadata = get_data(prefix + v_var + number_string + suffix, metadata=True)
+                            g_data_y = np.where(flag_data[1] == 1., np.nan, v_var_data[1])
+                            v_var_data_y = np.where(flag_data[1] != 1., np.nan, v_var_data[1])
+                            max_rg = np.nanmax(v_var_data[2]) + 1
+                            store_data(prefix + v_var + 'iscat_' + number_string + suffix,
+                                    data={'x':v_var_data[0],
+                                        'y':v_var_data_y,
+                                        'v':v_var_data[2]},
+                                    attr_dict=v_var_metadata)
+                            options(prefix + v_var + 'iscat_' + number_string + suffix, 'ytitle', ' ')
+                            options(prefix + v_var + 'iscat_' + number_string + suffix, 'ysubtitle', ' ')
+                            options(prefix + v_var + 'iscat_' + number_string + suffix, 'ztitle', ' ')
+                            options(prefix + v_var + 'iscat_' + number_string + suffix, 'spec', 1)
+                            loaded_data.append(prefix + v_var + 'iscat_' + number_string + suffix)
+                            metadata_for_gscat = deepcopy(v_var_metadata)
+                            metadata_for_gscat['plot_options']['extras']['fill_color'] = 5  #options like, 'fill_color:5' in IDL, have not implemented.
+                            store_data(prefix + v_var + 'gscat_' + number_string + suffix,
+                                    data={'x':v_var_data[0],
+                                        'y':g_data_y,
+                                        'v':v_var_data[2]},
+                                    attr_dict=metadata_for_gscat)
+                            options(prefix + v_var + 'gscat_' + number_string + suffix, 'ytitle', ' ')
+                            options(prefix + v_var + 'gscat_' + number_string + suffix, 'ysubtitle', ' ')
+                            options(prefix + v_var + 'gscat_' + number_string + suffix, 'ztitle', ' ')
+                            options(prefix + v_var + 'gscat_' + number_string + suffix, 'spec', 1)
+                            loaded_data.append(prefix + v_var + 'gscat_' + number_string + suffix)
+                            store_data(prefix + v_var + 'bothscat_' + number_string + suffix,
+                                    data=[prefix + v_var + 'iscat_' + number_string + suffix,
+                                        prefix + v_var + 'gscat_' + number_string + suffix])
+                            options(prefix + v_var + 'bothscat_' + number_string + suffix, 'yrange', [0,max_rg])
+                            loaded_data.append(prefix + v_var + 'bothscat_' + number_string + suffix)
+                            """
+                            Currently, '*iscat_*' and '*bothscat_*' are almost same plot outputs.
+                            Because, options like, 'fill_color:5' of IDL for '*gscat_*' have not implemented.
+                            """
 
                 #;Set the z range explicitly for some tplot variables
                 zlim(prefix + 'pwr_' + number_string + suffix, 0., 30.)
