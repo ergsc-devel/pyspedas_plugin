@@ -116,7 +116,7 @@ def gmag_mm210(
                     print(f'{gatt["LINK_TEXT"]} {gatt["HTTP_LINK"]}')
                     print('**************************************************************************')
                 except:
-                    print('printing PI info and rules of the road was failed')
+                    print('printing PI info and rules of the road was failed')"""
                 
             if (not downloadonly) and (not notplot):
                 if fres == '1min':
@@ -130,16 +130,19 @@ def gmag_mm210(
                         if get_data_vars is None:
                             store_data(current_tplot_name, delete=True)
                         else:
+                            #;--- Rename
                             new_tplot_name = prefix+'mag_'+site_input+'_'+fres_in+'_hdz'+suffix
                             store_data(current_tplot_name, newname=new_tplot_name)
                             loaded_data.remove(current_tplot_name)
                             loaded_data.append(new_tplot_name)
+                            #;--- Missing data -1.e+31 --> NaN
                             clip(new_tplot_name, -1e+4, 1e+4)
                             get_data_vars = get_data(new_tplot_name)
                             ylim(new_tplot_name, np.nanmin(get_data_vars[1]), np.nanmax(get_data_vars[1]))
-                            options(new_tplot_name, 'legend_names', ['H','D','Z'])
+                            #;--- Labels
+                            options(new_tplot_name, 'legend_names', ['Ch1','Ch2','Ch3'])
                             options(new_tplot_name, 'Color', ['b', 'g', 'r'])
-                            options(new_tplot_name, 'ytitle', '\n'.join(new_tplot_name.split('_')))"""
+                            options(new_tplot_name, 'ytitle', '\n'.join(new_tplot_name.split('_')))
 
 
     return loaded_data
