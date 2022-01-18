@@ -1,7 +1,12 @@
 import cdflib
 import numpy as np
 
-from pytplot import get_data, store_data, options, clip, ylim
+from pyspedas.utilities.time_double import time_double
+from pyspedas.analysis.time_clip import time_clip as tclip
+from pyspedas.utilities.dailynames import dailynames
+from pyspedas.utilities.download import download
+
+from pytplot import get_data, store_data, options, clip, ylim, cdf_to_tplot
 
 from ...satellite.erg.load import load
 
@@ -23,8 +28,8 @@ def gmag_nipr(
     ror=True
 ):
 
-    site_code_all = ['msr', 'rik', 'kag', 'ktb', 'lcl', 'mdm', 'tew']
-    tres_all=['64hz', '1sec', '1min', '1h']
+    site_code_all = ['syo', 'hus', 'tjo', 'aed', 'isa', 'h57', 'amb', 'srm', 'ihd', 'skl', 'h68']
+    tres_all=['1sec']
     if isinstance(datatype, str):
         datatype = datatype.lower()
         datatype = datatype.split(' ')
@@ -38,20 +43,6 @@ def gmag_nipr(
     if len(datatype) < 1:
         return
 
-    if '64' in datatype:
-        index = np.where(np.array(datatype) == '64')[0][0]
-        datatype[index] = '64hz'
-    elif  '1s' in datatype:
-        index = np.where(np.array(datatype) == '1s')[0][0]
-        datatype[index] = '1sec'
-    elif  '1m' in datatype:
-        index = np.where(np.array(datatype) == '1m')[0][0]
-        datatype[index] = '1min'
-    elif  '1hr' in datatype:
-        index = np.where(np.array(datatype) == '1hr')[0][0]
-        datatype[index] = '1h'
-
-    
     if isinstance(site, str):
         site_code = site.lower()
         site_code = site_code.split(' ')
@@ -63,34 +54,95 @@ def gmag_nipr(
         site_code = site_code_all
     
     site_code = list(set(site_code).intersection(site_code_all))
-
-    prefix = 'isee_fluxgate_'
+    instr='fmag'
+    trange_0 = time_double(trange[0])
+    prefix = 'nipr_'
     if notplot:
         loaded_data = {}
     else:
         loaded_data = []
+    
     for site_input in site_code:
         for data_type_in in datatype:
-            fres = data_type_in
-            if fres == '64hz':
-                file_res = 3600.
-                pathformat = 'ground/geomag/isee/fluxgate/'+fres+'/'+site_input\
-                                +'/%Y/%m/isee_fluxgate_'+fres+'_'+site_input+'_%Y%m%d%H_v??.cdf'
-            if fres == '1h':
-                fres = '1min'
-            if (fres == '1sec') or (fres == '1min'):
-                file_res = 3600. * 24
-                pathformat = 'ground/geomag/isee/fluxgate/'+fres+'/'+site_input\
-                                +'/%Y/isee_fluxgate_'+fres+'_'+site_input+'_%Y%m%d_v??.cdf'
+            if data_type_in == '1sec':
+                if site_input == 'syo':
+                    crttime = time_double('1998-01-01')
+                    if trange_0 < crttime:
+                        fres = '2sec'
+                    else:
+                        fres = '1sec'
+                elif site_input == 'hus':
+                    crttime = time_double('2001-09-08')
+                    if trange_0 < crttime:
+                        fres = '2sec'
+                    else:
+                        fres = '02hz'
+                elif site_input == 'tjo':
+                    crttime = time_double('2001-09-12')
+                    if trange_0 < crttime:
+                        fres = '2sec'
+                    else:
+                        fres = '02hz'
+                elif site_input == 'aed':
+                    crttime = time_double('2001-09-27')
+                    if trange_0 < crttime:
+                        fres = '2sec'
+                    else:
+                        fres = '02hz'
+                elif site_input == 'isa':
+                    fres = '2sec'
+                else:
+                    fres = '1sec'
+            else:
+                fres = data_type_in
+
+            local_data_dir = 'iugonet/'
+            remote_data_dir = 'http://iugonet0.nipr.ac.jp/data/'
             
-            loaded_data_temp = load(pathformat=pathformat, file_res=file_res, trange=trange, datatype=datatype, prefix=prefix, suffix='_'+site_input+suffix, get_support_data=get_support_data,
-                            varformat=varformat, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
-            
+
+            pathformat = instr+'/'+site_input+'/'+fres\
+                            +'/%Y/nipr_'+fres+'_'+instr+'_'+site_input+'_%Y%m%d_v??.cdf'
+            remote_names = dailynames(file_format=pathformat,
+                                    trange=trange, res=3600. * 24)
+
+            out_files = []
+
+            files = download(remote_file=remote_names, remote_path=remote_data_dir, local_path=local_data_dir,
+                            no_download=no_update, last_version=True, username=uname, password=passwd)
+            if files is not None:
+                for file in files:
+                    out_files.append(file)
+
+            out_files = sorted(out_files)
+
+            if not downloadonly:
+                loaded_data_temp = cdf_to_tplot(out_files, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
+                                    varformat=varformat, varnames=varnames, notplot=notplot)
+
+                if notplot:
+                    if len(out_files) > 0:
+                        cdf_file = cdflib.CDF(out_files[-1])
+                        cdf_info = cdf_file.cdf_info()
+                        all_cdf_variables = cdf_info['rVariables'] + cdf_info['zVariables']
+                        gatt = cdf_file.globalattsget()
+                        for var in all_cdf_variables:
+                            t_plot_name = prefix + var + suffix
+                            if t_plot_name in loaded_data_temp:
+                                vatt = cdf_file.varattsget(var)
+                                loaded_data_temp[t_plot_name]['CDF'] = {'VATT':vatt,
+                                                                        'GATT':gatt,
+                                                                        'FILENAME':out_files}
+                else:
+                    if time_clip:
+                        for new_var in loaded_data_temp:
+                            tclip(new_var, trange[0], trange[1], suffix='')
+
+
             if notplot:
                 loaded_data.update(loaded_data_temp)
             else:
                 loaded_data += loaded_data_temp
-            if (len(loaded_data_temp) > 0) and ror:
+            """if (len(loaded_data_temp) > 0) and ror:
                 try:
                     if isinstance(loaded_data_temp, list):
                         if downloadonly:
@@ -139,7 +191,7 @@ def gmag_nipr(
                             ylim(new_tplot_name, np.nanmin(get_data_vars[1]), np.nanmax(get_data_vars[1]))
                             options(new_tplot_name, 'legend_names', ['H','D','Z'])
                             options(new_tplot_name, 'Color', ['b', 'g', 'r'])
-                            options(new_tplot_name, 'ytitle', '\n'.join(new_tplot_name.split('_')))
+                            options(new_tplot_name, 'ytitle', '\n'.join(new_tplot_name.split('_')))"""
 
 
     return loaded_data
