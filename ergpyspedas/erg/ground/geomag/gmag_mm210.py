@@ -90,7 +90,7 @@ def gmag_mm210(
                 loaded_data.update(loaded_data_temp)
             else:
                 loaded_data += loaded_data_temp
-            """if (len(loaded_data_temp) > 0) and ror:
+            if (len(loaded_data_temp) > 0) and ror:
                 try:
                     if isinstance(loaded_data_temp, list):
                         if downloadonly:
@@ -116,7 +116,7 @@ def gmag_mm210(
                     print(f'{gatt["LINK_TEXT"]} {gatt["HTTP_LINK"]}')
                     print('**************************************************************************')
                 except:
-                    print('printing PI info and rules of the road was failed')"""
+                    print('printing PI info and rules of the road was failed')
                 
             if (not downloadonly) and (not notplot):
                 if fres == '1min':
