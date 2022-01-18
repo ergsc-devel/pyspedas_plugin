@@ -110,7 +110,7 @@ def gmag_mm210(
                     print('Affiliations: ')
                     print(gatt["PI_affiliation"])
                     print('')
-                    print('Rules of the Road for ISEE Fluxgate Data Use:')
+                    print('Rules of the Road for 210 MM Data Use:')
                     for gatt_text in gatt["TEXT"]:
                         print(gatt_text)
                     print(f'{gatt["LINK_TEXT"]} {gatt["HTTP_LINK"]}')
