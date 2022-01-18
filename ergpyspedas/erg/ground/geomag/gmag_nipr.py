@@ -25,7 +25,8 @@ def gmag_nipr(
     uname=None,
     passwd=None,
     time_clip=False,
-    ror=True
+    ror=True,
+    fproton=False
 ):
 
     site_code_all = ['syo', 'hus', 'tjo', 'aed', 'isa', 'h57', 'amb', 'srm', 'ihd', 'skl', 'h68']
@@ -192,6 +193,32 @@ def gmag_nipr(
                         options(new_tplot_name, 'Color', ['b', 'g', 'r'])
                         options(new_tplot_name, 'ytitle', site_input.upper())
                         options(new_tplot_name, 'ysubtitle', '[nT]')
+
+                #;----- If fproton=True is set, rename tplot variables of f_tres -----;
+                if fproton:
+                    current_tplot_name = prefix+'f_'+fres+'_' + site_input+suffix
+                    if current_tplot_name in loaded_data:
+                        get_data_vars = get_data(current_tplot_name)
+                        if get_data_vars is None:
+                            store_data(current_tplot_name, delete=True)
+                        else:
+                            #;--- Rename
+                            new_tplot_name = prefix+'mag_'+site_input+'_'+fres+'_f' +suffix
+                            store_data(current_tplot_name, newname=new_tplot_name)
+                            loaded_data.remove(current_tplot_name)
+                            loaded_data.append(new_tplot_name)
+                            #;--- Missing data -1.e+31 --> NaN
+                            clip(new_tplot_name, -1e+5, 1e+5)
+                            get_data_vars = get_data(new_tplot_name)
+                            if np.all(np.isnan(get_data_vars[1])):
+                                ylim(new_tplot_name, 40000, 49000)
+                            else:
+                                ylim(new_tplot_name, np.nanmin(get_data_vars[1]), np.nanmax(get_data_vars[1]))
+                            #;--- Labels
+                            options(new_tplot_name, 'legend_names', ['F'])
+                            options(new_tplot_name, 'ytitle', site_input.upper())
+                            options(new_tplot_name, 'ysubtitle', '[nT]')
+
 
 
     return loaded_data
