@@ -17,4 +17,5 @@ from .ground.geomag.gmag_isee_induction import gmag_isee_induction
 from .ground.geomag.gmag_stel_fluxgate import gmag_stel_fluxgate
 from .ground.geomag.gmag_stel_induction import gmag_stel_induction
 from .ground.geomag.gmag_magdas_1sec import gmag_magdas_1sec
+from .ground.geomag.gmag_mm210 import gmag_mm210
 from .ground.radar.superdarn.sdfit import sdfit
