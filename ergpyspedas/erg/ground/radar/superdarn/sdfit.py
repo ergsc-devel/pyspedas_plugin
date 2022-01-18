@@ -175,27 +175,30 @@ def sdfit(
                 #;Split vlos_? tplot variable into 3 components
                 get_data_vlos = get_data(prefix + 'vlos_' + number_string + suffix)
                 if get_data_vlos is not None:
-                    get_metadata_vlos = get_data(prefix + 'vlos_' + number_string + suffix, metadata=True)
-                    store_data(prefix + 'vlos_' + number_string + suffix,
-                                data={'x':get_data_vlos[0],
-                                    'y':get_data_vlos[1][:, :, 2],
-                                    'v':get_data_vlos[2]},
-                                attr_dict=get_metadata_vlos)
-                    options(prefix + 'vlos_' + number_string + suffix, 'ztitle', 'LOS Doppler vel. [m/s]')
-                    store_data(prefix + 'vnorth_' + number_string + suffix,
-                                data={'x':get_data_vlos[0],
-                                    'y':get_data_vlos[1][:, :, 0],
-                                    'v':get_data_vlos[2]},
-                                attr_dict=get_metadata_vlos)
-                    options(prefix + 'vnorth_' + number_string + suffix, 'ztitle', 'LOS V Northward [m/s]')
-                    loaded_data.append(prefix + 'vnorth_' + number_string + suffix)
-                    store_data(prefix + 'veast_' + number_string + suffix,
-                                data={'x':get_data_vlos[0],
-                                    'y':get_data_vlos[1][:, :, 1],
-                                    'v':get_data_vlos[2]},
-                                attr_dict=get_metadata_vlos)
-                    options(prefix + 'veast_' + number_string + suffix, 'ztitle', 'LOS V Eastward [m/s]')
-                    loaded_data.append(prefix + 'veast_' + number_string + suffix)
+                    if get_data_vlos[1].ndim >= 3:
+                        get_metadata_vlos = get_data(prefix + 'vlos_' + number_string + suffix, metadata=True)
+                        store_data(prefix + 'vnorth_' + number_string + suffix,
+                                    data={'x':get_data_vlos[0],
+                                        'y':get_data_vlos[1][:, :, 0],
+                                        'v':get_data_vlos[2]},
+                                    attr_dict=get_metadata_vlos)
+                        options(prefix + 'vnorth_' + number_string + suffix, 'ztitle', 'LOS V Northward [m/s]')
+                        loaded_data.append(prefix + 'vnorth_' + number_string + suffix)
+                        if get_data_vlos[1].shape[2] >= 1:
+                            store_data(prefix + 'veast_' + number_string + suffix,
+                                        data={'x':get_data_vlos[0],
+                                            'y':get_data_vlos[1][:, :, 1],
+                                            'v':get_data_vlos[2]},
+                                        attr_dict=get_metadata_vlos)
+                            options(prefix + 'veast_' + number_string + suffix, 'ztitle', 'LOS V Eastward [m/s]')
+                            loaded_data.append(prefix + 'veast_' + number_string + suffix)
+                        if get_data_vlos[1].shape[2] >= 2:
+                            store_data(prefix + 'vlos_' + number_string + suffix,
+                                        data={'x':get_data_vlos[0],
+                                            'y':get_data_vlos[1][:, :, 2],
+                                            'v':get_data_vlos[2]},
+                                        attr_dict=get_metadata_vlos)
+                            options(prefix + 'vlos_' + number_string + suffix, 'ztitle', 'LOS Doppler vel. [m/s]')
 
                     #;Combine iono. echo and ground echo for vlos
                     v_var_names = ['vlos_','vnorth_','veast_']
