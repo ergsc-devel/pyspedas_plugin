@@ -20,3 +20,4 @@ from .ground.geomag.gmag_magdas_1sec import gmag_magdas_1sec
 from .ground.geomag.gmag_mm210 import gmag_mm210
 from .ground.geomag.gmag_nipr import gmag_nipr
 from .ground.radar.superdarn.sdfit import sdfit
+from .ground.riometer.isee_brio import isee_brio
