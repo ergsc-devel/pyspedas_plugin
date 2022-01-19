@@ -52,7 +52,7 @@ def isee_brio(
         pathformat = 'ground/riometer/'+site_input\
                         +'/%Y/isee_'+fres+'_'+instr+freq+'_'+site_input+'_%Y%m%d_v??.cdf'
         
-        loaded_data_temp = load(pathformat=pathformat, file_res=file_res, trange=trange, datatype=datatype, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
+        loaded_data_temp = load(pathformat=pathformat, file_res=file_res, trange=trange, datatype=datatype, prefix=prefix, suffix='_' + site_input +suffix, get_support_data=get_support_data,
                         varformat=varformat, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
         
         if notplot:
