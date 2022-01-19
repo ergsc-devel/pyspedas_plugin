@@ -8,7 +8,7 @@ from ...satellite.erg.load import load
 
 
 def isee_vlf(
-    trange=['2020-08-01', '2020-08-02'],
+    trange=['2017-03-30/12:00:00', '2017-03-30/15:00:00'],
     suffix='',
     site='all',
     get_support_data=False,
