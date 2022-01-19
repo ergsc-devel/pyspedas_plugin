@@ -59,7 +59,7 @@ def isee_brio(
             loaded_data.update(loaded_data_temp)
         else:
             loaded_data += loaded_data_temp
-        """if (len(loaded_data_temp) > 0) and ror:
+        if (len(loaded_data_temp) > 0) and ror:
             try:
                 if isinstance(loaded_data_temp, list):
                     if downloadonly:
@@ -73,19 +73,17 @@ def isee_brio(
                 print(gatt["Logical_source_description"])
                 print('')
                 print(f'Information about {gatt["Station_code"]}')
-                print('PI and Host PI(s):')
-                print(gatt["PI_name"])
+                print(f'PI {gatt["PI_name"]}')
                 print('')
-                print('Affiliations: ')
-                print(gatt["PI_affiliation"])
+                print(f'Affiliations: {gatt["PI_affiliation"]}')
                 print('')
-                print('Rules of the Road for ISEE Fluxgate Data Use:')
-                for gatt_text in gatt["TEXT"]:
-                    print(gatt_text)
-                print(f'{gatt["LINK_TEXT"]} {gatt["HTTP_LINK"]}')
+                print('Rules of the Road for ISEE Riometer Data:')
+                print('')
+                print(gatt["TEXT"])
+                print({gatt["LINK_TEXT"]})
                 print('**************************************************************************')
             except:
-                print('printing PI info and rules of the road was failed')"""
+                print('printing PI info and rules of the road was failed')
             
         if (not downloadonly) and (not notplot):
             file_name = get_data(loaded_data_temp[-1], metadata=True)['CDF']['FILENAME']
