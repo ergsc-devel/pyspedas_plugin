@@ -55,34 +55,33 @@ def isee_vlf(
             loaded_data.update(loaded_data_temp)
         else:
             loaded_data += loaded_data_temp
-        """if (len(loaded_data_temp) > 0) and ror:
+        if (len(loaded_data_temp) > 0) and ror:
             try:
                 if isinstance(loaded_data_temp, list):
                     if downloadonly:
-                        cdf_file = cdflib.CDF(loaded_data_temp[-1])
+                        cdf_file = cdflib.CDF(loaded_data_temp[0])
                         gatt = cdf_file.globalattsget()
                     else:
-                        gatt = get_data(loaded_data_temp[-1], metadata=True)['CDF']['GATT']
+                        gatt = get_data(loaded_data_temp[0], metadata=True)['CDF']['GATT']
                 elif isinstance(loaded_data_temp, dict):
-                    gatt = loaded_data_temp[list(loaded_data_temp.keys())[-1]]['CDF']['GATT']
+                    gatt = loaded_data_temp[list(loaded_data_temp.keys())[0]]['CDF']['GATT']
                 print('**************************************************************************')
                 print(gatt["Logical_source_description"])
                 print('')
                 print(f'Information about {gatt["Station_code"]}')
-                print('PI and Host PI(s):')
-                print(gatt["PI_name"])
+                print(f'PI {gatt["PI_name"]}')
                 print('')
-                print('Affiliations: ')
-                print(gatt["PI_affiliation"])
+                print(f'Affiliations: {gatt["PI_affiliation"]}')
                 print('')
-                print('Rules of the Road for ISEE Fluxgate Data Use:')
+                print('Rules of the Road for ISEE VLF Data Use:')
+                print('')
                 for gatt_text in gatt["TEXT"]:
                     print(gatt_text)
-                print(f'{gatt["LINK_TEXT"]} {gatt["HTTP_LINK"]}')
+                print({gatt["LINK_TEXT"]})
                 print('**************************************************************************')
             except:
                 print('printing PI info and rules of the road was failed')
-            """
+            
         if (not downloadonly) and (not notplot):
             t_plot_name_list = list(set(tnames([prefix+'ch1'+suffix, 
                                     prefix+'ch2'+suffix])).intersection(loaded_data))
