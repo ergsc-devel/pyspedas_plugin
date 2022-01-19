@@ -40,7 +40,7 @@ def isee_brio(
     
     site_code = list(set(site_code).intersection(site_code_all))
 
-    prefix = 'isee_fluxgate_'
+    prefix = 'iseetmp_'
     if notplot:
         loaded_data = {}
     else:
@@ -51,7 +51,7 @@ def isee_brio(
         pathformat = 'ground/riometer/'+site_input\
                         +'/%Y/isee_'+fres+'_'+instr+freq+'_'+site_input+'_%Y%m%d_v??.cdf'
         
-        loaded_data_temp = load(pathformat=pathformat, file_res=file_res, trange=trange, datatype=datatype, prefix=prefix, suffix='_'+site_input+suffix, get_support_data=get_support_data,
+        loaded_data_temp = load(pathformat=pathformat, file_res=file_res, trange=trange, datatype=datatype, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
                         varformat=varformat, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
         
         if notplot:
@@ -84,30 +84,38 @@ def isee_brio(
                 print(f'{gatt["LINK_TEXT"]} {gatt["HTTP_LINK"]}')
                 print('**************************************************************************')
             except:
-                print('printing PI info and rules of the road was failed')
+                print('printing PI info and rules of the road was failed')"""
             
         if (not downloadonly) and (not notplot):
-            if fres == '1min':
-                fres_list = ['1min', '1h']
-            else:
-                fres_list = [fres]
-            for fres_in in fres_list:
-                current_tplot_name = prefix+'hdz_'+fres_in+'_' + site_input+suffix
-                if current_tplot_name in loaded_data:
-                    get_data_vars = get_data(current_tplot_name)
-                    if get_data_vars is None:
-                        store_data(current_tplot_name, delete=True)
-                    else:
-                        new_tplot_name = prefix+'mag_'+site_input+'_'+fres_in+'_hdz'+suffix
-                        store_data(current_tplot_name, newname=new_tplot_name)
-                        loaded_data.remove(current_tplot_name)
-                        loaded_data.append(new_tplot_name)
-                        clip(new_tplot_name, -1e+4, 1e+4)
-                        get_data_vars = get_data(new_tplot_name)
-                        ylim(new_tplot_name, np.nanmin(get_data_vars[1]), np.nanmax(get_data_vars[1]))
-                        options(new_tplot_name, 'legend_names', ['H','D','Z'])
-                        options(new_tplot_name, 'Color', ['b', 'g', 'r'])
-                        options(new_tplot_name, 'ytitle', '\n'.join(new_tplot_name.split('_')))"""
-
+            for t_plot_name in loaded_data_temp:
+                get_data_vars = get_data(t_plot_name)
+                if get_data_vars is None:
+                    store_data(t_plot_name, delete=True)
+                else:
+                    t_plot_name_split =t_plot_name.split('_')
+                    if len(t_plot_name_split) > 2:
+                        #;----- Find param -----;
+                        param = t_plot_name_split[1]
+                        if param in ['cna', 'qdc', 'raw']:
+                            #;----- Rename tplot variables -----;
+                            new_tplot_name = 'isee_brio'+freq+'_'+site_input+'_'+fres+'_'+param + suffix
+                            store_data(t_plot_name, newname=new_tplot_name)
+                            loaded_data.remove(t_plot_name)
+                            loaded_data.append(new_tplot_name)
+                            #;----- Missing data -1.e+31 --> NaN -----;
+                            clip(new_tplot_name, -1e+5, 1e+5)
+                            get_data_vars = get_data(new_tplot_name)
+                            ylim(new_tplot_name, np.nanmin(get_data_vars[1]), np.nanmax(get_data_vars[1]))
+                            #;----- Set options -----;
+                            options(new_tplot_name, 'ytitle', site_input.upper())
+                            if param == 'cna':
+                                options(new_tplot_name, 'ysubtitle', '[dB]')
+                                options(new_tplot_name, 'legend_names', ['CNA'])
+                            elif param == 'qdc':
+                                options(new_tplot_name, 'ysubtitle', '[V]')
+                                options(new_tplot_name, 'legend_names', ['QDC'])
+                            elif param == 'raw':
+                                options(new_tplot_name, 'ysubtitle', '[V]')
+                                options(new_tplot_name, 'legend_names', ['Raw data'])
 
     return loaded_data
