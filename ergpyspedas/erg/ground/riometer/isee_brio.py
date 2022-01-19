@@ -86,66 +86,67 @@ def isee_brio(
                 print('printing PI info and rules of the road was failed')
             
         if (not downloadonly) and (not notplot):
-            file_name = get_data(loaded_data_temp[-1], metadata=True)['CDF']['FILENAME']
-            if isinstance(file_name, list):
-                file_name = file_name[0]
-            cdf_file = cdflib.CDF(file_name)
-            cdf_info = cdf_file.cdf_info()
-            all_cdf_variables = cdf_info['rVariables'] + cdf_info['zVariables']
-            for t_plot_name in loaded_data_temp:
-                get_data_vars = get_data(t_plot_name)
-                if get_data_vars is None:
-                    store_data(t_plot_name, delete=True)
-                else:
-                    t_plot_name_split =t_plot_name.split('_')
-                    if len(t_plot_name_split) > 2:
-                        #;----- Find param -----;
-                        param = t_plot_name_split[1]
-                        if param in ['cna', 'qdc', 'raw']:
-                            #;----- Rename tplot variables -----;
-                            new_tplot_name = 'isee_brio'+freq+'_'+site_input+'_'+fres+'_'+param + suffix
-                            store_data(t_plot_name, newname=new_tplot_name)
-                            loaded_data.remove(t_plot_name)
-                            loaded_data.append(new_tplot_name)
-                            #;----- Missing data -1.e+31 --> NaN -----;
-                            clip(new_tplot_name, -1e+5, 1e+5)
-                            get_data_vars = get_data(new_tplot_name)
-                            if param in all_cdf_variables:
-                                var_atts = cdf_file.varattsget(param)
-                                if "FILLVAL" in var_atts:  #removing "FILLVAL", like 999.9000 or 0.0.
-                                                           #removing process of cdf_to_tplot.py may be not working well.
-                                    var_properties = cdf_file.varinq(param)
-                                    if ((var_properties['Data_Type_Description'] ==\
-                                            'CDF_FLOAT') or\
-                                            (var_properties['Data_Type_Description'] ==\
-                                            'CDF_REAL4') or\
-                                            (var_properties['Data_Type_Description'] ==\
-                                            'CDF_DOUBLE') or\
-                                            (var_properties['Data_Type_Description'] ==\
-                                            'CDF_REAL8')):
-                                        if isinstance(var_atts["FILLVAL"], str):
-                                            fill_value = float(var_atts["FILLVAL"])
-                                        else:
-                                            fill_value = deepcopy(var_atts["FILLVAL"])
-                                        new_y = np.where(get_data_vars[1] == fill_value,
-                                                        np.nan, get_data_vars[1])
-                                        get_metadata_vars = get_data(new_tplot_name, metadata=True)
-                                        store_data(new_tplot_name, data={'x':get_data_vars[0],
-                                                                            'y':new_y},
-                                                    attr_dict=get_metadata_vars)
-                                        ylim(new_tplot_name, np.nanmin(new_y), np.nanmax(new_y))
-                                else:
-                                    ylim(new_tplot_name, np.nanmin(get_data_vars[1]), np.nanmax(get_data_vars[1]))
-                            #;----- Set options -----;
-                            options(new_tplot_name, 'ytitle', site_input.upper())
-                            if param == 'cna':
-                                options(new_tplot_name, 'ysubtitle', '[dB]')
-                                options(new_tplot_name, 'legend_names', ['CNA'])
-                            elif param == 'qdc':
-                                options(new_tplot_name, 'ysubtitle', '[V]')
-                                options(new_tplot_name, 'legend_names', ['QDC'])
-                            elif param == 'raw':
-                                options(new_tplot_name, 'ysubtitle', '[V]')
-                                options(new_tplot_name, 'legend_names', ['Raw data'])
+            if len(loaded_data_temp) > 0:
+                file_name = get_data(loaded_data_temp[-1], metadata=True)['CDF']['FILENAME']
+                if isinstance(file_name, list):
+                    file_name = file_name[0]
+                cdf_file = cdflib.CDF(file_name)
+                cdf_info = cdf_file.cdf_info()
+                all_cdf_variables = cdf_info['rVariables'] + cdf_info['zVariables']
+                for t_plot_name in loaded_data_temp:
+                    get_data_vars = get_data(t_plot_name)
+                    if get_data_vars is None:
+                        store_data(t_plot_name, delete=True)
+                    else:
+                        t_plot_name_split =t_plot_name.split('_')
+                        if len(t_plot_name_split) > 2:
+                            #;----- Find param -----;
+                            param = t_plot_name_split[1]
+                            if param in ['cna', 'qdc', 'raw']:
+                                #;----- Rename tplot variables -----;
+                                new_tplot_name = 'isee_brio'+freq+'_'+site_input+'_'+fres+'_'+param + suffix
+                                store_data(t_plot_name, newname=new_tplot_name)
+                                loaded_data.remove(t_plot_name)
+                                loaded_data.append(new_tplot_name)
+                                #;----- Missing data -1.e+31 --> NaN -----;
+                                clip(new_tplot_name, -1e+5, 1e+5)
+                                get_data_vars = get_data(new_tplot_name)
+                                if param in all_cdf_variables:
+                                    var_atts = cdf_file.varattsget(param)
+                                    if "FILLVAL" in var_atts:  #removing "FILLVAL", like 999.9000 or 0.0.
+                                                            #removing process of cdf_to_tplot.py may be not working well.
+                                        var_properties = cdf_file.varinq(param)
+                                        if ((var_properties['Data_Type_Description'] ==\
+                                                'CDF_FLOAT') or\
+                                                (var_properties['Data_Type_Description'] ==\
+                                                'CDF_REAL4') or\
+                                                (var_properties['Data_Type_Description'] ==\
+                                                'CDF_DOUBLE') or\
+                                                (var_properties['Data_Type_Description'] ==\
+                                                'CDF_REAL8')):
+                                            if isinstance(var_atts["FILLVAL"], str):
+                                                fill_value = float(var_atts["FILLVAL"])
+                                            else:
+                                                fill_value = deepcopy(var_atts["FILLVAL"])
+                                            new_y = np.where(get_data_vars[1] == fill_value,
+                                                            np.nan, get_data_vars[1])
+                                            get_metadata_vars = get_data(new_tplot_name, metadata=True)
+                                            store_data(new_tplot_name, data={'x':get_data_vars[0],
+                                                                                'y':new_y},
+                                                        attr_dict=get_metadata_vars)
+                                            ylim(new_tplot_name, np.nanmin(new_y), np.nanmax(new_y))
+                                    else:
+                                        ylim(new_tplot_name, np.nanmin(get_data_vars[1]), np.nanmax(get_data_vars[1]))
+                                #;----- Set options -----;
+                                options(new_tplot_name, 'ytitle', site_input.upper())
+                                if param == 'cna':
+                                    options(new_tplot_name, 'ysubtitle', '[dB]')
+                                    options(new_tplot_name, 'legend_names', ['CNA'])
+                                elif param == 'qdc':
+                                    options(new_tplot_name, 'ysubtitle', '[V]')
+                                    options(new_tplot_name, 'legend_names', ['QDC'])
+                                elif param == 'raw':
+                                    options(new_tplot_name, 'ysubtitle', '[V]')
+                                    options(new_tplot_name, 'legend_names', ['Raw data'])
 
     return loaded_data
