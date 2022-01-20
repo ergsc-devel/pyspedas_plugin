@@ -10,7 +10,7 @@ def camera_omti_asi(
     trange=['2020-08-01', '2020-08-02'],
     suffix='',
     site='all',
-    datatype='all',
+    wavelength=[5577],
     get_support_data=False,
     varformat=None,
     varnames=[],
@@ -23,35 +23,20 @@ def camera_omti_asi(
     ror=True
 ):
 
-    site_code_all = ['msr', 'rik', 'kag', 'ktb', 'lcl', 'mdm', 'tew']
-    tres_all=['64hz', '1sec', '1min', '1h']
-    if isinstance(datatype, str):
-        datatype = datatype.lower()
-        datatype = datatype.split(' ')
-    elif isinstance(datatype, list):
-        for i in range(len(datatype)):
-            datatype[i] = datatype[i].lower()
+    site_code_all = ['abu', 'ath', 'drw', 'eur', 'gak', 'hlk',
+                     'hus', 'isg', 'ist', 'ith', 'kap', 'ktb',
+                     'mgd', 'nai', 'nyr', 'ptk', 'rik', 'rsb',
+                     'sgk', 'sta', 'syo', 'trs', 'yng']
 
-    if 'all' in datatype:
-        datatype=tres_all
-    datatype = list(set(datatype).intersection(tres_all))
-    if len(datatype) < 1:
-        return
+    if isinstance(wavelength, str):
+        wavelengthc = wavelength.split(' ')
+    elif isinstance(wavelength, int):
+        wavelengthc = [str(wavelength)]
+    elif isinstance(wavelength, list):
+        wavelengthc = []
+        for i in range(len(wavelength)):
+            wavelengthc.append(str(wavelength[i]))
 
-    if '64' in datatype:
-        index = np.where(np.array(datatype) == '64')[0][0]
-        datatype[index] = '64hz'
-    elif  '1s' in datatype:
-        index = np.where(np.array(datatype) == '1s')[0][0]
-        datatype[index] = '1sec'
-    elif  '1m' in datatype:
-        index = np.where(np.array(datatype) == '1m')[0][0]
-        datatype[index] = '1min'
-    elif  '1hr' in datatype:
-        index = np.where(np.array(datatype) == '1hr')[0][0]
-        datatype[index] = '1h'
-
-    
     if isinstance(site, str):
         site_code = site.lower()
         site_code = site_code.split(' ')
@@ -64,33 +49,26 @@ def camera_omti_asi(
     
     site_code = list(set(site_code).intersection(site_code_all))
 
-    prefix = 'isee_fluxgate_'
+    
     if notplot:
         loaded_data = {}
     else:
         loaded_data = []
     for site_input in site_code:
-        for data_type_in in datatype:
-            fres = data_type_in
-            if fres == '64hz':
-                file_res = 3600.
-                pathformat = 'ground/geomag/isee/fluxgate/'+fres+'/'+site_input\
-                                +'/%Y/%m/isee_fluxgate_'+fres+'_'+site_input+'_%Y%m%d%H_v??.cdf'
-            if fres == '1h':
-                fres = '1min'
-            if (fres == '1sec') or (fres == '1min'):
-                file_res = 3600. * 24
-                pathformat = 'ground/geomag/isee/fluxgate/'+fres+'/'+site_input\
-                                +'/%Y/isee_fluxgate_'+fres+'_'+site_input+'_%Y%m%d_v??.cdf'
-            
-            loaded_data_temp = load(pathformat=pathformat, file_res=file_res, trange=trange, datatype=datatype, prefix=prefix, suffix='_'+site_input+suffix, get_support_data=get_support_data,
+        for wavelength_in in wavelengthc:
+            prefix = 'omti_asi_'+site_input+'_'+wavelength_in+'_'
+            file_res = 3600.
+            pathformat = 'ground/camera/omti/asi/'+site_input\
+                            +'/%Y/%m/%d/omti_asi_c??_'+site_input+'_'+wavelength_in+'_%Y%m%d%H_v??.cdf'
+
+            loaded_data_temp = load(pathformat=pathformat, file_res=file_res, trange=trange, prefix=prefix, suffix='_'+site_input+suffix, get_support_data=get_support_data,
                             varformat=varformat, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
             
             if notplot:
                 loaded_data.update(loaded_data_temp)
             else:
                 loaded_data += loaded_data_temp
-            if (len(loaded_data_temp) > 0) and ror:
+            """if (len(loaded_data_temp) > 0) and ror:
                 try:
                     if isinstance(loaded_data_temp, list):
                         if downloadonly:
@@ -140,6 +118,6 @@ def camera_omti_asi(
                             options(new_tplot_name, 'legend_names', ['H','D','Z'])
                             options(new_tplot_name, 'Color', ['b', 'g', 'r'])
                             options(new_tplot_name, 'ytitle', '\n'.join(new_tplot_name.split('_')))
-
+"""
 
     return loaded_data
