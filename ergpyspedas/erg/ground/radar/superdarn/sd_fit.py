@@ -31,7 +31,7 @@ def get_pixel_cntr(tbl_array):
             cnttbl[i, j, 0] = pos_array[1]
     return cnttbl
 
-def sdfit(
+def sd_fit(
     trange=['2018-10-18/00:00:00','2018-10-18/02:00:00'],
     suffix='',
     site='all',
