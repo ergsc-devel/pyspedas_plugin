@@ -61,7 +61,7 @@ def camera_omti_asi(
             pathformat = 'ground/camera/omti/asi/'+site_input\
                             +'/%Y/%m/%d/omti_asi_c??_'+site_input+'_'+wavelength_in+'_%Y%m%d%H_v??.cdf'
 
-            loaded_data_temp = load(pathformat=pathformat, file_res=file_res, trange=trange, prefix=prefix, suffix='_'+site_input+suffix, get_support_data=get_support_data,
+            loaded_data_temp = load(pathformat=pathformat, file_res=file_res, trange=trange, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
                             varformat=varformat, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
             
             if notplot:
@@ -95,29 +95,69 @@ def camera_omti_asi(
                     print('**************************************************************************')
                 except:
                     print('printing PI info and rules of the road was failed')
-                
+                """
             if (not downloadonly) and (not notplot):
-                if fres == '1min':
-                    fres_list = ['1min', '1h']
-                else:
-                    fres_list = [fres]
-                for fres_in in fres_list:
-                    current_tplot_name = prefix+'hdz_'+fres_in+'_' + site_input+suffix
-                    if current_tplot_name in loaded_data:
-                        get_data_vars = get_data(current_tplot_name)
-                        if get_data_vars is None:
-                            store_data(current_tplot_name, delete=True)
-                        else:
-                            new_tplot_name = prefix+'mag_'+site_input+'_'+fres_in+'_hdz'+suffix
-                            store_data(current_tplot_name, newname=new_tplot_name)
-                            loaded_data.remove(current_tplot_name)
+                current_tplot_name = prefix+'cloud' + suffix
+                if current_tplot_name in loaded_data:
+                    get_data_vars = get_data(current_tplot_name)
+                    if get_data_vars is None:
+                        store_data(current_tplot_name, delete=True)
+                    else:
+                        new_tplot_name = 'omti_asi_'+site_input+'_cloud'+suffix
+                        store_data(current_tplot_name, newname=new_tplot_name)
+                        loaded_data.remove(current_tplot_name)
+                        if new_tplot_name not in loaded_data:
                             loaded_data.append(new_tplot_name)
-                            clip(new_tplot_name, -1e+4, 1e+4)
-                            get_data_vars = get_data(new_tplot_name)
-                            ylim(new_tplot_name, np.nanmin(get_data_vars[1]), np.nanmax(get_data_vars[1]))
-                            options(new_tplot_name, 'legend_names', ['H','D','Z'])
-                            options(new_tplot_name, 'Color', ['b', 'g', 'r'])
-                            options(new_tplot_name, 'ytitle', '\n'.join(new_tplot_name.split('_')))
-"""
+                        #;--- Missing data -1.e+31 --> NaN
+                        clip(new_tplot_name, -1, 9)
+                    
+                current_tplot_name = prefix+'image_raw' + suffix
+                if current_tplot_name in loaded_data:
+                    get_data_vars = get_data(current_tplot_name)
+                    if get_data_vars is None:
+                        store_data(current_tplot_name, delete=True)
+                    else:
+                        #;--- Missing data -1.e+31 --> NaN
+                        clip(current_tplot_name, -1e+6, 1e+6)
+                        get_data_vars = get_data(current_tplot_name)
+                        """
+                        Transpose y element of the image data.
+                        In order to not to make an Upside down, left and right upside down,
+                        for saving figure, by PIL library.
+                        """
+                        image_y_transpose = get_data_vars[1].transpose(0, 2, 1)
+                        """
+                        Try to get 'Data_Type_Description' from CDF file.
+                        In order to adjust the data type of y element into original one.
+                        (After clip, data type of y element may become float.)
+                        This may be need for saving figure correctly.
+                        """
+                        file_name = get_data(current_tplot_name,
+                                            metadata=True)['CDF']['FILENAME']
+                        if isinstance(file_name, list):
+                            if len(file_name) > 0:
+                                file_name = file_name[0]
+                        cdf_file = cdflib.CDF(file_name)
+                        cdf_info = cdf_file.cdf_info()
+                        all_cdf_variables = cdf_info['rVariables'] + cdf_info['zVariables']
+                        if 'image_raw' in all_cdf_variables:
+                            var_string = 'image_raw'
+                            var_properties = cdf_file.varinq(var_string)
+                            if 'Data_Type_Description' in var_properties:
+                                original_datatype_string = var_properties['Data_Type_Description']
+                                if original_datatype_string == 'CDF_INT4':
+                                    image_y_transpose = image_y_transpose.astype(np.int32)
+                                elif original_datatype_string == 'CDF_UINT1':
+                                    image_y_transpose = image_y_transpose.astype(np.uint8)
+                                elif original_datatype_string == 'CDF_UINT2':
+                                    image_y_transpose = image_y_transpose.astype(np.uint16)
+                                elif original_datatype_string == 'CDF_UINT4':
+                                    image_y_transpose = image_y_transpose.astype(np.uint32)
+
+                        get_metadata_vars = get_data(current_tplot_name, metadata=True)
+                        store_data(current_tplot_name,
+                                   data={'x':get_data_vars[0],
+                                         'y':image_y_transpose},
+                                   attr_dict=get_metadata_vars)
 
     return loaded_data
