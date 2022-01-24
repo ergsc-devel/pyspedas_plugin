@@ -116,13 +116,13 @@ def isee_brio(
                                     if "FILLVAL" in var_atts:  #removing "FILLVAL", like 999.9000 or 0.0.
                                                             #removing process of cdf_to_tplot.py may be not working well.
                                         var_properties = cdf_file.varinq(param)
-                                        if ((var_properties['Data_Type_Description'] ==\
-                                                'CDF_FLOAT') or\
-                                                (var_properties['Data_Type_Description'] ==\
-                                                'CDF_REAL4') or\
-                                                (var_properties['Data_Type_Description'] ==\
-                                                'CDF_DOUBLE') or\
-                                                (var_properties['Data_Type_Description'] ==\
+                                        if ((var_properties['Data_Type_Description'] ==
+                                                'CDF_FLOAT') or
+                                                (var_properties['Data_Type_Description'] ==
+                                                'CDF_REAL4') or
+                                                (var_properties['Data_Type_Description'] ==
+                                                'CDF_DOUBLE') or
+                                                (var_properties['Data_Type_Description'] ==
                                                 'CDF_REAL8')):
                                             if isinstance(var_atts["FILLVAL"], str):
                                                 fill_value = float(var_atts["FILLVAL"])
