@@ -1,5 +1,6 @@
 import cdflib
-from pytplot import clip, options, ylim, zlim, get_data
+from pyspedas import tnames
+from pytplot import clip, options, ylim, zlim, get_data, store_data, tplot_options
 
 from ..load import load
 
@@ -78,19 +79,30 @@ def pwe_hfa(trange=['2017-04-01', '2017-04-02'],
 
     file_res = 3600. * 24
 
-    if level == 'l2':
-        prefix = 'erg_pwe_hfa_'+level+'_' + mode + '_'
+    if mode == 'low': 
+        modenm = ['low','monit']
+    elif mode == 'all':
+        modenm = ['low','monit','high']
+    
+    loaded_data = []
+    for md in modenm:
+        if level == 'l2':
+            prefix = 'erg_pwe_hfa_'+level+'_' + md + '_'
 
-    if level == 'l2':
-        pathformat = 'satellite/erg/pwe/hfa/'+level+'/'+datatype+'/'+mode + \
-            '/%Y/%m/erg_pwe_hfa_'+level+'_'+datatype+'_'+mode+'_%Y%m%d_v??_??.cdf'
-    elif level == 'l3':
-        prefix = 'erg_pwe_hfa_'+level+'_1min_'
-        pathformat = 'satellite/erg/pwe/hfa/'+level + \
-            '/%Y/%m/erg_pwe_hfa_'+level+'_1min_%Y%m%d_v??_??.cdf'
+        if level == 'l2':
+            pathformat = 'satellite/erg/pwe/hfa/'+level+'/'+datatype+'/'+md + \
+                '/%Y/%m/erg_pwe_hfa_'+level+'_'+datatype+'_'+md+'_%Y%m%d_v??_??.cdf'
+        elif level == 'l3':
+            prefix = 'erg_pwe_hfa_'+level+'_1min_'
+            pathformat = 'satellite/erg/pwe/hfa/'+level + \
+                '/%Y/%m/erg_pwe_hfa_'+level+'_1min_%Y%m%d_v??_??.cdf'
 
-    loaded_data = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype, file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
-                       varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
+        loaded = load(pathformat=pathformat, trange=trange, level=level, 
+            datatype=datatype,file_res=file_res,   prefix=prefix, suffix=suffix, get_support_data=get_support_data,
+            varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
+        
+        if loaded:
+            loaded_data.extend( loaded )
 
     if (len(loaded_data) > 0) and ror:
 
@@ -130,114 +142,57 @@ def pwe_hfa(trange=['2017-04-01', '2017-04-02'],
     if initial_notplot_flag or downloadonly:
         return loaded_data
 
-    if (level == 'l2') and (mode == 'low') and (not notplot):
+    if (level == 'l2') and (not notplot):
 
+        l2prefix = 'erg_pwe_hfa_' + level + '_'
+        #Create combined variables
+        spec_coms = ['eu','ev','bgamma','esum','er','el','e_mix','e_ar'] 
+        coms = spec_coms + ['eu_ev','eu_bg','ev_bg']
+        if 'low' in modenm and 'monit' in modenm:
+            for com in coms:
+                vn = l2prefix+'lm_spectra_'+com
+                #store_data( vn, data=l2prefix+'low_spectra_'+com + ' ' + l2prefix+'monit_spectra_'+com )
+        if 'low' in modenm and 'high' in modenm:
+            for com in coms:
+                vn = l2prefix+'lh_spectra_'+com
+                #store_data( vn, data=l2prefix+'low_spectra_'+com + ' ' + l2prefix+'high_spectra_'+com )
+
+        # add ytitle for all variables
+        for com in coms:
+            vns = tnames(l2prefix+'*spectra_'+com)
+            options( vns, 'ytitle', 'ERG PWE/HFA\n'+com.upper() )
+        
         # set spectrogram plot option
-        options(prefix + 'spectra_eu' + suffix, 'Spec', 1)
-        options(prefix + 'spectra_ev' + suffix, 'Spec', 1)
-        options(prefix + 'spectra_bgamma' + suffix, 'Spec', 1)
-        options(prefix + 'spectra_esum' + suffix, 'Spec', 1)
-        options(prefix + 'spectra_er' + suffix, 'Spec', 1)
-        options(prefix + 'spectra_el' + suffix, 'Spec', 1)
-        options(prefix + 'spectra_e_mix' + suffix, 'Spec', 1)
-        options(prefix + 'spectra_e_ar' + suffix, 'Spec', 1)
+        vns = tnames( [ l2prefix+'*spectra_'+x for x in spec_coms ])
+        options( vns, 'Spec', 1 )
 
-        if prefix + 'spectra_er' + suffix in loaded_data:
-            # remove minus values in y array
-            clip(prefix + 'spectra_er' + suffix, 0., 5000.)
-        if prefix + 'spectra_el' + suffix in loaded_data:
-            # remove minus values in y array
-            clip(prefix + 'spectra_el' + suffix, 0., 5000.)
+        # misc. decolation
+        options(tnames(l2prefix+'*spectra_*'), 'ysubtitle', 'freq. [kHz]')
+        options(tnames(l2prefix+'*spectra_e*'), 'ztitle', '$mV^{2}/m^{2}/Hz$')
+        options(tnames(l2prefix+'*spectra_bgamma'), 'ztitle', '$pT^{2}/Hz$')
+        options(tnames(l2prefix+'*spectra_e_ar'), 'ztitle', 'LH:-1/RH:+1')
+        options(tnames(l2prefix+'*spectra_e*_bg'), 'ztitle', 'mV/m pT/Hz')
 
-        if prefix + 'spectra_eu' + suffix in loaded_data:
-            # remove minus values in y array
-            clip(prefix + 'spectra_eu' + suffix, 0., 5000.)
-            # set ylim
-            ylim(prefix + 'spectra_eu' + suffix,  2.0, 10000.0)
-            # set zlim
-            zlim(prefix + 'spectra_eu' + suffix,  1e-10, 1e-3)
+        for vn in tnames(l2prefix+'*spectra_e*'):
+            ylim( vn, 2.0, 10000. )
+        for vn in tnames(l2prefix+'*spectra_bgamma'):
+            ylim( vn, 2.0, 200.0 )
+        for vn in tnames( [ l2prefix+'*spectra_'+x for x in ['eu', 'ev', 'esum', 'er', 'el', 'e_mix'] ] ):
+            zlim( vn, 1e-10, 1e-3 )
+        for vn in tnames(l2prefix+'*spectra_bgamma'):
+            zlim( vn, 1e-4, 1e+2 )
+        for vn in tnames(l2prefix+'*spectra_e_ar'):
+            zlim( vn, -1, 1)
 
-        if prefix + 'spectra_ev' + suffix in loaded_data:
-            # remove minus values in y array
-            clip(prefix + 'spectra_ev' + suffix, 0., 5000.)
-            # set ylim
-            ylim(prefix + 'spectra_ev' + suffix,  2.0, 10000.0)
-            # set zlim
-            zlim(prefix + 'spectra_ev' + suffix,  1e-10, 1e-3)
+        vns = tnames([l2prefix+'*spectra_e*', l2prefix+'*spectra_bgamma'])
+        options( vns, 'ylog', 1 )
+        for com in ['eu','ev','esum','er','el','e_mix','bgamma']:
+            options( tnames( l2prefix+'*spectra_'+com ), 'zlog', 1 )
 
-        if prefix + 'spectra_bgamma' + suffix in loaded_data:
-            # set ylim
-            ylim(prefix + 'spectra_bgamma' + suffix, 2.0, 200.0)
-            # set zlim
-            zlim(prefix + 'spectra_bgamma' + suffix, 1e-4, 1e+2)
+        tplot_options( 'data_gap', 70. )
+        
 
-        if prefix + 'spectra_esum' + suffix in loaded_data:
-            # set ylim
-            ylim(prefix + 'spectra_esum' + suffix,  2.0, 10000.0)
-            # set zlim
-            zlim(prefix + 'spectra_esum' + suffix,  1e-10, 1e-3)
-
-        if prefix + 'spectra_e_ar' + suffix in loaded_data:
-            # set ylim
-            ylim(prefix + 'spectra_e_ar' + suffix,  2.0, 10000.0)
-            # set zlim
-            zlim(prefix + 'spectra_e_ar' + suffix, -1, 1)
-
-        # set y axis to logscale
-        options(prefix + 'spectra_eu' + suffix, 'ylog', 1)
-        options(prefix + 'spectra_ev' + suffix, 'ylog', 1)
-        options(prefix + 'spectra_bgamma' + suffix, 'ylog', 1)
-        options(prefix + 'spectra_esum' + suffix, 'ylog', 1)
-        options(prefix + 'spectra_er' + suffix, 'ylog', 1)
-        options(prefix + 'spectra_el' + suffix, 'ylog', 1)
-        options(prefix + 'spectra_e_mix' + suffix, 'ylog', 1)
-        options(prefix + 'spectra_e_ar' + suffix, 'ylog', 1)
-
-        # set z axis to logscale
-        options(prefix + 'spectra_eu' + suffix, 'zlog', 1)
-        options(prefix + 'spectra_ev' + suffix, 'zlog', 1)
-        options(prefix + 'spectra_bgamma' + suffix, 'zlog', 1)
-        options(prefix + 'spectra_esum' + suffix, 'zlog', 1)
-        options(prefix + 'spectra_er' + suffix, 'zlog', 1)
-        options(prefix + 'spectra_el' + suffix, 'zlog', 1)
-        options(prefix + 'spectra_e_mix' + suffix, 'zlog', 1)
-
-        # set ytitle
-        options(prefix + 'spectra_eu' + suffix, 'ytitle', 'ERG PWE/HFA (EU)')
-        options(prefix + 'spectra_ev' + suffix, 'ytitle', 'ERG PWE/HFA (EV)')
-        options(prefix + 'spectra_esum' + suffix,
-                'ytitle', 'ERG PWE/HFA (ESUM)')
-        options(prefix + 'spectra_e_ar' + suffix,
-                'ytitle', 'ERG PWE/HFA (E_AR)')
-        options(prefix + 'spectra_bgamma' + suffix,
-                'ytitle', 'ERG PWE/HFA (BGAMMA)')
-
-        # set ysubtitle
-        options(prefix + 'spectra_eu' + suffix, 'ysubtitle', 'frequency [Hz]')
-        options(prefix + 'spectra_ev' + suffix, 'ysubtitle', 'frequency [Hz]')
-        options(prefix + 'spectra_esum' + suffix,
-                'ysubtitle', 'frequency [Hz]')
-        options(prefix + 'spectra_e_ar' + suffix,
-                'ysubtitle', 'frequency [Hz]')
-        options(prefix + 'spectra_bgamma' + suffix,
-                'ysubtitle', 'frequency [Hz]')
-
-        # set ztitle
-        options(prefix + 'spectra_eu' + suffix, 'ztitle', 'mV^2/m^2/Hz')
-        options(prefix + 'spectra_ev' + suffix, 'ztitle', 'mV^2/m^2/Hz')
-        options(prefix + 'spectra_esum' + suffix, 'ztitle', 'mV^2/m^2/Hz')
-        options(prefix + 'spectra_e_ar' + suffix, 'ztitle', 'LH:-1/RH:+1')
-        options(prefix + 'spectra_bgamma' + suffix, 'ztitle', 'pT^2/Hz')
-
-        # change colormap option
-        options(prefix + 'spectra_eu' + suffix, 'Colormap', 'jet')
-        options(prefix + 'spectra_ev' + suffix, 'Colormap', 'jet')
-        options(prefix + 'spectra_bgamma' + suffix, 'Colormap', 'jet')
-        options(prefix + 'spectra_esum' + suffix, 'Colormap', 'jet')
-        options(prefix + 'spectra_er' + suffix, 'Colormap', 'jet')
-        options(prefix + 'spectra_el' + suffix, 'Colormap', 'jet')
-        options(prefix + 'spectra_e_mix' + suffix, 'Colormap', 'jet')
-        options(prefix + 'spectra_e_ar' + suffix, 'Colormap', 'jet')
+        
 
     elif level == 'l3':
 
