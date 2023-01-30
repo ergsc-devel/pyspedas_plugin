@@ -299,6 +299,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def change_units(self):
         current_text = self.comboBox_units.currentText()
         self.vtkWidget.draw_property.data.units = current_text
+        self.vtkWidget.draw_property.colorbar.units = current_text
         self.vtkWidget.update_data()
         self.vtkWidget.update_draw()
         self._set_value_text()
