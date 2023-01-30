@@ -1,0 +1,2928 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1018</width>
+    <height>774</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>ISEE_3D</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QScrollArea" name="scrollArea">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>341</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>341</width>
+        <height>631</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::Box</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Plain</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAsNeeded</enum>
+      </property>
+      <property name="widgetResizable">
+       <bool>true</bool>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+      </property>
+      <widget class="QWidget" name="scrollAreaWidgetContents_2">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>339</width>
+         <height>629</height>
+        </rect>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <widget class="QWidget" name="widget" native="true">
+          <property name="minimumSize">
+           <size>
+            <width>311</width>
+            <height>601</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>311</width>
+            <height>601</height>
+           </size>
+          </property>
+          <widget class="QFrame" name="frame_showData">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>161</width>
+             <height>91</height>
+            </rect>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::Box</enum>
+           </property>
+           <widget class="QCheckBox" name="checkBox_isosurface1">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>0</y>
+              <width>81</width>
+              <height>20</height>
+             </rect>
+            </property>
+            <property name="text">
+             <string>Isosurface1</string>
+            </property>
+           </widget>
+           <widget class="QCheckBox" name="checkBox_isosurface2">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>20</y>
+              <width>81</width>
+              <height>20</height>
+             </rect>
+            </property>
+            <property name="text">
+             <string>Isosurface2</string>
+            </property>
+           </widget>
+          </widget>
+          <widget class="QFrame" name="frame_saveImage">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>100</y>
+             <width>161</width>
+             <height>51</height>
+            </rect>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::Box</enum>
+           </property>
+           <widget class="QLabel" name="label_types">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>0</y>
+              <width>68</width>
+              <height>19</height>
+             </rect>
+            </property>
+            <property name="text">
+             <string>Types</string>
+            </property>
+           </widget>
+           <widget class="QComboBox" name="comboBox_saveType">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>20</y>
+              <width>61</width>
+              <height>21</height>
+             </rect>
+            </property>
+            <item>
+             <property name="text">
+              <string>PNG</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>EPS</string>
+             </property>
+            </item>
+           </widget>
+           <widget class="QPushButton" name="pushButton_saveImage">
+            <property name="geometry">
+             <rect>
+              <x>90</x>
+              <y>20</y>
+              <width>61</width>
+              <height>21</height>
+             </rect>
+            </property>
+            <property name="text">
+             <string>Save</string>
+            </property>
+           </widget>
+          </widget>
+          <widget class="QFrame" name="frame_axisAndUnits">
+           <property name="geometry">
+            <rect>
+             <x>170</x>
+             <y>0</y>
+             <width>141</width>
+             <height>151</height>
+            </rect>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::Box</enum>
+           </property>
+           <widget class="QLabel" name="label_coordinates">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>0</y>
+              <width>71</width>
+              <height>22</height>
+             </rect>
+            </property>
+            <property name="text">
+             <string>Coordinates</string>
+            </property>
+           </widget>
+           <widget class="QComboBox" name="comboBox_coordinates">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>20</y>
+              <width>111</width>
+              <height>21</height>
+             </rect>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>16</width>
+              <height>16</height>
+             </size>
+            </property>
+            <item>
+             <property name="text">
+              <string>SC</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>MAG</string>
+             </property>
+            </item>
+           </widget>
+           <widget class="QLabel" name="label_axisUnits">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>50</y>
+              <width>61</width>
+              <height>21</height>
+             </rect>
+            </property>
+            <property name="text">
+             <string>Axis Units</string>
+            </property>
+           </widget>
+           <widget class="QComboBox" name="comboBox_axisUnits">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>70</y>
+              <width>111</width>
+              <height>21</height>
+             </rect>
+            </property>
+            <item>
+             <property name="text">
+              <string>Velocity</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Energy</string>
+             </property>
+            </item>
+           </widget>
+           <widget class="QLabel" name="label_units">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>100</y>
+              <width>41</width>
+              <height>20</height>
+             </rect>
+            </property>
+            <property name="text">
+             <string>Units</string>
+            </property>
+           </widget>
+           <widget class="QComboBox" name="comboBox_units">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>120</y>
+              <width>111</width>
+              <height>21</height>
+             </rect>
+            </property>
+            <item>
+             <property name="text">
+              <string>PSD</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>FLUX</string>
+             </property>
+            </item>
+           </widget>
+          </widget>
+          <widget class="QFrame" name="frame_dataSlider">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>160</y>
+             <width>311</width>
+             <height>121</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::Box</enum>
+           </property>
+           <widget class="QLabel" name="label_firstTime_slider">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>70</y>
+              <width>71</width>
+              <height>16</height>
+             </rect>
+            </property>
+            <property name="text">
+             <string>HH:MM:SS.fff</string>
+            </property>
+           </widget>
+           <widget class="QLabel" name="label_lastTime_slider">
+            <property name="geometry">
+             <rect>
+              <x>210</x>
+              <y>70</y>
+              <width>81</width>
+              <height>20</height>
+             </rect>
+            </property>
+            <property name="text">
+             <string>HH:MM:SS.fff</string>
+            </property>
+           </widget>
+           <widget class="QSlider" name="horizontalSlider_dataStartTime">
+            <property name="geometry">
+             <rect>
+              <x>20</x>
+              <y>90</y>
+              <width>251</width>
+              <height>20</height>
+             </rect>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="tickPosition">
+             <enum>QSlider::NoTicks</enum>
+            </property>
+            <property name="tickInterval">
+             <number>0</number>
+            </property>
+           </widget>
+           <widget class="QLabel" name="label_startTime_head">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>0</y>
+              <width>81</width>
+              <height>31</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>10</pointsize>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Start Time(UT)</string>
+            </property>
+           </widget>
+           <widget class="QLabel" name="label_endTime_head">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>30</y>
+              <width>81</width>
+              <height>31</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>10</pointsize>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>End Time(UT)</string>
+            </property>
+           </widget>
+           <widget class="QLabel" name="label_startTime">
+            <property name="geometry">
+             <rect>
+              <x>110</x>
+              <y>0</y>
+              <width>161</width>
+              <height>31</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>10</pointsize>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>yyyy-mm-dd/HH:MM:SS.fff</string>
+            </property>
+           </widget>
+           <widget class="QLabel" name="label_endTime">
+            <property name="geometry">
+             <rect>
+              <x>110</x>
+              <y>30</y>
+              <width>161</width>
+              <height>31</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>10</pointsize>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>yyyy-mm-dd/HH:MM:SS.fff</string>
+            </property>
+           </widget>
+          </widget>
+          <widget class="QTabWidget" name="tabWidget">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>290</y>
+             <width>311</width>
+             <height>311</height>
+            </rect>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QTabWidget::pane {
+    border: 1px solid rgb(0, 0, 0);
+    border-top: 1px solid rgb(200, 200, 200);
+}
+
+QTabBar::tab {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #E1E1E1, stop: 0.4 #DDDDDD,
+                                stop: 0.5 #D8D8D8, stop: 1.0 #D3D3D3);
+    border: 1px solid rgb(0, 0, 0);
+    border-bottom-color: #C2C7CB;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    min-width: 8ex;
+    padding: 2px;
+}
+
+QTabBar::tab:selected, QTabBar::tab:hover {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #fafafa, stop: 0.4 #f4f4f4,
+                                stop: 0.5 #e7e7e7, stop: 1.0 #fafafa);
+}
+
+QTabBar::tab:selected {
+    border-bottom-color: #C2C7CB;
+}
+
+QTabBar::tab:!selected {
+    margin-top: 2px;
+	border-bottom: 1px solid rgb(0, 0, 0)
+}</string>
+           </property>
+           <property name="tabShape">
+            <enum>QTabWidget::Rounded</enum>
+           </property>
+           <property name="currentIndex">
+            <number>0</number>
+           </property>
+           <property name="elideMode">
+            <enum>Qt::ElideNone</enum>
+           </property>
+           <property name="usesScrollButtons">
+            <bool>true</bool>
+           </property>
+           <property name="documentMode">
+            <bool>false</bool>
+           </property>
+           <property name="tabsClosable">
+            <bool>false</bool>
+           </property>
+           <property name="movable">
+            <bool>false</bool>
+           </property>
+           <property name="tabBarAutoHide">
+            <bool>false</bool>
+           </property>
+           <widget class="QWidget" name="tab_slice">
+            <attribute name="icon">
+             <iconset theme="accessories-text-editor">
+              <normaloff>.</normaloff>.</iconset>
+            </attribute>
+            <attribute name="title">
+             <string>Slice</string>
+            </attribute>
+            <widget class="QLabel" name="label_xy">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>40</y>
+               <width>49</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>XY-Plane</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_slice">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>10</y>
+               <width>49</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Slice 2D</string>
+             </property>
+            </widget>
+            <widget class="QSlider" name="horizontalSlider_xy">
+             <property name="geometry">
+              <rect>
+               <x>20</x>
+               <y>80</y>
+               <width>191</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkBox_xy_contour">
+             <property name="geometry">
+              <rect>
+               <x>230</x>
+               <y>40</y>
+               <width>21</width>
+               <height>21</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>9</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>16</width>
+               <height>16</height>
+              </size>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkBox_xy_image">
+             <property name="geometry">
+              <rect>
+               <x>270</x>
+               <y>40</y>
+               <width>21</width>
+               <height>21</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_contour">
+             <property name="geometry">
+              <rect>
+               <x>210</x>
+               <y>10</y>
+               <width>49</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Contour</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_image">
+             <property name="geometry">
+              <rect>
+               <x>260</x>
+               <y>10</y>
+               <width>41</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Image</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_xy_minValue">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>60</y>
+               <width>51</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>-0.0e-00</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_xy_maxValue">
+             <property name="geometry">
+              <rect>
+               <x>180</x>
+               <y>60</y>
+               <width>51</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>-0.0e-00</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkBox_yz_contour">
+             <property name="geometry">
+              <rect>
+               <x>230</x>
+               <y>120</y>
+               <width>21</width>
+               <height>21</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_yz_minValue">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>140</y>
+               <width>49</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>-0.0e-00</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_yz_maxValue">
+             <property name="geometry">
+              <rect>
+               <x>180</x>
+               <y>140</y>
+               <width>51</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>-0.0e-00</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkBox_yz_image">
+             <property name="geometry">
+              <rect>
+               <x>270</x>
+               <y>120</y>
+               <width>21</width>
+               <height>21</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+            <widget class="QSlider" name="horizontalSlider_yz">
+             <property name="geometry">
+              <rect>
+               <x>20</x>
+               <y>160</y>
+               <width>191</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_yz">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>120</y>
+               <width>49</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>YZ-Plane</string>
+             </property>
+            </widget>
+            <widget class="QSlider" name="horizontalSlider_xz">
+             <property name="geometry">
+              <rect>
+               <x>20</x>
+               <y>240</y>
+               <width>191</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkBox_xz_image">
+             <property name="geometry">
+              <rect>
+               <x>270</x>
+               <y>200</y>
+               <width>21</width>
+               <height>21</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_xz_maxValue">
+             <property name="geometry">
+              <rect>
+               <x>180</x>
+               <y>220</y>
+               <width>51</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>-0.0e-00</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_xz">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>200</y>
+               <width>49</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>XZ-Plane</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkBox_xz_contour">
+             <property name="geometry">
+              <rect>
+               <x>230</x>
+               <y>200</y>
+               <width>21</width>
+               <height>21</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_xz_minValue">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>220</y>
+               <width>49</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>-0.0e-00</string>
+             </property>
+            </widget>
+            <widget class="QLineEdit" name="lineEdit_xyPlane">
+             <property name="geometry">
+              <rect>
+               <x>70</x>
+               <y>40</y>
+               <width>131</width>
+               <height>21</height>
+              </rect>
+             </property>
+            </widget>
+            <widget class="QLineEdit" name="lineEdit_yzPlane">
+             <property name="geometry">
+              <rect>
+               <x>70</x>
+               <y>120</y>
+               <width>131</width>
+               <height>21</height>
+              </rect>
+             </property>
+            </widget>
+            <widget class="QLineEdit" name="lineEdit_xzPlane">
+             <property name="geometry">
+              <rect>
+               <x>70</x>
+               <y>200</y>
+               <width>131</width>
+               <height>21</height>
+              </rect>
+             </property>
+            </widget>
+           </widget>
+           <widget class="QWidget" name="tab_color">
+            <attribute name="title">
+             <string>Color</string>
+            </attribute>
+            <widget class="QLabel" name="label_colorSetting">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>10</y>
+               <width>121</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Display Color Setting</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_color_minValue_head">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>40</y>
+               <width>61</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Min Value</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_color_maxValue_head">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>70</y>
+               <width>61</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Max Value</string>
+             </property>
+            </widget>
+            <widget class="QLineEdit" name="lineEdit_color_minValue">
+             <property name="geometry">
+              <rect>
+               <x>70</x>
+               <y>40</y>
+               <width>181</width>
+               <height>21</height>
+              </rect>
+             </property>
+            </widget>
+            <widget class="QLineEdit" name="lineEdit_color_maxValue">
+             <property name="geometry">
+              <rect>
+               <x>70</x>
+               <y>70</y>
+               <width>181</width>
+               <height>21</height>
+              </rect>
+             </property>
+            </widget>
+            <widget class="QPushButton" name="pushButton_color_reset">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>100</y>
+               <width>75</width>
+               <height>24</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Reset</string>
+             </property>
+            </widget>
+           </widget>
+           <widget class="QWidget" name="tab_isosurface">
+            <attribute name="title">
+             <string>Isosurface</string>
+            </attribute>
+            <widget class="QLabel" name="label_isosurface1">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>10</y>
+               <width>71</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Isosurface1</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkBox_isosurface1_mesh">
+             <property name="geometry">
+              <rect>
+               <x>130</x>
+               <y>10</y>
+               <width>75</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Mesh</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_isosurface1_value">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>40</y>
+               <width>49</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Value</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_isosurface1_minValue">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>50</y>
+               <width>49</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>-0.0e-00</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_isosurface1_maxValue">
+             <property name="geometry">
+              <rect>
+               <x>180</x>
+               <y>50</y>
+               <width>51</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>-0.0e-00</string>
+             </property>
+            </widget>
+            <widget class="QSlider" name="horizontalSlider_isosurface1">
+             <property name="geometry">
+              <rect>
+               <x>20</x>
+               <y>70</y>
+               <width>191</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+            <widget class="QComboBox" name="comboBox_isosurface1_color">
+             <property name="geometry">
+              <rect>
+               <x>190</x>
+               <y>20</y>
+               <width>91</width>
+               <height>22</height>
+              </rect>
+             </property>
+             <item>
+              <property name="text">
+               <string>RED</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>BLUE</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>GREEN</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>LIME</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>YELLOW</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>MAGENTA</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>CYAN</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>WHITE</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>BLACK</string>
+              </property>
+             </item>
+            </widget>
+            <widget class="QCheckBox" name="checkBox_isosurface2_mesh">
+             <property name="geometry">
+              <rect>
+               <x>130</x>
+               <y>130</y>
+               <width>75</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Mesh</string>
+             </property>
+            </widget>
+            <widget class="QComboBox" name="comboBox_isosurface2_color">
+             <property name="geometry">
+              <rect>
+               <x>190</x>
+               <y>150</y>
+               <width>91</width>
+               <height>22</height>
+              </rect>
+             </property>
+             <item>
+              <property name="text">
+               <string>RED</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>BLUE</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>GREEN</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>LIME</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>YELLOW</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>MAGENTA</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>CYAN</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>WHITE</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>BLACK</string>
+              </property>
+             </item>
+            </widget>
+            <widget class="QLabel" name="label_isosurface2_minValue">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>170</y>
+               <width>49</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>-0.0e-00</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_isosurface2_maxValue">
+             <property name="geometry">
+              <rect>
+               <x>180</x>
+               <y>170</y>
+               <width>51</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>-0.0e-00</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_isosurface2_value">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>150</y>
+               <width>49</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Value</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_isosurface2">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>130</y>
+               <width>71</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Isosurface2</string>
+             </property>
+            </widget>
+            <widget class="QSlider" name="horizontalSlider_isosurface2">
+             <property name="geometry">
+              <rect>
+               <x>20</x>
+               <y>190</y>
+               <width>191</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+            <widget class="QLineEdit" name="lineEdit_isosurface1">
+             <property name="geometry">
+              <rect>
+               <x>50</x>
+               <y>30</y>
+               <width>131</width>
+               <height>21</height>
+              </rect>
+             </property>
+            </widget>
+            <widget class="QLineEdit" name="lineEdit_isosurface2">
+             <property name="geometry">
+              <rect>
+               <x>50</x>
+               <y>150</y>
+               <width>131</width>
+               <height>21</height>
+              </rect>
+             </property>
+            </widget>
+           </widget>
+           <widget class="QWidget" name="tab_vector">
+            <attribute name="title">
+             <string>Vector</string>
+            </attribute>
+            <widget class="QCheckBox" name="checkBox_vector_mag">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>10</y>
+               <width>161</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Magnetic field vector(nT)</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_vector_mag_x_head">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>30</y>
+               <width>21</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>X</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_vector_mag_x">
+             <property name="geometry">
+              <rect>
+               <x>30</x>
+               <y>30</y>
+               <width>49</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>x_value</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_vector_mag_y">
+             <property name="geometry">
+              <rect>
+               <x>130</x>
+               <y>30</y>
+               <width>49</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>y_value</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_vector_mag_y_head">
+             <property name="geometry">
+              <rect>
+               <x>110</x>
+               <y>30</y>
+               <width>21</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Y</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_vector_mag_z_head">
+             <property name="geometry">
+              <rect>
+               <x>210</x>
+               <y>30</y>
+               <width>21</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Z</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_vector_mag_z">
+             <property name="geometry">
+              <rect>
+               <x>230</x>
+               <y>30</y>
+               <width>49</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>z_value</string>
+             </property>
+            </widget>
+            <widget class="QComboBox" name="comboBox_vector_mag_scale">
+             <property name="geometry">
+              <rect>
+               <x>80</x>
+               <y>50</y>
+               <width>68</width>
+               <height>22</height>
+              </rect>
+             </property>
+             <item>
+              <property name="text">
+               <string>full</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>half</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>quarter</string>
+              </property>
+             </item>
+            </widget>
+            <widget class="QComboBox" name="comboBox_vector_mag_thick">
+             <property name="geometry">
+              <rect>
+               <x>150</x>
+               <y>50</y>
+               <width>68</width>
+               <height>22</height>
+              </rect>
+             </property>
+             <item>
+              <property name="text">
+               <string>1</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>2</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>3</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>4</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>5</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>6</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>7</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>8</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>9</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>10</string>
+              </property>
+             </item>
+            </widget>
+            <widget class="QComboBox" name="comboBox_vector_mag_color">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>50</y>
+               <width>68</width>
+               <height>22</height>
+              </rect>
+             </property>
+             <item>
+              <property name="text">
+               <string>RED</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>BLUE</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>GREEN</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>LIME</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>YELLOW</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>MAGENTA</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>CYAN</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>WHITE</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>BLACK</string>
+              </property>
+             </item>
+            </widget>
+            <widget class="QComboBox" name="comboBox_vector_vel_scale">
+             <property name="geometry">
+              <rect>
+               <x>80</x>
+               <y>130</y>
+               <width>68</width>
+               <height>22</height>
+              </rect>
+             </property>
+             <item>
+              <property name="text">
+               <string>full</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>half</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>quarter</string>
+              </property>
+             </item>
+            </widget>
+            <widget class="QLabel" name="label_vector_vel_z">
+             <property name="geometry">
+              <rect>
+               <x>230</x>
+               <y>110</y>
+               <width>49</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>z_value</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkBox_vector_vel">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>90</y>
+               <width>161</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Velocity vector(km/s)</string>
+             </property>
+            </widget>
+            <widget class="QComboBox" name="comboBox_vector_vel_thick">
+             <property name="geometry">
+              <rect>
+               <x>150</x>
+               <y>130</y>
+               <width>68</width>
+               <height>22</height>
+              </rect>
+             </property>
+             <item>
+              <property name="text">
+               <string>1</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>2</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>3</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>4</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>5</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>6</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>7</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>8</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>9</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>10</string>
+              </property>
+             </item>
+            </widget>
+            <widget class="QLabel" name="label_vector_vel_x_head">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>110</y>
+               <width>21</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>X</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_vector_vel_z_head">
+             <property name="geometry">
+              <rect>
+               <x>210</x>
+               <y>110</y>
+               <width>21</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Z</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_vector_vel_y_head">
+             <property name="geometry">
+              <rect>
+               <x>110</x>
+               <y>110</y>
+               <width>21</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Y</string>
+             </property>
+            </widget>
+            <widget class="QComboBox" name="comboBox_vector_vel_color">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>130</y>
+               <width>68</width>
+               <height>22</height>
+              </rect>
+             </property>
+             <item>
+              <property name="text">
+               <string>RED</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>BLUE</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>GREEN</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>LIME</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>YELLOW</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>MAGENTA</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>CYAN</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>WHITE</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>BLACK</string>
+              </property>
+             </item>
+            </widget>
+            <widget class="QLabel" name="label_vector_vel_x">
+             <property name="geometry">
+              <rect>
+               <x>30</x>
+               <y>110</y>
+               <width>49</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>x_value</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_vector_vel_y">
+             <property name="geometry">
+              <rect>
+               <x>130</x>
+               <y>110</y>
+               <width>49</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>y_value</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkBox_vector_user">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>180</y>
+               <width>161</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>User vector</string>
+             </property>
+            </widget>
+            <widget class="QComboBox" name="comboBox_vector_user_thick">
+             <property name="geometry">
+              <rect>
+               <x>150</x>
+               <y>230</y>
+               <width>68</width>
+               <height>22</height>
+              </rect>
+             </property>
+             <item>
+              <property name="text">
+               <string>1</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>2</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>3</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>4</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>5</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>6</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>7</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>8</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>9</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>10</string>
+              </property>
+             </item>
+            </widget>
+            <widget class="QLabel" name="label_vector_user_x_head">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>200</y>
+               <width>16</width>
+               <height>21</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>X</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_vector_user_z_head">
+             <property name="geometry">
+              <rect>
+               <x>210</x>
+               <y>200</y>
+               <width>21</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Z</string>
+             </property>
+            </widget>
+            <widget class="QComboBox" name="comboBox_vector_user_scale">
+             <property name="geometry">
+              <rect>
+               <x>80</x>
+               <y>230</y>
+               <width>68</width>
+               <height>22</height>
+              </rect>
+             </property>
+             <item>
+              <property name="text">
+               <string>full</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>half</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>quarter</string>
+              </property>
+             </item>
+            </widget>
+            <widget class="QLabel" name="label_vector_user_y_head">
+             <property name="geometry">
+              <rect>
+               <x>110</x>
+               <y>200</y>
+               <width>21</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Y</string>
+             </property>
+            </widget>
+            <widget class="QComboBox" name="comboBox_vector_user_color">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>230</y>
+               <width>68</width>
+               <height>22</height>
+              </rect>
+             </property>
+             <item>
+              <property name="text">
+               <string>RED</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>BLUE</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>GREEN</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>LIME</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>YELLOW</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>MAGENTA</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>CYAN</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>WHITE</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>BLACK</string>
+              </property>
+             </item>
+            </widget>
+            <widget class="QLineEdit" name="lineEdit_vector_user_x">
+             <property name="geometry">
+              <rect>
+               <x>20</x>
+               <y>200</y>
+               <width>71</width>
+               <height>21</height>
+              </rect>
+             </property>
+            </widget>
+            <widget class="QLineEdit" name="lineEdit_vector_user_y">
+             <property name="geometry">
+              <rect>
+               <x>120</x>
+               <y>200</y>
+               <width>71</width>
+               <height>21</height>
+              </rect>
+             </property>
+            </widget>
+            <widget class="QLineEdit" name="lineEdit_vector_user_z">
+             <property name="geometry">
+              <rect>
+               <x>220</x>
+               <y>200</y>
+               <width>71</width>
+               <height>21</height>
+              </rect>
+             </property>
+            </widget>
+           </widget>
+           <widget class="QWidget" name="tab_view">
+            <attribute name="title">
+             <string>View</string>
+            </attribute>
+            <widget class="QPushButton" name="pushButton_view_reset">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>150</y>
+               <width>75</width>
+               <height>24</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Reset View</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>10</y>
+               <width>141</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Turn On/Off Axis and Box</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkBox_view_axis">
+             <property name="geometry">
+              <rect>
+               <x>150</x>
+               <y>30</y>
+               <width>51</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Axis</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkBox_view_center">
+             <property name="geometry">
+              <rect>
+               <x>70</x>
+               <y>30</y>
+               <width>61</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Center</string>
+             </property>
+            </widget>
+            <widget class="QCheckBox" name="checkBox_view_box">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>30</y>
+               <width>51</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Box</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_2">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>70</y>
+               <width>61</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Plane View</string>
+             </property>
+            </widget>
+            <widget class="QPushButton" name="pushButton_view_xzPlane">
+             <property name="geometry">
+              <rect>
+               <x>170</x>
+               <y>90</y>
+               <width>75</width>
+               <height>24</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>XZ-Plane</string>
+             </property>
+            </widget>
+            <widget class="QPushButton" name="pushButton_view_xyPlane">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>90</y>
+               <width>75</width>
+               <height>24</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>XY-Plane</string>
+             </property>
+            </widget>
+            <widget class="QPushButton" name="pushButton_view_yzPlane">
+             <property name="geometry">
+              <rect>
+               <x>90</x>
+               <y>90</y>
+               <width>75</width>
+               <height>24</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>YZ-Plane</string>
+             </property>
+            </widget>
+           </widget>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout_viewer">
+      <property name="sizeConstraint">
+       <enum>QLayout::SetNoConstraint</enum>
+      </property>
+      <item>
+       <widget class="QLabel" name="label_data">
+        <property name="font">
+         <font>
+          <pointsize>16</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>yyyy-mm-dd/HH:MM:SS.fff - yyyy-mm-dd/HH:MM:SS.fff  (axis units)</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>checkBox_xy_image</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_show_xyPlane_image()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>298</x>
+     <y>457</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>335</x>
+     <y>532</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lineEdit_isosurface2</sender>
+   <signal>editingFinished()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_isosurface2_value_text()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>93</x>
+     <y>567</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>66</x>
+     <y>691</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lineEdit_color_minValue</sender>
+   <signal>editingFinished()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>edit_color_values()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>162</x>
+     <y>450</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>321</x>
+     <y>460</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>comboBox_vector_vel_thick</sender>
+   <signal>currentTextChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_vector_vel_thick()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>212</x>
+     <y>548</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>7</x>
+     <y>615</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lineEdit_xyPlane</sender>
+   <signal>editingFinished()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>edit_xyPlane_value_text()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>120</x>
+     <y>440</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>324</x>
+     <y>433</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lineEdit_vector_user_y</sender>
+   <signal>editingFinished()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_vector_user_elems()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>162</x>
+     <y>613</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>8</x>
+     <y>234</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lineEdit_vector_user_z</sender>
+   <signal>editingFinished()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_vector_user_elems()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>282</x>
+     <y>607</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>5</x>
+     <y>188</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_xy_contour</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_show_xyPlane_contour()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>262</x>
+     <y>457</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>334</x>
+     <y>654</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>comboBox_isosurface2_color</sender>
+   <signal>currentTextChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_isosurface2_color()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>237</x>
+     <y>565</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>224</x>
+     <y>692</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>comboBox_vector_mag_color</sender>
+   <signal>currentTextChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_vector_mag_color()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>54</x>
+     <y>465</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>5</x>
+     <y>461</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lineEdit_vector_user_x</sender>
+   <signal>editingFinished()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_vector_user_elems()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>91</x>
+     <y>617</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>3</x>
+     <y>271</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>comboBox_vector_mag_scale</sender>
+   <signal>currentTextChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_vector_mag_scale()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>129</x>
+     <y>468</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>3</x>
+     <y>372</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_view_xyPlane</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_xyPlane()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>73</x>
+     <y>505</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>4</x>
+     <y>543</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>comboBox_vector_mag_thick</sender>
+   <signal>currentTextChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_vector_mag_thick()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>205</x>
+     <y>465</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>6</x>
+     <y>358</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSlider_isosurface2</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_isosurface2_value_slider()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>203</x>
+     <y>606</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>253</x>
+     <y>695</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>comboBox_vector_vel_scale</sender>
+   <signal>currentTextChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_vector_vel_scale()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>153</x>
+     <y>548</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>6</x>
+     <y>584</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_xz_contour</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_show_xzPlane_contour()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>256</x>
+     <y>617</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>333</x>
+     <y>600</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>comboBox_isosurface1_color</sender>
+   <signal>currentTextChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_isosurface1_color()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>279</x>
+     <y>438</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>322</x>
+     <y>416</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_vector_user</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_show_vector_user()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>61</x>
+     <y>591</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>5</x>
+     <y>640</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSlider_xz</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_xzPlane_value_slider()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>96</x>
+     <y>655</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>322</x>
+     <y>662</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>comboBox_vector_user_thick</sender>
+   <signal>currentTextChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_vector_user_thick()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>202</x>
+     <y>646</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>6</x>
+     <y>308</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_yz_image</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_show_yzPlane_image()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>293</x>
+     <y>533</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>333</x>
+     <y>490</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_vector_mag</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_show_vector_mag()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>33</x>
+     <y>413</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>6</x>
+     <y>412</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>comboBox_vector_vel_color</sender>
+   <signal>currentTextChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_vector_vel_color()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>52</x>
+     <y>548</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>8</x>
+     <y>555</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSlider_yz</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_yzPlane_value_slider()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>165</x>
+     <y>570</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>324</x>
+     <y>575</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSlider_isosurface1</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_isosurface1_value_slider()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>86</x>
+     <y>486</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>3</x>
+     <y>490</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_yz_contour</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_show_yzPlane_contour()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>260</x>
+     <y>537</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>333</x>
+     <y>445</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_vector_vel</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_show_vector_vel()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>59</x>
+     <y>506</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>4</x>
+     <y>518</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_isosurface2_mesh</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_isosurface2_mesh()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>165</x>
+     <y>546</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>165</x>
+     <y>694</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lineEdit_xzPlane</sender>
+   <signal>editingFinished()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>edit_xzPlane_value_text()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>194</x>
+     <y>617</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>321</x>
+     <y>623</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>comboBox_vector_user_color</sender>
+   <signal>currentTextChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_vector_user_color()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>60</x>
+     <y>644</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1</x>
+     <y>679</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lineEdit_isosurface1</sender>
+   <signal>editingFinished()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_isosurface1_value_text()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>125</x>
+     <y>447</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>323</x>
+     <y>369</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_xz_image</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_show_xzPlane_image()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>290</x>
+     <y>610</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>333</x>
+     <y>634</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_view_reset</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_reset()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>73</x>
+     <y>570</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>328</x>
+     <y>358</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_view_xzPlane</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_xzPlane()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>230</x>
+     <y>510</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>327</x>
+     <y>325</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_isosurface1_mesh</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_isosurface1_mesh()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>178</x>
+     <y>426</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>321</x>
+     <y>385</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lineEdit_yzPlane</sender>
+   <signal>editingFinished()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>edit_yzPlane_value_text()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>185</x>
+     <y>536</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>322</x>
+     <y>539</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>comboBox_vector_user_scale</sender>
+   <signal>currentTextChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_vector_user_scale()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>119</x>
+     <y>645</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>2</x>
+     <y>340</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_view_yzPlane</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>view_yzPlane()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>145</x>
+     <y>506</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>5</x>
+     <y>667</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lineEdit_color_maxValue</sender>
+   <signal>editingFinished()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>edit_color_values()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>237</x>
+     <y>480</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>321</x>
+     <y>509</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSlider_xy</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_xyPlane_value_slider()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>147</x>
+     <y>482</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>324</x>
+     <y>481</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_view_center</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_view_center()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>107</x>
+     <y>439</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>4</x>
+     <y>447</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_view_box</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_view_box()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>51</x>
+     <y>440</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>8</x>
+     <y>407</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_view_axis</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_view_axis()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>220</x>
+     <y>444</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>5</x>
+     <y>334</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_isosurface1</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_show_isosurface1()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>72</x>
+     <y>82</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>4</x>
+     <y>5</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_isosurface2</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_show_isosurface2()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>45</x>
+     <y>98</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>21</x>
+     <y>12</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_saveImage</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>click_save_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>132</x>
+     <y>202</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>2</x>
+     <y>50</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>comboBox_coordinates</sender>
+   <signal>currentTextChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_coordinates()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>246</x>
+     <y>98</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>85</x>
+     <y>5</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>comboBox_axisUnits</sender>
+   <signal>currentTextChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_axisUnits()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>277</x>
+     <y>149</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>104</x>
+     <y>12</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>comboBox_units</sender>
+   <signal>currentTextChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_units()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>217</x>
+     <y>200</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>121</x>
+     <y>21</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSlider_dataStartTime</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_data()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>43</x>
+     <y>339</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>16</x>
+     <y>39</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_color_reset</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>color_reset()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>70</x>
+     <y>513</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>14</x>
+     <y>702</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>click_save_button()</slot>
+  <slot>change_show_isosurface1()</slot>
+  <slot>change_show_isosurface2()</slot>
+  <slot>change_show_xyPlane_contour()</slot>
+  <slot>change_show_xyPlane_image()</slot>
+  <slot>change_show_yzPlane_contour()</slot>
+  <slot>change_show_yzPlane_image()</slot>
+  <slot>change_show_xzPlane_contour()</slot>
+  <slot>change_show_xzPlane_image()</slot>
+  <slot>change_coordinates()</slot>
+  <slot>change_axisUnits()</slot>
+  <slot>change_units()</slot>
+  <slot>change_data()</slot>
+  <slot>change_xyPlane_value_slider()</slot>
+  <slot>edit_xyPlane_value_text()</slot>
+  <slot>edit_yzPlane_value_text()</slot>
+  <slot>change_yzPlane_value_slider()</slot>
+  <slot>edit_xzPlane_value_text()</slot>
+  <slot>change_xzPlane_value_slider()</slot>
+  <slot>edit_color_values()</slot>
+  <slot>change_isosurface1_mesh()</slot>
+  <slot>change_isosurface1_color()</slot>
+  <slot>change_isosurface1_value_text()</slot>
+  <slot>change_isosurface1_value_slider()</slot>
+  <slot>change_isosurface2_mesh()</slot>
+  <slot>change_isosurface2_color()</slot>
+  <slot>change_isosurface2_value_text()</slot>
+  <slot>change_isosurface2_value_slider()</slot>
+  <slot>change_show_vector_mag()</slot>
+  <slot>change_vector_mag_color()</slot>
+  <slot>change_vector_mag_scale()</slot>
+  <slot>change_vector_mag_thick()</slot>
+  <slot>change_show_vector_vel()</slot>
+  <slot>change_vector_vel_color()</slot>
+  <slot>change_vector_vel_scale()</slot>
+  <slot>change_vector_vel_thick()</slot>
+  <slot>change_show_vector_user()</slot>
+  <slot>change_vector_user_color()</slot>
+  <slot>change_vector_user_scale()</slot>
+  <slot>change_vector_user_thick()</slot>
+  <slot>change_vector_user_elems()</slot>
+  <slot>change_view_box()</slot>
+  <slot>change_view_center()</slot>
+  <slot>change_view_axis()</slot>
+  <slot>view_reset()</slot>
+  <slot>view_xyPlane()</slot>
+  <slot>view_yzPlane()</slot>
+  <slot>view_xzPlane()</slot>
+  <slot>color_reset()</slot>
+ </slots>
+</ui>
