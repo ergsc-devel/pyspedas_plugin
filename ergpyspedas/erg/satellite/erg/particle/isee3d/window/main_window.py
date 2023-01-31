@@ -17,10 +17,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self._save_image_dir = config['save_image_dir']
         if not os.path.isdir(self._save_image_dir):
+            current_dir = os.path.abspath(os.curdir)
             msgBox = QtWidgets.QMessageBox()
-            msgBox.setText(f'Image save directory not found: "{self._save_image_dir}"')
+            message = f'Save image directory "{self._save_image_dir}" not found.\n'
+            message += f'Save image to "{current_dir}".'
+            msgBox.setText(message)
             msgBox.exec()
-            sys.exit()
+            self._save_image_dir = current_dir
+
+
         self._colormap_name = config['colormap_name']
         if not validate_colormap_name(self._colormap_name):
             msgBox = QtWidgets.QMessageBox()
@@ -261,8 +266,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if not os.path.isdir(save_dir):
             current_dir = os.path.abspath(os.curdir)
             msgBox = QtWidgets.QMessageBox()
-            message = f'Directory "{save_dir}" not found.\n'
-            message += f'Save to "{current_dir}".'
+            message = f'Save image directory "{save_dir}" not found.\n'
+            message += f'Save image to "{current_dir}".'
             msgBox.setText(message)
             msgBox.exec()
             save_dir = current_dir
