@@ -26,13 +26,17 @@ def isee3d(dists, mag_vn, vel_vn, colormap_name=None, save_image_dir=None):
             Directory where images will be saved.
 
     '''
+    # If CONFIG is changed directly, the changed value is used in the next run.
+    config = CONFIG.copy()
     if colormap_name is not None:
-        CONFIG['colormap_name'] = colormap_name
+        config['colormap_name'] = colormap_name
     if save_image_dir is not None:
-        CONFIG['save_image_dir'] = save_image_dir
+        config['save_image_dir'] = save_image_dir
 
-    app = QtWidgets.QApplication()
-    window = MainWindow(dists, mag_vn, vel_vn, CONFIG)
+    app = QtWidgets.QApplication.instance()
+    if app is None:
+        app = QtWidgets.QApplication()
+    window = MainWindow(dists, mag_vn, vel_vn, config)
     window.show()
     window.vtkWidget.render_window_interactor.Initialize()
-    sys.exit(app.exec_())
+    app.exec_()
