@@ -29,9 +29,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self._colormap_name = config['colormap_name']
         if not validate_colormap_name(self._colormap_name):
             msgBox = QtWidgets.QMessageBox()
-            msgBox.setText(f'Colormap name "{self._colormap_name}" is not available.')
+            message = f'Colormap name "{self._colormap_name}" is not available.\n'
+            message += f'Use colormap "jet".'
+            msgBox.setText(message)
             msgBox.exec()
-            sys.exit()
+            self._colormap_name = 'jet'
 
 
         self.vtkWidget = VtkWidget(self.centralwidget, dists, mag_vn, vel_vn, self._colormap_name)
