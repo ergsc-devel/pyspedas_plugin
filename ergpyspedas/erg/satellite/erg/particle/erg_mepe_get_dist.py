@@ -91,7 +91,8 @@ def erg_mepe_get_dist(tname,
                 index = np.arange(n_times)
         else:
             n_times = np.array([index]).size
-
+    if isinstance(index, int):
+        index = np.array([index])
     """
     ;; --------------------------------------------------------------
 
@@ -137,7 +138,7 @@ def erg_mepe_get_dist(tname,
     ;;   dim[ nenergy, nspinph(azimuth), napd(elevation), ntime]
     """
 
-    dist['time'] = data_in[0][[index]]
+    dist['time'] = data_in[0][index]
     dist['end_time'] = dist['time'] + integ_time  # ;; currently hard-coded
 
     """
@@ -146,7 +147,7 @@ def erg_mepe_get_dist(tname,
     ;; The factor 1d-3 is to convert [/keV-s-sr-cm2] (default unit of
     ;; MEP-e Lv2 flux data) to [/eV-s-sr-cm2]
     """
-    dist['data'] = data_in[1][[index]].transpose([2, 1, 3, 0]) * 1e-3
+    dist['data'] = data_in[1][index].transpose([2, 1, 3, 0]) * 1e-3
 
     dist['bins'] = np.ones(shape=np.insert(dim_array, dim_array.shape[0],
                                            n_times), dtype='int8')
