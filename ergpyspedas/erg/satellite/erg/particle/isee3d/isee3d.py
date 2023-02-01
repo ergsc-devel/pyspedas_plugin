@@ -1,5 +1,3 @@
-import sys
-
 from PySide6 import QtWidgets
 
 from .window.main_window import MainWindow
@@ -36,6 +34,7 @@ def isee3d(dists, mag_vn, vel_vn, colormap_name=None, save_image_dir=None):
     app = QtWidgets.QApplication.instance()
     if app is None:
         app = QtWidgets.QApplication()
+    app.setStyle('Fusion')
     window = MainWindow(dists, mag_vn, vel_vn, config)
     window.show()
     window.vtkWidget.render_window_interactor.Initialize()
