@@ -15,7 +15,7 @@ def draw_colorbar(colorbar_property, v_array, renderer):
     lookup_table.SetNanColor(0, 0, 0, 1)  # nan to black
     lookup_table.Build()
 
-    scalarBarActor = make_actor.make_scalar_bar_actor(lookup_table, colorbar_property.units)
+    scalarBarActor = make_actor.make_scalar_bar_actor(lookup_table, colorbar_property.units, colorbar_property.text_size)
     renderer.AddActor2D(scalarBarActor)
 
     return lookup_table
@@ -66,12 +66,12 @@ def draw_outline(outline_property, scale, renderer):
         # x axis and y axis
         cube_axes_actor_xy = make_actor.make_cube_axes_actor(axis_names, bounds, scale, is_zaxis=False)
         cube_axes_actor_xy.SetCamera(renderer.GetActiveCamera())
-        cube_axes_actor_xy.SetScreenSize(outline_property.axis_screen_size)
+        cube_axes_actor_xy.SetScreenSize(outline_property.axis_text_size)
         renderer.AddActor(cube_axes_actor_xy)
         # z axis
         cube_axes_actor_z = make_actor.make_cube_axes_actor(axis_names, bounds, scale, is_zaxis=True)
         cube_axes_actor_z.SetCamera(renderer.GetActiveCamera())
-        cube_axes_actor_z.SetScreenSize(outline_property.axis_screen_size)
+        cube_axes_actor_z.SetScreenSize(outline_property.axis_text_size)
         renderer.AddActor(cube_axes_actor_z)
 
 def draw_all(draw_property, draw_data, renderer):

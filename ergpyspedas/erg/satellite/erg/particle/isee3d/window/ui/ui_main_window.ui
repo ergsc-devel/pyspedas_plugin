@@ -1892,7 +1892,7 @@ QTabBar::tab:!selected {
               <string>Reset View</string>
              </property>
             </widget>
-            <widget class="QLabel" name="label">
+            <widget class="QLabel" name="label_1">
              <property name="geometry">
               <rect>
                <x>10</x>
@@ -1996,6 +1996,65 @@ QTabBar::tab:!selected {
               <string>YZ-Plane</string>
              </property>
             </widget>
+            <widget class="QLabel" name="label_3">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>230</y>
+               <width>131</width>
+               <height>21</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Colorbar Text Size</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>260</y>
+               <width>101</width>
+               <height>21</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Axis Text Size</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_4">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>210</y>
+               <width>81</width>
+               <height>21</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Text Size</string>
+             </property>
+            </widget>
+            <widget class="QComboBox" name="comboBox_colorbar_text_size">
+             <property name="geometry">
+              <rect>
+               <x>120</x>
+               <y>230</y>
+               <width>81</width>
+               <height>22</height>
+              </rect>
+             </property>
+            </widget>
+            <widget class="QComboBox" name="comboBox_axis_text_size">
+             <property name="geometry">
+              <rect>
+               <x>120</x>
+               <y>260</y>
+               <width>81</width>
+               <height>22</height>
+              </rect>
+             </property>
+            </widget>
            </widget>
           </widget>
          </widget>
@@ -2045,8 +2104,8 @@ QTabBar::tab:!selected {
    <slot>change_show_xyPlane_image()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>308</x>
-     <y>451</y>
+     <x>310</x>
+     <y>419</y>
     </hint>
     <hint type="destinationlabel">
      <x>335</x>
@@ -2061,8 +2120,8 @@ QTabBar::tab:!selected {
    <slot>change_isosurface2_value_text()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>113</x>
-     <y>561</y>
+     <x>123</x>
+     <y>529</y>
     </hint>
     <hint type="destinationlabel">
      <x>66</x>
@@ -2077,8 +2136,8 @@ QTabBar::tab:!selected {
    <slot>edit_color_values()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>162</x>
-     <y>450</y>
+     <x>172</x>
+     <y>419</y>
     </hint>
     <hint type="destinationlabel">
      <x>321</x>
@@ -2093,8 +2152,8 @@ QTabBar::tab:!selected {
    <slot>change_vector_vel_thick()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>222</x>
-     <y>542</y>
+     <x>232</x>
+     <y>510</y>
     </hint>
     <hint type="destinationlabel">
      <x>7</x>
@@ -2109,8 +2168,8 @@ QTabBar::tab:!selected {
    <slot>edit_xyPlane_value_text()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>120</x>
-     <y>440</y>
+     <x>130</x>
+     <y>419</y>
     </hint>
     <hint type="destinationlabel">
      <x>324</x>
@@ -2125,8 +2184,8 @@ QTabBar::tab:!selected {
    <slot>change_vector_user_elems()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>172</x>
-     <y>611</y>
+     <x>182</x>
+     <y>579</y>
     </hint>
     <hint type="destinationlabel">
      <x>8</x>
@@ -2141,8 +2200,8 @@ QTabBar::tab:!selected {
    <slot>change_vector_user_elems()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>282</x>
-     <y>607</y>
+     <x>292</x>
+     <y>579</y>
     </hint>
     <hint type="destinationlabel">
      <x>5</x>
@@ -2158,7 +2217,7 @@ QTabBar::tab:!selected {
    <hints>
     <hint type="sourcelabel">
      <x>260</x>
-     <y>451</y>
+     <y>419</y>
     </hint>
     <hint type="destinationlabel">
      <x>334</x>
@@ -2173,8 +2232,8 @@ QTabBar::tab:!selected {
    <slot>change_isosurface2_color()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>247</x>
-     <y>552</y>
+     <x>257</x>
+     <y>520</y>
     </hint>
     <hint type="destinationlabel">
      <x>224</x>
@@ -2189,8 +2248,8 @@ QTabBar::tab:!selected {
    <slot>change_vector_mag_color()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>64</x>
-     <y>462</y>
+     <x>74</x>
+     <y>430</y>
     </hint>
     <hint type="destinationlabel">
      <x>5</x>
@@ -2205,8 +2264,8 @@ QTabBar::tab:!selected {
    <slot>change_vector_user_elems()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>101</x>
-     <y>611</y>
+     <x>111</x>
+     <y>579</y>
     </hint>
     <hint type="destinationlabel">
      <x>3</x>
@@ -2221,8 +2280,8 @@ QTabBar::tab:!selected {
    <slot>change_vector_mag_scale()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>139</x>
-     <y>462</y>
+     <x>149</x>
+     <y>430</y>
     </hint>
     <hint type="destinationlabel">
      <x>3</x>
@@ -2237,8 +2296,8 @@ QTabBar::tab:!selected {
    <slot>view_xyPlane()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>83</x>
-     <y>504</y>
+     <x>93</x>
+     <y>479</y>
     </hint>
     <hint type="destinationlabel">
      <x>4</x>
@@ -2253,8 +2312,8 @@ QTabBar::tab:!selected {
    <slot>change_vector_mag_thick()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>215</x>
-     <y>462</y>
+     <x>225</x>
+     <y>430</y>
     </hint>
     <hint type="destinationlabel">
      <x>6</x>
@@ -2269,8 +2328,8 @@ QTabBar::tab:!selected {
    <slot>change_isosurface2_value_slider()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>213</x>
-     <y>600</y>
+     <x>223</x>
+     <y>568</y>
     </hint>
     <hint type="destinationlabel">
      <x>253</x>
@@ -2285,8 +2344,8 @@ QTabBar::tab:!selected {
    <slot>change_vector_vel_scale()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>163</x>
-     <y>542</y>
+     <x>167</x>
+     <y>510</y>
     </hint>
     <hint type="destinationlabel">
      <x>6</x>
@@ -2301,8 +2360,8 @@ QTabBar::tab:!selected {
    <slot>change_show_xzPlane_contour()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>256</x>
-     <y>617</y>
+     <x>260</x>
+     <y>599</y>
     </hint>
     <hint type="destinationlabel">
      <x>333</x>
@@ -2317,8 +2376,8 @@ QTabBar::tab:!selected {
    <slot>change_isosurface1_color()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>289</x>
-     <y>432</y>
+     <x>299</x>
+     <y>400</y>
     </hint>
     <hint type="destinationlabel">
      <x>322</x>
@@ -2333,8 +2392,8 @@ QTabBar::tab:!selected {
    <slot>change_show_vector_user()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>71</x>
-     <y>590</y>
+     <x>81</x>
+     <y>559</y>
     </hint>
     <hint type="destinationlabel">
      <x>5</x>
@@ -2349,8 +2408,8 @@ QTabBar::tab:!selected {
    <slot>change_xzPlane_value_slider()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>106</x>
-     <y>681</y>
+     <x>116</x>
+     <y>639</y>
     </hint>
     <hint type="destinationlabel">
      <x>322</x>
@@ -2365,8 +2424,8 @@ QTabBar::tab:!selected {
    <slot>change_vector_user_thick()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>212</x>
-     <y>642</y>
+     <x>222</x>
+     <y>610</y>
     </hint>
     <hint type="destinationlabel">
      <x>6</x>
@@ -2381,8 +2440,8 @@ QTabBar::tab:!selected {
    <slot>change_show_yzPlane_image()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>293</x>
-     <y>533</y>
+     <x>303</x>
+     <y>509</y>
     </hint>
     <hint type="destinationlabel">
      <x>333</x>
@@ -2397,8 +2456,8 @@ QTabBar::tab:!selected {
    <slot>change_show_vector_mag()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>33</x>
-     <y>413</y>
+     <x>43</x>
+     <y>389</y>
     </hint>
     <hint type="destinationlabel">
      <x>6</x>
@@ -2413,8 +2472,8 @@ QTabBar::tab:!selected {
    <slot>change_vector_vel_color()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>62</x>
-     <y>542</y>
+     <x>72</x>
+     <y>510</y>
     </hint>
     <hint type="destinationlabel">
      <x>8</x>
@@ -2429,8 +2488,8 @@ QTabBar::tab:!selected {
    <slot>change_yzPlane_value_slider()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>165</x>
-     <y>570</y>
+     <x>175</x>
+     <y>549</y>
     </hint>
     <hint type="destinationlabel">
      <x>324</x>
@@ -2445,8 +2504,8 @@ QTabBar::tab:!selected {
    <slot>change_isosurface1_value_slider()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>96</x>
-     <y>480</y>
+     <x>106</x>
+     <y>448</y>
     </hint>
     <hint type="destinationlabel">
      <x>3</x>
@@ -2462,7 +2521,7 @@ QTabBar::tab:!selected {
    <hints>
     <hint type="sourcelabel">
      <x>260</x>
-     <y>537</y>
+     <y>509</y>
     </hint>
     <hint type="destinationlabel">
      <x>333</x>
@@ -2477,8 +2536,8 @@ QTabBar::tab:!selected {
    <slot>change_show_vector_vel()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>69</x>
-     <y>500</y>
+     <x>79</x>
+     <y>469</y>
     </hint>
     <hint type="destinationlabel">
      <x>4</x>
@@ -2493,8 +2552,8 @@ QTabBar::tab:!selected {
    <slot>change_isosurface2_mesh()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>175</x>
-     <y>540</y>
+     <x>185</x>
+     <y>508</y>
     </hint>
     <hint type="destinationlabel">
      <x>165</x>
@@ -2509,8 +2568,8 @@ QTabBar::tab:!selected {
    <slot>edit_xzPlane_value_text()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>194</x>
-     <y>617</y>
+     <x>204</x>
+     <y>599</y>
     </hint>
     <hint type="destinationlabel">
      <x>321</x>
@@ -2525,8 +2584,8 @@ QTabBar::tab:!selected {
    <slot>change_vector_user_color()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>70</x>
-     <y>642</y>
+     <x>80</x>
+     <y>610</y>
     </hint>
     <hint type="destinationlabel">
      <x>1</x>
@@ -2541,8 +2600,8 @@ QTabBar::tab:!selected {
    <slot>change_isosurface1_value_text()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>145</x>
-     <y>441</y>
+     <x>155</x>
+     <y>409</y>
     </hint>
     <hint type="destinationlabel">
      <x>323</x>
@@ -2557,8 +2616,8 @@ QTabBar::tab:!selected {
    <slot>change_show_xzPlane_image()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>300</x>
-     <y>631</y>
+     <x>310</x>
+     <y>599</y>
     </hint>
     <hint type="destinationlabel">
      <x>333</x>
@@ -2573,8 +2632,8 @@ QTabBar::tab:!selected {
    <slot>view_reset()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>83</x>
-     <y>564</y>
+     <x>93</x>
+     <y>539</y>
     </hint>
     <hint type="destinationlabel">
      <x>328</x>
@@ -2589,8 +2648,8 @@ QTabBar::tab:!selected {
    <slot>view_xzPlane()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>240</x>
-     <y>504</y>
+     <x>250</x>
+     <y>479</y>
     </hint>
     <hint type="destinationlabel">
      <x>327</x>
@@ -2605,8 +2664,8 @@ QTabBar::tab:!selected {
    <slot>change_isosurface1_mesh()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>188</x>
-     <y>420</y>
+     <x>198</x>
+     <y>388</y>
     </hint>
     <hint type="destinationlabel">
      <x>321</x>
@@ -2621,8 +2680,8 @@ QTabBar::tab:!selected {
    <slot>edit_yzPlane_value_text()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>185</x>
-     <y>536</y>
+     <x>195</x>
+     <y>509</y>
     </hint>
     <hint type="destinationlabel">
      <x>322</x>
@@ -2637,8 +2696,8 @@ QTabBar::tab:!selected {
    <slot>change_vector_user_scale()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>129</x>
-     <y>642</y>
+     <x>139</x>
+     <y>610</y>
     </hint>
     <hint type="destinationlabel">
      <x>2</x>
@@ -2653,8 +2712,8 @@ QTabBar::tab:!selected {
    <slot>view_yzPlane()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>155</x>
-     <y>504</y>
+     <x>165</x>
+     <y>479</y>
     </hint>
     <hint type="destinationlabel">
      <x>5</x>
@@ -2669,8 +2728,8 @@ QTabBar::tab:!selected {
    <slot>edit_color_values()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>237</x>
-     <y>480</y>
+     <x>247</x>
+     <y>449</y>
     </hint>
     <hint type="destinationlabel">
      <x>321</x>
@@ -2685,8 +2744,8 @@ QTabBar::tab:!selected {
    <slot>change_xyPlane_value_slider()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>147</x>
-     <y>482</y>
+     <x>157</x>
+     <y>459</y>
     </hint>
     <hint type="destinationlabel">
      <x>324</x>
@@ -2701,8 +2760,8 @@ QTabBar::tab:!selected {
    <slot>change_view_center()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>107</x>
-     <y>439</y>
+     <x>117</x>
+     <y>409</y>
     </hint>
     <hint type="destinationlabel">
      <x>4</x>
@@ -2717,8 +2776,8 @@ QTabBar::tab:!selected {
    <slot>change_view_box()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>51</x>
-     <y>440</y>
+     <x>61</x>
+     <y>409</y>
     </hint>
     <hint type="destinationlabel">
      <x>8</x>
@@ -2733,8 +2792,8 @@ QTabBar::tab:!selected {
    <slot>change_view_axis()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>220</x>
-     <y>440</y>
+     <x>230</x>
+     <y>409</y>
     </hint>
     <hint type="destinationlabel">
      <x>5</x>
@@ -2749,8 +2808,8 @@ QTabBar::tab:!selected {
    <slot>change_show_isosurface1()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>81</x>
-     <y>76</y>
+     <x>90</x>
+     <y>44</y>
     </hint>
     <hint type="destinationlabel">
      <x>4</x>
@@ -2765,8 +2824,8 @@ QTabBar::tab:!selected {
    <slot>change_show_isosurface2()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>54</x>
-     <y>96</y>
+     <x>63</x>
+     <y>64</y>
     </hint>
     <hint type="destinationlabel">
      <x>21</x>
@@ -2781,8 +2840,8 @@ QTabBar::tab:!selected {
    <slot>click_save_button()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>132</x>
-     <y>202</y>
+     <x>141</x>
+     <y>174</y>
     </hint>
     <hint type="destinationlabel">
      <x>2</x>
@@ -2797,8 +2856,8 @@ QTabBar::tab:!selected {
    <slot>change_coordinates()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>246</x>
-     <y>98</y>
+     <x>255</x>
+     <y>74</y>
     </hint>
     <hint type="destinationlabel">
      <x>85</x>
@@ -2813,8 +2872,8 @@ QTabBar::tab:!selected {
    <slot>change_axisUnits()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>277</x>
-     <y>149</y>
+     <x>286</x>
+     <y>124</y>
     </hint>
     <hint type="destinationlabel">
      <x>104</x>
@@ -2829,8 +2888,8 @@ QTabBar::tab:!selected {
    <slot>change_units()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>217</x>
-     <y>200</y>
+     <x>226</x>
+     <y>174</y>
     </hint>
     <hint type="destinationlabel">
      <x>121</x>
@@ -2845,8 +2904,8 @@ QTabBar::tab:!selected {
    <slot>change_data()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>52</x>
-     <y>335</y>
+     <x>61</x>
+     <y>303</y>
     </hint>
     <hint type="destinationlabel">
      <x>16</x>
@@ -2861,12 +2920,44 @@ QTabBar::tab:!selected {
    <slot>color_reset()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>70</x>
-     <y>513</y>
+     <x>80</x>
+     <y>489</y>
     </hint>
     <hint type="destinationlabel">
      <x>14</x>
      <y>702</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>comboBox_colorbar_text_size</sender>
+   <signal>currentTextChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_colorbar_text_size()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>180</x>
+     <y>599</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>514</x>
+     <y>354</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>comboBox_axis_text_size</sender>
+   <signal>currentTextChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_axis_text_size()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>180</x>
+     <y>629</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>514</x>
+     <y>354</y>
     </hint>
    </hints>
   </connection>
@@ -2921,5 +3012,7 @@ QTabBar::tab:!selected {
   <slot>view_yzPlane()</slot>
   <slot>view_xzPlane()</slot>
   <slot>color_reset()</slot>
+  <slot>change_colorbar_text_size()</slot>
+  <slot>change_axis_text_size()</slot>
  </slots>
 </ui>

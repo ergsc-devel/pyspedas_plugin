@@ -54,7 +54,9 @@ class VtkWidget(QVTKRenderWindowInteractor, QtWidgets.QWidget):
 
         data_manager = DataManager(dists, mag_vn, vel_vn)
         data_manager.setup()
-        draw_property = Isee3dProperty(data_manager.max_mag_squared_length, data_manager.max_vel_squared_length, self._colormap_name)
+        draw_property = Isee3dProperty(data_manager.max_mag_squared_length,
+                                       data_manager.max_vel_squared_length,
+                                       self._colormap_name)
         draw_data = data_manager.make_draw_data(draw_property.data)
         draw_property.setup(draw_data)
 

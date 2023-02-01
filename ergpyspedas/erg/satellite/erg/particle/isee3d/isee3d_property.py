@@ -18,6 +18,7 @@ class ColorbarProperty:
     min: float
     max: float
     units: str
+    text_size: int
 
     def reset(self):
         self.min = None
@@ -47,7 +48,7 @@ class OutlineProperty:
     show_center_lines: bool
     show_axis: bool
     axis_units: str
-    axis_screen_size: float
+    axis_text_size: float
     x_min: float
     x_max: float
     y_min: float
@@ -76,9 +77,9 @@ class Isee3dProperty:
         self.xz_plane = Slice2dProperty(show_image=False, show_contour=False, cut_axis='y_axis', cut_value=None)
         self.xy_plane = Slice2dProperty(show_image=False, show_contour=False, cut_axis='z_axis', cut_value=None)
 
-        self.outline = OutlineProperty(show_box=True, show_center_lines=True, show_axis=True, axis_units='Velocity', axis_screen_size=28,
+        self.outline = OutlineProperty(show_box=True, show_center_lines=True, show_axis=True, axis_units='Velocity', axis_text_size=28,
                                        x_min=None, x_max=None, y_min=None, y_max=None, z_min=None, z_max=None)
-        self.colorbar = ColorbarProperty(name=colormap_name, min=None, max=None, units='PSD')
+        self.colorbar = ColorbarProperty(name=colormap_name, min=None, max=None, units='PSD', text_size=16)
 
         self.data = DrawDataProperty(coordinates='SC', axis_units='Velocity', units='PSD', show_data_index=0)
 

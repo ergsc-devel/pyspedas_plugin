@@ -27,6 +27,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.vtkWidget.resize(768,768)
         self.verticalLayout_viewer.addWidget(self.vtkWidget)
 
+        self._suppress_update = True
+
         self._set_data_text()
         self._set_start_time_text()
         self._set_end_time_text()
@@ -41,6 +43,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self._set_isosurface_tab_widgets()
         self._set_vectors_tab_widgets()
         self._set_view_tab_widgets()
+
+        self._suppress_update = False
 
         self.statusBar.showMessage('Initialized', timeout=self._message_timeout_msec)
     
@@ -126,7 +130,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.label_vector_vel_x.setText(f'{self.vtkWidget.draw_property.vel_vec.vector[0]:.2e}')
         self.label_vector_vel_y.setText(f'{self.vtkWidget.draw_property.vel_vec.vector[1]:.2e}')
         self.label_vector_vel_z.setText(f'{self.vtkWidget.draw_property.vel_vec.vector[2]:.2e}')
-
+    
     # -------------------------------------------------------------------
     # PANEL FOR OBJECT ON/OFF
     # -------------------------------------------------------------------
@@ -135,6 +139,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.checkBox_isosurface2.setChecked(self.vtkWidget.draw_property.isosurface2.show)
 
     def change_show_isosurface1(self):
+        if self._suppress_update: return
+
         is_checked = self.checkBox_isosurface1.isChecked()
         if is_checked:
             self.vtkWidget.draw_property.isosurface1.show = True
@@ -143,6 +149,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.vtkWidget.update_draw()
 
     def change_show_isosurface2(self):
+        if self._suppress_update: return
+        
         is_checked = self.checkBox_isosurface2.isChecked()
         if is_checked:
             self.vtkWidget.draw_property.isosurface2.show = True
@@ -191,6 +199,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.horizontalSlider_dataStartTime.setMaximum(len(dists['time'])-1)
 
     def change_coordinates(self):
+        if self._suppress_update: return
+        
         current_text = self.comboBox_coordinates.currentText()
         self.vtkWidget.draw_property.data.coordinates = current_text
         self.vtkWidget.update_data()
@@ -198,6 +208,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self._set_vector_label()
 
     def change_axisUnits(self):
+        if self._suppress_update: return
+        
         current_text = self.comboBox_axisUnits.currentText()
         self.vtkWidget.draw_property.data.axis_units = current_text
         self.vtkWidget.draw_property.outline.axis_units = current_text
@@ -207,6 +219,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self._set_coordinates_text()
 
     def change_units(self):
+        if self._suppress_update: return
+        
         current_text = self.comboBox_units.currentText()
         self.vtkWidget.draw_property.data.units = current_text
         self.vtkWidget.draw_property.colorbar.units = current_text
@@ -215,6 +229,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self._set_value_text()
 
     def change_data(self):
+        if self._suppress_update: return
+        
         value = self.horizontalSlider_dataStartTime.value()
         self.vtkWidget.draw_property.data.show_data_index = value
 
@@ -285,6 +301,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.lineEdit_xzPlane.validator().setRange(self.vtkWidget.draw_property.outline.y_min, self.vtkWidget.draw_property.outline.y_max)
 
     def change_show_xyPlane_contour(self):
+        if self._suppress_update: return
+        
         is_checked = self.checkBox_xy_contour.isChecked()
         if is_checked:
             self.vtkWidget.draw_property.xy_plane.show_contour = True
@@ -293,6 +311,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.vtkWidget.update_draw()
 
     def change_show_xyPlane_image(self):
+        if self._suppress_update: return
+        
         is_checked = self.checkBox_xy_image.isChecked()
         if is_checked:
             self.vtkWidget.draw_property.xy_plane.show_image = True
@@ -301,6 +321,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.vtkWidget.update_draw()
 
     def change_show_yzPlane_contour(self):
+        if self._suppress_update: return
+        
         is_checked = self.checkBox_yz_contour.isChecked()
         if is_checked:
             self.vtkWidget.draw_property.yz_plane.show_contour = True
@@ -309,6 +331,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.vtkWidget.update_draw()
 
     def change_show_yzPlane_image(self):
+        if self._suppress_update: return
+        
         is_checked = self.checkBox_yz_image.isChecked()
         if is_checked:
             self.vtkWidget.draw_property.yz_plane.show_image = True
@@ -317,6 +341,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.vtkWidget.update_draw()
 
     def change_show_xzPlane_contour(self):
+        if self._suppress_update: return
+        
         is_checked = self.checkBox_xz_contour.isChecked()
         if is_checked:
             self.vtkWidget.draw_property.xz_plane.show_contour = True
@@ -325,6 +351,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.vtkWidget.update_draw()
 
     def change_show_xzPlane_image(self):
+        if self._suppress_update: return
+        
         is_checked = self.checkBox_xz_image.isChecked()
         if is_checked:
             self.vtkWidget.draw_property.xz_plane.show_image = True
@@ -333,6 +361,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.vtkWidget.update_draw()
 
     def change_xyPlane_value_slider(self):
+        if self._suppress_update: return
+        
         slider_value = self.horizontalSlider_xy.value()
         if slider_value == self._xyPlane_slider_value:
             return
@@ -345,6 +375,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.lineEdit_xyPlane.setText(f'{axis_value:.3e}')
 
     def edit_xyPlane_value_text(self):
+        if self._suppress_update: return
+        
         axis_value = self.lineEdit_xyPlane.text()
         axis_value = float(axis_value)
         slider_value = self._plane_axis_value_to_slider_value(axis_value, axis='z_axis')
@@ -359,6 +391,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.horizontalSlider_xy.setValue(slider_value)
 
     def change_yzPlane_value_slider(self):
+        if self._suppress_update: return
+        
         slider_value = self.horizontalSlider_yz.value()
         if slider_value == self._yzPlane_slider_value:
             return
@@ -371,6 +405,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.lineEdit_yzPlane.setText(f'{axis_value:.3e}')
 
     def edit_yzPlane_value_text(self):
+        if self._suppress_update: return
+        
         axis_value = self.lineEdit_yzPlane.text()
         axis_value = float(axis_value)
         slider_value = self._plane_axis_value_to_slider_value(axis_value, axis='x_axis')
@@ -385,6 +421,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.horizontalSlider_yz.setValue(slider_value)
 
     def change_xzPlane_value_slider(self):
+        if self._suppress_update: return
+        
         slider_value = self.horizontalSlider_xz.value()
         if slider_value == self._xzPlane_slider_value:
             return
@@ -397,6 +435,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.lineEdit_xzPlane.setText(f'{axis_value:.3e}')
 
     def edit_xzPlane_value_text(self):
+        if self._suppress_update: return
+        
         axis_value = self.lineEdit_xzPlane.text()
         axis_value = float(axis_value)
         slider_value = self._plane_axis_value_to_slider_value(axis_value, axis='y_axis')
@@ -464,6 +504,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.lineEdit_color_maxValue.setValidator(QtGui.QDoubleValidator())
 
     def edit_color_values(self):
+        if self._suppress_update: return
+        
         try:
             min_value = float(self.lineEdit_color_minValue.text())
             max_value = float(self.lineEdit_color_maxValue.text())
@@ -482,6 +524,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.vtkWidget.update_draw()
     
     def color_reset(self):
+        if self._suppress_update: return
+        
         min_value = self.vtkWidget.draw_data.value.min()
         max_value = self.vtkWidget.draw_data.value.max()
         
@@ -522,6 +566,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.lineEdit_isosurface2.validator().setRange(self.vtkWidget.draw_data.value.min(), self.vtkWidget.draw_data.value.max())
 
     def change_isosurface1_mesh(self):
+        if self._suppress_update: return
+        
         is_checked = self.checkBox_isosurface1_mesh.isChecked()
         if is_checked:
             self.vtkWidget.draw_property.isosurface1.mesh = True
@@ -530,11 +576,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.vtkWidget.update_draw()
 
     def change_isosurface1_color(self):
+        if self._suppress_update: return
+        
         color = self.comboBox_isosurface1_color.currentText()
         self.vtkWidget.draw_property.isosurface1.color = color
         self.vtkWidget.update_draw()
 
     def change_isosurface1_value_text(self):
+        if self._suppress_update: return
+        
         isosurface_value = self.lineEdit_isosurface1.text()
         isosurface_value = float(isosurface_value)
         slider_value = self._isosurface_value_to_slider_value(isosurface_value)
@@ -549,6 +599,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.horizontalSlider_isosurface1.setValue(slider_value)
 
     def change_isosurface1_value_slider(self):
+        if self._suppress_update: return
+        
         slider_value = self.horizontalSlider_isosurface1.value()
         if slider_value == self._isosurface1_slider_value:
             return
@@ -562,6 +614,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
 
     def change_isosurface2_mesh(self):
+        if self._suppress_update: return
+        
         is_checked = self.checkBox_isosurface2_mesh.isChecked()
         if is_checked:
             self.vtkWidget.draw_property.isosurface2.mesh = True
@@ -570,11 +624,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.vtkWidget.update_draw()
 
     def change_isosurface2_color(self):
+        if self._suppress_update: return
+        
         color = self.comboBox_isosurface2_color.currentText()
         self.vtkWidget.draw_property.isosurface2.color = color
         self.vtkWidget.update_draw()
 
     def change_isosurface2_value_text(self):
+        if self._suppress_update: return
+        
         isosurface_value = self.lineEdit_isosurface2.text()
         isosurface_value = float(isosurface_value)
         slider_value = self._isosurface_value_to_slider_value(isosurface_value)
@@ -589,6 +647,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.horizontalSlider_isosurface2.setValue(slider_value)
 
     def change_isosurface2_value_slider(self):
+        if self._suppress_update: return
+        
         slider_value = self.horizontalSlider_isosurface2.value()
         if slider_value == self._isosurface2_slider_value:
             return
@@ -655,67 +715,92 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.lineEdit_vector_user_z.setText(f'{self.vtkWidget.draw_property.user_vec.vector[2]:.2e}')
 
     def change_show_vector_mag(self):
+        if self._suppress_update: return
+        
         is_checked = self.checkBox_vector_mag.isChecked()
         self.vtkWidget.draw_property.mag_vec.show = is_checked
         self.vtkWidget.update_draw()
     
     def change_vector_mag_color(self):
+        if self._suppress_update: return
+        
         color = self.comboBox_vector_mag_color.currentText()
         self.vtkWidget.draw_property.mag_vec.color = color
         self.vtkWidget.update_draw()
     
     def change_vector_mag_scale(self):
+        if self._suppress_update: return
+        
         scale = self.comboBox_vector_mag_scale.currentText()
         self.vtkWidget.draw_property.mag_vec.length_scale = scale
         self.vtkWidget.update_draw()
     
     def change_vector_mag_thick(self):
+        if self._suppress_update: return
+        
         thick = int(self.comboBox_vector_mag_thick.currentText())
         self.vtkWidget.draw_property.mag_vec.thick = thick
         self.vtkWidget.update_draw()
 
-
     def change_show_vector_vel(self):
+        if self._suppress_update: return
+        
         is_checked = self.checkBox_vector_vel.isChecked()
         self.vtkWidget.draw_property.vel_vec.show = is_checked
         self.vtkWidget.update_draw()
     
     def change_vector_vel_color(self):
+        if self._suppress_update: return
+        
         color = self.comboBox_vector_vel_color.currentText()
         self.vtkWidget.draw_property.vel_vec.color = color
         self.vtkWidget.update_draw()
     
     def change_vector_vel_scale(self):
+        if self._suppress_update: return
+        
         scale = self.comboBox_vector_vel_scale.currentText()
         self.vtkWidget.draw_property.vel_vec.length_scale = scale
         self.vtkWidget.update_draw()
     
     def change_vector_vel_thick(self):
+        if self._suppress_update: return
+        
         thick = int(self.comboBox_vector_vel_thick.currentText())
         self.vtkWidget.draw_property.vel_vec.thick = thick
         self.vtkWidget.update_draw()
 
     def change_show_vector_user(self):
+        if self._suppress_update: return
+        
         is_checked = self.checkBox_vector_user.isChecked()
         self.vtkWidget.draw_property.user_vec.show = is_checked
         self._update_vector()
     
     def change_vector_user_color(self):
+        if self._suppress_update: return
+        
         color = self.comboBox_vector_user_color.currentText()
         self.vtkWidget.draw_property.user_vec.color = color
         self._update_vector()
     
     def change_vector_user_scale(self):
+        if self._suppress_update: return
+        
         scale = self.comboBox_vector_user_scale.currentText()
         self.vtkWidget.draw_property.user_vec.length_scale = scale
         self._update_vector()
     
     def change_vector_user_thick(self):
+        if self._suppress_update: return
+        
         thick = int(self.comboBox_vector_user_thick.currentText())
         self.vtkWidget.draw_property.user_vec.thick = thick
         self._update_vector()
     
     def change_vector_user_elems(self):
+        if self._suppress_update: return
+        
         self._update_vector()
     
     def _update_vector(self):
@@ -760,35 +845,53 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                                   'clipping range': (0.01, 1000.01),
                                   'orientation': (-90.0, 0.0, 0.0),
                                   'parallel_scale': 1.0}
+        self.comboBox_colorbar_text_size.addItems([str(i) for i in range(5, 50)])
+        self.comboBox_colorbar_text_size.setCurrentText(str(self.vtkWidget.draw_property.colorbar.text_size))
+        self.comboBox_axis_text_size.addItems([str(i) for i in range(5, 50)])
+        self.comboBox_axis_text_size.setCurrentText(str(self.vtkWidget.draw_property.outline.axis_text_size))
 
     def change_view_box(self):
+        if self._suppress_update: return
+        
         is_checked = self.checkBox_view_box.isChecked()
         self.vtkWidget.draw_property.outline.show_box = is_checked
         self.vtkWidget.update_draw()
 
     def change_view_center(self):
+        if self._suppress_update: return
+        
         is_checked = self.checkBox_view_center.isChecked()
         self.vtkWidget.draw_property.outline.show_center_lines = is_checked
         self.vtkWidget.update_draw()
 
     def change_view_axis(self):
+        if self._suppress_update: return
+        
         is_checked = self.checkBox_view_axis.isChecked()
         self.vtkWidget.draw_property.outline.show_axis = is_checked
         self.vtkWidget.update_draw()
 
     def view_xyPlane(self):
+        if self._suppress_update: return
+        
         self._set_orientation(self._camera_params_xy)
         self.vtkWidget.update_draw()
 
     def view_yzPlane(self):
+        if self._suppress_update: return
+        
         self._set_orientation(self._camera_params_yz)
         self.vtkWidget.update_draw()
 
     def view_xzPlane(self):
+        if self._suppress_update: return
+        
         self._set_orientation(self._camera_params_xz)
         self.vtkWidget.update_draw()
 
     def view_reset(self):
+        if self._suppress_update: return
+        
         self._set_orientation(self._initial_camera_params)
         self.vtkWidget.update_draw()
 
@@ -812,3 +915,17 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         camera.SetDistance(p['distance'])
         camera.SetClippingRange(p['clipping range'])
         camera.SetParallelScale(p['parallel_scale'])
+
+    def change_colorbar_text_size(self):
+        if self._suppress_update: return
+        
+        text_size = self.comboBox_colorbar_text_size.currentText()
+        self.vtkWidget.draw_property.colorbar.text_size = int(text_size)
+        self.vtkWidget.update_draw()
+
+    def change_axis_text_size(self):
+        if self._suppress_update: return
+        
+        text_size = self.comboBox_axis_text_size.currentText()
+        self.vtkWidget.draw_property.outline.axis_text_size = int(text_size)
+        self.vtkWidget.update_draw()

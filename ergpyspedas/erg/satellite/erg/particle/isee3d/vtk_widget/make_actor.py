@@ -229,7 +229,7 @@ def make_vector_actor(vec_property):
     return actor
 
 
-def make_scalar_bar_actor(lookup_table, array_name):
+def make_scalar_bar_actor(lookup_table, array_name, font_size):
     scalar_bar_actor = vtk.vtkScalarBarActor()
     scalar_bar_actor.SetOrientationToVertical()
     scalar_bar_actor.SetLookupTable(lookup_table)
@@ -244,7 +244,7 @@ def make_scalar_bar_actor(lookup_table, array_name):
 
     text_property = vtk.vtkTextProperty()
     text_property.SetColor(0, 0, 0)
-    text_property.SetFontSize(16)
+    text_property.SetFontSize(font_size)
     text_property.SetFontFamilyToArial()
     text_property.ItalicOff()
     text_property.BoldOff()
@@ -253,7 +253,7 @@ def make_scalar_bar_actor(lookup_table, array_name):
 
     text_property = vtk.vtkTextProperty()
     text_property.SetColor(0, 0, 0)
-    text_property.SetFontSize(20)
+    text_property.SetFontSize(font_size+4)
     text_property.SetFontFamilyToArial()
     text_property.ItalicOff()
     text_property.BoldOff()
