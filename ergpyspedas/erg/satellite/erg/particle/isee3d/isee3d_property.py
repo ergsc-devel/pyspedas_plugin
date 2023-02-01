@@ -83,7 +83,6 @@ class Isee3dProperty:
         self.data = DrawDataProperty(coordinates='SC', axis_units='Velocity', units='PSD', show_data_index=0)
 
     def setup(self, draw_data):
-        self.colorbar.reset()
 
         mag_vec = draw_data.mag_vec
         self.mag_vec.vector = mag_vec

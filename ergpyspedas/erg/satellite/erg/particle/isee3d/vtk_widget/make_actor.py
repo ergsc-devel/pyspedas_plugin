@@ -19,19 +19,40 @@ def make_point_cloud_actor(pointCloudData, lookup_table, sphere_radius=0.001):
     
     return point_cloud_actor
 
+def get_axis_title_exponent_and_scale(min_value, max_value, scale, prec=3):
+    max_abs_value = max(abs(min_value*scale), abs(max_value*scale))
+    exponent = int(f'{max_abs_value:.0e}'.split('e')[1])
+    if exponent >= 0:
+        factor = exponent // prec
+    else:
+        factor = -(-exponent // prec)
+    title_exponent = ''
+    if factor != 0:
+        title_exponent = f'x 10^{prec * factor} '
+    axis_scale = scale/np.power(10., prec*factor)
+    return title_exponent, axis_scale
 
 def make_cube_axes_actor(axis_names, bounds, scale, is_zaxis):
     cube_axes_actor = vtk.vtkCubeAxesActor()
 
-    cube_axes_actor.SetXTitle(axis_names[0])
-    cube_axes_actor.SetYTitle(axis_names[1])
-    cube_axes_actor.SetZTitle(axis_names[2])
-
     cube_axes_actor.SetBounds(bounds)
+    # label_format = '%-#6.3g'
 
-    cube_axes_actor.SetXAxisRange(bounds[0]*scale, bounds[1]*scale)
-    cube_axes_actor.SetYAxisRange(bounds[2]*scale, bounds[3]*scale)
-    cube_axes_actor.SetZAxisRange(bounds[4]*scale, bounds[5]*scale)
+    title_exponent, axis_scale = get_axis_title_exponent_and_scale(bounds[0], bounds[1], scale)
+    cube_axes_actor.SetXTitle(axis_names[0].format(title_exponent))
+    cube_axes_actor.SetXAxisRange(bounds[0]*axis_scale, bounds[1]*axis_scale)
+    # cube_axes_actor.SetXLabelFormat(label_format)
+
+    title_exponent, axis_scale = get_axis_title_exponent_and_scale(bounds[2], bounds[3], scale)
+    cube_axes_actor.SetYTitle(axis_names[1].format(title_exponent))
+    cube_axes_actor.SetYAxisRange(bounds[2]*axis_scale, bounds[3]*axis_scale)
+    # cube_axes_actor.SetYLabelFormat(label_format)
+
+    title_exponent, axis_scale = get_axis_title_exponent_and_scale(bounds[4], bounds[5], scale)
+    cube_axes_actor.SetZTitle(axis_names[2].format(title_exponent))
+    cube_axes_actor.SetZAxisRange(bounds[4]*axis_scale, bounds[5]*axis_scale)
+    # cube_axes_actor.SetZLabelFormat(label_format)
+
 
     cube_axes_actor.XAxisMinorTickVisibilityOff()
     cube_axes_actor.YAxisMinorTickVisibilityOff()

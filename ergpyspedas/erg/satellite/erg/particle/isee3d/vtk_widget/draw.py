@@ -60,9 +60,9 @@ def draw_outline(outline_property, scale, renderer):
     # Axes
     if outline_property.show_axis:
         if outline_property.axis_units == 'Velocity':
-            axis_names = ['<- VX ->', '<- VY ->','<- VZ ->']
+            axis_names = ['<- VX -> [{}km/s]', '<- VY -> [{}km/s]','<- VZ -> [{}km/s]']
         elif outline_property.axis_units == 'Energy':
-            axis_names = ['<- EX ->', '<- EY ->','<- EZ ->']
+            axis_names = ['<- VX -> [{}ev]', '<- VY -> [{}ev]','<- VZ -> [{}ev]']
         # x axis and y axis
         cube_axes_actor_xy = make_actor.make_cube_axes_actor(axis_names, bounds, scale, is_zaxis=False)
         cube_axes_actor_xy.SetCamera(renderer.GetActiveCamera())
@@ -79,7 +79,7 @@ def draw_all(draw_property, draw_data, renderer):
     lookup_table = draw_colorbar(draw_property.colorbar, draw_data.value, renderer)
 
     # point cloud
-    # point_cloud_actor = make_actor.make_point_cloud_actor(point_cloud_data, lookup_table, sphere_radius=0.005)
+    # point_cloud_actor = make_actor.make_point_cloud_actor(draw_data.point_cloud_data, lookup_table, sphere_radius=0.005)
     # renderer.AddActor(point_cloud_actor)
 
     # isosurface

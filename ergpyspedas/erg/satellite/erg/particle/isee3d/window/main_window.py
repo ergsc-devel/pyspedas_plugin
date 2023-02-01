@@ -22,6 +22,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             message = f'Save image directory "{self._save_image_dir}" not found.\n'
             message += f'Save image to "{current_dir}".'
             msgBox.setText(message)
+            msgBox.setWindowTitle('ISEE_3D')
             msgBox.exec()
             self._save_image_dir = current_dir
 
@@ -32,6 +33,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             message = f'Colormap name "{self._colormap_name}" is not available.\n'
             message += f'Use colormap "jet".'
             msgBox.setText(message)
+            msgBox.setWindowTitle('ISEE_3D')
             msgBox.exec()
             self._colormap_name = 'jet'
 
@@ -69,7 +71,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.horizontalSlider_xy.setMinimum(0)
         self.horizontalSlider_xy.setMaximum(dim - 1)
         axis_value = self._plane_slider_value_to_axis_value(slider_value, axis='z_axis')
-        self.lineEdit_xyPlane.setText(str(axis_value))
+        self.lineEdit_xyPlane.setText(f'{axis_value:.4e}')
         self.lineEdit_xyPlane.setValidator(QtGui.QDoubleValidator())
         self.lineEdit_xyPlane.validator().setRange(self.vtkWidget.draw_property.outline.z_min, self.vtkWidget.draw_property.outline.z_max)
 
@@ -83,7 +85,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.horizontalSlider_yz.setMinimum(0)
         self.horizontalSlider_yz.setMaximum(dim - 1)
         axis_value = self._plane_slider_value_to_axis_value(slider_value, axis='x_axis')
-        self.lineEdit_yzPlane.setText(str(axis_value))
+        self.lineEdit_yzPlane.setText(f'{axis_value:.4e}')
         self.lineEdit_yzPlane.setValidator(QtGui.QDoubleValidator())
         self.lineEdit_yzPlane.validator().setRange(self.vtkWidget.draw_property.outline.x_min, self.vtkWidget.draw_property.outline.x_max)
 
@@ -97,7 +99,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.horizontalSlider_xz.setMinimum(0)
         self.horizontalSlider_xz.setMaximum(dim - 1)
         axis_value = self._plane_slider_value_to_axis_value(slider_value, axis='y_axis')
-        self.lineEdit_xzPlane.setText(str(axis_value))
+        self.lineEdit_xzPlane.setText(f'{axis_value:.4e}')
         self.lineEdit_xzPlane.setValidator(QtGui.QDoubleValidator())
         self.lineEdit_xzPlane.validator().setRange(self.vtkWidget.draw_property.outline.y_min, self.vtkWidget.draw_property.outline.y_max)
 
@@ -271,6 +273,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             message = f'Save image directory "{save_dir}" not found.\n'
             message += f'Save image to "{current_dir}".'
             msgBox.setText(message)
+            msgBox.setWindowTitle('ISEE_3D')
             msgBox.exec()
             save_dir = current_dir
 
@@ -316,6 +319,17 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def change_data(self):
         value = self.horizontalSlider_dataStartTime.value()
         self.vtkWidget.draw_property.data.show_data_index = value
+
+        try:
+            edit_min = float(self.lineEdit_color_minValue.text())
+            edit_max = float(self.lineEdit_color_maxValue.text())
+            colorbar_min = self.vtkWidget.draw_property.colorbar.min
+            colorbar_max = self.vtkWidget.draw_property.colorbar.max
+            if (edit_min != colorbar_min) or (edit_max != colorbar_max):
+                self.vtkWidget.draw_property.colorbar.reset()
+        except:
+            self.vtkWidget.draw_property.colorbar.reset()
+
         self.vtkWidget.update_data()
         self.vtkWidget.update_draw()
         self._set_start_time_text()
@@ -387,7 +401,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.vtkWidget.update_draw()
 
         self._xyPlane_slider_value = slider_value
-        self.lineEdit_xyPlane.setText(str(axis_value))
+        self.lineEdit_xyPlane.setText(f'{axis_value:.4e}')
 
     def edit_xyPlane_value_text(self):
         axis_value = self.lineEdit_xyPlane.text()
@@ -413,7 +427,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.vtkWidget.update_draw()
 
         self._yzPlane_slider_value = slider_value
-        self.lineEdit_yzPlane.setText(str(axis_value))
+        self.lineEdit_yzPlane.setText(f'{axis_value:.4e}')
 
     def edit_yzPlane_value_text(self):
         axis_value = self.lineEdit_yzPlane.text()
@@ -439,7 +453,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.vtkWidget.update_draw()
 
         self._xzPlane_slider_value = slider_value
-        self.lineEdit_xzPlane.setText(str(axis_value))
+        self.lineEdit_xzPlane.setText(f'{axis_value:.4e}')
 
     def edit_xzPlane_value_text(self):
         axis_value = self.lineEdit_xzPlane.text()
@@ -501,6 +515,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             else:
                 return i + 1
 
+
     def edit_color_values(self):
         try:
             min_value = float(self.lineEdit_color_minValue.text())
@@ -508,6 +523,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             if min_value >= max_value:
                 msgBox = QtWidgets.QMessageBox()
                 msgBox.setText('"Max Value" must be greater than "Min Value".')
+                msgBox.setWindowTitle('ISEE_3D')
                 msgBox.exec()
                 return
         except:
