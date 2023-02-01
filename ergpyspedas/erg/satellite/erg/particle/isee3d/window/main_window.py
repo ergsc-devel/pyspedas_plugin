@@ -71,7 +71,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.horizontalSlider_xy.setMinimum(0)
         self.horizontalSlider_xy.setMaximum(dim - 1)
         axis_value = self._plane_slider_value_to_axis_value(slider_value, axis='z_axis')
-        self.lineEdit_xyPlane.setText(f'{axis_value:.4e}')
+        self.lineEdit_xyPlane.setText(f'{axis_value:.3e}')
         self.lineEdit_xyPlane.setValidator(QtGui.QDoubleValidator())
         self.lineEdit_xyPlane.validator().setRange(self.vtkWidget.draw_property.outline.z_min, self.vtkWidget.draw_property.outline.z_max)
 
@@ -85,7 +85,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.horizontalSlider_yz.setMinimum(0)
         self.horizontalSlider_yz.setMaximum(dim - 1)
         axis_value = self._plane_slider_value_to_axis_value(slider_value, axis='x_axis')
-        self.lineEdit_yzPlane.setText(f'{axis_value:.4e}')
+        self.lineEdit_yzPlane.setText(f'{axis_value:.3e}')
         self.lineEdit_yzPlane.setValidator(QtGui.QDoubleValidator())
         self.lineEdit_yzPlane.validator().setRange(self.vtkWidget.draw_property.outline.x_min, self.vtkWidget.draw_property.outline.x_max)
 
@@ -99,7 +99,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.horizontalSlider_xz.setMinimum(0)
         self.horizontalSlider_xz.setMaximum(dim - 1)
         axis_value = self._plane_slider_value_to_axis_value(slider_value, axis='y_axis')
-        self.lineEdit_xzPlane.setText(f'{axis_value:.4e}')
+        self.lineEdit_xzPlane.setText(f'{axis_value:.3e}')
         self.lineEdit_xzPlane.setValidator(QtGui.QDoubleValidator())
         self.lineEdit_xzPlane.validator().setRange(self.vtkWidget.draw_property.outline.y_min, self.vtkWidget.draw_property.outline.y_max)
 
@@ -119,7 +119,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.horizontalSlider_isosurface1.setMinimum(0)
         self.horizontalSlider_isosurface1.setMaximum(self._value_divide_num)
         isosurface_value = self._slider_value_to_isosurface_value(slider_value)
-        self.lineEdit_isosurface1.setText(f'{isosurface_value:.4e}')
+        self.lineEdit_isosurface1.setText(f'{isosurface_value:.3e}')
         self.lineEdit_isosurface1.setValidator(QtGui.QDoubleValidator())
         self.lineEdit_isosurface1.validator().setRange(self.vtkWidget.draw_data.value.min(), self.vtkWidget.draw_data.value.max())
 
@@ -132,7 +132,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.horizontalSlider_isosurface2.setMinimum(0)
         self.horizontalSlider_isosurface2.setMaximum(self._value_divide_num)
         isosurface_value = self._slider_value_to_isosurface_value(slider_value)
-        self.lineEdit_isosurface2.setText(f'{isosurface_value:.4e}')
+        self.lineEdit_isosurface2.setText(f'{isosurface_value:.3e}')
         self.lineEdit_isosurface2.setValidator(QtGui.QDoubleValidator())
         self.lineEdit_isosurface2.validator().setRange(self.vtkWidget.draw_data.value.min(), self.vtkWidget.draw_data.value.max())
 
@@ -401,7 +401,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.vtkWidget.update_draw()
 
         self._xyPlane_slider_value = slider_value
-        self.lineEdit_xyPlane.setText(f'{axis_value:.4e}')
+        self.lineEdit_xyPlane.setText(f'{axis_value:.3e}')
 
     def edit_xyPlane_value_text(self):
         axis_value = self.lineEdit_xyPlane.text()
@@ -427,7 +427,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.vtkWidget.update_draw()
 
         self._yzPlane_slider_value = slider_value
-        self.lineEdit_yzPlane.setText(f'{axis_value:.4e}')
+        self.lineEdit_yzPlane.setText(f'{axis_value:.3e}')
 
     def edit_yzPlane_value_text(self):
         axis_value = self.lineEdit_yzPlane.text()
@@ -453,7 +453,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.vtkWidget.update_draw()
 
         self._xzPlane_slider_value = slider_value
-        self.lineEdit_xzPlane.setText(f'{axis_value:.4e}')
+        self.lineEdit_xzPlane.setText(f'{axis_value:.3e}')
 
     def edit_xzPlane_value_text(self):
         axis_value = self.lineEdit_xzPlane.text()
@@ -580,7 +580,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.vtkWidget.update_draw()
 
         self._isosurface1_slider_value = slider_value
-        self.lineEdit_isosurface1.setText(f'{isosurface_value:.4e}')
+        self.lineEdit_isosurface1.setText(f'{isosurface_value:.3e}')
 
 
     def change_isosurface2_mesh(self):
@@ -620,7 +620,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.vtkWidget.update_draw()
 
         self._isosurface2_slider_value = slider_value
-        self.lineEdit_isosurface2.setText(f'{isosurface_value:.4e}')
+        self.lineEdit_isosurface2.setText(f'{isosurface_value:.3e}')
 
 
     def _slider_value_to_isosurface_value(self, slider_value):
