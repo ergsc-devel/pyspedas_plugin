@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1018</width>
-    <height>774</height>
+    <width>1029</width>
+    <height>710</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -31,14 +31,14 @@
       </property>
       <property name="minimumSize">
        <size>
-        <width>341</width>
-        <height>0</height>
+        <width>351</width>
+        <height>100</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>341</width>
-        <height>631</height>
+        <width>351</width>
+        <height>671</height>
        </size>
       </property>
       <property name="styleSheet">
@@ -59,13 +59,13 @@
       <property name="alignment">
        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
       </property>
-      <widget class="QWidget" name="scrollAreaWidgetContents_2">
+      <widget class="QWidget" name="scrollAreaWidgetContents">
        <property name="geometry">
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>339</width>
-         <height>629</height>
+         <width>349</width>
+         <height>669</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -74,13 +74,13 @@
           <property name="minimumSize">
            <size>
             <width>311</width>
-            <height>601</height>
+            <height>641</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
             <width>311</width>
-            <height>601</height>
+            <height>641</height>
            </size>
           </property>
           <widget class="QFrame" name="frame_showData">
@@ -100,8 +100,8 @@
              <rect>
               <x>10</x>
               <y>0</y>
-              <width>81</width>
-              <height>20</height>
+              <width>101</width>
+              <height>21</height>
              </rect>
             </property>
             <property name="text">
@@ -113,8 +113,8 @@
              <rect>
               <x>10</x>
               <y>20</y>
-              <width>81</width>
-              <height>20</height>
+              <width>101</width>
+              <height>21</height>
              </rect>
             </property>
             <property name="text">
@@ -128,7 +128,7 @@
              <x>0</x>
              <y>100</y>
              <width>161</width>
-             <height>51</height>
+             <height>61</height>
             </rect>
            </property>
            <property name="frameShape">
@@ -140,7 +140,7 @@
               <x>10</x>
               <y>0</y>
               <width>68</width>
-              <height>19</height>
+              <height>21</height>
              </rect>
             </property>
             <property name="text">
@@ -151,8 +151,8 @@
             <property name="geometry">
              <rect>
               <x>10</x>
-              <y>20</y>
-              <width>61</width>
+              <y>30</y>
+              <width>71</width>
               <height>21</height>
              </rect>
             </property>
@@ -173,7 +173,7 @@
               <x>90</x>
               <y>20</y>
               <width>61</width>
-              <height>21</height>
+              <height>31</height>
              </rect>
             </property>
             <property name="text">
@@ -187,7 +187,7 @@
              <x>170</x>
              <y>0</y>
              <width>141</width>
-             <height>151</height>
+             <height>161</height>
             </rect>
            </property>
            <property name="frameShape">
@@ -197,9 +197,9 @@
             <property name="geometry">
              <rect>
               <x>10</x>
-              <y>0</y>
-              <width>71</width>
-              <height>22</height>
+              <y>10</y>
+              <width>91</width>
+              <height>21</height>
              </rect>
             </property>
             <property name="text">
@@ -210,7 +210,7 @@
             <property name="geometry">
              <rect>
               <x>10</x>
-              <y>20</y>
+              <y>30</y>
               <width>111</width>
               <height>21</height>
              </rect>
@@ -236,8 +236,8 @@
             <property name="geometry">
              <rect>
               <x>10</x>
-              <y>50</y>
-              <width>61</width>
+              <y>60</y>
+              <width>81</width>
               <height>21</height>
              </rect>
             </property>
@@ -249,7 +249,7 @@
             <property name="geometry">
              <rect>
               <x>10</x>
-              <y>70</y>
+              <y>80</y>
               <width>111</width>
               <height>21</height>
              </rect>
@@ -269,9 +269,9 @@
             <property name="geometry">
              <rect>
               <x>10</x>
-              <y>100</y>
-              <width>41</width>
-              <height>20</height>
+              <y>110</y>
+              <width>61</width>
+              <height>21</height>
              </rect>
             </property>
             <property name="text">
@@ -282,7 +282,7 @@
             <property name="geometry">
              <rect>
               <x>10</x>
-              <y>120</y>
+              <y>130</y>
               <width>111</width>
               <height>21</height>
              </rect>
@@ -303,7 +303,7 @@
            <property name="geometry">
             <rect>
              <x>0</x>
-             <y>160</y>
+             <y>170</y>
              <width>311</width>
              <height>121</height>
             </rect>
@@ -321,8 +321,8 @@
              <rect>
               <x>10</x>
               <y>70</y>
-              <width>71</width>
-              <height>16</height>
+              <width>91</width>
+              <height>21</height>
              </rect>
             </property>
             <property name="text">
@@ -332,10 +332,10 @@
            <widget class="QLabel" name="label_lastTime_slider">
             <property name="geometry">
              <rect>
-              <x>210</x>
+              <x>200</x>
               <y>70</y>
-              <width>81</width>
-              <height>20</height>
+              <width>101</width>
+              <height>21</height>
              </rect>
             </property>
             <property name="text">
@@ -366,13 +366,13 @@
              <rect>
               <x>10</x>
               <y>0</y>
-              <width>81</width>
+              <width>91</width>
               <height>31</height>
              </rect>
             </property>
             <property name="font">
              <font>
-              <pointsize>10</pointsize>
+              <pointsize>9</pointsize>
               <bold>false</bold>
              </font>
             </property>
@@ -385,13 +385,13 @@
              <rect>
               <x>10</x>
               <y>30</y>
-              <width>81</width>
+              <width>91</width>
               <height>31</height>
              </rect>
             </property>
             <property name="font">
              <font>
-              <pointsize>10</pointsize>
+              <pointsize>9</pointsize>
               <bold>false</bold>
              </font>
             </property>
@@ -404,13 +404,13 @@
              <rect>
               <x>110</x>
               <y>0</y>
-              <width>161</width>
+              <width>171</width>
               <height>31</height>
              </rect>
             </property>
             <property name="font">
              <font>
-              <pointsize>10</pointsize>
+              <pointsize>9</pointsize>
               <bold>false</bold>
              </font>
             </property>
@@ -423,13 +423,13 @@
              <rect>
               <x>110</x>
               <y>30</y>
-              <width>161</width>
+              <width>171</width>
               <height>31</height>
              </rect>
             </property>
             <property name="font">
              <font>
-              <pointsize>10</pointsize>
+              <pointsize>9</pointsize>
               <bold>false</bold>
              </font>
             </property>
@@ -442,9 +442,9 @@
            <property name="geometry">
             <rect>
              <x>0</x>
-             <y>290</y>
+             <y>310</y>
              <width>311</width>
-             <height>311</height>
+             <height>331</height>
             </rect>
            </property>
            <property name="styleSheet">
@@ -517,8 +517,8 @@ QTabBar::tab:!selected {
               <rect>
                <x>10</x>
                <y>40</y>
-               <width>49</width>
-               <height>16</height>
+               <width>61</width>
+               <height>21</height>
               </rect>
              </property>
              <property name="text">
@@ -530,8 +530,8 @@ QTabBar::tab:!selected {
               <rect>
                <x>10</x>
                <y>10</y>
-               <width>49</width>
-               <height>16</height>
+               <width>61</width>
+               <height>21</height>
               </rect>
              </property>
              <property name="text">
@@ -543,8 +543,8 @@ QTabBar::tab:!selected {
               <rect>
                <x>20</x>
                <y>80</y>
-               <width>191</width>
-               <height>20</height>
+               <width>181</width>
+               <height>21</height>
               </rect>
              </property>
              <property name="orientation">
@@ -554,7 +554,7 @@ QTabBar::tab:!selected {
             <widget class="QCheckBox" name="checkBox_xy_contour">
              <property name="geometry">
               <rect>
-               <x>230</x>
+               <x>220</x>
                <y>40</y>
                <width>21</width>
                <height>21</height>
@@ -591,10 +591,10 @@ QTabBar::tab:!selected {
             <widget class="QLabel" name="label_contour">
              <property name="geometry">
               <rect>
-               <x>210</x>
+               <x>198</x>
                <y>10</y>
-               <width>49</width>
-               <height>16</height>
+               <width>61</width>
+               <height>21</height>
               </rect>
              </property>
              <property name="text">
@@ -606,8 +606,8 @@ QTabBar::tab:!selected {
               <rect>
                <x>260</x>
                <y>10</y>
-               <width>41</width>
-               <height>16</height>
+               <width>51</width>
+               <height>21</height>
               </rect>
              </property>
              <property name="text">
@@ -619,8 +619,8 @@ QTabBar::tab:!selected {
               <rect>
                <x>10</x>
                <y>60</y>
-               <width>51</width>
-               <height>16</height>
+               <width>61</width>
+               <height>21</height>
               </rect>
              </property>
              <property name="text">
@@ -630,10 +630,10 @@ QTabBar::tab:!selected {
             <widget class="QLabel" name="label_xy_maxValue">
              <property name="geometry">
               <rect>
-               <x>180</x>
+               <x>160</x>
                <y>60</y>
-               <width>51</width>
-               <height>16</height>
+               <width>61</width>
+               <height>21</height>
               </rect>
              </property>
              <property name="text">
@@ -643,8 +643,8 @@ QTabBar::tab:!selected {
             <widget class="QCheckBox" name="checkBox_yz_contour">
              <property name="geometry">
               <rect>
-               <x>230</x>
-               <y>120</y>
+               <x>220</x>
+               <y>130</y>
                <width>21</width>
                <height>21</height>
               </rect>
@@ -657,9 +657,9 @@ QTabBar::tab:!selected {
              <property name="geometry">
               <rect>
                <x>10</x>
-               <y>140</y>
-               <width>49</width>
-               <height>16</height>
+               <y>150</y>
+               <width>61</width>
+               <height>21</height>
               </rect>
              </property>
              <property name="text">
@@ -669,10 +669,10 @@ QTabBar::tab:!selected {
             <widget class="QLabel" name="label_yz_maxValue">
              <property name="geometry">
               <rect>
-               <x>180</x>
-               <y>140</y>
-               <width>51</width>
-               <height>16</height>
+               <x>160</x>
+               <y>150</y>
+               <width>61</width>
+               <height>21</height>
               </rect>
              </property>
              <property name="text">
@@ -683,7 +683,7 @@ QTabBar::tab:!selected {
              <property name="geometry">
               <rect>
                <x>270</x>
-               <y>120</y>
+               <y>130</y>
                <width>21</width>
                <height>21</height>
               </rect>
@@ -696,9 +696,9 @@ QTabBar::tab:!selected {
              <property name="geometry">
               <rect>
                <x>20</x>
-               <y>160</y>
-               <width>191</width>
-               <height>20</height>
+               <y>170</y>
+               <width>181</width>
+               <height>21</height>
               </rect>
              </property>
              <property name="orientation">
@@ -709,9 +709,9 @@ QTabBar::tab:!selected {
              <property name="geometry">
               <rect>
                <x>10</x>
-               <y>120</y>
-               <width>49</width>
-               <height>16</height>
+               <y>130</y>
+               <width>61</width>
+               <height>21</height>
               </rect>
              </property>
              <property name="text">
@@ -722,9 +722,9 @@ QTabBar::tab:!selected {
              <property name="geometry">
               <rect>
                <x>20</x>
-               <y>240</y>
-               <width>191</width>
-               <height>20</height>
+               <y>260</y>
+               <width>181</width>
+               <height>21</height>
               </rect>
              </property>
              <property name="orientation">
@@ -735,7 +735,7 @@ QTabBar::tab:!selected {
              <property name="geometry">
               <rect>
                <x>270</x>
-               <y>200</y>
+               <y>220</y>
                <width>21</width>
                <height>21</height>
               </rect>
@@ -747,10 +747,10 @@ QTabBar::tab:!selected {
             <widget class="QLabel" name="label_xz_maxValue">
              <property name="geometry">
               <rect>
-               <x>180</x>
-               <y>220</y>
-               <width>51</width>
-               <height>16</height>
+               <x>160</x>
+               <y>240</y>
+               <width>61</width>
+               <height>21</height>
               </rect>
              </property>
              <property name="text">
@@ -761,9 +761,9 @@ QTabBar::tab:!selected {
              <property name="geometry">
               <rect>
                <x>10</x>
-               <y>200</y>
-               <width>49</width>
-               <height>16</height>
+               <y>220</y>
+               <width>61</width>
+               <height>21</height>
               </rect>
              </property>
              <property name="text">
@@ -773,8 +773,8 @@ QTabBar::tab:!selected {
             <widget class="QCheckBox" name="checkBox_xz_contour">
              <property name="geometry">
               <rect>
-               <x>230</x>
-               <y>200</y>
+               <x>220</x>
+               <y>220</y>
                <width>21</width>
                <height>21</height>
               </rect>
@@ -787,9 +787,9 @@ QTabBar::tab:!selected {
              <property name="geometry">
               <rect>
                <x>10</x>
-               <y>220</y>
-               <width>49</width>
-               <height>16</height>
+               <y>240</y>
+               <width>61</width>
+               <height>21</height>
               </rect>
              </property>
              <property name="text">
@@ -799,9 +799,9 @@ QTabBar::tab:!selected {
             <widget class="QLineEdit" name="lineEdit_xyPlane">
              <property name="geometry">
               <rect>
-               <x>70</x>
+               <x>90</x>
                <y>40</y>
-               <width>131</width>
+               <width>111</width>
                <height>21</height>
               </rect>
              </property>
@@ -809,9 +809,9 @@ QTabBar::tab:!selected {
             <widget class="QLineEdit" name="lineEdit_yzPlane">
              <property name="geometry">
               <rect>
-               <x>70</x>
-               <y>120</y>
-               <width>131</width>
+               <x>90</x>
+               <y>130</y>
+               <width>111</width>
                <height>21</height>
               </rect>
              </property>
@@ -819,9 +819,9 @@ QTabBar::tab:!selected {
             <widget class="QLineEdit" name="lineEdit_xzPlane">
              <property name="geometry">
               <rect>
-               <x>70</x>
-               <y>200</y>
-               <width>131</width>
+               <x>90</x>
+               <y>220</y>
+               <width>111</width>
                <height>21</height>
               </rect>
              </property>
@@ -836,8 +836,8 @@ QTabBar::tab:!selected {
               <rect>
                <x>10</x>
                <y>10</y>
-               <width>121</width>
-               <height>16</height>
+               <width>131</width>
+               <height>21</height>
               </rect>
              </property>
              <property name="text">
@@ -849,8 +849,8 @@ QTabBar::tab:!selected {
               <rect>
                <x>10</x>
                <y>40</y>
-               <width>61</width>
-               <height>16</height>
+               <width>71</width>
+               <height>21</height>
               </rect>
              </property>
              <property name="text">
@@ -862,8 +862,8 @@ QTabBar::tab:!selected {
               <rect>
                <x>10</x>
                <y>70</y>
-               <width>61</width>
-               <height>16</height>
+               <width>71</width>
+               <height>21</height>
               </rect>
              </property>
              <property name="text">
@@ -873,9 +873,9 @@ QTabBar::tab:!selected {
             <widget class="QLineEdit" name="lineEdit_color_minValue">
              <property name="geometry">
               <rect>
-               <x>70</x>
+               <x>90</x>
                <y>40</y>
-               <width>181</width>
+               <width>161</width>
                <height>21</height>
               </rect>
              </property>
@@ -883,9 +883,9 @@ QTabBar::tab:!selected {
             <widget class="QLineEdit" name="lineEdit_color_maxValue">
              <property name="geometry">
               <rect>
-               <x>70</x>
+               <x>90</x>
                <y>70</y>
-               <width>181</width>
+               <width>161</width>
                <height>21</height>
               </rect>
              </property>
@@ -895,8 +895,8 @@ QTabBar::tab:!selected {
               <rect>
                <x>10</x>
                <y>100</y>
-               <width>75</width>
-               <height>24</height>
+               <width>81</width>
+               <height>31</height>
               </rect>
              </property>
              <property name="text">
@@ -913,7 +913,7 @@ QTabBar::tab:!selected {
               <rect>
                <x>10</x>
                <y>10</y>
-               <width>71</width>
+               <width>81</width>
                <height>16</height>
               </rect>
              </property>
@@ -938,9 +938,9 @@ QTabBar::tab:!selected {
              <property name="geometry">
               <rect>
                <x>10</x>
-               <y>40</y>
+               <y>30</y>
                <width>49</width>
-               <height>16</height>
+               <height>21</height>
               </rect>
              </property>
              <property name="text">
@@ -952,8 +952,8 @@ QTabBar::tab:!selected {
               <rect>
                <x>10</x>
                <y>50</y>
-               <width>49</width>
-               <height>16</height>
+               <width>61</width>
+               <height>21</height>
               </rect>
              </property>
              <property name="text">
@@ -963,10 +963,10 @@ QTabBar::tab:!selected {
             <widget class="QLabel" name="label_isosurface1_maxValue">
              <property name="geometry">
               <rect>
-               <x>180</x>
+               <x>170</x>
                <y>50</y>
-               <width>51</width>
-               <height>16</height>
+               <width>61</width>
+               <height>21</height>
               </rect>
              </property>
              <property name="text">
@@ -1045,9 +1045,9 @@ QTabBar::tab:!selected {
              <property name="geometry">
               <rect>
                <x>130</x>
-               <y>130</y>
+               <y>129</y>
                <width>75</width>
-               <height>20</height>
+               <height>21</height>
               </rect>
              </property>
              <property name="text">
@@ -1058,7 +1058,7 @@ QTabBar::tab:!selected {
              <property name="geometry">
               <rect>
                <x>190</x>
-               <y>150</y>
+               <y>140</y>
                <width>91</width>
                <height>22</height>
               </rect>
@@ -1114,8 +1114,8 @@ QTabBar::tab:!selected {
               <rect>
                <x>10</x>
                <y>170</y>
-               <width>49</width>
-               <height>16</height>
+               <width>61</width>
+               <height>21</height>
               </rect>
              </property>
              <property name="text">
@@ -1125,10 +1125,10 @@ QTabBar::tab:!selected {
             <widget class="QLabel" name="label_isosurface2_maxValue">
              <property name="geometry">
               <rect>
-               <x>180</x>
+               <x>170</x>
                <y>170</y>
-               <width>51</width>
-               <height>16</height>
+               <width>61</width>
+               <height>21</height>
               </rect>
              </property>
              <property name="text">
@@ -1141,7 +1141,7 @@ QTabBar::tab:!selected {
                <x>10</x>
                <y>150</y>
                <width>49</width>
-               <height>16</height>
+               <height>21</height>
               </rect>
              </property>
              <property name="text">
@@ -1152,9 +1152,9 @@ QTabBar::tab:!selected {
              <property name="geometry">
               <rect>
                <x>10</x>
-               <y>130</y>
-               <width>71</width>
-               <height>16</height>
+               <y>125</y>
+               <width>81</width>
+               <height>21</height>
               </rect>
              </property>
              <property name="text">
@@ -1177,9 +1177,9 @@ QTabBar::tab:!selected {
             <widget class="QLineEdit" name="lineEdit_isosurface1">
              <property name="geometry">
               <rect>
-               <x>50</x>
+               <x>60</x>
                <y>30</y>
-               <width>131</width>
+               <width>121</width>
                <height>21</height>
               </rect>
              </property>
@@ -1187,9 +1187,9 @@ QTabBar::tab:!selected {
             <widget class="QLineEdit" name="lineEdit_isosurface2">
              <property name="geometry">
               <rect>
-               <x>50</x>
+               <x>60</x>
                <y>150</y>
-               <width>131</width>
+               <width>121</width>
                <height>21</height>
               </rect>
              </property>
@@ -1204,8 +1204,8 @@ QTabBar::tab:!selected {
               <rect>
                <x>10</x>
                <y>10</y>
-               <width>161</width>
-               <height>20</height>
+               <width>171</width>
+               <height>21</height>
               </rect>
              </property>
              <property name="text">
@@ -1218,7 +1218,7 @@ QTabBar::tab:!selected {
                <x>10</x>
                <y>30</y>
                <width>21</width>
-               <height>16</height>
+               <height>21</height>
               </rect>
              </property>
              <property name="text">
@@ -1230,8 +1230,8 @@ QTabBar::tab:!selected {
               <rect>
                <x>30</x>
                <y>30</y>
-               <width>49</width>
-               <height>16</height>
+               <width>81</width>
+               <height>21</height>
               </rect>
              </property>
              <property name="text">
@@ -1243,8 +1243,8 @@ QTabBar::tab:!selected {
               <rect>
                <x>130</x>
                <y>30</y>
-               <width>49</width>
-               <height>16</height>
+               <width>81</width>
+               <height>21</height>
               </rect>
              </property>
              <property name="text">
@@ -1257,7 +1257,7 @@ QTabBar::tab:!selected {
                <x>110</x>
                <y>30</y>
                <width>21</width>
-               <height>16</height>
+               <height>21</height>
               </rect>
              </property>
              <property name="text">
@@ -1270,7 +1270,7 @@ QTabBar::tab:!selected {
                <x>210</x>
                <y>30</y>
                <width>21</width>
-               <height>16</height>
+               <height>21</height>
               </rect>
              </property>
              <property name="text">
@@ -1282,8 +1282,8 @@ QTabBar::tab:!selected {
               <rect>
                <x>230</x>
                <y>30</y>
-               <width>49</width>
-               <height>16</height>
+               <width>81</width>
+               <height>21</height>
               </rect>
              </property>
              <property name="text">
@@ -1460,8 +1460,8 @@ QTabBar::tab:!selected {
               <rect>
                <x>230</x>
                <y>110</y>
-               <width>49</width>
-               <height>16</height>
+               <width>81</width>
+               <height>21</height>
               </rect>
              </property>
              <property name="text">
@@ -1474,7 +1474,7 @@ QTabBar::tab:!selected {
                <x>10</x>
                <y>90</y>
                <width>161</width>
-               <height>20</height>
+               <height>21</height>
               </rect>
              </property>
              <property name="text">
@@ -1547,7 +1547,7 @@ QTabBar::tab:!selected {
                <x>10</x>
                <y>110</y>
                <width>21</width>
-               <height>16</height>
+               <height>21</height>
               </rect>
              </property>
              <property name="text">
@@ -1560,7 +1560,7 @@ QTabBar::tab:!selected {
                <x>210</x>
                <y>110</y>
                <width>21</width>
-               <height>16</height>
+               <height>21</height>
               </rect>
              </property>
              <property name="text">
@@ -1573,7 +1573,7 @@ QTabBar::tab:!selected {
                <x>110</x>
                <y>110</y>
                <width>21</width>
-               <height>16</height>
+               <height>21</height>
               </rect>
              </property>
              <property name="text">
@@ -1640,8 +1640,8 @@ QTabBar::tab:!selected {
               <rect>
                <x>30</x>
                <y>110</y>
-               <width>49</width>
-               <height>16</height>
+               <width>81</width>
+               <height>21</height>
               </rect>
              </property>
              <property name="text">
@@ -1653,8 +1653,8 @@ QTabBar::tab:!selected {
               <rect>
                <x>130</x>
                <y>110</y>
-               <width>49</width>
-               <height>16</height>
+               <width>81</width>
+               <height>21</height>
               </rect>
              </property>
              <property name="text">
@@ -1667,7 +1667,7 @@ QTabBar::tab:!selected {
                <x>10</x>
                <y>180</y>
                <width>161</width>
-               <height>20</height>
+               <height>21</height>
               </rect>
              </property>
              <property name="text">
@@ -1739,7 +1739,7 @@ QTabBar::tab:!selected {
               <rect>
                <x>10</x>
                <y>200</y>
-               <width>16</width>
+               <width>21</width>
                <height>21</height>
               </rect>
              </property>
@@ -1753,7 +1753,7 @@ QTabBar::tab:!selected {
                <x>210</x>
                <y>200</y>
                <width>21</width>
-               <height>16</height>
+               <height>21</height>
               </rect>
              </property>
              <property name="text">
@@ -1791,7 +1791,7 @@ QTabBar::tab:!selected {
                <x>110</x>
                <y>200</y>
                <width>21</width>
-               <height>16</height>
+               <height>21</height>
               </rect>
              </property>
              <property name="text">
@@ -1858,7 +1858,7 @@ QTabBar::tab:!selected {
               <rect>
                <x>20</x>
                <y>200</y>
-               <width>71</width>
+               <width>81</width>
                <height>21</height>
               </rect>
              </property>
@@ -1868,7 +1868,7 @@ QTabBar::tab:!selected {
               <rect>
                <x>120</x>
                <y>200</y>
-               <width>71</width>
+               <width>81</width>
                <height>21</height>
               </rect>
              </property>
@@ -1878,7 +1878,7 @@ QTabBar::tab:!selected {
               <rect>
                <x>220</x>
                <y>200</y>
-               <width>71</width>
+               <width>81</width>
                <height>21</height>
               </rect>
              </property>
@@ -1893,8 +1893,8 @@ QTabBar::tab:!selected {
               <rect>
                <x>10</x>
                <y>150</y>
-               <width>75</width>
-               <height>24</height>
+               <width>81</width>
+               <height>31</height>
               </rect>
              </property>
              <property name="text">
@@ -1907,7 +1907,7 @@ QTabBar::tab:!selected {
                <x>10</x>
                <y>10</y>
                <width>141</width>
-               <height>16</height>
+               <height>21</height>
               </rect>
              </property>
              <property name="text">
@@ -1919,8 +1919,8 @@ QTabBar::tab:!selected {
               <rect>
                <x>150</x>
                <y>30</y>
-               <width>51</width>
-               <height>20</height>
+               <width>61</width>
+               <height>21</height>
               </rect>
              </property>
              <property name="text">
@@ -1932,8 +1932,8 @@ QTabBar::tab:!selected {
               <rect>
                <x>70</x>
                <y>30</y>
-               <width>61</width>
-               <height>20</height>
+               <width>71</width>
+               <height>21</height>
               </rect>
              </property>
              <property name="text">
@@ -1945,8 +1945,8 @@ QTabBar::tab:!selected {
               <rect>
                <x>10</x>
                <y>30</y>
-               <width>51</width>
-               <height>20</height>
+               <width>61</width>
+               <height>21</height>
               </rect>
              </property>
              <property name="text">
@@ -1958,7 +1958,7 @@ QTabBar::tab:!selected {
               <rect>
                <x>10</x>
                <y>70</y>
-               <width>61</width>
+               <width>81</width>
                <height>16</height>
               </rect>
              </property>
@@ -1969,10 +1969,10 @@ QTabBar::tab:!selected {
             <widget class="QPushButton" name="pushButton_view_xzPlane">
              <property name="geometry">
               <rect>
-               <x>170</x>
+               <x>190</x>
                <y>90</y>
-               <width>75</width>
-               <height>24</height>
+               <width>81</width>
+               <height>31</height>
               </rect>
              </property>
              <property name="text">
@@ -1984,8 +1984,8 @@ QTabBar::tab:!selected {
               <rect>
                <x>10</x>
                <y>90</y>
-               <width>75</width>
-               <height>24</height>
+               <width>81</width>
+               <height>31</height>
               </rect>
              </property>
              <property name="text">
@@ -1995,10 +1995,10 @@ QTabBar::tab:!selected {
             <widget class="QPushButton" name="pushButton_view_yzPlane">
              <property name="geometry">
               <rect>
-               <x>90</x>
+               <x>100</x>
                <y>90</y>
-               <width>75</width>
-               <height>24</height>
+               <width>81</width>
+               <height>31</height>
               </rect>
              </property>
              <property name="text">
@@ -2037,7 +2037,13 @@ QTabBar::tab:!selected {
     </item>
    </layout>
   </widget>
-  <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QStatusBar" name="statusBar">
+   <property name="font">
+    <font>
+     <pointsize>9</pointsize>
+    </font>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections>
@@ -2048,8 +2054,8 @@ QTabBar::tab:!selected {
    <slot>change_show_xyPlane_image()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>298</x>
-     <y>457</y>
+     <x>308</x>
+     <y>451</y>
     </hint>
     <hint type="destinationlabel">
      <x>335</x>
@@ -2064,8 +2070,8 @@ QTabBar::tab:!selected {
    <slot>change_isosurface2_value_text()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>93</x>
-     <y>567</y>
+     <x>113</x>
+     <y>561</y>
     </hint>
     <hint type="destinationlabel">
      <x>66</x>
@@ -2096,8 +2102,8 @@ QTabBar::tab:!selected {
    <slot>change_vector_vel_thick()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>212</x>
-     <y>548</y>
+     <x>222</x>
+     <y>542</y>
     </hint>
     <hint type="destinationlabel">
      <x>7</x>
@@ -2128,8 +2134,8 @@ QTabBar::tab:!selected {
    <slot>change_vector_user_elems()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>162</x>
-     <y>613</y>
+     <x>172</x>
+     <y>611</y>
     </hint>
     <hint type="destinationlabel">
      <x>8</x>
@@ -2160,8 +2166,8 @@ QTabBar::tab:!selected {
    <slot>change_show_xyPlane_contour()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>262</x>
-     <y>457</y>
+     <x>260</x>
+     <y>451</y>
     </hint>
     <hint type="destinationlabel">
      <x>334</x>
@@ -2176,8 +2182,8 @@ QTabBar::tab:!selected {
    <slot>change_isosurface2_color()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>237</x>
-     <y>565</y>
+     <x>247</x>
+     <y>552</y>
     </hint>
     <hint type="destinationlabel">
      <x>224</x>
@@ -2192,8 +2198,8 @@ QTabBar::tab:!selected {
    <slot>change_vector_mag_color()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>54</x>
-     <y>465</y>
+     <x>64</x>
+     <y>462</y>
     </hint>
     <hint type="destinationlabel">
      <x>5</x>
@@ -2208,8 +2214,8 @@ QTabBar::tab:!selected {
    <slot>change_vector_user_elems()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>91</x>
-     <y>617</y>
+     <x>101</x>
+     <y>611</y>
     </hint>
     <hint type="destinationlabel">
      <x>3</x>
@@ -2224,8 +2230,8 @@ QTabBar::tab:!selected {
    <slot>change_vector_mag_scale()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>129</x>
-     <y>468</y>
+     <x>139</x>
+     <y>462</y>
     </hint>
     <hint type="destinationlabel">
      <x>3</x>
@@ -2240,8 +2246,8 @@ QTabBar::tab:!selected {
    <slot>view_xyPlane()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>73</x>
-     <y>505</y>
+     <x>83</x>
+     <y>504</y>
     </hint>
     <hint type="destinationlabel">
      <x>4</x>
@@ -2256,8 +2262,8 @@ QTabBar::tab:!selected {
    <slot>change_vector_mag_thick()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>205</x>
-     <y>465</y>
+     <x>215</x>
+     <y>462</y>
     </hint>
     <hint type="destinationlabel">
      <x>6</x>
@@ -2272,8 +2278,8 @@ QTabBar::tab:!selected {
    <slot>change_isosurface2_value_slider()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>203</x>
-     <y>606</y>
+     <x>213</x>
+     <y>600</y>
     </hint>
     <hint type="destinationlabel">
      <x>253</x>
@@ -2288,8 +2294,8 @@ QTabBar::tab:!selected {
    <slot>change_vector_vel_scale()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>153</x>
-     <y>548</y>
+     <x>163</x>
+     <y>542</y>
     </hint>
     <hint type="destinationlabel">
      <x>6</x>
@@ -2320,8 +2326,8 @@ QTabBar::tab:!selected {
    <slot>change_isosurface1_color()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>279</x>
-     <y>438</y>
+     <x>289</x>
+     <y>432</y>
     </hint>
     <hint type="destinationlabel">
      <x>322</x>
@@ -2336,8 +2342,8 @@ QTabBar::tab:!selected {
    <slot>change_show_vector_user()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>61</x>
-     <y>591</y>
+     <x>71</x>
+     <y>590</y>
     </hint>
     <hint type="destinationlabel">
      <x>5</x>
@@ -2352,8 +2358,8 @@ QTabBar::tab:!selected {
    <slot>change_xzPlane_value_slider()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>96</x>
-     <y>655</y>
+     <x>106</x>
+     <y>681</y>
     </hint>
     <hint type="destinationlabel">
      <x>322</x>
@@ -2368,8 +2374,8 @@ QTabBar::tab:!selected {
    <slot>change_vector_user_thick()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>202</x>
-     <y>646</y>
+     <x>212</x>
+     <y>642</y>
     </hint>
     <hint type="destinationlabel">
      <x>6</x>
@@ -2416,8 +2422,8 @@ QTabBar::tab:!selected {
    <slot>change_vector_vel_color()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>52</x>
-     <y>548</y>
+     <x>62</x>
+     <y>542</y>
     </hint>
     <hint type="destinationlabel">
      <x>8</x>
@@ -2448,8 +2454,8 @@ QTabBar::tab:!selected {
    <slot>change_isosurface1_value_slider()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>86</x>
-     <y>486</y>
+     <x>96</x>
+     <y>480</y>
     </hint>
     <hint type="destinationlabel">
      <x>3</x>
@@ -2480,8 +2486,8 @@ QTabBar::tab:!selected {
    <slot>change_show_vector_vel()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>59</x>
-     <y>506</y>
+     <x>69</x>
+     <y>500</y>
     </hint>
     <hint type="destinationlabel">
      <x>4</x>
@@ -2496,8 +2502,8 @@ QTabBar::tab:!selected {
    <slot>change_isosurface2_mesh()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>165</x>
-     <y>546</y>
+     <x>175</x>
+     <y>540</y>
     </hint>
     <hint type="destinationlabel">
      <x>165</x>
@@ -2528,8 +2534,8 @@ QTabBar::tab:!selected {
    <slot>change_vector_user_color()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>60</x>
-     <y>644</y>
+     <x>70</x>
+     <y>642</y>
     </hint>
     <hint type="destinationlabel">
      <x>1</x>
@@ -2544,8 +2550,8 @@ QTabBar::tab:!selected {
    <slot>change_isosurface1_value_text()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>125</x>
-     <y>447</y>
+     <x>145</x>
+     <y>441</y>
     </hint>
     <hint type="destinationlabel">
      <x>323</x>
@@ -2560,8 +2566,8 @@ QTabBar::tab:!selected {
    <slot>change_show_xzPlane_image()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>290</x>
-     <y>610</y>
+     <x>300</x>
+     <y>631</y>
     </hint>
     <hint type="destinationlabel">
      <x>333</x>
@@ -2576,8 +2582,8 @@ QTabBar::tab:!selected {
    <slot>view_reset()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>73</x>
-     <y>570</y>
+     <x>83</x>
+     <y>564</y>
     </hint>
     <hint type="destinationlabel">
      <x>328</x>
@@ -2592,8 +2598,8 @@ QTabBar::tab:!selected {
    <slot>view_xzPlane()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>230</x>
-     <y>510</y>
+     <x>240</x>
+     <y>504</y>
     </hint>
     <hint type="destinationlabel">
      <x>327</x>
@@ -2608,8 +2614,8 @@ QTabBar::tab:!selected {
    <slot>change_isosurface1_mesh()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>178</x>
-     <y>426</y>
+     <x>188</x>
+     <y>420</y>
     </hint>
     <hint type="destinationlabel">
      <x>321</x>
@@ -2640,8 +2646,8 @@ QTabBar::tab:!selected {
    <slot>change_vector_user_scale()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>119</x>
-     <y>645</y>
+     <x>129</x>
+     <y>642</y>
     </hint>
     <hint type="destinationlabel">
      <x>2</x>
@@ -2656,8 +2662,8 @@ QTabBar::tab:!selected {
    <slot>view_yzPlane()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>145</x>
-     <y>506</y>
+     <x>155</x>
+     <y>504</y>
     </hint>
     <hint type="destinationlabel">
      <x>5</x>
@@ -2737,7 +2743,7 @@ QTabBar::tab:!selected {
    <hints>
     <hint type="sourcelabel">
      <x>220</x>
-     <y>444</y>
+     <y>440</y>
     </hint>
     <hint type="destinationlabel">
      <x>5</x>
@@ -2752,8 +2758,8 @@ QTabBar::tab:!selected {
    <slot>change_show_isosurface1()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>72</x>
-     <y>82</y>
+     <x>81</x>
+     <y>76</y>
     </hint>
     <hint type="destinationlabel">
      <x>4</x>
@@ -2768,8 +2774,8 @@ QTabBar::tab:!selected {
    <slot>change_show_isosurface2()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>45</x>
-     <y>98</y>
+     <x>54</x>
+     <y>96</y>
     </hint>
     <hint type="destinationlabel">
      <x>21</x>
@@ -2848,8 +2854,8 @@ QTabBar::tab:!selected {
    <slot>change_data()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>43</x>
-     <y>339</y>
+     <x>52</x>
+     <y>335</y>
     </hint>
     <hint type="destinationlabel">
      <x>16</x>
