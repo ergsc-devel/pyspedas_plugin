@@ -230,8 +230,8 @@ class DataManager:
         coords = np.stack([x_coord, y_coord, z_coord])
         new_x_coord, new_y_coord, new_z_coord = np.dot(rotmat, coords)
         
-        new_mag_vec = np.dot(rotmat, mag_vec.reshape(3, 1))
-        new_vel_vec = np.dot(rotmat, vel_vec.reshape(3, 1))
+        new_mag_vec = np.dot(rotmat, mag_vec.reshape(3, 1)).reshape(3)
+        new_vel_vec = np.dot(rotmat, vel_vec.reshape(3, 1)).reshape(3)
 
         return new_x_coord, new_y_coord, new_z_coord, new_mag_vec, new_vel_vec 
 

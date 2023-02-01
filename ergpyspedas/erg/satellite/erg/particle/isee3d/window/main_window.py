@@ -118,6 +118,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.label_isosurface1_maxValue.setText(f'{value_max:.1e}')
         self.label_isosurface2_maxValue.setText(f'{value_max:.1e}')
 
+    def _set_vector_label(self):
+        self.label_vector_mag_x.setText(f'{self.vtkWidget.draw_property.mag_vec.vector[0]:.2e}')
+        self.label_vector_mag_y.setText(f'{self.vtkWidget.draw_property.mag_vec.vector[1]:.2e}')
+        self.label_vector_mag_z.setText(f'{self.vtkWidget.draw_property.mag_vec.vector[2]:.2e}')
+
+        self.label_vector_vel_x.setText(f'{self.vtkWidget.draw_property.vel_vec.vector[0]:.2e}')
+        self.label_vector_vel_y.setText(f'{self.vtkWidget.draw_property.vel_vec.vector[1]:.2e}')
+        self.label_vector_vel_z.setText(f'{self.vtkWidget.draw_property.vel_vec.vector[2]:.2e}')
+
     # -------------------------------------------------------------------
     # PANEL FOR OBJECT ON/OFF
     # -------------------------------------------------------------------
@@ -186,6 +195,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.vtkWidget.draw_property.data.coordinates = current_text
         self.vtkWidget.update_data()
         self.vtkWidget.update_draw()
+        self._set_vector_label()
 
     def change_axisUnits(self):
         current_text = self.comboBox_axisUnits.currentText()
@@ -226,6 +236,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.lineEdit_xyPlane.validator().setRange(self.vtkWidget.draw_property.outline.z_min, self.vtkWidget.draw_property.outline.z_max)
         self.lineEdit_yzPlane.validator().setRange(self.vtkWidget.draw_property.outline.x_min, self.vtkWidget.draw_property.outline.x_max)
         self.lineEdit_xzPlane.validator().setRange(self.vtkWidget.draw_property.outline.y_min, self.vtkWidget.draw_property.outline.y_max)
+        self._set_vector_label()
 
     # -------------------------------------------------------------------
     # TAB FOR 2D SLICE
@@ -620,6 +631,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     # TAB FOR VECTORS
     # -------------------------------------------------------------------
     def _set_vectors_tab_widgets(self):
+        self._set_vector_label()
+
         self.checkBox_vector_mag.setChecked(self.vtkWidget.draw_property.mag_vec.show)
         self.comboBox_vector_mag_color.setCurrentText(self.vtkWidget.draw_property.mag_vec.color)
         self.comboBox_vector_mag_scale.setCurrentText(self.vtkWidget.draw_property.mag_vec.length_scale)
@@ -637,9 +650,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.lineEdit_vector_user_x.setValidator(QtGui.QDoubleValidator())
         self.lineEdit_vector_user_y.setValidator(QtGui.QDoubleValidator())
         self.lineEdit_vector_user_z.setValidator(QtGui.QDoubleValidator())
-        self.lineEdit_vector_user_x.setText(str(self.vtkWidget.draw_property.user_vec.vector[0]))
-        self.lineEdit_vector_user_y.setText(str(self.vtkWidget.draw_property.user_vec.vector[1]))
-        self.lineEdit_vector_user_z.setText(str(self.vtkWidget.draw_property.user_vec.vector[2]))
+        self.lineEdit_vector_user_x.setText(f'{self.vtkWidget.draw_property.user_vec.vector[0]:.2e}')
+        self.lineEdit_vector_user_y.setText(f'{self.vtkWidget.draw_property.user_vec.vector[1]:.2e}')
+        self.lineEdit_vector_user_z.setText(f'{self.vtkWidget.draw_property.user_vec.vector[2]:.2e}')
 
     def change_show_vector_mag(self):
         is_checked = self.checkBox_vector_mag.isChecked()
