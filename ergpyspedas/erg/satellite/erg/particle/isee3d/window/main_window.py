@@ -15,28 +15,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         super(MainWindow, self).__init__(parent)
         self.setupUi(self)
 
-        self._save_image_dir = config['save_image_dir']
-        if not os.path.isdir(self._save_image_dir):
-            current_dir = os.path.abspath(os.curdir)
-            msgBox = QtWidgets.QMessageBox()
-            message = f'Save image directory "{self._save_image_dir}" not found.\n'
-            message += f'Save image to "{current_dir}".'
-            msgBox.setText(message)
-            msgBox.setWindowTitle('ISEE_3D')
-            msgBox.exec()
-            self._save_image_dir = current_dir
+        self._message_timeout_msec = 10000
 
+        self._save_image_dir = config['save_image_dir']
+        self._check_save_image_dir()
 
         self._colormap_name = config['colormap_name']
-        if not validate_colormap_name(self._colormap_name):
-            msgBox = QtWidgets.QMessageBox()
-            message = f'Colormap name "{self._colormap_name}" is not available.\n'
-            message += f'Use colormap "jet".'
-            msgBox.setText(message)
-            msgBox.setWindowTitle('ISEE_3D')
-            msgBox.exec()
-            self._colormap_name = 'jet'
-
+        self._check_colormap_name()
 
         self.vtkWidget = VtkWidget(self.centralwidget, dists, mag_vn, vel_vn, self._colormap_name)
         self.vtkWidget.resize(768,768)
@@ -48,19 +33,204 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self._set_coordinates_text()
         self._set_value_text()
 
+        self._set_on_off_panel_widgets()
+        self._set_save_panel_widgets()
+        self._set_data_change_panel_widgets(dists)
+        self._set_2d_slice_tab_widgets()
+        self._set_color_setting_tab_widgets()
+        self._set_isosurface_tab_widgets()
+        self._set_vectors_tab_widgets()
+        self._set_view_tab_widgets()
 
+        self.statusBar.showMessage('Initialized', timeout=self._message_timeout_msec)
+    
+    def _check_save_image_dir(self):
+        if not os.path.isdir(self._save_image_dir):
+            current_dir = os.path.abspath(os.curdir)
+            msgBox = QtWidgets.QMessageBox()
+            message = f'Save image directory "{self._save_image_dir}" not found.\n'
+            message += f'Save image to "{current_dir}".'
+            msgBox.setText(message)
+            msgBox.setWindowTitle('ISEE_3D')
+            msgBox.exec()
+            self._save_image_dir = current_dir
+    
+    def _check_colormap_name(self):
+        if not validate_colormap_name(self._colormap_name):
+            msgBox = QtWidgets.QMessageBox()
+            message = f'Colormap name "{self._colormap_name}" is not available.\n'
+            message += f'Use colormap "jet".'
+            msgBox.setText(message)
+            msgBox.setWindowTitle('ISEE_3D')
+            msgBox.exec()
+            self._colormap_name = 'jet'
+
+    def _set_data_text(self):
+        first_datetime = datetime.strptime(self.vtkWidget.first_data_time, '%Y-%m-%d %H:%M:%S.%f')
+        first_date_txt = first_datetime.strftime('%Y-%m-%d')
+        first_time_txt = first_datetime.strftime('%H:%M:%S') + f'.{round(first_datetime.microsecond/1000)}'
+        self.label_firstTime_slider.setText(first_time_txt)
+
+        last_datetime = datetime.strptime(self.vtkWidget.last_data_time, '%Y-%m-%d %H:%M:%S.%f')
+        last_date_txt = last_datetime.strftime('%Y-%m-%d')
+        last_time_txt = last_datetime.strftime('%H:%M:%S') + f'.{round(last_datetime.microsecond/1000)}'
+        self.label_lastTime_slider.setText(last_time_txt)
+
+        axis_units_txt = self.vtkWidget.draw_property.data.axis_units
+
+        self.label_data.setText(f'{first_date_txt}/{first_time_txt} - {last_date_txt}/{last_time_txt} ({axis_units_txt})')
+    
+    def _set_start_time_text(self):
+        start_datetime = datetime.strptime(self.vtkWidget.draw_data.start_data_time, '%Y-%m-%d %H:%M:%S.%f')
+        start_date_txt = start_datetime.strftime('%Y-%m-%d')
+        start_time_txt = start_datetime.strftime('%H:%M:%S') + f'.{round(start_datetime.microsecond/1000)}'
+        self.label_startTime.setText(f'{start_date_txt} {start_time_txt}')
+
+    def _set_end_time_text(self):
+        if self.vtkWidget.draw_data.end_data_time is None:
+            self.label_endTime.setText(f'')
+        else:
+            end_datetime = datetime.strptime(self.vtkWidget.draw_data.end_data_time, '%Y-%m-%d %H:%M:%S.%f')
+            end_date_txt = end_datetime.strftime('%Y-%m-%d')
+            end_time_txt = end_datetime.strftime('%H:%M:%S') + f'.{round(end_datetime.microsecond/1000)}'
+            self.label_endTime.setText(f'{end_date_txt} {end_time_txt}')
+
+    def _set_coordinates_text(self):
+        outline = self.vtkWidget.draw_property.outline
+
+        self.label_xy_minValue.setText(f'{outline.x_min:.1e}')
+        self.label_xy_maxValue.setText(f'{outline.x_max:.1e}')
+
+        self.label_yz_minValue.setText(f'{outline.y_min:.1e}')
+        self.label_yz_maxValue.setText(f'{outline.y_max:.1e}')
+
+        self.label_xz_minValue.setText(f'{outline.z_min:.1e}')
+        self.label_xz_maxValue.setText(f'{outline.z_max:.1e}')
+
+    def _set_value_text(self):
+        draw_data = self.vtkWidget.draw_data
+
+        value_min = draw_data.value.min()
+        self.label_isosurface1_minValue.setText(f'{value_min:.1e}')
+        self.label_isosurface2_minValue.setText(f'{value_min:.1e}')
+
+        value_max = draw_data.value.max()
+        self.label_isosurface1_maxValue.setText(f'{value_max:.1e}')
+        self.label_isosurface2_maxValue.setText(f'{value_max:.1e}')
+
+    # -------------------------------------------------------------------
+    # PANEL FOR OBJECT ON/OFF
+    # -------------------------------------------------------------------
+    def _set_on_off_panel_widgets(self):
         self.checkBox_isosurface1.setChecked(self.vtkWidget.draw_property.isosurface1.show)
         self.checkBox_isosurface2.setChecked(self.vtkWidget.draw_property.isosurface2.show)
 
+    def change_show_isosurface1(self):
+        is_checked = self.checkBox_isosurface1.isChecked()
+        if is_checked:
+            self.vtkWidget.draw_property.isosurface1.show = True
+        else:
+            self.vtkWidget.draw_property.isosurface1.show = False
+        self.vtkWidget.update_draw()
+
+    def change_show_isosurface2(self):
+        is_checked = self.checkBox_isosurface2.isChecked()
+        if is_checked:
+            self.vtkWidget.draw_property.isosurface2.show = True
+        else:
+            self.vtkWidget.draw_property.isosurface2.show = False
+        self.vtkWidget.update_draw()
+
+    # -------------------------------------------------------------------
+    # PANEL FOR "SAVE"
+    # -------------------------------------------------------------------
+    def _set_save_panel_widgets(self):
         self.comboBox_coordinates.setCurrentText(self.vtkWidget.draw_property.data.coordinates)
         self.comboBox_axisUnits.setCurrentText(self.vtkWidget.draw_property.data.axis_units)
         self.comboBox_units.setCurrentText(self.vtkWidget.draw_property.data.units)
 
+    def click_save_button(self):
+        save_dir = os.path.abspath(self._save_image_dir)
+        if not os.path.isdir(save_dir):
+            current_dir = os.path.abspath(os.curdir)
+            msgBox = QtWidgets.QMessageBox()
+            message = f'Save image directory "{save_dir}" not found.\n'
+            message += f'Save image to "{current_dir}".'
+            msgBox.setText(message)
+            msgBox.setWindowTitle('ISEE_3D')
+            msgBox.exec()
+            save_dir = current_dir
+
+        current_time_txt = datetime.now().strftime('%Y%m%d%H%M%S')
+        if self.comboBox_saveType.currentText() == 'PNG':
+            save_fn = f'isee3d_screen_{current_time_txt}.png'
+            save_path = os.path.join(save_dir, save_fn)
+            self.statusBar.showMessage(f'Save PNG Image: {save_path}', timeout=self._message_timeout_msec)
+            self.vtkWidget.save_png_image(save_path)
+        elif self.comboBox_saveType.currentText() == 'EPS':
+            save_fn = f'isee3d_screen_{current_time_txt}.eps'
+            save_path = os.path.join(save_dir, save_fn)
+            self.statusBar.showMessage(f'Save EPS Image: {save_path}', timeout=self._message_timeout_msec)
+            self.vtkWidget.save_eps_image(save_path)
+
+    # -------------------------------------------------------------------
+    # PANEL FOR DATA CHANGE
+    # -------------------------------------------------------------------
+    def _set_data_change_panel_widgets(self, dists):
         self.horizontalSlider_dataStartTime.setTracking(False)
         self.horizontalSlider_dataStartTime.setMinimum(0)
         self.horizontalSlider_dataStartTime.setMaximum(len(dists['time'])-1)
 
+    def change_coordinates(self):
+        current_text = self.comboBox_coordinates.currentText()
+        self.vtkWidget.draw_property.data.coordinates = current_text
+        self.vtkWidget.update_data()
+        self.vtkWidget.update_draw()
 
+    def change_axisUnits(self):
+        current_text = self.comboBox_axisUnits.currentText()
+        self.vtkWidget.draw_property.data.axis_units = current_text
+        self.vtkWidget.draw_property.outline.axis_units = current_text
+        self.vtkWidget.update_data()
+        self.vtkWidget.update_draw()
+        self._set_data_text()
+        self._set_coordinates_text()
+
+    def change_units(self):
+        current_text = self.comboBox_units.currentText()
+        self.vtkWidget.draw_property.data.units = current_text
+        self.vtkWidget.draw_property.colorbar.units = current_text
+        self.vtkWidget.update_data()
+        self.vtkWidget.update_draw()
+        self._set_value_text()
+
+    def change_data(self):
+        value = self.horizontalSlider_dataStartTime.value()
+        self.vtkWidget.draw_property.data.show_data_index = value
+
+        try:
+            edit_min = float(self.lineEdit_color_minValue.text())
+            edit_max = float(self.lineEdit_color_maxValue.text())
+            colorbar_min = self.vtkWidget.draw_property.colorbar.min
+            colorbar_max = self.vtkWidget.draw_property.colorbar.max
+            if (edit_min != colorbar_min) or (edit_max != colorbar_max):
+                self.vtkWidget.draw_property.colorbar.reset()
+        except:
+            self.vtkWidget.draw_property.colorbar.reset()
+
+        self.vtkWidget.update_data()
+        self.vtkWidget.update_draw()
+        self._set_start_time_text()
+        self._set_end_time_text()
+        self._set_value_text()
+        self.lineEdit_xyPlane.validator().setRange(self.vtkWidget.draw_property.outline.z_min, self.vtkWidget.draw_property.outline.z_max)
+        self.lineEdit_yzPlane.validator().setRange(self.vtkWidget.draw_property.outline.x_min, self.vtkWidget.draw_property.outline.x_max)
+        self.lineEdit_xzPlane.validator().setRange(self.vtkWidget.draw_property.outline.y_min, self.vtkWidget.draw_property.outline.y_max)
+
+    # -------------------------------------------------------------------
+    # TAB FOR 2D SLICE
+    # -------------------------------------------------------------------
+    def _set_2d_slice_tab_widgets(self):
         self.checkBox_xy_contour.setChecked(self.vtkWidget.draw_property.xy_plane.show_contour)
         self.checkBox_xy_image.setChecked(self.vtkWidget.draw_property.xy_plane.show_image)
         self._xyPlane_slider_value = None
@@ -102,246 +272,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.lineEdit_xzPlane.setText(f'{axis_value:.3e}')
         self.lineEdit_xzPlane.setValidator(QtGui.QDoubleValidator())
         self.lineEdit_xzPlane.validator().setRange(self.vtkWidget.draw_property.outline.y_min, self.vtkWidget.draw_property.outline.y_max)
-
-
-        self.lineEdit_color_minValue.setValidator(QtGui.QDoubleValidator())
-        self.lineEdit_color_maxValue.setValidator(QtGui.QDoubleValidator())
-
-
-        self._value_divide_num = 100
-
-        self.comboBox_isosurface1_color.setCurrentText(self.vtkWidget.draw_property.isosurface1.color)
-        self.checkBox_isosurface1_mesh.setChecked(self.vtkWidget.draw_property.isosurface1.mesh)
-        self._isosurface1_slider_value = None
-        slider_value = 0
-        self.horizontalSlider_isosurface1.setValue(slider_value)
-        self.horizontalSlider_isosurface1.setTracking(False)
-        self.horizontalSlider_isosurface1.setMinimum(0)
-        self.horizontalSlider_isosurface1.setMaximum(self._value_divide_num)
-        isosurface_value = self._slider_value_to_isosurface_value(slider_value)
-        self.lineEdit_isosurface1.setText(f'{isosurface_value:.3e}')
-        self.lineEdit_isosurface1.setValidator(QtGui.QDoubleValidator())
-        self.lineEdit_isosurface1.validator().setRange(self.vtkWidget.draw_data.value.min(), self.vtkWidget.draw_data.value.max())
-
-        self.comboBox_isosurface2_color.setCurrentText(self.vtkWidget.draw_property.isosurface2.color)
-        self.checkBox_isosurface2_mesh.setChecked(self.vtkWidget.draw_property.isosurface2.mesh)
-        self._isosurface2_slider_value = None
-        slider_value = 0
-        self.horizontalSlider_isosurface2.setValue(slider_value)
-        self.horizontalSlider_isosurface2.setTracking(False)
-        self.horizontalSlider_isosurface2.setMinimum(0)
-        self.horizontalSlider_isosurface2.setMaximum(self._value_divide_num)
-        isosurface_value = self._slider_value_to_isosurface_value(slider_value)
-        self.lineEdit_isosurface2.setText(f'{isosurface_value:.3e}')
-        self.lineEdit_isosurface2.setValidator(QtGui.QDoubleValidator())
-        self.lineEdit_isosurface2.validator().setRange(self.vtkWidget.draw_data.value.min(), self.vtkWidget.draw_data.value.max())
-
-
-        self.checkBox_vector_mag.setChecked(self.vtkWidget.draw_property.mag_vec.show)
-        self.comboBox_vector_mag_color.setCurrentText(self.vtkWidget.draw_property.mag_vec.color)
-        self.comboBox_vector_mag_scale.setCurrentText(self.vtkWidget.draw_property.mag_vec.length_scale)
-        self.comboBox_vector_mag_thick.setCurrentText(str(self.vtkWidget.draw_property.mag_vec.thick))
-
-
-        self.checkBox_vector_vel.setChecked(self.vtkWidget.draw_property.vel_vec.show)
-        self.comboBox_vector_vel_color.setCurrentText(self.vtkWidget.draw_property.vel_vec.color)
-        self.comboBox_vector_vel_scale.setCurrentText(self.vtkWidget.draw_property.vel_vec.length_scale)
-        self.comboBox_vector_vel_thick.setCurrentText(str(self.vtkWidget.draw_property.vel_vec.thick))
-
-        self.checkBox_vector_user.setChecked(self.vtkWidget.draw_property.user_vec.show)
-        self.comboBox_vector_user_color.setCurrentText(self.vtkWidget.draw_property.user_vec.color)
-        self.comboBox_vector_user_scale.setCurrentText(self.vtkWidget.draw_property.user_vec.length_scale)
-        self.comboBox_vector_user_thick.setCurrentText(str(self.vtkWidget.draw_property.user_vec.thick))
-        self.lineEdit_vector_user_x.setValidator(QtGui.QDoubleValidator())
-        self.lineEdit_vector_user_y.setValidator(QtGui.QDoubleValidator())
-        self.lineEdit_vector_user_z.setValidator(QtGui.QDoubleValidator())
-        self.lineEdit_vector_user_x.setText(str(self.vtkWidget.draw_property.user_vec.vector[0]))
-        self.lineEdit_vector_user_y.setText(str(self.vtkWidget.draw_property.user_vec.vector[1]))
-        self.lineEdit_vector_user_z.setText(str(self.vtkWidget.draw_property.user_vec.vector[2]))
-
-
-        self.checkBox_view_box.setChecked(self.vtkWidget.draw_property.outline.show_box)
-        self.checkBox_view_center.setChecked(self.vtkWidget.draw_property.outline.show_center_lines)
-        self.checkBox_view_axis.setChecked(self.vtkWidget.draw_property.outline.show_axis)
-
-        self._initial_camera_params = self._get_orientation()
-        self._camera_params_xy = {'position': (0.0, 0.0, 1.0),
-                                  'focal point': (0.0, 0.0, 0.0),
-                                  'view up': (0.0, 1.0, 0.0),
-                                  'distance': 1.0,
-                                  'clipping range': (0.01, 1000.01),
-                                  'orientation': (0.0, 0.0, 0.0),
-                                  'parallel_scale': 1.0}
-
-        self._camera_params_yz = {'position': (1.0, 0.0, 0.0),
-                                  'focal point': (0.0, 0.0, 0.0),
-                                  'view up': (0.0, 0.0, 1.0),
-                                  'distance': 1.0,
-                                  'clipping range': (0.01, 1000.01),
-                                  'orientation': (0.0, -90.0, -90.0),
-                                  'parallel_scale': 1.0}
-
-        self._camera_params_xz = {'position': (0.0, -1.0, 0.0),
-                                  'focal point': (0.0, 0.0, 0.0),
-                                  'view up': (0.0, 0.0, 1.0),
-                                  'distance': 1.0,
-                                  'clipping range': (0.01, 1000.01),
-                                  'orientation': (-90.0, 0.0, 0.0),
-                                  'parallel_scale': 1.0}
-
-        self.statusBar.showMessage('Initialized', timeout=5000)
-    
-    def _set_data_text(self):
-        first_datetime = datetime.strptime(self.vtkWidget.first_data_time, '%Y-%m-%d %H:%M:%S.%f')
-        first_date_txt = first_datetime.strftime('%Y-%m-%d')
-        first_time_txt = first_datetime.strftime('%H:%M:%S') + f'.{round(first_datetime.microsecond/1000)}'
-        self.label_firstTime_slider.setText(first_time_txt)
-
-        last_datetime = datetime.strptime(self.vtkWidget.last_data_time, '%Y-%m-%d %H:%M:%S.%f')
-        last_date_txt = last_datetime.strftime('%Y-%m-%d')
-        last_time_txt = last_datetime.strftime('%H:%M:%S') + f'.{round(last_datetime.microsecond/1000)}'
-        self.label_lastTime_slider.setText(last_time_txt)
-
-        axis_units_txt = self.vtkWidget.draw_property.data.axis_units
-
-        self.label_data.setText(f'{first_date_txt}/{first_time_txt} - {last_date_txt}/{last_time_txt} ({axis_units_txt})')
-    
-    def _set_start_time_text(self):
-        start_datetime = datetime.strptime(self.vtkWidget.draw_data.start_data_time, '%Y-%m-%d %H:%M:%S.%f')
-        start_date_txt = start_datetime.strftime('%Y-%m-%d')
-        start_time_txt = start_datetime.strftime('%H:%M:%S') + f'.{round(start_datetime.microsecond/1000)}'
-        self.label_startTime.setText(f'{start_date_txt} {start_time_txt}')
-
-    def _set_end_time_text(self):
-        if self.vtkWidget.draw_data.end_data_time is None:
-            self.label_endTime.setText(f'')
-        else:
-            end_datetime = datetime.strptime(self.vtkWidget.draw_data.end_data_time, '%Y-%m-%d %H:%M:%S.%f')
-            end_date_txt = end_datetime.strftime('%Y-%m-%d')
-            end_time_txt = end_datetime.strftime('%H:%M:%S') + f'.{round(end_datetime.microsecond/1000)}'
-            self.label_endTime.setText(f'{end_date_txt} {end_time_txt}')
-    
-
-    def _set_coordinates_text(self):
-        outline = self.vtkWidget.draw_property.outline
-
-        self.label_xy_minValue.setText(f'{outline.x_min:.1e}')
-        self.label_xy_maxValue.setText(f'{outline.x_max:.1e}')
-
-        self.label_yz_minValue.setText(f'{outline.y_min:.1e}')
-        self.label_yz_maxValue.setText(f'{outline.y_max:.1e}')
-
-        self.label_xz_minValue.setText(f'{outline.z_min:.1e}')
-        self.label_xz_maxValue.setText(f'{outline.z_max:.1e}')
-
-    def _set_value_text(self):
-        draw_data = self.vtkWidget.draw_data
-
-        value_min = draw_data.value.min()
-        self.label_isosurface1_minValue.setText(f'{value_min:.1e}')
-        self.label_isosurface2_minValue.setText(f'{value_min:.1e}')
-
-        value_max = draw_data.value.max()
-        self.label_isosurface1_maxValue.setText(f'{value_max:.1e}')
-        self.label_isosurface2_maxValue.setText(f'{value_max:.1e}')
-
-
-
-    def change_show_isosurface1(self):
-        is_checked = self.checkBox_isosurface1.isChecked()
-        if is_checked:
-            self.vtkWidget.draw_property.isosurface1.show = True
-        else:
-            self.vtkWidget.draw_property.isosurface1.show = False
-        self.vtkWidget.update_draw()
-
-    def change_show_isosurface2(self):
-        is_checked = self.checkBox_isosurface2.isChecked()
-        if is_checked:
-            self.vtkWidget.draw_property.isosurface2.show = True
-        else:
-            self.vtkWidget.draw_property.isosurface2.show = False
-        self.vtkWidget.update_draw()
-
-
-    
-    def click_save_button(self):
-        save_dir = os.path.abspath(self._save_image_dir)
-        if not os.path.isdir(save_dir):
-            current_dir = os.path.abspath(os.curdir)
-            msgBox = QtWidgets.QMessageBox()
-            message = f'Save image directory "{save_dir}" not found.\n'
-            message += f'Save image to "{current_dir}".'
-            msgBox.setText(message)
-            msgBox.setWindowTitle('ISEE_3D')
-            msgBox.exec()
-            save_dir = current_dir
-
-        current_time_txt = datetime.now().strftime('%Y%m%d%H%M%S')
-        if self.comboBox_saveType.currentText() == 'PNG':
-            save_fn = f'isee3d_screen_{current_time_txt}.png'
-            save_path = os.path.join(save_dir, save_fn)
-            self.statusBar.showMessage(f'Save PNG Image: {save_path}', timeout=5000)
-            self.vtkWidget.save_png_image(save_path)
-        elif self.comboBox_saveType.currentText() == 'EPS':
-            save_fn = f'isee3d_screen_{current_time_txt}.eps'
-            save_path = os.path.join(save_dir, save_fn)
-            self.statusBar.showMessage(f'Save EPS Image: {save_path}', timeout=5000)
-            self.vtkWidget.save_eps_image(save_path)
-
-
-
-    def change_coordinates(self):
-        current_text = self.comboBox_coordinates.currentText()
-        self.vtkWidget.draw_property.data.coordinates = current_text
-        self.vtkWidget.update_data()
-        self.vtkWidget.update_draw()
-
-    def change_axisUnits(self):
-        current_text = self.comboBox_axisUnits.currentText()
-        self.vtkWidget.draw_property.data.axis_units = current_text
-        self.vtkWidget.draw_property.outline.axis_units = current_text
-        self.vtkWidget.update_data()
-        self.vtkWidget.update_draw()
-        self._set_data_text()
-        self._set_coordinates_text()
-
-    def change_units(self):
-        current_text = self.comboBox_units.currentText()
-        self.vtkWidget.draw_property.data.units = current_text
-        self.vtkWidget.draw_property.colorbar.units = current_text
-        self.vtkWidget.update_data()
-        self.vtkWidget.update_draw()
-        self._set_value_text()
-
-
-
-    def change_data(self):
-        value = self.horizontalSlider_dataStartTime.value()
-        self.vtkWidget.draw_property.data.show_data_index = value
-
-        try:
-            edit_min = float(self.lineEdit_color_minValue.text())
-            edit_max = float(self.lineEdit_color_maxValue.text())
-            colorbar_min = self.vtkWidget.draw_property.colorbar.min
-            colorbar_max = self.vtkWidget.draw_property.colorbar.max
-            if (edit_min != colorbar_min) or (edit_max != colorbar_max):
-                self.vtkWidget.draw_property.colorbar.reset()
-        except:
-            self.vtkWidget.draw_property.colorbar.reset()
-
-        self.vtkWidget.update_data()
-        self.vtkWidget.update_draw()
-        self._set_start_time_text()
-        self._set_end_time_text()
-        self._set_value_text()
-        self.lineEdit_xyPlane.validator().setRange(self.vtkWidget.draw_property.outline.z_min, self.vtkWidget.draw_property.outline.z_max)
-        self.lineEdit_yzPlane.validator().setRange(self.vtkWidget.draw_property.outline.x_min, self.vtkWidget.draw_property.outline.x_max)
-        self.lineEdit_xzPlane.validator().setRange(self.vtkWidget.draw_property.outline.y_min, self.vtkWidget.draw_property.outline.y_max)
-
-
-
-
 
     def change_show_xyPlane_contour(self):
         is_checked = self.checkBox_xy_contour.isChecked()
@@ -515,6 +445,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             else:
                 return i + 1
 
+    # -------------------------------------------------------------------
+    # TAB FOR COLOR SETTING
+    # -------------------------------------------------------------------
+    def _set_color_setting_tab_widgets(self):
+        self.lineEdit_color_minValue.setValidator(QtGui.QDoubleValidator())
+        self.lineEdit_color_maxValue.setValidator(QtGui.QDoubleValidator())
 
     def edit_color_values(self):
         try:
@@ -542,6 +478,37 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.vtkWidget.draw_property.colorbar.max = max_value
         self.vtkWidget.update_draw()
 
+    # -------------------------------------------------------------------
+    # TAB FOR ISOSURFACE
+    # -------------------------------------------------------------------
+    def _set_isosurface_tab_widgets(self):
+        self._value_divide_num = 100
+
+        self.comboBox_isosurface1_color.setCurrentText(self.vtkWidget.draw_property.isosurface1.color)
+        self.checkBox_isosurface1_mesh.setChecked(self.vtkWidget.draw_property.isosurface1.mesh)
+        self._isosurface1_slider_value = None
+        slider_value = 0
+        self.horizontalSlider_isosurface1.setValue(slider_value)
+        self.horizontalSlider_isosurface1.setTracking(False)
+        self.horizontalSlider_isosurface1.setMinimum(0)
+        self.horizontalSlider_isosurface1.setMaximum(self._value_divide_num)
+        isosurface_value = self._slider_value_to_isosurface_value(slider_value)
+        self.lineEdit_isosurface1.setText(f'{isosurface_value:.3e}')
+        self.lineEdit_isosurface1.setValidator(QtGui.QDoubleValidator())
+        self.lineEdit_isosurface1.validator().setRange(self.vtkWidget.draw_data.value.min(), self.vtkWidget.draw_data.value.max())
+
+        self.comboBox_isosurface2_color.setCurrentText(self.vtkWidget.draw_property.isosurface2.color)
+        self.checkBox_isosurface2_mesh.setChecked(self.vtkWidget.draw_property.isosurface2.mesh)
+        self._isosurface2_slider_value = None
+        slider_value = 0
+        self.horizontalSlider_isosurface2.setValue(slider_value)
+        self.horizontalSlider_isosurface2.setTracking(False)
+        self.horizontalSlider_isosurface2.setMinimum(0)
+        self.horizontalSlider_isosurface2.setMaximum(self._value_divide_num)
+        isosurface_value = self._slider_value_to_isosurface_value(slider_value)
+        self.lineEdit_isosurface2.setText(f'{isosurface_value:.3e}')
+        self.lineEdit_isosurface2.setValidator(QtGui.QDoubleValidator())
+        self.lineEdit_isosurface2.validator().setRange(self.vtkWidget.draw_data.value.min(), self.vtkWidget.draw_data.value.max())
 
     def change_isosurface1_mesh(self):
         is_checked = self.checkBox_isosurface1_mesh.isChecked()
@@ -622,7 +589,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self._isosurface2_slider_value = slider_value
         self.lineEdit_isosurface2.setText(f'{isosurface_value:.3e}')
 
-
     def _slider_value_to_isosurface_value(self, slider_value):
         log_min_value = np.log10(self.vtkWidget.draw_data.value.min())
         log_max_value = np.log10(self.vtkWidget.draw_data.value.max())
@@ -650,6 +616,30 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             else:
                 return i + 1
         
+    # -------------------------------------------------------------------
+    # TAB FOR VECTORS
+    # -------------------------------------------------------------------
+    def _set_vectors_tab_widgets(self):
+        self.checkBox_vector_mag.setChecked(self.vtkWidget.draw_property.mag_vec.show)
+        self.comboBox_vector_mag_color.setCurrentText(self.vtkWidget.draw_property.mag_vec.color)
+        self.comboBox_vector_mag_scale.setCurrentText(self.vtkWidget.draw_property.mag_vec.length_scale)
+        self.comboBox_vector_mag_thick.setCurrentText(str(self.vtkWidget.draw_property.mag_vec.thick))
+
+        self.checkBox_vector_vel.setChecked(self.vtkWidget.draw_property.vel_vec.show)
+        self.comboBox_vector_vel_color.setCurrentText(self.vtkWidget.draw_property.vel_vec.color)
+        self.comboBox_vector_vel_scale.setCurrentText(self.vtkWidget.draw_property.vel_vec.length_scale)
+        self.comboBox_vector_vel_thick.setCurrentText(str(self.vtkWidget.draw_property.vel_vec.thick))
+
+        self.checkBox_vector_user.setChecked(self.vtkWidget.draw_property.user_vec.show)
+        self.comboBox_vector_user_color.setCurrentText(self.vtkWidget.draw_property.user_vec.color)
+        self.comboBox_vector_user_scale.setCurrentText(self.vtkWidget.draw_property.user_vec.length_scale)
+        self.comboBox_vector_user_thick.setCurrentText(str(self.vtkWidget.draw_property.user_vec.thick))
+        self.lineEdit_vector_user_x.setValidator(QtGui.QDoubleValidator())
+        self.lineEdit_vector_user_y.setValidator(QtGui.QDoubleValidator())
+        self.lineEdit_vector_user_z.setValidator(QtGui.QDoubleValidator())
+        self.lineEdit_vector_user_x.setText(str(self.vtkWidget.draw_property.user_vec.vector[0]))
+        self.lineEdit_vector_user_y.setText(str(self.vtkWidget.draw_property.user_vec.vector[1]))
+        self.lineEdit_vector_user_z.setText(str(self.vtkWidget.draw_property.user_vec.vector[2]))
 
     def change_show_vector_mag(self):
         is_checked = self.checkBox_vector_mag.isChecked()
@@ -692,7 +682,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.vtkWidget.draw_property.vel_vec.thick = thick
         self.vtkWidget.update_draw()
 
-
     def change_show_vector_user(self):
         is_checked = self.checkBox_vector_user.isChecked()
         self.vtkWidget.draw_property.user_vec.show = is_checked
@@ -726,6 +715,38 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.vtkWidget.draw_property.user_vec.vector = np.array([x, y, z])
         self.vtkWidget.update_draw()
 
+    # -------------------------------------------------------------------
+    # TAB FOR VIEW
+    # -------------------------------------------------------------------
+    def _set_view_tab_widgets(self):
+        self.checkBox_view_box.setChecked(self.vtkWidget.draw_property.outline.show_box)
+        self.checkBox_view_center.setChecked(self.vtkWidget.draw_property.outline.show_center_lines)
+        self.checkBox_view_axis.setChecked(self.vtkWidget.draw_property.outline.show_axis)
+
+        self._initial_camera_params = self._get_orientation()
+        self._camera_params_xy = {'position': (0.0, 0.0, 1.0),
+                                  'focal point': (0.0, 0.0, 0.0),
+                                  'view up': (0.0, 1.0, 0.0),
+                                  'distance': 1.0,
+                                  'clipping range': (0.01, 1000.01),
+                                  'orientation': (0.0, 0.0, 0.0),
+                                  'parallel_scale': 1.0}
+
+        self._camera_params_yz = {'position': (1.0, 0.0, 0.0),
+                                  'focal point': (0.0, 0.0, 0.0),
+                                  'view up': (0.0, 0.0, 1.0),
+                                  'distance': 1.0,
+                                  'clipping range': (0.01, 1000.01),
+                                  'orientation': (0.0, -90.0, -90.0),
+                                  'parallel_scale': 1.0}
+
+        self._camera_params_xz = {'position': (0.0, -1.0, 0.0),
+                                  'focal point': (0.0, 0.0, 0.0),
+                                  'view up': (0.0, 0.0, 1.0),
+                                  'distance': 1.0,
+                                  'clipping range': (0.01, 1000.01),
+                                  'orientation': (-90.0, 0.0, 0.0),
+                                  'parallel_scale': 1.0}
 
     def change_view_box(self):
         is_checked = self.checkBox_view_box.isChecked()

@@ -39,14 +39,14 @@ class DataManager:
         self._data_dict = {}
 
     @property
-    def max_mag_squared_length(self) -> float:
+    def max_mag_squared_length(self):
         mag_squared_length_array = np.square(self._data_dict['bfield'][1]).sum(axis=1)
         max_mag_index = np.argmax(mag_squared_length_array)
         max_mag_squared_length = mag_squared_length_array[max_mag_index]
         return max_mag_squared_length
     
     @property
-    def max_vel_squared_length(self) -> float:
+    def max_vel_squared_length(self):
         vel_squared_length_array = np.square(self._data_dict['velocity'][1]).sum(axis=1)
         max_vel_index = np.argmax(vel_squared_length_array)
         max_vel_squared_length = vel_squared_length_array[max_vel_index]
@@ -58,7 +58,7 @@ class DataManager:
         self._store_tvar(self._vel_vn, key_name='velocity')
         # self._set_maximum_vectors()
     
-    def make_draw_data(self, draw_data_property) -> DrawData:
+    def make_draw_data(self, draw_data_property):
         mag_vec = self._data_dict['bfield'][1][draw_data_property.show_data_index]
         vel_vec = self._data_dict['velocity'][1][draw_data_property.show_data_index]
 
@@ -116,8 +116,8 @@ class DataManager:
 
     def _extract_dist(self, dist_id):
         '''
-        PySPEDASの新しい仕様では、get_dist からの戻り値を dists としたとき、
-        dists[0]のようにしてある時間のデータを取得できるらしいので、この関数は不要になる
+        The new specification of the PySPEDAS dists allows to retrieve data at a certain time ex. dists[0],
+        so this function will not be needed.
         '''
         dist = {}
         for k, v in self._dists.items():
@@ -137,10 +137,10 @@ class DataManager:
             
             tmp_data = {}
             ene_id = np.where(~np.isnan(dist['energy'][:, 0, 0]))
-            tmp_data['data_flax'] = dist['data'][ene_id].astype('float64') # 元は float32
+            tmp_data['data_flax'] = dist['data'][ene_id].astype('float64') # originally float32
             tmp_data['bins'] = dist['bins'][ene_id]
-            tmp_data['energy'] = dist['energy'][ene_id].astype('float64') # 元は float32
-            tmp_data['denergy'] = dist['denergy'][ene_id].astype('float64') # 元は float32
+            tmp_data['energy'] = dist['energy'][ene_id].astype('float64') # originally float32
+            tmp_data['denergy'] = dist['denergy'][ene_id].astype('float64') # originally float32
             tmp_data['nenergy'] = np.nan
             tmp_data['phi'] = dist['phi'][ene_id]
             tmp_data['dphi'] = dist['dphi'][ene_id]
@@ -148,7 +148,7 @@ class DataManager:
             tmp_data['dtheta'] = dist['dtheta'][ene_id]
 
             dist_df = erg_convert_flux_units(dist, units='df')
-            tmp_data['data_psd'] = dist_df['data'][ene_id].astype('float64') # 元は float32
+            tmp_data['data_psd'] = dist_df['data'][ene_id].astype('float64') # originally float32
 
             c = 299792458.0 # m/s
             erest = dist['mass'] * c ** 2 / 1e6 # convert mass from eV/(km/s)^2 to eV/c^2
@@ -158,8 +158,8 @@ class DataManager:
             data = {'energy': tmp_data['energy'].flatten(),
                     'v': (c * np.sqrt( 1 - 1/((tmp_data['energy']/erest + 1) ** 2) )  /  1000).flatten(),
                     'azim': tmp_data['phi'].flatten(),
-                    # IDL版の処理。この後、直交座標に変換するときに、elev = 90 - elev として theta の値に戻していたので、この時点で elev = theta にする
-                    # 'elev': 90 - tmp_data['theta'].flatten(),
+                    # The IDL version processes is "'elev': 90 - tmp_data['theta'].flatten(),". After this, when converting to Cartesian coordinates,
+                    # the value of theta was returned as elev = 90 - elev. So elev becomes theta.
                     'elev': tmp_data['theta'].flatten(),
                     'flux': tmp_data['data_flax'].flatten(),
                     'psd': tmp_data['data_psd'].flatten(),

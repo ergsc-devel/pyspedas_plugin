@@ -64,7 +64,7 @@ class DrawDataProperty:
 
 
 class Isee3dProperty:
-    def __init__(self, max_mag_squared_length: float, max_vel_squared_length: float, colormap_name):
+    def __init__(self, max_mag_squared_length, max_vel_squared_length, colormap_name):
         self.mag_vec = VectorProperty(show=True, color='CYAN', max_squared_length=max_mag_squared_length, length_scale='full', thick=4, vector=None)
         self.vel_vec = VectorProperty(show=True, color='YELLOW', max_squared_length=max_vel_squared_length, length_scale='full', thick=4, vector=None)
         self.user_vec = VectorProperty(show=False, color='MAGENTA', max_squared_length=None, length_scale='full', thick=4, vector=np.array([0, 1, 0]))
