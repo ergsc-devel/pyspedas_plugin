@@ -234,11 +234,11 @@ def make_scalar_bar_actor(lookup_table, array_name, font_size):
     scalar_bar_actor.SetOrientationToVertical()
     scalar_bar_actor.SetLookupTable(lookup_table)
     scalar_bar_actor.SetTitle(array_name)
-    scalar_bar_actor.SetTextPositionToSucceedScalarBar ()
+    scalar_bar_actor.SetTextPositionToSucceedScalarBar()
     scalar_bar_actor.SetNumberOfLabels(6)
     scalar_bar_actor.SetBarRatio(0.1)
     scalar_bar_actor.SetWidth(0.1)
-    scalar_bar_actor.SetPosition(0.88, 0.1)
+    scalar_bar_actor.SetPosition(0.85, 0.1)
  
     # Draw ticks method. This doesn't wok for bug. https://gitlab.kitware.com/vtk/vtk/-/issues/17751
     # scalar_bar_actor.DrawTickLabelsOn()
@@ -246,18 +246,13 @@ def make_scalar_bar_actor(lookup_table, array_name, font_size):
     text_property = vtk.vtkTextProperty()
     text_property.SetColor(0, 0, 0)
     text_property.SetFontSize(font_size)
-    text_property.SetFontFamilyToArial()
+    text_property.SetFontFamilyToTimes()
     text_property.ItalicOff()
     text_property.BoldOff()
+
     scalar_bar_actor.UnconstrainedFontSizeOn()
     scalar_bar_actor.SetLabelTextProperty(text_property)
 
-    text_property = vtk.vtkTextProperty()
-    text_property.SetColor(0, 0, 0)
-    text_property.SetFontSize(font_size+4)
-    text_property.SetFontFamilyToArial()
-    text_property.ItalicOff()
-    text_property.BoldOff()
     scalar_bar_actor.UnconstrainedFontSizeOn()
     scalar_bar_actor.SetTitleTextProperty(text_property)
 

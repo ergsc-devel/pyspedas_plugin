@@ -15,8 +15,14 @@ def draw_colorbar(colorbar_property, v_array, renderer):
     lookup_table.SetNanColor(0, 0, 0, 1)  # nan to black
     lookup_table.Build()
 
-    scalarBarActor = make_actor.make_scalar_bar_actor(lookup_table, colorbar_property.units, colorbar_property.text_size)
-    renderer.AddActor2D(scalarBarActor)
+    unit_name = colorbar_property.units
+    if unit_name == 'FLUX':
+        unit_name += '\n[/ev/s/sr/cm^2]'
+    elif unit_name == 'PSD':
+        unit_name += '\n[s^3/km^6]'
+
+    scalarBarActor = make_actor.make_scalar_bar_actor(lookup_table, unit_name, colorbar_property.text_size)
+    renderer.AddActor(scalarBarActor)
 
     return lookup_table
 
