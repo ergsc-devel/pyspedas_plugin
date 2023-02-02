@@ -30,8 +30,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self._suppress_update = True
 
         self._set_data_text()
-        self._set_start_time_text()
-        self._set_end_time_text()
+        self._set_start_and_end_time_text()
         self._set_coordinates_text()
         self._set_value_text()
 
@@ -80,24 +79,28 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         last_time_txt = last_datetime.strftime('%H:%M:%S') + f'.{round(last_datetime.microsecond/1000)}'
         self.label_lastTime_slider.setText(last_time_txt)
 
+        # axis_units_txt = self.vtkWidget.draw_property.data.axis_units
+        # self.label_data.setText(f'{first_date_txt}/{first_time_txt} - {last_date_txt}/{last_time_txt} ({axis_units_txt})')
+    
+    def _set_start_and_end_time_text(self):
         axis_units_txt = self.vtkWidget.draw_property.data.axis_units
 
-        self.label_data.setText(f'{first_date_txt}/{first_time_txt} - {last_date_txt}/{last_time_txt} ({axis_units_txt})')
-    
-    def _set_start_time_text(self):
         start_datetime = datetime.strptime(self.vtkWidget.draw_data.start_data_time, '%Y-%m-%d %H:%M:%S.%f')
         start_date_txt = start_datetime.strftime('%Y-%m-%d')
         start_time_txt = start_datetime.strftime('%H:%M:%S') + f'.{round(start_datetime.microsecond/1000)}'
         self.label_startTime.setText(f'{start_date_txt} {start_time_txt}')
 
-    def _set_end_time_text(self):
         if self.vtkWidget.draw_data.end_data_time is None:
             self.label_endTime.setText(f'')
+
+            self.label_data.setText(f'{start_date_txt}/{start_time_txt} ({axis_units_txt})')
         else:
             end_datetime = datetime.strptime(self.vtkWidget.draw_data.end_data_time, '%Y-%m-%d %H:%M:%S.%f')
             end_date_txt = end_datetime.strftime('%Y-%m-%d')
             end_time_txt = end_datetime.strftime('%H:%M:%S') + f'.{round(end_datetime.microsecond/1000)}'
             self.label_endTime.setText(f'{end_date_txt} {end_time_txt}')
+
+            self.label_data.setText(f'{start_date_txt}/{start_time_txt} - {end_date_txt}/{end_time_txt} ({axis_units_txt})')
 
     def _set_coordinates_text(self):
         outline = self.vtkWidget.draw_property.outline
@@ -246,8 +249,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.vtkWidget.update_data()
         self.vtkWidget.update_draw()
-        self._set_start_time_text()
-        self._set_end_time_text()
+        self._set_start_and_end_time_text()
         self._set_value_text()
         self.lineEdit_xyPlane.validator().setRange(self.vtkWidget.draw_property.outline.z_min, self.vtkWidget.draw_property.outline.z_max)
         self.lineEdit_yzPlane.validator().setRange(self.vtkWidget.draw_property.outline.x_min, self.vtkWidget.draw_property.outline.x_max)
