@@ -144,7 +144,7 @@ def make_center_line_actors(bounds, center):
 
 
 def make_arrow_actor(startPoint, endPoint, radius_scale=5):
-    # refer to  OrientedArrow int vtk-examples
+    # refer to  OrientedArrow in vtk-examples
 
     # Create an arrow.
     tip_radius = 0.006 * radius_scale
@@ -237,7 +237,8 @@ def make_scalar_bar_actor(lookup_table, array_name, font_size):
     scalar_bar_actor.SetTextPositionToSucceedScalarBar ()
     scalar_bar_actor.SetNumberOfLabels(6)
     scalar_bar_actor.SetBarRatio(0.1)
-    scalar_bar_actor.SetPosition2(0.15, 0.8)
+    scalar_bar_actor.SetWidth(0.1)
+    scalar_bar_actor.SetPosition(0.88, 0.1)
  
     # Draw ticks method. This doesn't wok for bug. https://gitlab.kitware.com/vtk/vtk/-/issues/17751
     # scalar_bar_actor.DrawTickLabelsOn()
