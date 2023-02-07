@@ -227,6 +227,17 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         current_text = self.comboBox_units.currentText()
         self.vtkWidget.draw_property.data.units = current_text
         self.vtkWidget.draw_property.colorbar.units = current_text
+
+        try:
+            edit_min = float(self.lineEdit_color_minValue.text())
+            edit_max = float(self.lineEdit_color_maxValue.text())
+            colorbar_min = self.vtkWidget.draw_property.colorbar.min
+            colorbar_max = self.vtkWidget.draw_property.colorbar.max
+            if (edit_min != colorbar_min) or (edit_max != colorbar_max):
+                self.vtkWidget.draw_property.colorbar.reset()
+        except:
+            self.vtkWidget.draw_property.colorbar.reset()
+
         self.vtkWidget.update_data()
         self.vtkWidget.update_draw()
         self._set_value_text()
