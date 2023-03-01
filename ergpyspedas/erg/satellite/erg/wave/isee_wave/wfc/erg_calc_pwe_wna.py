@@ -1,4 +1,3 @@
-import os
 from enum import Enum, auto
 from typing import Callable, List, Optional, Tuple
 
@@ -10,8 +9,8 @@ from pytplot import get_data, options, store_data, ylim, zlim
 from pytplot.importers.tplot_restore import tplot_restore
 from pytplot.tplot_math.join_vec import join_vec
 
-from add_fc import add_fc
-from get_uname_passwd import get_uname_passwd
+from ..load.add_fc import add_fc
+from ..utils.get_uname_passwd import get_uname_passwd
 
 
 class MessageKind(Enum):
@@ -100,7 +99,9 @@ def analysis_impl_dummy():
         and os.path.exists(os.path.join(dummy_data_dir, "planarity.tplot"))
         and os.path.exists(os.path.join(dummy_data_dir, "poyntingvec.tplot"))
     ):
-        raise FileNotFoundError("Dummy data files does not exist")
+        raise FileNotFoundError(
+            f"Dummy data files do not exist in dir: {dummy_data_dir}"
+        )
 
     tplot_restore(os.path.join(dummy_data_dir, "espec.tplot"))
     tplot_restore(os.path.join(dummy_data_dir, "bspec.tplot"))

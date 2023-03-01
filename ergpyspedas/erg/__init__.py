@@ -29,3 +29,4 @@ from .ground.riometer.isee_brio import isee_brio
 from .ground.vlf.isee_vlf import isee_vlf
 
 from .satellite.erg.particle.isee3d.isee3d import isee3d
+from .satellite.erg.wave.isee_wave.isee_wave import isee_wave

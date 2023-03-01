@@ -1,12 +1,21 @@
+from dataclasses import dataclass
+
 import matplotlib.pyplot as plt
-from matplotlib.backends.backend_qtagg import FigureCanvas
+from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg
 from PySide6 import QtCore, QtGui, QtWidgets
 
-from plot_ofa import plot_ofa_init
+from .plot_ofa import plot_ofa_init
+
+
+@dataclass
+class OFAViewOptions:
+    xsize: int = 1280  # px
+    ysize: int = 600  # px
+    font_size: float = 10  # pt
 
 
 class OFAView(QtWidgets.QWidget):
-    def __init__(self) -> None:
+    def __init__(self, options: OFAViewOptions = OFAViewOptions()) -> None:
         super().__init__()
         self.setWindowTitle("ISEE_Wave (OFA)")
         self._layout = QtWidgets.QVBoxLayout(self)
@@ -39,9 +48,17 @@ class OFAView(QtWidgets.QWidget):
         self._input_layout.addStretch()
         self._input_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeft)
         self._layout.addLayout(self._input_layout)
-        fig = plot_ofa_init()
-        self._canvas = FigureCanvas(fig)
-        self._layout.addWidget(self._canvas)
+        # HACK: Put single figure in nested layout with stretch
+        # in order not the figure to stretch but spacings around the figure to stretch
+        self._canvas_vlayout = QtWidgets.QVBoxLayout()
+        self._layout.addLayout(self._canvas_vlayout)
+        self._canvas_hlayout = QtWidgets.QHBoxLayout()
+        self._canvas_vlayout.addLayout(self._canvas_hlayout)
+        fig = plot_ofa_init(options.xsize, options.ysize)
+        self._canvas = FigureCanvasQTAgg(fig)
+        self._canvas_hlayout.addWidget(self._canvas)
+        self._canvas_hlayout.addStretch()
+        self._canvas_vlayout.addStretch()
         self._time_label = QtWidgets.QLabel("")
         self._layout.addWidget(self._time_label)
         self._layout.setSizeConstraint(QtWidgets.QLayout.SizeConstraint.SetFixedSize)

@@ -1,17 +1,22 @@
 from PySide6 import QtWidgets
 
-from login_presenter import LoginPresenter, LoginPresenterViewInterface
-from login_view import LoginView
+from ..ofa.ofa_view import OFAViewOptions
+from ..ofa.ofa_view_controller import OFAViewController
+from ..wfc.wfc_view import WFCViewOptions
+from ..wfc.wfc_view_controller import WFCViewController
+from .login_presenter import LoginPresenter, LoginPresenterViewInterface
+from .login_view import LoginView
 
 
 class LoginViewController(LoginPresenterViewInterface):
     def __init__(self) -> None:
         super().__init__()
         self._view = LoginView()
-        self._view._login_button.clicked.connect(self.login_button_clicked)
-        self._view._guest_button.clicked.connect(self.guest_button_clicked)
-        self._view._troubleshooting_button.clicked.connect(
-            self.troubleshooting_button_clicked)
+        self._view._login_button.clicked.connect(self.login_button_clicked)  # type: ignore
+        self._view._guest_button.clicked.connect(self.guest_button_clicked)  # type: ignore
+        self._view._troubleshooting_button.clicked.connect(  # type: ignore
+            self.troubleshooting_button_clicked
+        )
 
     def inject(self, presenter: LoginPresenter) -> None:
         self._presenter = presenter
@@ -46,23 +51,31 @@ class LoginViewController(LoginPresenterViewInterface):
 
     def invalid_window_size_options(self) -> None:
         QtWidgets.QMessageBox.critical(
-            self._view, "Error", "X and Y sizes must be larger than 300 pixels.")
+            self._view, "Error", "X and Y sizes must be larger than 300 pixels."
+        )
 
     def invalid_font_size_options(self) -> None:
         QtWidgets.QMessageBox.critical(
-            self._view, "Error", "Font size must be larger than 0.")
+            self._view, "Error", "Font size must be larger than 0."
+        )
 
     def invalid_uname_passwd(self) -> None:
-        QtWidgets.QMessageBox.critical(
-            self._view, "Error", "Authentication failed.")
-        # TODO: maybe logging?
-        print("Authentication failed.")
+        QtWidgets.QMessageBox.critical(self._view, "Error", "Authentication failed.")
 
     def troubleshooting_finished(self) -> None:
         QtWidgets.QMessageBox.information(
-            self._view, "Information", "Successfully finished.")
+            self._view, "Information", "Successfully finished."
+        )
 
-    def close(self) -> None:
+    def transition_to_ofa_wfc(
+        self, ofa_options: OFAViewOptions, wfc_options: WFCViewOptions
+    ) -> None:
+        self.ofa_vc = OFAViewController(ofa_options)
+        self.wfc_vc = WFCViewController(wfc_options)
+        self.ofa_vc.inject(self.wfc_vc)
+        self.wfc_vc.inject(self.ofa_vc)
+        self.ofa_vc.show()
+        self.wfc_vc.show()
         self._view.close()
 
     def login_button_clicked(self) -> None:
@@ -74,5 +87,9 @@ class LoginViewController(LoginPresenterViewInterface):
     def troubleshooting_button_clicked(self) -> None:
         self._presenter.troubleshooting()
 
+    def update_views(self, option1, option2) -> None:
+        self._view.update_views(option1, option2)
+
     def show(self) -> None:
+        self._presenter.view_did_load()
         self._view.show()

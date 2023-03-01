@@ -6,8 +6,8 @@ from pytplot import get_data
 
 def get_uname_passwd() -> Tuple[str, str]:
     if tnames("uname"):
-        uname1 = get_data("uname").y[0]
-        passwd1 = get_data("passwd").y[0]
+        uname1 = get_data("uname").y[0]  # type: ignore
+        passwd1 = get_data("passwd").y[0]  # type: ignore
     else:
         uname1 = ""
         passwd1 = ""

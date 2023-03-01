@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum
-from typing import Dict, Optional
+from typing import Dict, List
 
 data_option_dict_dict = {
     "espec": {
@@ -15,7 +15,7 @@ data_option_dict_dict = {
         "zlog": 1,
         "mask": 1,
         "plot": 1,
-        "mask_label": "E-Spec (Exponential)",
+        "mask_label": "E-Spec",
     },
     "bspec": {
         "ytitle": "B-Spec",
@@ -29,7 +29,7 @@ data_option_dict_dict = {
         "zlog": 1,
         "mask": 1,
         "plot": 1,
-        "mask_label": "B-Spec (Exponential)",
+        "mask_label": "B-Spec",
     },
     "wna": {
         "ytitle": "Wave normal angle",
@@ -89,69 +89,63 @@ data_option_dict_dict = {
     },
 }
 
-orbital_information_option_dict = {"mlt": 1, "mlat": 1, "altitude": 1, "lshell": 1}
-
-
-params = {
-    "ofa_starttime": ["2017-04-01/00:00:00"],
-    "ofa_endtime": ["2017-04-01/23:59:59"],
-    "ofa_drawwindow": None,
-    "ofa_xs": 1280,
-    "ofa_ys": 600,
-    "ofa_tplotlist": [
-        "ofae",
-        "ofab",
-        "erg_pwe_wfc_l2_info_stat_chorus",
-        "erg_pwe_wfc_l2_info_stat_swpia",
-    ],
-    "wfc_starttime": "2017-04-01/13:57:45",
-    "wfc_endtime": "2017-04-01/13:57:53",
-    "wfc_xs": 650,
-    "wfc_ys": 900,
-    "fce": 0,
-    "fcH": 0,
-    "fce05": 0,
-    "fcH05": 0,
-    "fcHe": 0,
-    "fcO": 0,
-    "tb_sel_top": 0,
-    "tb_sel_bottom": 0,
-    "draw_support_line_cb": 1,
-    "filter": "BPF",
-    "drawline": 0,
-    "rgb_table": 33,
-    "mask_flg": 0,
-    "UVW": "GEO",
-    "xdeg": 0,
-    "ydeg": 0,
-    "zdeg": 0,
-    "mask_apply_01": 1,
-    "mask_apply_02": 1,
-    "mask_apply_03": 1,
-    "mask_apply_04": 1,
-    "mask_apply_05": 1,
-    "mask_apply_06": 1,
-    "ylog_01": 0,
-    "ylog_02": 0,
-    "ylog_03": 0,
-    "ylog_04": 0,
-    "ylog_05": 0,
-    "ylog_06": 0,
-    "zlog_01": 0,
-    "zlog_02": 0,
-    "zlog_03": 0,
-    "zlog_04": 0,
-    "zlog_05": 0,
-    "zlog_06": 0,
+orbital_information_option_dict = {
+    "mlt": True,
+    "mlat": True,
+    "altitude": True,
+    "lshell": True,
 }
 
-
-@dataclass
-class OrbitalInformationOption:
-    mlt: int
-    mlat: int
-    altitude: int
-    lshell: int
+support_line_option_list = [
+    {
+        "species": "fc",
+        "M": "1/1837",
+        "Q": "1",
+        "LSTY": "0",
+        "LCOL": "5",
+        "enable": "OFF",
+    },
+    {
+        "species": "0.5fc",
+        "M": "2/1837",
+        "Q": "1",
+        "LSTY": "0",
+        "LCOL": "1",
+        "enable": "OFF",
+    },
+    {
+        "species": "0.1fc",
+        "M": "10/1837",
+        "Q": "1",
+        "LSTY": "0",
+        "LCOL": "3",
+        "enable": "OFF",
+    },
+    {
+        "species": "fcH",
+        "M": "1",
+        "Q": "1",
+        "LSTY": "0",
+        "LCOL": "255",
+        "enable": "OFF",
+    },
+    {
+        "species": "fcHe",
+        "M": "4",
+        "Q": "1",
+        "LSTY": "0",
+        "LCOL": "255",
+        "enable": "OFF",
+    },
+    {
+        "species": "fcO",
+        "M": "16",
+        "Q": "1",
+        "LSTY": "0",
+        "LCOL": "255",
+        "enable": "OFF",
+    },
+]
 
 
 @dataclass
@@ -160,21 +154,21 @@ class DataOption:
     ysubtitle: str  # ylabel second column
     ymin: float
     ymax: float
-    ylog: int  # 0: linear, 1: log
+    ylog: bool
     ztitle: str  # label of color bar
     zmin: float
     zmax: float
-    zlog: int  # 0: linear, 1: log
-    mask: int  # 0: false, 1: true
-    plot: int  # 0: false, 1: true
+    zlog: bool
+    mask: bool
+    plot: bool
     mask_label: str
 
 
 @dataclass
 class DataInfo:
-    min: Optional[float] = None
-    max: Optional[float] = None
-    mask: Optional[float] = None
+    min: float
+    max: float
+    mask: float
 
 
 class DataName(Enum):
@@ -186,7 +180,23 @@ class DataName(Enum):
     poyntingvec = "poyntingvec"
 
 
-def create_data_options() -> Dict[DataName, DataOption]:
+class OrbitalInfoName(Enum):
+    mlt = "mlt"
+    mlat = "mlat"
+    alt = "altitude"
+    l = "lshell"
+
+
+class SupportLineOptionName(Enum):
+    species = "species"
+    m = "M"
+    q = "Q"
+    lsty = "LSTY"
+    lcol = "LCOL"
+    enable = "enable"
+
+
+def create_data_options(data_option_dict_dict) -> Dict[DataName, DataOption]:
     data_options = {}
     for name in DataName:
         dic = data_option_dict_dict[name.value]
@@ -194,8 +204,16 @@ def create_data_options() -> Dict[DataName, DataOption]:
     return data_options
 
 
-def create_data_infos() -> Dict[DataName, DataInfo]:
-    data_infos = {}
-    for name in DataName:
-        data_infos[name] = DataInfo()
-    return data_infos
+def create_orbital_informations(
+    orbital_information_option_dict,
+) -> Dict[OrbitalInfoName, bool]:
+    return {id_: orbital_information_option_dict[id_.value] for id_ in OrbitalInfoName}
+
+
+def create_support_line_options(
+    support_line_option_list,
+) -> List[Dict[SupportLineOptionName, str]]:
+    list_ = []
+    for dict_ in support_line_option_list:
+        list_.append({name: dict_[name.value] for name in SupportLineOptionName})
+    return list_

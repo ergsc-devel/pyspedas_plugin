@@ -1,3 +1,4 @@
+import os
 
 from PySide6 import QtCore, QtGui, QtWidgets
 
@@ -7,8 +8,9 @@ class LoginView(QtWidgets.QWidget):
         super().__init__()
         self.setWindowTitle("ISEE_Wave")
         self._layout = QtWidgets.QVBoxLayout(self)
-
-        pixmap = QtGui.QPixmap("assets/images/arase_logo.png")
+        pixmap = QtGui.QPixmap(
+            os.path.join(os.path.dirname(__file__), "../assets/images/arase_logo.png")
+        )
         pixmap = pixmap.scaled(200, 200)
         self._image_label = QtWidgets.QLabel()
         self._image_label.setPixmap(pixmap)
@@ -35,8 +37,7 @@ class LoginView(QtWidgets.QWidget):
         self._loginguest_layout.addWidget(self._login_button)
         self._loginguest_layout.addWidget(self._or_label)
         self._loginguest_layout.addWidget(self._guest_button)
-        self._loginguest_layout.setAlignment(
-            QtCore.Qt.AlignmentFlag.AlignCenter)
+        self._loginguest_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self._idpw_loginguest_layout.addLayout(self._loginguest_layout)
 
         self._layout.addLayout(self._idpw_loginguest_layout)
@@ -49,14 +50,14 @@ class LoginView(QtWidgets.QWidget):
         self._ofa_layout = QtWidgets.QHBoxLayout()
         self._ofa_label = QtWidgets.QLabel("[OFA]")
         self._ofa_xsize_label = QtWidgets.QLabel("X size:")
-        self._ofa_xsize_line_edit = QtWidgets.QLineEdit("1280")
+        self._ofa_xsize_line_edit = QtWidgets.QLineEdit()
         # TODO: only setFixedWidth can really control width
         # but it is not aligned against above or below lines
         # maybe grid layout is better
         self._ofa_xsize_line_edit.setFixedWidth(40)
         self._ofa_xsize_px_label = QtWidgets.QLabel("px")
         self._ofa_ysize_label = QtWidgets.QLabel("Y size:")
-        self._ofa_ysize_line_edit = QtWidgets.QLineEdit("600")
+        self._ofa_ysize_line_edit = QtWidgets.QLineEdit()
         self._ofa_ysize_line_edit.setFixedWidth(40)
         self._ofa_ysize_px_label = QtWidgets.QLabel("px")
         self._ofa_layout.addWidget(self._ofa_label)
@@ -67,18 +68,17 @@ class LoginView(QtWidgets.QWidget):
         self._ofa_layout.addWidget(self._ofa_ysize_line_edit)
         self._ofa_layout.addWidget(self._ofa_ysize_px_label)
         self._ofa_layout.addStretch()
-        self._ofa_layout.setAlignment(
-            QtCore.Qt.AlignmentFlag.AlignLeft)
+        self._ofa_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeft)
         self._advanced_options_layout.addLayout(self._ofa_layout)
 
         self._wfc_layout = QtWidgets.QHBoxLayout()
         self._wfc_label = QtWidgets.QLabel("[WFC]")
         self._wfc_xsize_label = QtWidgets.QLabel("X size:")
-        self._wfc_xsize_line_edit = QtWidgets.QLineEdit("650")
+        self._wfc_xsize_line_edit = QtWidgets.QLineEdit("800")
         self._wfc_xsize_line_edit.setFixedWidth(40)
         self._wfc_xsize_px_label = QtWidgets.QLabel("px")
         self._wfc_ysize_label = QtWidgets.QLabel("Y size:")
-        self._wfc_ysize_line_edit = QtWidgets.QLineEdit("900")
+        self._wfc_ysize_line_edit = QtWidgets.QLineEdit("1000")
         self._wfc_ysize_line_edit.setFixedWidth(40)
         self._wfc_ysize_px_label = QtWidgets.QLabel("px")
         self._wfc_layout.addWidget(self._wfc_label)
@@ -89,29 +89,25 @@ class LoginView(QtWidgets.QWidget):
         self._wfc_layout.addWidget(self._wfc_ysize_line_edit)
         self._wfc_layout.addWidget(self._wfc_ysize_px_label)
         self._wfc_layout.addStretch()
-        self._wfc_layout.setAlignment(
-            QtCore.Qt.AlignmentFlag.AlignLeft)
+        self._wfc_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeft)
         self._advanced_options_layout.addLayout(self._wfc_layout)
 
         self._font_size_layout = QtWidgets.QHBoxLayout()
         self._font_size_label = QtWidgets.QLabel("[Font size]")
-        self._font_size_line_edit = QtWidgets.QLineEdit("1.0")
+        self._font_size_line_edit = QtWidgets.QLineEdit("10")
         self._font_size_line_edit.setFixedWidth(40)
         self._font_size_layout.addWidget(self._font_size_label)
         self._font_size_layout.addWidget(self._font_size_line_edit)
         self._font_size_layout.addStretch()
-        self._font_size_layout.setAlignment(
-            QtCore.Qt.AlignmentFlag.AlignLeft)
+        self._font_size_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeft)
         self._advanced_options_layout.addLayout(self._font_size_layout)
 
         self._troubleshooting_layout = QtWidgets.QHBoxLayout()
         self._troubleshooting_label = QtWidgets.QLabel("[Troubleshooting]")
-        self._troubleshooting_button = QtWidgets.QPushButton(
-            "Temporary file reset")
+        self._troubleshooting_button = QtWidgets.QPushButton("Temporary file reset")
         self._troubleshooting_layout.addWidget(self._troubleshooting_label)
         self._troubleshooting_layout.addWidget(self._troubleshooting_button)
-        self._troubleshooting_layout.setAlignment(
-            QtCore.Qt.AlignmentFlag.AlignLeft)
+        self._troubleshooting_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeft)
         self._advanced_options_layout.addLayout(self._troubleshooting_layout)
 
         self._layout.addLayout(self._advanced_options_layout)
@@ -122,3 +118,11 @@ class LoginView(QtWidgets.QWidget):
 
         # TODO: is it ok to be here?
         self.resize(329, 510)
+
+    def update_views(self, option1, option2):
+        self._ofa_xsize_line_edit.setText(str(option1.xsize))
+        self._ofa_ysize_line_edit.setText(str(option1.ysize))
+        self._font_size_line_edit.setText(str(option1.font_size))
+        self._wfc_xsize_line_edit.setText(str(option2.xsize))
+        self._wfc_ysize_line_edit.setText(str(option2.ysize))
+        self._font_size_line_edit.setText(str(option2.font_size))

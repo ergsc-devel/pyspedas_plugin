@@ -1,21 +1,26 @@
-import matplotlib as mpl
-import matplotlib.figure
+from typing import Dict, List, Tuple
+
+import matplotlib.dates
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 import numpy as np
 import pytplot
+from matplotlib.figure import Figure
 from pyspedas.erg.satellite.erg.pwe.pwe_ofa import pwe_ofa
 from pytplot import tplot_options, xlim
 from pytplot.MPLPlotter.tplot import get_var_label_ticks
 from pytplot.options import options
 from pytplot.tplot import tplot
 
-from add_orb import add_orb
-from get_uname_passwd import get_uname_passwd
-from pwe_wfc_info import pwe_wfc_info
+from ..load.add_orb import add_orb
+from ..load.pwe_wfc_info import pwe_wfc_info
+from ..options.options import OrbitalInfoName
+from ..utils.get_uname_passwd import get_uname_passwd
 
 
-def load_ofa(trange=["2017-04-01/00:00:00", "2017-04-01/23:59:59"], no_update=False):
+def load_ofa(
+    trange=["2017-04-01/00:00:00", "2017-04-01/23:59:59"], no_update=False
+) -> Tuple[List[str], Dict[OrbitalInfoName, str]]:
     uname1, passwd1 = get_uname_passwd()
 
     # Loading data and general option settings
@@ -33,13 +38,15 @@ def load_ofa(trange=["2017-04-01/00:00:00", "2017-04-01/23:59:59"], no_update=Fa
     return ofa_tplotlist, var_label_list
 
 
-def plot_ofa_init(xsize: float = 12.8, ysize: float = 6) -> matplotlib.figure.Figure:
+def plot_ofa_init(xsize: float = 1280, ysize: float = 600, dpi: int = 100) -> Figure:
     # Figure size is 1280 x 600 (px)
     # In the case of dpi = 300
     # However, width of axes spines, ticks should be also managed for dpi = 300
     # factor = 1
     # In the case of dpi = 100
-    fig = plt.figure(figsize=(xsize, ysize), facecolor="black")
+    xsize_inch = xsize / dpi
+    ysize_inch = ysize / dpi
+    fig = Figure(figsize=(xsize_inch, ysize_inch), facecolor="black")
     return fig
 
 
@@ -80,7 +87,7 @@ def _postprocess_var_label_panel(variables, var_label_list, axes, fs):
     # but xticklabels is initialized only after figure is drawn
     # So you need to directly use formatter to get the strings
     locator = last_data_axis.xaxis.get_major_locator()
-    formatter = mpl.dates.ConciseDateFormatter(locator)
+    formatter = matplotlib.dates.ConciseDateFormatter(locator)
     # Ex. 12:34
     time_suffixes = formatter.format_ticks(xaxis_ticks)
     # Ex. 2017-Apr-01
@@ -88,7 +95,7 @@ def _postprocess_var_label_panel(variables, var_label_list, axes, fs):
 
     # List[np.datetime64]
     xaxis_ticks_dt = [
-        np.datetime64(mpl.dates.num2date(tick_val).isoformat())
+        np.datetime64(matplotlib.dates.num2date(tick_val).isoformat())
         for tick_val in xaxis_ticks
     ]
 
@@ -99,7 +106,9 @@ def _postprocess_var_label_panel(variables, var_label_list, axes, fs):
     var_label_axis.spines["bottom"].set_visible(False)
     var_label_axis.spines["left"].set_visible(False)
     var_label_axis.tick_params(axis="x", which="both", length=0, labelbottom=False)
-    var_label_axis.tick_params(axis="y", which="both", length=0, pad=fs * 3)
+    var_label_axis.tick_params(
+        axis="y", which="both", length=0, pad=fs * 3, labelsize=fs
+    )
     var_label_axis.set_ylim(0, len(var_label_list) + 2)
 
     ys = []
@@ -123,10 +132,12 @@ def _postprocess_var_label_panel(variables, var_label_list, axes, fs):
             else:
                 label = var_label_list[i]
                 label_data = pytplot.get_data(label, xarray=True, dt=True)
-                y_label = label_data.attrs["plot_options"]["yaxis_opt"]["axis_label"]
-                xaxis_labels = get_var_label_ticks(label_data, xaxis_ticks_dt)
+                y_label = label_data.attrs["plot_options"]["yaxis_opt"]["axis_label"]  # type: ignore
+                xaxis_labels = get_var_label_ticks(
+                    label_data, xaxis_ticks_dt
+                )  # type] ignore
 
-            for xaxis_tick, xaxis_label in zip(xaxis_ticks, xaxis_labels):
+            for xaxis_tick, xaxis_label in zip(xaxis_ticks, xaxis_labels):  # type: ignore
                 # Sometimes ticks produced by locator can be outside xlim, so let exclude them
                 if xmin <= xaxis_tick <= xmax:
                     var_label_axis.text(
@@ -143,8 +154,12 @@ def _postprocess_var_label_panel(variables, var_label_list, axes, fs):
 
 
 def plot_ofa(
-    fig: matplotlib.figure.Figure, trange, ofa_tplotlist, var_label_list
-) -> matplotlib.figure.Figure:
+    fig: Figure,
+    trange,
+    ofa_tplotlist,
+    var_label_dict: Dict[OrbitalInfoName, str],
+    font_size: float = 10,
+) -> Figure:
     fig.clf()
     # Controls not loaded data xrange but plot xrange
     xlim(*trange)
@@ -159,9 +174,8 @@ def plot_ofa(
     tplot_options("vertical_spacing", 0.2)
 
     # font size
-    fs = 10
-    tplot_options("charsize", fs)
-    tplot_options("axis_font_size", fs)
+    tplot_options("charsize", font_size)
+    tplot_options("axis_font_size", font_size)
     # In tplot(), xmargin is ineffective when specplot exists
     # plot_options("xmargin", [0.05, 0.05])
     tplot_options("ymargin", [0.05, 0.05])
@@ -169,7 +183,9 @@ def plot_ofa(
     kinds = ["chorus", "emic", "efd", "swpia"]
     names = [wfi + kind for kind in kinds]
     for name in names:
-        options(name, "marker_size", fs * 2)
+        options(name, "marker_size", font_size * 2)
+
+    var_label_list = [tplot_name for tplot_name in var_label_dict.values()]
 
     # Preprocess var panels
     fig, axes = _preprocess_var_label_panel(fig, ofa_tplotlist, var_label_list)
@@ -193,7 +209,7 @@ def plot_ofa(
     ax_swpia = axes[3]
     ax_swpia.set_yticks([0.5, 1.0, 1.5], [" ", "WP", " "])
 
-    _postprocess_var_label_panel(ofa_tplotlist, var_label_list, axes, fs)
+    _postprocess_var_label_panel(ofa_tplotlist, var_label_list, axes, font_size)
     return fig
 
 

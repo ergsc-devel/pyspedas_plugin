@@ -1,25 +1,24 @@
 import os
-from typing import List
 
 from pyspedas.erg.satellite.erg.config import CONFIG
 from pyspedas.utilities.download import download
 
-from login_presenter import LoginPresenterModelInterface
+from .login_presenter import LoginPresenterModelInterface
 
 
 class AuthenticationModel(LoginPresenterModelInterface):
     def __init__(self) -> None:
         super().__init__()
 
-    def authenticate(self, idpw_uname: str, idpw_passwd: str) -> List[str]:
+    def authenticate(self, idpw_uname: str, idpw_passwd: str) -> bool:
         localdir = CONFIG["local_data_dir"]
-        remotedir = 'http://ergsc.isee.nagoya-u.ac.jp/erg_socware/bleeding_edge/'
+        remotedir = "http://ergsc.isee.nagoya-u.ac.jp/erg_socware/bleeding_edge/"
         path = localdir + "pw_connection"
         # Removing local file is equivalent to force download
         if os.path.exists(path):
             os.remove(path)
         # TODO: check last_version is same in pyspedas (however not necassary for this function)
-        path = download(
+        paths = download(
             remote_path=remotedir,
             remote_file="note_ERG-SC_procedures_en.pdf",
             local_path=localdir,
@@ -30,4 +29,7 @@ class AuthenticationModel(LoginPresenterModelInterface):
             basic_auth=False,
             last_version=True,
         )
-        return path
+        all_paths_exists = len(paths) > 0 and all(
+            [os.path.exists(path) for path in paths]
+        )
+        return all_paths_exists

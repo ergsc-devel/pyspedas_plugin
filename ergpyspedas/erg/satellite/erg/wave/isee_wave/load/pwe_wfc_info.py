@@ -8,7 +8,7 @@ from pyspedas.erg.satellite.erg.config import CONFIG
 from pyspedas.utilities.dailynames import dailynames
 from pyspedas.utilities.download import download
 from pyspedas.utilities.tnames import tnames
-from pytplot import cdf_to_tplot, options, store_data, ylim
+from pytplot import cdf_to_tplot, options, store_data
 
 
 def _cdf_var_atts(path: str) -> Dict[str, Any]:

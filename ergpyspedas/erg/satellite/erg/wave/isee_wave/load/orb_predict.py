@@ -33,8 +33,10 @@ def orb_predict(
         local_dir = CONFIG["local_data_dir"] + "satellite/erg/orb/" + suffix + "/"
         relfpathfmt = "%Y/erg_orb_" + suffix + "_" + level + "_%Y%m%d_v??.cdf"
         relfpaths = dailynames(file_format=relfpathfmt, trange=trange)
+        if relfpaths is None:
+            continue
         datfiles = download(
-            remote_file=relfpaths,
+            remote_file=relfpaths,  # type: ignore
             remote_path=remote_dir,
             local_path=local_dir,
             no_download=no_download,
