@@ -98,7 +98,7 @@ class OFAViewController:
 
         return start_time, end_time  # type: ignore
 
-    def _update_time(self, trange: tuple[float, float]) -> bool:
+    def _update_time(self, trange: Tuple[float, float]) -> bool:
         # Presentation logic
         is_time_updated = self._trange is None or (
             trange[0] < self._trange[0] or trange[1] > self._trange[1]

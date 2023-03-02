@@ -10,6 +10,6 @@ setup(
     version='0.0',
     packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
     install_requires=['pyspedas>=1.2.8', 'vtk==9.2.2', 'pyside6==6.4.2'],
-    python_requires='>=3.7',
+    python_requires='>=3.8',
     include_package_data=True,
 )

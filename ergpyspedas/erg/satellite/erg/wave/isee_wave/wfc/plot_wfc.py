@@ -28,7 +28,7 @@ from ..utils.get_uname_passwd import get_uname_passwd
 from .erg_calc_pwe_wna import erg_calc_pwe_wna
 
 
-def get_min_max_idl(z: np.ndarray, zlog: int) -> tuple[float, float]:
+def get_min_max_idl(z: np.ndarray, zlog: int) -> Tuple[float, float]:
     """
     >>> get_min_max_idl(np.array([1, 2]), 1)
     array([1, 2])
@@ -77,7 +77,7 @@ def get_mask_idl(z: np.ndarray, threshold: float, zlog: int) -> np.ndarray:
         return ~blocking_mask
 
 
-def get_min_max(z: np.ndarray, zlog: bool) -> tuple[float, float]:
+def get_min_max(z: np.ndarray, zlog: bool) -> Tuple[float, float]:
     z_real = z.real
     if zlog:
         z_pos = z_real[z_real > 0]
