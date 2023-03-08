@@ -17,23 +17,13 @@ from .satellite.erg.particle.erg_mep_part_products import erg_mep_part_products
 from .satellite.erg.particle.erg_lep_part_products import erg_lep_part_products
 
 from .ground.camera.camera_omti_asi import camera_omti_asi
-from .ground.camera.omti_attitude_params import omti_attitude_params
-from .ground.camera.plot_omti_image import plot_omti_image
-from .ground.camera.rm_star_absint import rm_star_absint
-from .ground.camera.tabsint import tabsint
-from .ground.camera.tmake_image_dev import tmake_image_dev
-from .ground.camera.keogram_image import keogram_image
-from .ground.camera.plot_omti_gmap import plot_omti_gmap
-from .ground.camera.search_omti_calibration_file import search_omti_calibration_file
-from .ground.camera.tabsint_nobg import tabsint_nobg
-from .ground.camera.tasi2gmap import tasi2gmap
-from .ground.camera.tmake_map_table import tmake_map_table
 from .ground.geomag.gmag_isee_fluxgate import gmag_isee_fluxgate
 from .ground.geomag.gmag_isee_induction import gmag_isee_induction
 from .ground.geomag.gmag_stel_fluxgate import gmag_stel_fluxgate
 from .ground.geomag.gmag_stel_induction import gmag_stel_induction
 from .ground.geomag.gmag_magdas_1sec import gmag_magdas_1sec
 from .ground.geomag.gmag_mm210 import gmag_mm210
+from .ground.geomag.gmag_nipr import gmag_nipr
 from .ground.radar.superdarn.sd_fit import sd_fit
 from .ground.riometer.isee_brio import isee_brio
 from .ground.vlf.isee_vlf import isee_vlf

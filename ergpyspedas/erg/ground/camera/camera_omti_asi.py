@@ -21,24 +21,7 @@ def camera_omti_asi(
     passwd=None,
     time_clip=False,
     ror=True
-    ):
-    '''
-    Load the OMTI ASI data from the ISEE ERG-SC site.
-
-    @trange: time range of interest (2 element array)
-    @suffix:
-    @site: Observatory name, example, erg_load_camera_omti_asi, site='sgk'. The default is 'all', i.e., load all available stations. This can be an array of strings, e.g., ['sgk', 'sta'] or a single string delimited by spaces, e.g., 'sgk sta'. Sites: abu ath drw eur gak hlk hus isg ist ith kap ktb mgd nai nyr ptk rik rsb sgk sta syo trs yng
-    @wavelength: Wavelength in Angstrom, i.e., 5577, 6300, 7200, 7774, 5893, etc. The default is 5577. This can be an array of integers, e.g., [5577, 6300] or strings, e.g., '5577', '5577 6300', and ['5577', '6300'].
-    @get_support_data:
-    @varformat:
-    @downloadonly: if set, then only download the data, do not load it into variables
-    @notplot:
-    @no_update:
-    @uname:
-    @passwd:
-    @time_clip:
-    @ror:
-    '''
+):
 
     site_code_all = ['abu', 'ath', 'drw', 'eur', 'gak', 'hlk',
                      'hus', 'isg', 'ist', 'ith', 'kap', 'ktb',
