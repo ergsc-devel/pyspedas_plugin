@@ -45,6 +45,7 @@
     │   ├── support_line_option.py      # 支持線の情報の設定
     │   └── wfc_view_option.py          # WFC画面の設定
     ├── plot
+    │   ├── __init__.py                 # パッケージ化用ファイル
     │   └── common.py                   # tplot関数の拡張版
     ├── utils
     │   ├── __init__.py                 # パッケージ化用ファイル
