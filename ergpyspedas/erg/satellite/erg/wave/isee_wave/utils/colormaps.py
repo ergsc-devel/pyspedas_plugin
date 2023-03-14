@@ -4,6 +4,7 @@ import numpy as np
 from matplotlib.colors import LinearSegmentedColormap
 
 # Copied from SPEDAS
+# First 7 numbers are qualitative colormap, and else are sequential colormap
 _blue_red_data_raw = [
     [0, 0, 0],
     [255, 0, 255],
@@ -263,6 +264,7 @@ _blue_red_data_raw = [
     [255, 255, 255],
 ]
 
+# Following matplotlib colormap convention
 colormaps: Dict[str, LinearSegmentedColormap] = {}
 _name_data_raw_list = [
     ("Blue-Red", _blue_red_data_raw),

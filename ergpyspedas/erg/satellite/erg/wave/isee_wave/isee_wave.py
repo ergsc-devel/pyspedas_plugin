@@ -6,10 +6,9 @@ from .login.login_view_controller import LoginViewController
 
 
 def isee_wave():
-
     app = QtWidgets.QApplication.instance()
-    if app is None:
-        app = QtWidgets.QApplication()
+    if not app:
+        app = QtWidgets.QApplication([])
     model = AuthenticationModel()
     view = LoginViewController()
     presenter = LoginPresenter(view, model)

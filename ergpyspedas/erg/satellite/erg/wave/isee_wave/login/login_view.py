@@ -2,6 +2,8 @@ import os
 
 from PySide6 import QtCore, QtGui, QtWidgets
 
+from ..__version__ import __version__
+
 
 class LoginView(QtWidgets.QWidget):
     def __init__(self):
@@ -51,9 +53,7 @@ class LoginView(QtWidgets.QWidget):
         self._ofa_label = QtWidgets.QLabel("[OFA]")
         self._ofa_xsize_label = QtWidgets.QLabel("X size:")
         self._ofa_xsize_line_edit = QtWidgets.QLineEdit()
-        # TODO: only setFixedWidth can really control width
-        # but it is not aligned against above or below lines
-        # maybe grid layout is better
+        # Only setFixedWidth can really control width
         self._ofa_xsize_line_edit.setFixedWidth(40)
         self._ofa_xsize_px_label = QtWidgets.QLabel("px")
         self._ofa_ysize_label = QtWidgets.QLabel("Y size:")
@@ -112,11 +112,10 @@ class LoginView(QtWidgets.QWidget):
 
         self._layout.addLayout(self._advanced_options_layout)
         self._layout.addStretch()
-        # TODO: What version should it be?
-        self._version_label = QtWidgets.QLabel("Version: 1.1.0")
+        self._version_label = QtWidgets.QLabel(f"Version: {__version__}")
         self._layout.addWidget(self._version_label)
 
-        # TODO: is it ok to be here?
+        # Almost same size as IDL
         self.resize(329, 510)
 
     def update_views(self, option1, option2):

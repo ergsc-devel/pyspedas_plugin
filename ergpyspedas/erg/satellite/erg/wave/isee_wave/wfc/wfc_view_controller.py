@@ -1,56 +1,80 @@
+from __future__ import annotations
+
 import copy
 import json
 import os
+from abc import ABC, abstractmethod
+from dataclasses import asdict
 from functools import partial
-from typing import List, Optional, Tuple
+from typing import TYPE_CHECKING, Dict, List, Optional, Tuple
 
-import numpy as np
 from PySide6 import QtCore, QtWidgets
 from pyspedas import time_double, time_string
 from pyspedas.erg.satellite.erg.config import CONFIG
 from pytplot import tplot_save
 
-from ..load.add_fc import add_fc
-from ..options.options import (
-    DataName,
-    OrbitalInfoName,
-    SupportLineOptionName,
-    create_data_options,
-    create_orbital_informations,
-    create_support_line_options,
-    data_option_dict_dict,
-    orbital_information_option_dict,
-    support_line_option_list,
-)
-from ..utils.utils import safe_eval_formula, str_to_float_or_none, str_to_int_or_none
-from .plot_wfc import _get_info, _mask, _update_info, load_wfc, plot_wfc, plot_wfc_init
-from .wfc_view import WFCView, WFCViewOptions
+from ..options.data_option import DataName, DataOptions
+from ..options.orbital_info_option import OrbitalInfoName, OrbitalInfoOption
+from ..options.support_line_option import SupportLineOptions
+from ..options.wfc_view_option import WFCViewOption, WFCViewOptionOther
+from ..plot.common import plot_init
+from ..utils.progress_manager import ProgressManager
+from ..utils.utils import str_to_float_or_none, str_to_int_or_none
+
+from .add_fc import add_fc
+from .load_wfc import load_wfc
+from .mask import MaskManagers
+from .plot_wfc import plot_wfc
+from .wfc_view import WFCView
+
+if TYPE_CHECKING:
+    from ..ofa.ofa_view_controller import OFAViewControllerTlimitInterface
 
 
-class WFCViewController:
-    def __init__(self, view_options: WFCViewOptions = WFCViewOptions()) -> None:
-        # State
-        self.view_options = view_options
-        self.data_options = create_data_options(data_option_dict_dict)
+class WFCViewControllerTlimitInterface(ABC):
+    @abstractmethod
+    def is_visible(self) -> bool:
+        pass
+
+    @abstractmethod
+    def on_tlimit_wfc_first_pressed(self, tlimit_start: float) -> None:
+        pass
+
+    @abstractmethod
+    def on_tlimit_wfc_second_pressed(self, trange: Tuple[float, float]) -> None:
+        pass
+
+
+class WFCViewController(WFCViewControllerTlimitInterface):
+    def __init__(
+        self,
+        view_options: WFCViewOption = WFCViewOption(),
+        view_options_other: WFCViewOptionOther = WFCViewOptionOther(),
+    ) -> None:
+        # Settings
+        self._view_options = view_options
+        self._view_options_other = view_options_other
+        self._data_options = DataOptions.from_dict()
         self._load_config()
-        self.data_options_bak = copy.deepcopy(self.data_options)
-        self.support_line_options_bak = copy.deepcopy(self.support_line_options)
-        self.orbital_info_options_bak = copy.deepcopy(self.orbital_info_options)
-        self.trange: Optional[Tuple[float, float]] = None
-        self.species: Optional[List[str]] = None
+        # Backup settings used in resetting
+        self._data_options_bak = copy.deepcopy(self._data_options)
+        self._support_line_options_bak = copy.deepcopy(self._support_line_options)
+        self._orbital_info_options_bak = copy.deepcopy(self._orbital_info_options)
+
+        # Data
+        self._trange: Optional[Tuple[float, float]] = None
+        self._orbital_infos: Dict[OrbitalInfoName, str] = {}
+        self._species: List[str] = []
+        self._ofa_view_controller: "Optional[OFAViewControllerTlimitInterface]" = None
         self._has_plotted = False
-        self.ofa_view_controller = None
 
         # View
         self._view = WFCView(
-            data_options=self.data_options,
-            orbital_info_options=self.orbital_info_options,
-            support_line_options=self.support_line_options,
-            view_options=self.view_options,
+            data_options=self._data_options,
+            orbital_info_options=self._orbital_info_options,
+            support_line_options=self._support_line_options,
+            view_options=self._view_options,
         )
-        for name, group in self._view._mask_tab._slider_groups.items():
-            group._slider.setEnabled(False)
-            group._line_edit.setEnabled(False)
 
         # Events
         # General
@@ -59,30 +83,54 @@ class WFCViewController:
         self._view._fft_revert_button.clicked.connect(self.on_fft_revert_button_clicked)  # type: ignore
         # Options tab
         self._view._options_tab._support_lines_apply_button.clicked.connect(  # type: ignore
-            self.on_options_tab_support_lines_apply_button_clicked
+            self.on_support_lines_apply_button_clicked
         )
         self._view._options_tab._support_lines_add_button.clicked.connect(  # type: ignore
-            self.on_options_tab_support_lines_add_button_clicked
+            self.on_support_lines_add_button_clicked
         )
         self._view._options_tab._support_lines_delete_button.clicked.connect(  # type: ignore
-            self.on_options_tab_support_lines_delete_button_clicked
+            self.on_support_lines_delete_button_clicked
         )
         self._view._options_tab._support_lines_reset_button.clicked.connect(  # type: ignore
-            self.on_options_tab_support_lines_reset_button_clicked
+            self.on_support_lines_reset_button_clicked
         )
         self._view._options_tab._xyzaxis_apply_button.clicked.connect(  # type: ignore
-            self.options_tab_xyz_apply_button_clicked
+            self.on_xyz_apply_button_clicked
         )
         self._view._options_tab._xyzaxis_reset_button.clicked.connect(  # type: ignore
-            self.options_tab_xyz_reset_button_clicked
+            self.on_xyz_reset_button_clicked
         )
-        self._view._options_tab._yaxis_widgets.ylog.stateChanged.connect(  # type: ignore
-            self.on_options_tab_ylog_checkbox_state_changed
+        # Event to sync information with mask tab is raised on limit and log button
+        self._view._options_tab.yaxis_widgets.title.editingFinished.connect(  # type: ignore
+            self.on_yaxis_title_editing_finished
+        )
+        self._view._options_tab.yaxis_widgets.ymin.editingFinished.connect(  # type: ignore
+            self.on_yaxis_ymin_editing_finished
+        )
+        self._view._options_tab.yaxis_widgets.ymax.editingFinished.connect(  # type: ignore
+            self.on_yaxis_ymax_editing_finished
+        )
+        self._view._options_tab.yaxis_widgets.ylog.stateChanged.connect(  # type: ignore
+            self.on_yaxis_log_state_changed
         )
         for name, zaxis_widgets in self._view._options_tab._zaxis_widgets.items():
-            widget = zaxis_widgets.zlog
-            widget.stateChanged.connect(  # type: ignore
-                partial(self.on_options_tab_zlog_checkbox_state_changed, name)
+            zaxis_widgets.title.editingFinished.connect(  # type: ignore
+                partial(self.on_zaxis_title_editing_finished, name)
+            )
+            zaxis_widgets.zmin.editingFinished.connect(  # type: ignore
+                partial(self.on_zaxis_zmin_editing_finished, name)
+            )
+            zaxis_widgets.zmax.editingFinished.connect(  # type: ignore
+                partial(self.on_zaxis_zmax_editing_finished, name)
+            )
+            zaxis_widgets.zlog.stateChanged.connect(  # type: ignore
+                partial(self.on_zaxis_zlog_state_changed, name)
+            )
+            zaxis_widgets.mask.stateChanged.connect(  # type: ignore
+                partial(self.on_zaxis_mask_state_changed, name)
+            )
+            zaxis_widgets.plot.stateChanged.connect(  # type: ignore
+                partial(self.on_zaxis_plot_state_changed, name)
             )
         # Mask tab
         for name, group in self._view._mask_tab._slider_groups.items():
@@ -94,48 +142,48 @@ class WFCViewController:
             )
 
         self._view._mask_tab._apply_button.clicked.connect(  # type: ignore
-            self.mask_tab_apply_button_clicked
+            self.on_mask_tab_apply_button_clicked
         )
         self._view._mask_tab._reset_button.clicked.connect(  # type: ignore
-            self.mask_tab_reset_button_clicked
+            self.on_mask_tab_reset_button_clicked
         )
         # Output tab
         self._view._output_tab._eps_button.clicked.connect(  # type: ignore
-            self.output_tab_eps_button_clicked
+            self.on_output_tab_eps_button_clicked
         )
         self._view._output_tab._png_button.clicked.connect(  # type: ignore
-            self.output_tab_png_button_clicked
+            self.on_output_tab_png_button_clicked
         )
         self._view._output_tab._tplot_button.clicked.connect(  # type: ignore
-            self.output_tab_tplot_button_clicked
+            self.on_output_tab_tplot_button_clicked
         )
 
-    def inject(self, ofa_view_controller) -> None:
-        # TODO: type of ofa_view_controller is OFAViewController but cannot import due to circular import
-        # You can avoid circular import by specifying protocol (interface)
-        self.ofa_view_controller = ofa_view_controller
+    def inject(self, ofa_view_controller: "OFAViewControllerTlimitInterface") -> None:
+        # Used to cooperate with OFA panel
+        self._ofa_view_controller = ofa_view_controller
 
     def show(self) -> None:
         self._view.show()
 
+    def is_visible(self) -> bool:
+        # If window is minimized by upper left button, this is True
+        # If window is closed by upper left button, this is False
+        return self._view.isVisible()
+
     # GUI
     def on_tlimit_button_clicked(self) -> None:
+        # Input
         if (
-            self.ofa_view_controller is None
-            or not self.ofa_view_controller.can_use_wfc_tlimit()
+            self._ofa_view_controller is None
+            or not self._ofa_view_controller.is_visible()
+            or not self._ofa_view_controller.can_use_wfc_tlimit()
         ):
             return
+        # View
         # Disable any input in WFC
         self._view.setEnabled(False)
-        # Bring OFA to front
-        view = self.ofa_view_controller._view
-        view.setWindowState(
-            view.windowState() & ~QtCore.Qt.WindowState.WindowMinimized
-            | QtCore.Qt.WindowState.WindowActive
-        )
-        view.activateWindow()
         # Presentation logic
-        self.ofa_view_controller.on_wfc_tlimit_button_clicked()
+        self._ofa_view_controller.on_wfc_tlimit_button_clicked()
 
     def on_tlimit_wfc_first_pressed(self, tlimit_start: float) -> None:
         self._view._start_line_edit.setText(
@@ -149,12 +197,14 @@ class WFCViewController:
         self._view._end_line_edit.setText(
             time_string(trange[1], fmt="%Y-%m-%d/%H:%M:%S")  # type: ignore
         )
+        # Focus on WFC window
         view = self._view
         view.setWindowState(
             view.windowState() & ~QtCore.Qt.WindowState.WindowMinimized
             | QtCore.Qt.WindowState.WindowActive
         )
         view.activateWindow()
+        # Enable any input in WFC
         view.setEnabled(True)
         QtWidgets.QMessageBox.information(
             view,
@@ -163,8 +213,6 @@ class WFCViewController:
         )
 
     def _get_trange_from_line_edit_text(self) -> Optional[Tuple[float, float]]:
-        # View controller
-        # Input validation
         start_line_edit_text = self._view._start_line_edit.text()
         end_line_edit_text = self._view._end_line_edit.text()
 
@@ -177,6 +225,7 @@ class WFCViewController:
                 "Invalid start time format. YYYY-MM-DD/hh:mm:ss is accepted.",
             )
             return None
+
         try:
             end_time: float = time_double(end_line_edit_text)  # type: ignore
         except:
@@ -185,12 +234,13 @@ class WFCViewController:
                 "Warning",
                 "Invalid end time format. YYYY-MM-DD/hh:mm:ss is accepted.",
             )
-            return
+            return None
+
         if start_time >= end_time:
             QtWidgets.QMessageBox.warning(
                 self._view, "Warning", "Invalid time interval was specified."
             )
-            return
+            return None
 
         return start_time, end_time  # type: ignore
 
@@ -201,12 +251,12 @@ class WFCViewController:
         # TODO: Only for development
         no_update = os.getenv("WAVE_NO_UPDATE") == "True"
 
-        # Validation
+        # Input
         trange = self._get_trange_from_line_edit_text()
         if trange is None:
             return
 
-        fft_window_box = self._view._fft_window_box.currentText()
+        fft_window = self._view._fft_window_box.currentText()
 
         window_size_text = self._view._window_size_line_edit.text()
         window_size = str_to_int_or_none(window_size_text)
@@ -265,193 +315,252 @@ class WFCViewController:
             )
             return
 
-        # Presentation logic
-        # TODO: maybe trange will be saved after completion of loading and plotting
-        self.trange = trange
+        progress_manager = ProgressManager(self._view)
 
+        # Model
         ret = load_wfc(
-            trange=self.trange,
-            data_options=self.data_options,
+            trange=trange,
+            w=fft_window,
+            nfft=window_size,
+            stride=stride,
+            n_average=n_average,
             no_update=no_update,
+            progress_manager=progress_manager,
         )
         if ret is None:
+            progress_manager.close()
             return
         (
-            self.tplot_names_for_plot,
-            self.var_label_dict,
-            self.data_infos,
-            self.trange,
+            self._orbital_infos,
+            self._trange,
         ) = ret
-
+        self._mask_managers = MaskManagers(self._data_options)
         self._plot()
 
-    def _plot(self):
-        self._support_lines_apply()
-        self._xyz_apply()
-        self._save_config()
+        # View
+        self._view._start_line_edit.setText(
+            time_string(self._trange[0], fmt="%Y-%m-%d/%H:%M:%S")  # type: ignore
+        )
+        self._view._end_line_edit.setText(
+            time_string(self._trange[1], fmt="%Y-%m-%d/%H:%M:%S")  # type: ignore
+        )
+        self._update_mask_tab()
+        for group in self._view._mask_tab._slider_groups.values():
+            group._slider.setEnabled(True)
+            group._line_edit.setEnabled(True)
 
-        if self.trange is None:
-            return
+        progress_manager.complete()
+
+    def _plot(self):
+        assert self._trange is not None
+
+        self._support_lines_apply()
+        self._orbital_info_apply()
+        self._mask_apply()
+        self._save_config()
 
         fig = self._view._canvas.figure
         fig = plot_wfc(
             fig=fig,
-            trange=self.trange,
-            tplot_names_for_plot=self.tplot_names_for_plot,
-            var_label_dict=self.var_label_dict,
-            species=self.species,
-            data_options=self.data_options,
-            font_size=self.view_options.font_size,
-            orbital_info_options=self.orbital_info_options,
+            trange=self._trange,
+            orb_dict=self._orbital_infos,
+            species=self._species,
+            data_options=self._data_options,
+            orbital_info_options=self._orbital_info_options,
+            font_size=self._view_options.font_size,
         )
         self._view._canvas.draw()
 
-        self._update_mask_tab()
+        # This makes some GUIs operate on the plot effective
         self._has_plotted = True
-        self._view._mask_tab
-        # self._view._tabs.setTabEnabled(1, True)
-        # self._view._tabs.setTabEnabled(2, True)
-        for name, group in self._view._mask_tab._slider_groups.items():
-            group._slider.setEnabled(True)
-            group._line_edit.setEnabled(True)
 
     # Options tab
-    def on_options_tab_support_lines_apply_button_clicked(self) -> None:
+    def on_support_lines_apply_button_clicked(self) -> None:
         if not self._has_plotted:
             return
         self._plot()
 
     def _support_lines_apply(self) -> None:
-        if not self._has_plotted:
-            return
-        # View controller
-        options_tab = self._view._options_tab
-        model = options_tab._support_lines_model
-        data = model._data
-        species = []
-        m = []
-        q = []
-        lsty = []
-        lcol = []
-        for row in data:
-            if row[SupportLineOptionName.enable] == "ON":
-                species.append(row[SupportLineOptionName.species])
-                m.append(safe_eval_formula(row[SupportLineOptionName.m]))
-                q.append(safe_eval_formula(row[SupportLineOptionName.q]))
-                lsty.append(int(row[SupportLineOptionName.lsty]))
-                lcol.append(int(row[SupportLineOptionName.lcol]))
+        assert self._trange is not None
+
+        # Fetch input
+        opts = self._view._options_tab.support_lines_model._data
+        species, m, q, lsty, lcol = [], [], [], [], []
+        for opt in opts:
+            if opt.enable_typed:
+                species.append(opt.species_typed)
+                m.append(opt.m_typed)
+                q.append(opt.q_typed)
+                lsty.append(opt.lsty_typed)
+                lcol.append(opt.lcol_typed)
 
         # Presentation logic
-        # TODO: make it better
         names = [name.value for name in DataName]
-        add_fc(
-            names, species=species, m=m, q=q, lsty=lsty, lcol=lcol, trange=self.trange
+        actual_species = add_fc(
+            names, species=species, m=m, q=q, lsty=lsty, lcol=lcol, trange=self._trange
         )
-        self.species = species
+        self._species = actual_species
 
-    def on_options_tab_support_lines_add_button_clicked(self) -> None:
+    def on_support_lines_add_button_clicked(self) -> None:
         options_tab = self._view._options_tab
-        model = options_tab._support_lines_model
-        row = model._row_count
+        model = options_tab.support_lines_model
+        row = model.rowCount()
         model.insertRow(row)
 
-    def on_options_tab_support_lines_delete_button_clicked(self) -> None:
+    def on_support_lines_delete_button_clicked(self) -> None:
         options_tab = self._view._options_tab
-        model = options_tab._support_lines_model
+        model = options_tab.support_lines_model
         indexes = (
             options_tab._support_lines_table_view.selectionModel().selectedIndexes()
         )
         if len(indexes) == 0:
             return
-        rows = [index.row() for index in indexes]
+        # Reduce rows when multiple cell with same row and different columns are selected
+        rows = list(set([index.row() for index in indexes]))
         # Must remove from bottom to up so that index shift during iteration does not matter
         for row in sorted(rows, reverse=True):
             model.removeRow(row)
 
-    def on_options_tab_support_lines_reset_button_clicked(self) -> None:
+    def on_support_lines_reset_button_clicked(self) -> None:
         options_tab = self._view._options_tab
-        model = options_tab._support_lines_model
+        model = options_tab.support_lines_model
         model.reset()
 
-    def _xyz_apply(self) -> None:
+    def _orbital_info_apply(self) -> None:
         for name in OrbitalInfoName:
             is_checked = self._view._options_tab._orbital_info_boxes[name].isChecked()
-            self.orbital_info_options[name] = is_checked
+            setattr(self._orbital_info_options, name.value, is_checked)
 
-        yaxis_widgets = self._view._options_tab._yaxis_widgets
-        zaxis_widgets = self._view._options_tab._zaxis_widgets
-
-        for name in DataName:
-            self.data_options[name].ysubtitle = yaxis_widgets.title.text()
-            self.data_options[name].ymin = float(yaxis_widgets.ymin.text())
-            self.data_options[name].ymax = float(yaxis_widgets.ymax.text())
-            self.data_options[name].ylog = yaxis_widgets.ylog.isChecked()
-            self.data_options[name].ytitle = zaxis_widgets[name].title.text()
-            self.data_options[name].zmin = float(zaxis_widgets[name].zmin.text())
-            self.data_options[name].zmax = float(zaxis_widgets[name].zmax.text())
-            self.data_options[name].zlog = zaxis_widgets[name].zlog.isChecked()
-            self.data_options[name].mask = zaxis_widgets[name].mask.isChecked()
-            self.data_options[name].plot = zaxis_widgets[name].plot.isChecked()
-
-        _mask(self.data_options, self.data_infos)
-
-    def options_tab_xyz_apply_button_clicked(self) -> None:
+    def on_xyz_apply_button_clicked(self) -> None:
         if not self._has_plotted:
             return
         self._plot()
 
-    def options_tab_xyz_reset_button_clicked(self) -> None:
-        self.data_options = copy.deepcopy(self.data_options_bak)
-        self.orbital_info_options = copy.deepcopy(self.orbital_info_options_bak)
-        self._view._options_tab.setup_xyzaxis_value(self.data_options)
-        self._view._options_tab.setup_orbital_info_boxes_value(
-            self.orbital_info_options
+    def on_xyz_reset_button_clicked(self) -> None:
+        # Data
+        self._data_options = copy.deepcopy(self._data_options_bak)
+        self._orbital_info_options = copy.deepcopy(self._orbital_info_options_bak)
+        # View
+        self._view._options_tab.update_xyzaxis_value(self._data_options)
+        self._view._options_tab.update_orbital_info_boxes_value(
+            self._orbital_info_options
         )
+        # Update mask tab only if plot (and thus data) exists
+        if not self._has_plotted:
+            return
+        self._mask_managers = MaskManagers(self._data_options)
+        self._update_mask_tab()
 
-    def on_options_tab_ylog_checkbox_state_changed(self, state: int) -> None:
+    def on_yaxis_log_state_changed(self, state: int) -> None:
         if state == QtCore.Qt.CheckState.Checked.value:
             ylog = True
         elif state == QtCore.Qt.CheckState.Unchecked.value:
             ylog = False
-        # QtCore.Qt.CheckState.PartiallyChecked does not occur in this case
         else:
             return
         for name in DataName:
-            opt = self.data_options[name]
-            opt.ylog = ylog
-        self._view._options_tab.setup_xyzaxis_value(self.data_options)
+            self._data_options[name].ylog = ylog
+        self._view._options_tab.update_xyzaxis_value(self._data_options)
 
-    # Sync option tab zlog checkbox and mask tab sliders
-    def on_options_tab_zlog_checkbox_state_changed(
-        self, name: DataName, state: int
-    ) -> None:
+    def on_yaxis_title_editing_finished(self) -> None:
+        text = self._view._options_tab.yaxis_widgets.title.text()
+        for name in DataName:
+            self._data_options[name].ysubtitle = text
+        self._view._options_tab.update_xyzaxis_value(self._data_options)
+
+    def on_yaxis_ymin_editing_finished(self) -> None:
+        # When ylog is changed from False to True,
+        # ylim <= 0 will change to small ylim > 0.
+        # Then when ylog is changed from True to False,
+        # it feels nicer for ylog to go back to <= 0 instead of small ylim > 0
+        # if user does not explicitly edit ylim
+        ymin_edit = float(self._view._options_tab.yaxis_widgets.ymin.text())
+        for name in DataName:
+            ymin = self._data_options[name].ymin
+            # Since QLineEdit.editingFinished event will occur when
+            # user does not change content but just move cursor in and out of line edit,
+            # it seems better to consider that case "not edited".
+            if ymin_edit == ymin:
+                continue
+            self._data_options[name].set_ymin(ymin_edit)
+        self._view._options_tab.update_xyzaxis_value(self._data_options)
+
+    def on_yaxis_ymax_editing_finished(self) -> None:
+        ymax_edit = float(self._view._options_tab.yaxis_widgets.ymax.text())
+        for name in DataName:
+            ymax = self._data_options[name].ymax
+            if ymax_edit == ymax:
+                continue
+            self._data_options[name].set_ymax(ymax_edit)
+        self._view._options_tab.update_xyzaxis_value(self._data_options)
+
+    def on_zaxis_zlog_state_changed(self, name: DataName, state: int) -> None:
         if state == QtCore.Qt.CheckState.Checked.value:
             zlog = True
         elif state == QtCore.Qt.CheckState.Unchecked.value:
             zlog = False
-        # QtCore.Qt.CheckState.PartiallyChecked does not occur in this case
         else:
-            return
-        opt = self.data_options[name]
-        opt.zlog = zlog
+            raise ValueError(f"Check state is invalid: {state}")
+        self._data_options[name].zlog = zlog
+        self._view._options_tab.update_xyzaxis_value(self._data_options)
         self._update_slider_group_label(name)
-        self._view._options_tab.setup_xyzaxis_value(self.data_options)
-        if not self._has_plotted:
-            return
-        _update_info(name, self.data_options, self.data_infos)
         self._update_slider_group_slider(name)
         self._update_slider_group_line_edit(name)
 
+    def on_zaxis_mask_state_changed(self, name: DataName, state: int) -> None:
+        if state == QtCore.Qt.CheckState.Checked.value:
+            mask = True
+        elif state == QtCore.Qt.CheckState.Unchecked.value:
+            mask = False
+        else:
+            raise ValueError(f"Check state is invalid: {state}")
+        self._data_options[name].mask = mask
+        self._view._options_tab.update_xyzaxis_value(self._data_options)
+
+    def on_zaxis_plot_state_changed(self, name: DataName, state: int) -> None:
+        if state == QtCore.Qt.CheckState.Checked.value:
+            plot = True
+        elif state == QtCore.Qt.CheckState.Unchecked.value:
+            plot = False
+        else:
+            raise ValueError(f"Check state is invalid: {state}")
+        self._data_options[name].plot = plot
+        self._view._options_tab.update_xyzaxis_value(self._data_options)
+
+    def on_zaxis_title_editing_finished(self, name: DataName) -> None:
+        text = self._view._options_tab._zaxis_widgets[name].title.text()
+        self._data_options[name].ytitle = text
+        self._view._options_tab.update_xyzaxis_value(self._data_options)
+
+    def on_zaxis_zmin_editing_finished(self, name: DataName) -> None:
+        zmin_edit = float(self._view._options_tab._zaxis_widgets[name].zmin.text())
+        zmin = self._data_options[name].zmin
+        if zmin_edit == zmin:
+            return
+        self._data_options[name].set_zmin(zmin_edit)
+        self._view._options_tab.update_xyzaxis_value(self._data_options)
+
+    def on_zaxis_zmax_editing_finished(self, name: DataName) -> None:
+        zmax_edit = float(self._view._options_tab._zaxis_widgets[name].zmax.text())
+        zmax = self._data_options[name].zmax
+        if zmax_edit == zmax:
+            return
+        self._data_options[name].set_zmax(zmax_edit)
+        self._view._options_tab.update_xyzaxis_value(self._data_options)
+
     # Mask tab
-    def mask_tab_apply_button_clicked(self) -> None:
+    def _mask_apply(self):
+        self._mask_managers.apply_mask()
+
+    def on_mask_tab_apply_button_clicked(self) -> None:
         if not self._has_plotted:
             return
-        _mask(self.data_options, self.data_infos)
         self._plot()
 
-    def mask_tab_reset_button_clicked(self) -> None:
-        self.data_infos = _get_info(self.data_options)
-        _mask(self.data_options, self.data_infos)
+    def on_mask_tab_reset_button_clicked(self) -> None:
+        if not self._has_plotted:
+            return
+        self._mask_managers = MaskManagers(self._data_options)
         self._update_mask_tab()
 
     def _update_mask_tab(self) -> None:
@@ -461,126 +570,93 @@ class WFCViewController:
             self._update_slider_group_line_edit(name)
 
     def _update_slider_group_label(self, name: DataName) -> None:
-        # Irrelevant to data
-        opt = self.data_options[name]
+        opt = self._data_options[name]
         mask_label = opt.mask_label
-        if opt.zlog:
-            label = mask_label + " (Exponential):"
-        else:
-            label = mask_label + ":"
         group = self._view._mask_tab._slider_groups[name]
-        group._label.setText(label)
+        group._label.setText(mask_label)
 
     def _update_slider_group_slider(self, name: DataName) -> None:
-        # Get value
-        info = self.data_infos[name]
-        real_value = info.mask
+        assert self._has_plotted
+        info = self._mask_managers[name]
 
-        # Conversion
-        group = self._view._mask_tab._slider_groups[name]
-        smin = group._slider.minimum()
-        smax = group._slider.maximum()
-        rmin = info.min
-        rmax = info.max
-        # TODO: is it ok to convert zlog everywhere, using same logic many times?
-        opt = self.data_options[name]
-        scaled_value = real_value
-        if opt.zlog:
-            # TOOD: temporarily machine epsilon
-            if rmin <= 0:
-                rmin = np.finfo(float).eps
-            if rmax <= 0:
-                rmax = np.finfo(float).eps
-            if scaled_value <= 0:
-                scaled_value = np.finfo(float).eps
-            rmin = np.log10(rmin)
-            rmax = np.log10(rmax)
-            scaled_value = np.log10(scaled_value)
+        # Convert data value to slider value
+        imin = info.min_scaled
+        imax = info.max_scaled
+        imask = info.mask_scaled
 
-        slider_value = int((smax - smin) / (rmax - rmin) * (scaled_value - rmin) + smin)
+        if info.log and info.ndigits == 0:
+            smin = int(imin)
+            smax = int(imax)
+            slider_value = int(imask)
+        else:
+            smin = 0
+            smax = 100
+            slider_value = int((smax - smin) / (imax - imin) * (imask - imin) + smin)
 
-        # Update
-        slider = group._slider
+        # Update view
+        slider = self._view._mask_tab._slider_groups[name]._slider
         slider.blockSignals(True)
+        slider.setMinimum(smin)
+        slider.setMaximum(smax)
         slider.setValue(slider_value)
         slider.blockSignals(False)
 
     def _update_slider_group_line_edit(self, name: DataName) -> None:
-        # Get value
-        info = self.data_infos[name]
-        real_value = info.mask
+        assert self._has_plotted
+        info = self._mask_managers[name]
 
-        # Conversion
-        opt = self.data_options[name]
-        if opt.zlog:
-            if real_value <= 0:
-                real_value = np.finfo(float).eps
-            scaled_value = np.log10(real_value)
-        else:
-            scaled_value = real_value
+        # Convert data value to line edit value
+        imask = info.mask_scaled
+        ndigits = info.ndigits
+        formatter = "{{:.{:}f}}".format(ndigits)
+        text = formatter.format(imask)
 
-        # Update
+        # Update view
         line_edit = self._view._mask_tab._slider_groups[name]._line_edit
         line_edit.blockSignals(True)
-        line_edit.setText(str(scaled_value))
+        line_edit.setText(text)
         line_edit.blockSignals(False)
 
     def on_mask_tab_slider_value_changed(
         self, name: DataName, slider_value: int
     ) -> None:
-        # Get value
-        group = self._view._mask_tab._slider_groups[name]
-        slider_value = group._slider.value()
+        info = self._mask_managers[name]
 
-        # Conversion
-        smin = group._slider.minimum()
-        smax = group._slider.maximum()
-        info = self.data_infos[name]
-        rmin = info.min
-        rmax = info.max
-        opt = self.data_options[name]
-        if opt.zlog:
-            # TOOD: temporarily machine epsilon
-            if rmin <= 0:
-                rmin = np.finfo(float).eps
-            if rmax <= 0:
-                rmax = np.finfo(float).eps
-            rmin = np.log10(rmin)
-            rmax = np.log10(rmax)
-        scaled_value = (rmax - rmin) / (smax - smin) * (slider_value - smin) + rmin
-
-        if opt.zlog:
-            info.mask = 10**scaled_value
+        # Convert slider value to data value
+        if info.log and info.ndigits == 0:
+            imask = slider_value
         else:
-            info.mask = scaled_value
+            smin = 0
+            smax = 100
+            imin = info.min_scaled
+            imax = info.max_scaled
+            imask = (imax - imin) / (smax - smin) * (slider_value - smin) + imin
+        info.set_mask_scaled(imask)
 
-        # Update
+        # Update view
+        self._update_slider_group_slider(name)
         self._update_slider_group_line_edit(name)
 
     def on_mask_tab_line_edit_editing_finished(self, name: DataName) -> None:
-        # Get value
+        info = self._mask_managers[name]
+
+        # Convert line edit value to data value
         group = self._view._mask_tab._slider_groups[name]
         text = group._line_edit.text()
-        scaled_value = float(text)
+        imask = float(text)
+        info.set_mask_scaled(imask)
 
-        # Conversion
-        info = self.data_infos[name]
-        opt = self.data_options[name]
-        if opt.zlog:
-            info.mask = 10**scaled_value
-        else:
-            info.mask = scaled_value
-
-        # Update
+        # Update view
         self._update_slider_group_slider(name)
+        self._update_slider_group_line_edit(name)
 
     # Output tab
-    def output_tab_eps_button_clicked(self) -> None:
+    def on_output_tab_eps_button_clicked(self) -> None:
         # Validate state
         if not self._has_plotted:
             return
 
-        trange = self.trange
+        trange = self._trange
         if trange is None:
             return
 
@@ -629,26 +705,25 @@ class WFCViewController:
         x_px = x_inch * dpi
         y_px = y_inch * dpi
 
-        fig = plot_wfc_init(x_px, y_px)
+        fig = plot_init(x_px, y_px, dpi=dpi)
         fig = plot_wfc(
             fig=fig,
             trange=trange,
-            tplot_names_for_plot=self.tplot_names_for_plot,
-            var_label_dict=self.var_label_dict,
-            species=self.species,
-            data_options=self.data_options,
+            orb_dict=self._orbital_infos,
+            species=self._species,
+            data_options=self._data_options,
             font_size=font_size,
-            orbital_info_options=self.orbital_info_options,
+            orbital_info_options=self._orbital_info_options,
             rasterized=True,
         )
-        fig.savefig(file_path + ".eps", dpi=dpi)
+        fig.savefig(file_path, dpi=dpi)
 
-    def output_tab_png_button_clicked(self) -> None:
+    def on_output_tab_png_button_clicked(self) -> None:
         # Validate state
         if not self._has_plotted:
             return
 
-        trange = self.trange
+        trange = self._trange
         if trange is None:
             return
 
@@ -691,25 +766,24 @@ class WFCViewController:
             return
 
         dpi = 100
-        fig = plot_wfc_init(x_px, y_px)
+        fig = plot_init(x_px, y_px, dpi=dpi)
         fig = plot_wfc(
             fig=fig,
             trange=trange,
-            tplot_names_for_plot=self.tplot_names_for_plot,
-            var_label_dict=self.var_label_dict,
-            species=self.species,
-            data_options=self.data_options,
+            orb_dict=self._orbital_infos,
+            species=self._species,
+            data_options=self._data_options,
             font_size=font_size,
-            orbital_info_options=self.orbital_info_options,
+            orbital_info_options=self._orbital_info_options,
         )
         fig.savefig(file_path, dpi=dpi)
 
-    def output_tab_tplot_button_clicked(self) -> None:
+    def on_output_tab_tplot_button_clicked(self) -> None:
         if not self._has_plotted:
             return
 
         # Validate state
-        trange = self.trange
+        trange = self._trange
         if trange is None:
             return
         data_names = [name.value for name in DataName]
@@ -725,8 +799,9 @@ class WFCViewController:
         tplot_save(data_names, file_path)
 
     def _load_config(self) -> None:
-        # TODO: overwriting is better
         localdir = CONFIG["local_data_dir"]
+
+        # Prefer user config if exists.
         path_user = os.path.join(localdir, "user_config.json")
         if os.path.exists(path_user):
             with open(path_user, "r") as f:
@@ -737,14 +812,15 @@ class WFCViewController:
                 support_line_options_dict_load is not None
                 and orbital_information_option_dict_load is not None
             ):
-                self.support_line_options = create_support_line_options(
+                self._support_line_options = SupportLineOptions.from_list_of_dict(
                     support_line_options_dict_load
                 )
-                self.orbital_info_options = create_orbital_informations(
-                    orbital_information_option_dict_load
+                self._orbital_info_options = OrbitalInfoOption(
+                    **orbital_information_option_dict_load
                 )
                 return
 
+        # Else prefer default config if exists.
         path_default = os.path.join(localdir, "default_config.json")
         if os.path.exists(path_default):
             with open(path_default, "r") as f:
@@ -755,20 +831,17 @@ class WFCViewController:
                 support_line_options_dict_load is not None
                 and orbital_information_option_dict_load is not None
             ):
-                self.support_line_options = create_support_line_options(
+                self._support_line_options = SupportLineOptions.from_list_of_dict(
                     support_line_options_dict_load
                 )
-                self.orbital_info_options = create_orbital_informations(
-                    orbital_information_option_dict_load
+                self._orbital_info_options = OrbitalInfoOption(
+                    **orbital_information_option_dict_load
                 )
                 return
 
-        self.support_line_options = create_support_line_options(
-            support_line_option_list
-        )
-        self.orbital_info_options = create_orbital_informations(
-            orbital_information_option_dict
-        )
+        # Else use config embedded in source and save as user and default configs.
+        self._support_line_options = SupportLineOptions.from_list_of_dict()
+        self._orbital_info_options = OrbitalInfoOption()
         for path in [path_user, path_default]:
             if os.path.exists(path):
                 with open(path, "r") as f:
@@ -778,24 +851,16 @@ class WFCViewController:
 
             os.makedirs(os.path.dirname(path), exist_ok=True)
             with open(path, "w") as f:
-                support_line_options = self.support_line_options
-                support_line_options_list = []
-                for line in support_line_options:
-                    support_line_options_list.append(
-                        {name.value: line[name] for name in SupportLineOptionName}
-                    )
-                json_data["support_line_list"] = support_line_options_list
-
-                orbital_info_options = self.orbital_info_options
-                orbital_info_options_dict = {
-                    name.value: orbital_info_options[name] for name in OrbitalInfoName
-                }
-                json_data["orbital_information"] = orbital_info_options_dict
+                json_data[
+                    "support_line_list"
+                ] = self._support_line_options.to_list_of_dict()
+                json_data["orbital_information"] = asdict(self._orbital_info_options)
                 json.dump(json_data, f, indent=4)
 
         return
 
     def _save_config(self) -> None:
+        # Save user config.
         localdir = CONFIG["local_data_dir"]
 
         path = os.path.join(localdir, "user_config.json")
@@ -805,19 +870,8 @@ class WFCViewController:
         else:
             json_data = {}
 
-        support_line_options = self.support_line_options
-        support_line_options_list = []
-        for line in support_line_options:
-            support_line_options_list.append(
-                {name.value: line[name] for name in SupportLineOptionName}
-            )
-        json_data["support_line_list"] = support_line_options_list
-
-        orbital_info_options = self.orbital_info_options
-        orbital_info_options_dict = {
-            name.value: orbital_info_options[name] for name in OrbitalInfoName
-        }
-        json_data["orbital_information"] = orbital_info_options_dict
+        json_data["support_line_list"] = self._support_line_options.to_list_of_dict()
+        json_data["orbital_information"] = asdict(self._orbital_info_options)
         with open(path, "w") as f:
             json.dump(json_data, f, indent=4)
 

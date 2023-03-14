@@ -7,9 +7,9 @@ from typing import Optional, Tuple
 from pyspedas.erg.satellite.erg.config import CONFIG
 from pytplot.store_data import store_data
 
-from ..ofa.ofa_view import OFAViewOptions
+from ..options.ofa_view_option import OFAViewOption
+from ..options.wfc_view_option import WFCViewOption
 from ..utils.utils import str_to_float_or_none, str_to_int_or_none
-from ..wfc.wfc_view import WFCViewOptions
 
 
 class LoginPresenterViewInterface(ABC):
@@ -66,7 +66,7 @@ class LoginPresenterViewInterface(ABC):
 
     @abstractmethod
     def transition_to_ofa_wfc(
-        self, ofa_options: OFAViewOptions, wfc_options: WFCViewOptions
+        self, ofa_options: OFAViewOption, wfc_options: WFCViewOption
     ) -> None:
         pass
 
@@ -85,7 +85,6 @@ class LoginPresenter:
     def __init__(
         self, view: LoginPresenterViewInterface, model: LoginPresenterModelInterface
     ) -> None:
-        # TODO: Check circular reference does not lead to memory leak or any other symptoms
         self._view = view
         self._model = model
 
@@ -106,7 +105,6 @@ class LoginPresenter:
 
     def _validate_font_size_options(self) -> Optional[float]:
         font_size = str_to_float_or_none(self._view.font_size)
-        # TODO: check font_size = 0 is maybe not ok
         if font_size is None or font_size <= 0:
             return None
         else:
@@ -140,10 +138,10 @@ class LoginPresenter:
         store_data("passwd", data={"x": [0], "y": [passwd]})
 
         ofa_xsize, ofa_ysize, wfc_xsize, wfc_ysize = window_size_options
-        ofa_options = OFAViewOptions(ofa_xsize, ofa_ysize, font_size)
-        wfc_options = WFCViewOptions(wfc_xsize, wfc_ysize, font_size)
+        ofa_options = OFAViewOption(ofa_xsize, ofa_ysize, font_size)
+        wfc_options = WFCViewOption(wfc_xsize, wfc_ysize, font_size)
 
-        self._save_config(ofa_options)
+        self._save_config(ofa_options, wfc_options)
         self._view.transition_to_ofa_wfc(ofa_options, wfc_options)
 
     def guest(self):
@@ -158,10 +156,10 @@ class LoginPresenter:
             return
 
         ofa_xsize, ofa_ysize, wfc_xsize, wfc_ysize = window_size_options
-        ofa_options = OFAViewOptions(ofa_xsize, ofa_ysize, font_size)
-        wfc_options = WFCViewOptions(wfc_xsize, wfc_ysize, font_size)
+        ofa_options = OFAViewOption(ofa_xsize, ofa_ysize, font_size)
+        wfc_options = WFCViewOption(wfc_xsize, wfc_ysize, font_size)
 
-        self._save_config(ofa_options)
+        self._save_config(ofa_options, wfc_options)
         self._view.transition_to_ofa_wfc(ofa_options, wfc_options)
 
     def troubleshooting(self):
@@ -184,8 +182,7 @@ class LoginPresenter:
         wfc_options = self._load_wfc_config()
         return ofa_options, wfc_options
 
-    def _load_ofa_config(self) -> OFAViewOptions:
-        # TODO: overwriting is better
+    def _load_ofa_config(self) -> OFAViewOption:
         localdir = CONFIG["local_data_dir"]
 
         path_user = os.path.join(localdir, "user_config.json")
@@ -194,7 +191,7 @@ class LoginPresenter:
                 json_data = json.load(f)
             view_option_dict = json_data.get("ofa_view")
             if view_option_dict is not None:
-                options_user = OFAViewOptions(**view_option_dict)
+                options_user = OFAViewOption(**view_option_dict)
                 return options_user
 
         path_default = os.path.join(localdir, "default_config.json")
@@ -203,10 +200,10 @@ class LoginPresenter:
                 json_data = json.load(f)
             view_option_dict = json_data.get("ofa_view")
             if view_option_dict is not None:
-                options_default = OFAViewOptions(**view_option_dict)
+                options_default = OFAViewOption(**view_option_dict)
                 return options_default
 
-        options = OFAViewOptions()
+        options = OFAViewOption()
         for path in [path_user, path_default]:
             if os.path.exists(path):
                 with open(path, "r") as f:
@@ -220,8 +217,7 @@ class LoginPresenter:
                 json.dump(json_data, f, indent=4)
         return options
 
-    def _load_wfc_config(self) -> WFCViewOptions:
-        # TODO: overwriting is better
+    def _load_wfc_config(self) -> WFCViewOption:
         localdir = CONFIG["local_data_dir"]
 
         path_user = os.path.join(localdir, "user_config.json")
@@ -230,7 +226,7 @@ class LoginPresenter:
                 json_data = json.load(f)
             view_option_dict = json_data.get("wfc_view")
             if view_option_dict is not None:
-                options_user = WFCViewOptions(**view_option_dict)
+                options_user = WFCViewOption(**view_option_dict)
                 return options_user
 
         path_default = os.path.join(localdir, "default_config.json")
@@ -239,10 +235,10 @@ class LoginPresenter:
                 json_data = json.load(f)
             view_option_dict = json_data.get("wfc_view")
             if view_option_dict is not None:
-                options_default = WFCViewOptions(**view_option_dict)
+                options_default = WFCViewOption(**view_option_dict)
                 return options_default
 
-        options = WFCViewOptions()
+        options = WFCViewOption()
         for path in [path_user, path_default]:
             if os.path.exists(path):
                 with open(path, "r") as f:
@@ -256,14 +252,19 @@ class LoginPresenter:
                 json.dump(json_data, f, indent=4)
         return options
 
-    def _save_config(self, ofa_options: OFAViewOptions) -> None:
+    def _save_config(
+        self, ofa_options: OFAViewOption, wfc_options: WFCViewOption
+    ) -> None:
         localdir = CONFIG["local_data_dir"]
 
         path = os.path.join(localdir, "user_config.json")
         os.makedirs(os.path.dirname(path), exist_ok=True)
-        with open(path, "r") as f:
-            json_data = json.load(f)
-
+        if os.path.exists(path):
+            with open(path, "r") as f:
+                json_data = json.load(f)
+        else:
+            json_data = {}
         json_data["ofa_view"] = asdict(ofa_options)
+        json_data["wfc_view"] = asdict(wfc_options)
         with open(path, "w") as f:
             json.dump(json_data, f, indent=4)

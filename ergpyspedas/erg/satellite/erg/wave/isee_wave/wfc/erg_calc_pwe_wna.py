@@ -9,13 +9,14 @@ from pytplot import get_data, options, store_data, ylim, zlim
 from pytplot.importers.tplot_restore import tplot_restore
 from pytplot.tplot_math.join_vec import join_vec
 
-from ..load.add_fc import add_fc
 from ..utils.get_uname_passwd import get_uname_passwd
+from .add_fc import add_fc
 
 
 class MessageKind(Enum):
-    information = auto()
     error = auto()
+    information = auto()
+    question = auto()
     warning = auto()
 
 
@@ -255,7 +256,7 @@ def analysis_impl(
 
 def erg_calc_pwe_wna(
     trange: List[str] = ["2017-04-01/13:57:45", "2017-04-01/13:57:53"],
-    w: str = "hanning",
+    w: str = "Hanning",
     nfft: int = 4096,  # TODO: This value is the default of app, while 1024 is the real default of the corresponding function.
     stride: int = 2048,  # TODO: This value is the default of app, while 512 is the real default of the corresponding function.
     n_average: int = 3,
@@ -266,12 +267,12 @@ def erg_calc_pwe_wna(
 ) -> Tuple[bool, Optional[Message]]:
     bw = 65536 / nfft
 
-    if w == "hamming":
+    if w == "Hamming":
         alpha = 0.54
-    elif w == "hanning":
+    elif w == "Hanning":
         alpha = 0.5
     else:
-        raise ValueError("w must be hamming or hanning")
+        raise ValueError("w must be Hamming or Hanning")
 
     win = hanning(nfft, alpha=alpha) * 2
 
@@ -410,6 +411,7 @@ def erg_calc_pwe_wna(
     store_data("planarity_mask", data={"x": ts_b, "y": planarity, "v": freq})
     store_data("poyntingvec_mask", data={"x": ts_e, "y": theta, "v": freq})
 
+    # TODO: get actual species
     add_fc(
         [
             "espec",
@@ -487,6 +489,7 @@ def erg_calc_pwe_wna(
     # options, "espec*", "ztickunits", "scientific"
     # options, "bspec*", "ztickunits", "scientific"
 
+    # TODO: Must change to options(..., "yrange", ...), ylim is invalid
     # ylim
     ylim("espec", 32, 20000)
     ylim("bspec", 32, 20000)
@@ -558,7 +561,7 @@ if __name__ == "__main__":
     # Usage example of erg_calc_pwe_wna
     succeeded, message = erg_calc_pwe_wna(
         trange=["2017-04-01/13:57:45", "2017-04-01/13:57:53"],
-        w="hanning",
+        w="Hanning",
         nfft=4096,
         stride=2048,
         n_average=3,

@@ -1,5 +1,8 @@
+from __future__ import annotations
+
+from abc import ABC, abstractmethod
 from enum import Enum, auto
-from typing import List, Optional, Tuple
+from typing import TYPE_CHECKING, List, Optional, Tuple
 
 import matplotlib
 import matplotlib.dates
@@ -9,66 +12,87 @@ from matplotlib.backend_tools import Cursors
 from PySide6 import QtCore, QtWidgets
 from pyspedas import time_double, time_string
 
-from ..wfc.wfc_view_controller import WFCViewController
-from .ofa_view import OFAView, OFAViewOptions
-from .plot_ofa import load_ofa, plot_ofa
+from .load_ofa import load_ofa
+from .ofa_view import OFAView, OFAViewOption
+from .plot_ofa import plot_ofa
+
+if TYPE_CHECKING:
+    from ..wfc.wfc_view_controller import WFCViewControllerTlimitInterface
 
 
-class TlimitMode(Enum):
+class _TlimitMode(Enum):
     no_data = auto()
     closed = auto()
     ofa = auto()
     wfc = auto()
 
 
-class PositionInXAxis(Enum):
+class _PositionInXAxis(Enum):
     left = auto()
     inside = auto()
     right = auto()
 
 
-class OFAViewController:
-    def __init__(self, options: OFAViewOptions = OFAViewOptions()) -> None:
+class OFAViewControllerTlimitInterface(ABC):
+    @abstractmethod
+    def is_visible(self) -> bool:
+        pass
+
+    @abstractmethod
+    def can_use_wfc_tlimit(self) -> bool:
+        pass
+
+    @abstractmethod
+    def on_wfc_tlimit_button_clicked(self) -> None:
+        pass
+
+
+class OFAViewController(OFAViewControllerTlimitInterface):
+    def __init__(self, options: OFAViewOption = OFAViewOption()) -> None:
         super().__init__()
         # View
         self._view = OFAView(options)
         self._view_options = options
         # Events
-        self._view._display_button.clicked.connect(self.display_button_clicked)  # type: ignore
+        self._view._display_button.clicked.connect(self.on_display_button_clicked)  # type: ignore
         self._view._one_day_before_button.clicked.connect(  # type: ignore
-            self.one_day_before_button_clicked
+            self.on_one_day_before_button_clicked
         )
         self._view._one_hour_before_button.clicked.connect(  # type: ignore
-            self.one_hour_before_button_clicked
+            self.on_one_hour_before_button_clicked
         )
         self._view._one_hour_after_button.clicked.connect(  # type: ignore
-            self.one_hour_after_button_clicked
+            self.on_one_hour_after_button_clicked
         )
         self._view._one_day_after_button.clicked.connect(  # type: ignore
-            self.one_day_after_button_clicked
+            self.on_one_day_after_button_clicked
         )
         self._view._tlimit_button.clicked.connect(self.on_tlimit_button_clicked)  # type: ignore
         # States
-        self._plotted = False
-        self._tlimit_mode = TlimitMode.no_data
+        self._has_plotted = False
+        self._tlimit_mode = _TlimitMode.no_data
         self._is_tlimit_first_press = True
         self._trange: Optional[Tuple[float, float]] = None
         self._last_trange: Optional[Tuple[float, float]] = None
         self._tlimit_start: Optional[float] = None
-        self._tlimit_start_x_axis_pos: Optional[PositionInXAxis] = None
+        self._tlimit_start_x_axis_pos: Optional[_PositionInXAxis] = None
+        # Other
         self._view._canvas.set_cursor(Cursors.SELECT_REGION)
-        self._wfc_view_controller: Optional[WFCViewController] = None
+        self._wfc_view_controller: "Optional[WFCViewControllerTlimitInterface]" = None
 
-    def inject(self, wfc_view_controller: WFCViewController) -> None:
+    def inject(self, wfc_view_controller: "WFCViewControllerTlimitInterface") -> None:
+        # Used to cooperate with WFC panel
         self.wfc_view_controller = wfc_view_controller
 
     def show(self) -> None:
         self._view.show()
 
+    def is_visible(self) -> bool:
+        # If window is minimized by upper left button, this is True
+        # If window is closed by upper left button, this is False
+        return self._view.isVisible()
+
     def _get_trange_from_line_edit_text(self) -> Optional[Tuple[float, float]]:
-        # View controller
-        # Input validation
-        # TODO: maybe use validator
         start_line_edit_text = self._view._start_line_edit.text()
         end_line_edit_text = self._view._end_line_edit.text()
 
@@ -100,19 +124,20 @@ class OFAViewController:
 
     def _update_time(self, trange: Tuple[float, float]) -> bool:
         # Presentation logic
-        is_time_updated = self._trange is None or (
+        # Check if there is new time that is not within last trange
+        has_new_time = self._trange is None or (
             trange[0] < self._trange[0] or trange[1] > self._trange[1]
         )
         self._last_trange = self._trange
         self._trange = trange
-        return is_time_updated
+        return has_new_time
 
-    def display_button_clicked(self) -> None:
+    def on_display_button_clicked(self) -> None:
         trange = self._get_trange_from_line_edit_text()
         if trange is None:
             return
-        is_time_updated = self._update_time(trange)
-        self._load_and_plot_with_dialog(is_time_updated)
+        has_new_time = self._update_time(trange)
+        self._load_and_plot_with_dialog(has_new_time)
 
     def _scroll_time_button_clicked(self, diff_sec: int) -> None:
         trange = self._get_trange_from_line_edit_text()
@@ -126,28 +151,27 @@ class OFAViewController:
             time_string(trange[1], fmt="%Y-%m-%d/%H:%M:%S")  # type: ignore
         )
 
-        is_time_updated = self._update_time(trange)
-        self._load_and_plot_with_dialog(is_time_updated)
+        has_new_time = self._update_time(trange)
+        self._load_and_plot_with_dialog(has_new_time)
 
-    def one_day_before_button_clicked(self) -> None:
+    def on_one_day_before_button_clicked(self) -> None:
         diff_sec = -24 * 60 * 60
         self._scroll_time_button_clicked(diff_sec)
 
-    def one_hour_before_button_clicked(self) -> None:
+    def on_one_hour_before_button_clicked(self) -> None:
         diff_sec = -60 * 60
         self._scroll_time_button_clicked(diff_sec)
 
-    def one_hour_after_button_clicked(self) -> None:
+    def on_one_hour_after_button_clicked(self) -> None:
         diff_sec = 60 * 60
         self._scroll_time_button_clicked(diff_sec)
 
-    def one_day_after_button_clicked(self) -> None:
+    def on_one_day_after_button_clicked(self) -> None:
         diff_sec = 24 * 60 * 60
         self._scroll_time_button_clicked(diff_sec)
 
     def _load_and_plot_with_dialog(self, load: bool) -> None:
-        # TODO: QDialog may show Not responding to window title if several seconds passed
-        # TODO: Manage keyboard shortcut
+        # Dialog similar to IDL version
         dialog = QtWidgets.QDialog(self._view)
         dialog.setWindowTitle("OFA process")
         layout = QtWidgets.QVBoxLayout(dialog)
@@ -159,24 +183,25 @@ class OFAViewController:
         dialog.setWindowFlag(QtCore.Qt.WindowType.WindowMaximizeButtonHint, on=False)
         dialog.setWindowFlag(QtCore.Qt.WindowType.WindowCloseButtonHint, on=False)
         dialog.show()
+        # Need to directly process event to show the dialog immediately
         QtWidgets.QApplication.processEvents()
+
         if load:
             self._load()
         self._plot()
+
         dialog.close()
 
     def _load(self) -> None:
         if self._trange is None:
             return
-        # Load data
+        # TODO: Only for development
         import os
 
         no_update = os.getenv("WAVE_NO_UPDATE") == "True"
 
-        self.ofa_tplotlist, self.var_label_dict = load_ofa(
-            trange=self._trange, no_update=no_update
-        )
-        self._n_plots = len(self.ofa_tplotlist)
+        self._var_label_dict = load_ofa(trange=self._trange, no_update=no_update)
+        self._n_plots = 4
 
     def _plot(self) -> None:
         if self._trange is None:
@@ -186,29 +211,27 @@ class OFAViewController:
         fig = plot_ofa(
             fig=fig,
             trange=self._trange,
-            ofa_tplotlist=self.ofa_tplotlist,
-            var_label_dict=self.var_label_dict,
+            orb_dict=self._var_label_dict,
             font_size=self._view_options.font_size,
         )
-        # TODO: needed in add new figure but not in update black current figure
-        # TODO: Connect events only once when first plot is done
-        if not self._plotted:
+        # Enable some GUI after initial plot
+        if not self._has_plotted:
             self._view._canvas.mpl_connect("motion_notify_event", self.on_mouse_move)
             self._view._canvas.mpl_connect("button_press_event", self.on_button_pressed)
-            # self._view._canvas.mpl_connect("draw_event", self.on_draw)
-            # TODO: two same states
-            self._plotted = True
-            self._tlimit_mode = TlimitMode.closed
-        self.setup_cursor()
-        # must be after self.setup_cursor()
+            self._has_plotted = True
+            self._tlimit_mode = _TlimitMode.closed
+        # Must be before self._view.canvas.draw()
+        self._initialize_crosshair()
+        # Draw data
         self._view._canvas.draw()
         self.bg = self._view._canvas.copy_from_bbox(self._view._canvas.figure.bbox)
 
     def on_tlimit_button_clicked(self) -> None:
-        # TODO: is same as self._plotted
-        if self._tlimit_mode in [TlimitMode.no_data, TlimitMode.wfc]:
+        if self._tlimit_mode in [_TlimitMode.no_data, _TlimitMode.wfc]:
             return
-        self._tlimit_mode = TlimitMode.ofa
+
+        self._tlimit_mode = _TlimitMode.ofa
+        # Disable some GUIs
         self._view._start_line_edit.setEnabled(False)
         self._view._end_line_edit.setEnabled(False)
         self._view._display_button.setEnabled(False)
@@ -219,12 +242,21 @@ class OFAViewController:
         self._view._tlimit_button.setEnabled(False)
 
     def can_use_wfc_tlimit(self) -> bool:
-        return self._tlimit_mode == TlimitMode.closed
+        return self._tlimit_mode == _TlimitMode.closed
 
     def on_wfc_tlimit_button_clicked(self) -> None:
-        if self._tlimit_mode in [TlimitMode.no_data, TlimitMode.ofa]:
+        if self._tlimit_mode in [_TlimitMode.no_data, _TlimitMode.ofa]:
             return
-        self._tlimit_mode = TlimitMode.wfc
+
+        # Bring OFA to front
+        self._view.setWindowState(
+            self._view.windowState() & ~QtCore.Qt.WindowState.WindowMinimized
+            | QtCore.Qt.WindowState.WindowActive
+        )
+        self._view.activateWindow()
+
+        self._tlimit_mode = _TlimitMode.wfc
+        # Disable some GUIs
         self._view._start_line_edit.setEnabled(False)
         self._view._end_line_edit.setEnabled(False)
         self._view._display_button.setEnabled(False)
@@ -234,13 +266,15 @@ class OFAViewController:
         self._view._one_day_after_button.setEnabled(False)
         self._view._tlimit_button.setEnabled(False)
 
-    def setup_cursor(self) -> None:
+    def _initialize_crosshair(self) -> None:
+        # Initialize horizontal and vertical line of crosshair for all data plot
         self.hlines = []
         self.vlines = []
+        # Initialize vertical line used while tlimit mode
         self.tlimit_first_vlines = []
         self.tlimit_second_vlines = []
         for i in range(self._n_plots):
-            ax = self._view._canvas.figure.axes[i]
+            ax: Axes = self._view._canvas.figure.axes[i]
             hline = ax.axhline(0, visible=False, animated=True, color="black")
             vline = ax.axvline(0, visible=False, animated=True, color="black")
             tlimit_first_vline = ax.axvline(
@@ -256,7 +290,7 @@ class OFAViewController:
 
     def _get_nearest_axes_and_coords(
         self, event: LocationEvent
-    ) -> Optional[Tuple[Axes, float, float, PositionInXAxis]]:
+    ) -> Optional[Tuple[Axes, float, float, _PositionInXAxis]]:
         axs: List[Axes] = self._view._canvas.figure.axes[: self._n_plots]
         if len(axs) == 0:
             return
@@ -276,12 +310,12 @@ class OFAViewController:
         # If cursor is outside ax in terms of x axis, move it inside ax virtually
         if x < x_left:
             x = x_left
-            x_axis_pos = PositionInXAxis.left
+            x_axis_pos = _PositionInXAxis.left
         elif x > x_right:
             x = x_right
-            x_axis_pos = PositionInXAxis.right
+            x_axis_pos = _PositionInXAxis.right
         else:
-            x_axis_pos = PositionInXAxis.inside
+            x_axis_pos = _PositionInXAxis.inside
         # Pixel coordinate to data coordinate
         trans = ax.transData.inverted()
         xdata, _ = trans.transform((x, 0))
@@ -332,27 +366,31 @@ class OFAViewController:
             return
         ax_nearest, x, y, _ = ret
 
-        # This event is GUI but only available inside plot
+        # Always show time of corresponding cursor position
         self._view._time_label.setText(
             time_string(matplotlib.dates.num2date(x).timestamp(), fmt="%Y-%m-%d/%H:%M:%S")  # type: ignore
         )
-        if self._tlimit_mode in [TlimitMode.no_data, TlimitMode.closed]:
+
+        # Following occurs in tlimit mode only
+        if self._tlimit_mode in [_TlimitMode.no_data, _TlimitMode.closed]:
             return
-        # Reset background
+
+        # Use blitting for faster screen update
+        # Reset background (without crosshair)
         self._view._canvas.restore_region(self.bg)
-        # Add cursor
+        # Add crosshair
         index = self._view._canvas.figure.axes.index(ax_nearest)
         for i in range(self._n_plots):
             ax = self._view._canvas.figure.axes[i]
-            # vline
+            # Draw vertical line for all plot
             vline = self.vlines[i]
-            vline.set_xdata(x)
+            vline.set_xdata([x])
             vline.set_visible(True)
             ax.draw_artist(vline)
-            # hline should be only visible in event.inaxes
+            # Horizontal line should be only visible in event.inaxes
             hline = self.hlines[i]
             if i == index:
-                hline.set_ydata(y)
+                hline.set_ydata([y])
                 hline.set_visible(True)
             else:
                 hline.set_visible(False)
@@ -377,7 +415,7 @@ class OFAViewController:
         for i in range(self._n_plots):
             ax = self._view._canvas.figure.axes[i]
             line = lines[i]
-            line.set_xdata(x)
+            line.set_xdata([x])
             line.set_visible(True)
             ax.draw_artist(line)
         # Update background
@@ -389,7 +427,6 @@ class OFAViewController:
         self._view._canvas.blit()
 
     def _on_tlimit_ofa_first_pressed(self, x: float, tlimit_start: float) -> None:
-        # View controller
         self._view._start_line_edit.setText(
             time_string(tlimit_start, fmt="%Y-%m-%d/%H:%M:%S")  # type: ignore
         )
@@ -398,7 +435,6 @@ class OFAViewController:
     def _on_tlimit_ofa_second_pressed(
         self, x: float, needs_load: bool, trange: Tuple[float, float]
     ) -> None:
-        # View controller
         self._draw_tlimit_lines_background(x, False)
         self._load_and_plot_with_dialog(needs_load)
         self._view._start_line_edit.setEnabled(True)
@@ -420,7 +456,6 @@ class OFAViewController:
         self._draw_tlimit_lines_background(x, True)
 
     def _on_tlimit_wfc_second_pressed(self, x: float) -> None:
-        # View controller
         self._draw_tlimit_lines_background(x, False)
         self._plot()
         self._view._start_line_edit.setEnabled(True)
@@ -436,18 +471,18 @@ class OFAViewController:
         self,
         tlimit_time: float,
         x: float,
-        x_axis_pos: PositionInXAxis,
+        x_axis_pos: _PositionInXAxis,
     ) -> None:
-        # Presentation logic
         if self._is_tlimit_first_press:
             # Presentation logic
             self._tlimit_start = tlimit_time
             self._tlimit_start_x_axis_pos = x_axis_pos
             self._is_tlimit_first_press = False
 
-            # View controller
+            # View
             self._on_tlimit_ofa_first_pressed(x, self._tlimit_start)
         else:
+            # Presentation logic
             assert self._tlimit_start is not None
             assert self._tlimit_start_x_axis_pos is not None
             assert self._trange is not None
@@ -456,18 +491,17 @@ class OFAViewController:
             tlimit_end = tlimit_time
             tlimit_end_x_axis_pos = x_axis_pos
 
-            # Presentation logic
             # tlimit previous
             current_start, current_end = self._trange
             diff = current_end - current_start
             if (
-                tlimit_start_x_axis_pos == PositionInXAxis.left
-                and tlimit_end_x_axis_pos == PositionInXAxis.left
+                tlimit_start_x_axis_pos == _PositionInXAxis.left
+                and tlimit_end_x_axis_pos == _PositionInXAxis.left
             ):
                 trange = (current_start - diff, current_end - diff)
             elif (
-                tlimit_start_x_axis_pos == PositionInXAxis.right
-                and tlimit_end_x_axis_pos == PositionInXAxis.right
+                tlimit_start_x_axis_pos == _PositionInXAxis.right
+                and tlimit_end_x_axis_pos == _PositionInXAxis.right
             ):
                 trange = (current_start + diff, current_end + diff)
             else:
@@ -478,19 +512,18 @@ class OFAViewController:
                     trange = (tlimit_start, tlimit_end + 1)
                 # tlimit last
                 else:
-                    # Special case
+                    # If tlimit last done right after initial plot, dismiss
                     if self._last_trange is None:
                         trange = self._trange
                     else:
                         trange = self._last_trange
 
             self._is_tlimit_first_press = True
-            self._tlimit_mode = TlimitMode.closed
+            self._tlimit_mode = _TlimitMode.closed
             needs_load = self._update_time(trange)
-            # TODO: duplicate fo tlimit start
             self._tlimit_start = None
 
-            # View controller
+            # View
             self._on_tlimit_ofa_second_pressed(x, needs_load, trange)
 
     def _on_tlimit_wfc_pressed(
@@ -503,9 +536,12 @@ class OFAViewController:
             self._tlimit_start = tlimit_time
             self._is_tlimit_first_press = False
 
-            # View controller
+            # View
             self._on_tlimit_wfc_first_pressed(x)
-            if self.wfc_view_controller is not None:
+            if (
+                self.wfc_view_controller is not None
+                and self.wfc_view_controller.is_visible()
+            ):
                 self.wfc_view_controller.on_tlimit_wfc_first_pressed(self._tlimit_start)
         else:
             # Presentation logic
@@ -521,16 +557,19 @@ class OFAViewController:
                 trange = (tlimit_end, tlimit_start)
 
             self._is_tlimit_first_press = True
-            self._tlimit_mode = TlimitMode.closed
+            self._tlimit_mode = _TlimitMode.closed
             self._tlimit_start = None
 
-            # View controller
+            # View
             self._on_tlimit_wfc_second_pressed(x)
-            if self.wfc_view_controller is not None:
+            if (
+                self.wfc_view_controller is not None
+                and self.wfc_view_controller.is_visible()
+            ):
                 self.wfc_view_controller.on_tlimit_wfc_second_pressed(trange)
 
     def on_button_pressed(self, event) -> None:
-        # View controller
+        # View
         ret = self._get_nearest_axes_and_coords(event)
         if ret is None:
             return
@@ -538,11 +577,11 @@ class OFAViewController:
         tlimit_time = matplotlib.dates.num2date(x).timestamp()
 
         # Presentation logic
-        if self._tlimit_mode in [TlimitMode.no_data, TlimitMode.closed]:
+        if self._tlimit_mode in [_TlimitMode.no_data, _TlimitMode.closed]:
             return
-        elif self._tlimit_mode == TlimitMode.ofa:
+        elif self._tlimit_mode == _TlimitMode.ofa:
             self._on_tlimit_ofa_pressed(tlimit_time, x, x_axis_pos)
-        elif self._tlimit_mode == TlimitMode.wfc:
+        elif self._tlimit_mode == _TlimitMode.wfc:
             self._on_tlimit_wfc_pressed(tlimit_time, x)
         else:
             raise ValueError

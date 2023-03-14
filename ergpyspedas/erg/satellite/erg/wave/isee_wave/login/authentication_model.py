@@ -10,26 +10,34 @@ class AuthenticationModel(LoginPresenterModelInterface):
     def __init__(self) -> None:
         super().__init__()
 
-    def authenticate(self, idpw_uname: str, idpw_passwd: str) -> bool:
-        localdir = CONFIG["local_data_dir"]
-        remotedir = "http://ergsc.isee.nagoya-u.ac.jp/erg_socware/bleeding_edge/"
-        path = localdir + "pw_connection"
-        # Removing local file is equivalent to force download
-        if os.path.exists(path):
-            os.remove(path)
-        # TODO: check last_version is same in pyspedas (however not necassary for this function)
+    def authenticate(self, uname: str, passwd: str) -> bool:
+        """Return True if user name and password is valid else False"""
+        local_dir = CONFIG["local_data_dir"]
+        remote_dir = "http://ergsc.isee.nagoya-u.ac.jp/erg_socware/bleeding_edge/"
+        local_file = "pw_connection"
+
+        # Removing local file in Python is equivalent to forcing download in IDL
+        local_path = local_dir + local_file
+        if os.path.exists(local_path):
+            os.remove(local_path)
+
         paths = download(
-            remote_path=remotedir,
+            remote_path=remote_dir,
             remote_file="note_ERG-SC_procedures_en.pdf",
-            local_path=localdir,
-            local_file="pw_connection",
+            local_path=local_dir,
+            local_file=local_file,
             no_download=False,
-            username=idpw_uname,
-            password=idpw_passwd,
+            username=uname,
+            password=passwd,
             basic_auth=False,
             last_version=True,
         )
-        all_paths_exists = len(paths) > 0 and all(
-            [os.path.exists(path) for path in paths]
+
+        # Maybe path existence check is verbose but follow convention in
+        # for example idpw_login in spedas\projects\erg\satellite\erg\wave\isee_wave\idpw_login.pro
+        all_paths_exists = (
+            paths is not None
+            and len(paths) > 0
+            and all([os.path.exists(path) for path in paths])
         )
         return all_paths_exists

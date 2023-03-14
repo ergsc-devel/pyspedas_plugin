@@ -1,8 +1,8 @@
 from PySide6 import QtWidgets
 
-from ..ofa.ofa_view import OFAViewOptions
 from ..ofa.ofa_view_controller import OFAViewController
-from ..wfc.wfc_view import WFCViewOptions
+from ..options.ofa_view_option import OFAViewOption
+from ..options.wfc_view_option import WFCViewOption
 from ..wfc.wfc_view_controller import WFCViewController
 from .login_presenter import LoginPresenter, LoginPresenterViewInterface
 from .login_view import LoginView
@@ -68,7 +68,7 @@ class LoginViewController(LoginPresenterViewInterface):
         )
 
     def transition_to_ofa_wfc(
-        self, ofa_options: OFAViewOptions, wfc_options: WFCViewOptions
+        self, ofa_options: OFAViewOption, wfc_options: WFCViewOption
     ) -> None:
         self.ofa_vc = OFAViewController(ofa_options)
         self.wfc_vc = WFCViewController(wfc_options)

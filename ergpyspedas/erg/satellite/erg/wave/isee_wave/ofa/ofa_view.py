@@ -1,21 +1,13 @@
-from dataclasses import dataclass
-
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg
 from PySide6 import QtCore, QtGui, QtWidgets
 
-from .plot_ofa import plot_ofa_init
-
-
-@dataclass
-class OFAViewOptions:
-    xsize: int = 1280  # px
-    ysize: int = 600  # px
-    font_size: float = 10  # pt
+from ..options.ofa_view_option import OFAViewOption
+from ..plot.common import plot_init
 
 
 class OFAView(QtWidgets.QWidget):
-    def __init__(self, options: OFAViewOptions = OFAViewOptions()) -> None:
+    def __init__(self, options: OFAViewOption = OFAViewOption()) -> None:
         super().__init__()
         self.setWindowTitle("ISEE_Wave (OFA)")
         self._layout = QtWidgets.QVBoxLayout(self)
@@ -54,7 +46,7 @@ class OFAView(QtWidgets.QWidget):
         self._layout.addLayout(self._canvas_vlayout)
         self._canvas_hlayout = QtWidgets.QHBoxLayout()
         self._canvas_vlayout.addLayout(self._canvas_hlayout)
-        fig = plot_ofa_init(options.xsize, options.ysize)
+        fig = plot_init(options.xsize, options.ysize)
         self._canvas = FigureCanvasQTAgg(fig)
         self._canvas_hlayout.addWidget(self._canvas)
         self._canvas_hlayout.addStretch()
