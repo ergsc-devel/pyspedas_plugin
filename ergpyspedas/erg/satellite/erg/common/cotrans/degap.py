@@ -50,8 +50,10 @@ def degap(tvar,dt,margin,func='nan',new_tvar = None):
     for i in gap_index_locations[0]:
         values_to_add = np.append(values_to_add, np.arange(new_tvar_index[i], new_tvar_index[i+1], dt))
 
-    new_index = np.sort(np.unique(np.concatenate((values_to_add, new_tvar_index))))
-
+    #new_index = np.sort(np.unique(np.concatenate((values_to_add, new_tvar_index))))
+    new_index_float = np.sort(np.unique(np.concatenate((values_to_add, new_tvar_index))))
+    new_index = np.array( [datetime.datetime.utcfromtimestamp(t) if np.isfinite(t) else datetime.datetime.utcfromtimestamp(0) for t in new_index_float] )
+    
     if func == 'nan':
         method = None
     if func == 'ffill':
