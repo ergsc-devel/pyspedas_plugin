@@ -14,6 +14,7 @@ import pytplot
 import numpy as np
 import pandas as pd
 import copy
+import datetime
     
 def degap(tvar,dt,margin,func='nan',new_tvar = None):
     '''
