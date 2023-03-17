@@ -3,7 +3,8 @@ from pyspedas import tnames, time_double
 from pyspedas.analysis.tcrossp import tcrossp
 from pyspedas.utilities.time_string import time_string
 from pytplot import get_data, get_timespan
-from pytplot.tplot_math.degap import degap
+#from pytplot.tplot_math.degap import degap
+from .degap import degap
 from scipy import interpolate
 
 from ...att.att import att
