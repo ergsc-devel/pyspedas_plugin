@@ -40,13 +40,13 @@ def load_wfc(
         and progress_manager is not None
         and not progress_manager.was_canceled()
     ):
-        if progress_manager.confirm_cancel(
+        if not progress_manager.confirm_cancel(
             "Too long time interval was specified. Do you want to continue anyway?",
             MessageKind.question,
         ):
             return None
 
-    # TODO: Interface changed a bit so need modification
+    # TODO: Need merge with analysis
     succeeded, message = erg_calc_pwe_wna(
         trange=trange_actual,  # type: ignore
         w=w,

@@ -19,8 +19,7 @@ from ..options.support_line_option import SupportLineOptions
 from ..options.wfc_view_option import WFCViewOption, WFCViewOptionOther
 from ..plot.common import plot_init
 from ..utils.progress_manager import ProgressManager
-from ..utils.utils import str_to_float_or_none, str_to_int_or_none
-
+from ..utils.utils import round_down, round_up, str_to_float_or_none, str_to_int_or_none
 from .add_fc import add_fc
 from .load_wfc import load_wfc
 from .mask import MaskManagers
@@ -187,15 +186,15 @@ class WFCViewController(WFCViewControllerTlimitInterface):
 
     def on_tlimit_wfc_first_pressed(self, tlimit_start: float) -> None:
         self._view._start_line_edit.setText(
-            time_string(tlimit_start, fmt="%Y-%m-%d/%H:%M:%S")  # type: ignore
+            time_string(round_down(tlimit_start), fmt="%Y-%m-%d/%H:%M:%S")  # type: ignore
         )
 
     def on_tlimit_wfc_second_pressed(self, trange: Tuple[float, float]) -> None:
         self._view._start_line_edit.setText(
-            time_string(trange[0], fmt="%Y-%m-%d/%H:%M:%S")  # type: ignore
+            time_string(round_down(trange[0]), fmt="%Y-%m-%d/%H:%M:%S")  # type: ignore
         )
         self._view._end_line_edit.setText(
-            time_string(trange[1], fmt="%Y-%m-%d/%H:%M:%S")  # type: ignore
+            time_string(round_up(trange[1]), fmt="%Y-%m-%d/%H:%M:%S")  # type: ignore
         )
         # Focus on WFC window
         view = self._view
@@ -248,9 +247,6 @@ class WFCViewController(WFCViewControllerTlimitInterface):
         self._view.setup_fft_options()
 
     def on_fft_calc_button_clicked(self) -> None:
-        # TODO: Only for development
-        no_update = os.getenv("WAVE_NO_UPDATE") == "True"
-
         # Input
         trange = self._get_trange_from_line_edit_text()
         if trange is None:
@@ -324,7 +320,6 @@ class WFCViewController(WFCViewControllerTlimitInterface):
             nfft=window_size,
             stride=stride,
             n_average=n_average,
-            no_update=no_update,
             progress_manager=progress_manager,
         )
         if ret is None:
@@ -339,10 +334,10 @@ class WFCViewController(WFCViewControllerTlimitInterface):
 
         # View
         self._view._start_line_edit.setText(
-            time_string(self._trange[0], fmt="%Y-%m-%d/%H:%M:%S")  # type: ignore
+            time_string(round_down(self._trange[0]), fmt="%Y-%m-%d/%H:%M:%S")  # type: ignore
         )
         self._view._end_line_edit.setText(
-            time_string(self._trange[1], fmt="%Y-%m-%d/%H:%M:%S")  # type: ignore
+            time_string(round_up(self._trange[1]), fmt="%Y-%m-%d/%H:%M:%S")  # type: ignore
         )
         self._update_mask_tab()
         for group in self._view._mask_tab._slider_groups.values():
@@ -689,8 +684,8 @@ class WFCViewController(WFCViewControllerTlimitInterface):
             )
             return
 
-        start_time_str = time_string(trange[0], fmt="%Y%m%d%H%M%S")  # type: ignore
-        end_time_str = time_string(trange[1], fmt="%Y%m%d%H%M%S")  # type: ignore
+        start_time_str = time_string(round_down(trange[0]), fmt="%Y%m%d%H%M%S")  # type: ignore
+        end_time_str = time_string(round_up(trange[1]), fmt="%Y%m%d%H%M%S")  # type: ignore
         file_name = "erg_pwe_wfc_" + start_time_str + "_" + end_time_str + ".eps"  # type: ignore
         file_path, _ = QtWidgets.QFileDialog.getSaveFileName(
             parent=self._view, dir=file_name, filter="*.eps"
@@ -756,8 +751,8 @@ class WFCViewController(WFCViewControllerTlimitInterface):
             )
             return
 
-        start_time_str = time_string(trange[0], fmt="%Y%m%d%H%M%S")  # type: ignore
-        end_time_str = time_string(trange[1], fmt="%Y%m%d%H%M%S")  # type: ignore
+        start_time_str = time_string(round_down(trange[0]), fmt="%Y%m%d%H%M%S")  # type: ignore
+        end_time_str = time_string(round_up(trange[1]), fmt="%Y%m%d%H%M%S")  # type: ignore
         file_name = "erg_pwe_wfc_" + start_time_str + "_" + end_time_str + ".png"  # type: ignore
         file_path, _ = QtWidgets.QFileDialog.getSaveFileName(
             parent=self._view, dir=file_name, filter="*.png"
@@ -788,8 +783,8 @@ class WFCViewController(WFCViewControllerTlimitInterface):
             return
         data_names = [name.value for name in DataName]
 
-        start_time_str = time_string(trange[0], fmt="%Y%m%d%H%M%S")  # type: ignore
-        end_time_str = time_string(trange[1], fmt="%Y%m%d%H%M%S")  # type: ignore
+        start_time_str = time_string(round_down(trange[0]), fmt="%Y%m%d%H%M%S")  # type: ignore
+        end_time_str = time_string(round_up(trange[1]), fmt="%Y%m%d%H%M%S")  # type: ignore
         file_name = "erg_pwe_wfc_" + start_time_str + "_" + end_time_str + ".tplot"  # type: ignore
         file_path, _ = QtWidgets.QFileDialog.getSaveFileName(
             parent=self._view, dir=file_name, filter="*.tplot"

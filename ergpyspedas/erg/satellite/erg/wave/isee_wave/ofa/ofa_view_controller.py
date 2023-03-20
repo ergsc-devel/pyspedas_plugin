@@ -178,11 +178,14 @@ class OFAViewController(OFAViewControllerTlimitInterface):
         label = QtWidgets.QLabel("Downloading/Importing data...")
         layout.addWidget(label)
         layout.addStretch()
-        dialog.setWindowModality(QtCore.Qt.WindowModality.WindowModal)
+        dialog.setWindowModality(QtCore.Qt.WindowModality.ApplicationModal)
         dialog.setWindowFlag(QtCore.Qt.WindowType.WindowMinimizeButtonHint, on=False)
         dialog.setWindowFlag(QtCore.Qt.WindowType.WindowMaximizeButtonHint, on=False)
         dialog.setWindowFlag(QtCore.Qt.WindowType.WindowCloseButtonHint, on=False)
         dialog.show()
+
+        # You need to setEnabled(False)to realize modality for this dialog
+        self._view.setEnabled(False)
         # Need to directly process event to show the dialog immediately
         QtWidgets.QApplication.processEvents()
 
@@ -191,16 +194,13 @@ class OFAViewController(OFAViewControllerTlimitInterface):
         self._plot()
 
         dialog.close()
+        self._view.setEnabled(True)
 
     def _load(self) -> None:
         if self._trange is None:
             return
-        # TODO: Only for development
-        import os
 
-        no_update = os.getenv("WAVE_NO_UPDATE") == "True"
-
-        self._var_label_dict = load_ofa(trange=self._trange, no_update=no_update)
+        self._var_label_dict = load_ofa(trange=self._trange)
         self._n_plots = 4
 
     def _plot(self) -> None:

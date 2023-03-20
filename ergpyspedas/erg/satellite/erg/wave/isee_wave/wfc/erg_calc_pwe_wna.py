@@ -3,7 +3,8 @@ from typing import Callable, List, Optional, Tuple
 
 import numpy as np
 from pyspedas.erg.satellite.erg.mgf.mgf import mgf
-from pyspedas.erg.satellite.erg.pwe.pwe_wfc import pwe_wfc
+# Use bugfixed below now instead of: from pyspedas.erg.satellite.erg.pwe.pwe_wfc import pwe_wfc
+from ergpyspedas.erg import pwe_wfc
 from pyspedas.utilities.tnames import tnames
 from pytplot import get_data, options, store_data, ylim, zlim
 from pytplot.importers.tplot_restore import tplot_restore

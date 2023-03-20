@@ -47,7 +47,7 @@ class ProgressManager(ProgressManagerInterface):
             parent=parent,
         )
         self._progress.setWindowTitle("Operation in Progress...")
-        self._progress.setWindowModality(QtCore.Qt.WindowModality.WindowModal)
+        self._progress.setWindowModality(QtCore.Qt.WindowModality.ApplicationModal)
         # If not specified the dialog will not show until a several tens of percent reached
         self._progress.setMinimumDuration(0)
         self._progress.forceShow()
@@ -92,7 +92,6 @@ class ProgressManager(ProgressManagerInterface):
             raise ValueError("Progress dialog does not exist anymore.")
 
         if message_kind == MessageKind.question:
-            # Do not admit cancel
             button = QtWidgets.QMessageBox.question(self._progress, "Question", message)
             if button == QtWidgets.QMessageBox.StandardButton.No:
                 return False

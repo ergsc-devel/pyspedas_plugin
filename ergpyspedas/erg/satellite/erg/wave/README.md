@@ -1,6 +1,6 @@
 # Python版ISEE_Wave プログラム実行手順書
 
-最終更新: 2023/03/14
+最終更新: 2023/03/20
 
 ## 前提事項・諸注意
 
@@ -9,6 +9,7 @@
 ## フォルダ構成
 
 ```txt
+wave
 ├── README.md                           # 本ファイル
 ├── requirements.txt                    # 依存ライブラリ一覧
 ├── MANIFEST.in                         # パッケージに含めるデータの情報
@@ -45,7 +46,7 @@
     │   ├── support_line_option.py      # 支持線の情報の設定
     │   └── wfc_view_option.py          # WFC画面の設定
     ├── plot
-    │   ├── __init__.py                 # パッケージ化用ファイル
+    │   ├── __init__.py                 # パッケージ化用ファイル
     │   └── common.py                   # tplot関数の拡張版
     ├── utils
     │   ├── __init__.py                 # パッケージ化用ファイル
@@ -70,13 +71,13 @@
 
 ### OS・ハードウェア
 
-* OS: Windows 10
-* CPU: Intel(R) Core(TM) i9-9900KF CPU @ 3.60GHz
+* OS: Windows 11 Home
+* CPU: 11th Gen Intel(R) Core(TM) i9-11980HK @ 2.60GHz
 * メモリ: 64 GB
 
 ### Python環境
 
-* Pythonバージョン: `3.10.9`
+* Pythonバージョン: `3.8.10`
 * 依存ライブラリ: `requirements.txt`を参照
 
 ## 実行方法

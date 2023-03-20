@@ -1,6 +1,7 @@
 from typing import Optional, Sequence, Tuple
 
-from pyspedas.erg.satellite.erg.pwe.pwe_wfc import pwe_wfc
+# Use bugfixed below now instead of: from pyspedas.erg.satellite.erg.pwe.pwe_wfc import pwe_wfc
+from ergpyspedas.erg import pwe_wfc
 from pyspedas.utilities.time_double import time_double
 from pytplot import get_data, store_data
 
