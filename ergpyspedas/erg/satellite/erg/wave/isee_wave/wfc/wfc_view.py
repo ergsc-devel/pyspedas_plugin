@@ -726,8 +726,8 @@ class WFCView(QtWidgets.QWidget):
         self.setup_fft_options()
 
     def setup_trange(self) -> None:
-        self._start_line_edit.setText("2017-04-01/13:57:45")
-        self._end_line_edit.setText("2017-04-01/13:57:53")
+        self._start_line_edit.setText("2017-04-01/13:57:45.000")
+        self._end_line_edit.setText("2017-04-01/13:57:53.000")
 
     def setup_fft_options(self) -> None:
         for text in ["Hanning", "Hamming"]:

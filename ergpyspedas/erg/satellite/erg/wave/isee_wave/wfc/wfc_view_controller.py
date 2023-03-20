@@ -186,15 +186,15 @@ class WFCViewController(WFCViewControllerTlimitInterface):
 
     def on_tlimit_wfc_first_pressed(self, tlimit_start: float) -> None:
         self._view._start_line_edit.setText(
-            time_string(round_down(tlimit_start), fmt="%Y-%m-%d/%H:%M:%S")  # type: ignore
+            time_string(round_down(tlimit_start, ndigits=3), fmt="%Y-%m-%d/%H:%M:%S.%f")[:-3]  # type: ignore
         )
 
     def on_tlimit_wfc_second_pressed(self, trange: Tuple[float, float]) -> None:
         self._view._start_line_edit.setText(
-            time_string(round_down(trange[0]), fmt="%Y-%m-%d/%H:%M:%S")  # type: ignore
+            time_string(round_down(trange[0], ndigits=3), fmt="%Y-%m-%d/%H:%M:%S.%f")[:-3]  # type: ignore
         )
         self._view._end_line_edit.setText(
-            time_string(round_up(trange[1]), fmt="%Y-%m-%d/%H:%M:%S")  # type: ignore
+            time_string(round_up(trange[1], ndigits=3), fmt="%Y-%m-%d/%H:%M:%S.%f")[:-3]  # type: ignore
         )
         # Focus on WFC window
         view = self._view
@@ -334,10 +334,10 @@ class WFCViewController(WFCViewControllerTlimitInterface):
 
         # View
         self._view._start_line_edit.setText(
-            time_string(round_down(self._trange[0]), fmt="%Y-%m-%d/%H:%M:%S")  # type: ignore
+            time_string(round_down(self._trange[0], ndigits=3), fmt="%Y-%m-%d/%H:%M:%S.%f")[:-3]  # type: ignore
         )
         self._view._end_line_edit.setText(
-            time_string(round_up(self._trange[1]), fmt="%Y-%m-%d/%H:%M:%S")  # type: ignore
+            time_string(round_up(self._trange[1], ndigits=3), fmt="%Y-%m-%d/%H:%M:%S.%f")[:-3]  # type: ignore
         )
         self._update_mask_tab()
         for group in self._view._mask_tab._slider_groups.values():
@@ -684,8 +684,8 @@ class WFCViewController(WFCViewControllerTlimitInterface):
             )
             return
 
-        start_time_str = time_string(round_down(trange[0]), fmt="%Y%m%d%H%M%S")  # type: ignore
-        end_time_str = time_string(round_up(trange[1]), fmt="%Y%m%d%H%M%S")  # type: ignore
+        start_time_str = time_string(round_down(trange[0], ndigits=3), fmt="%Y%m%d%H%M%S%f")[:-3]  # type: ignore
+        end_time_str = time_string(round_up(trange[1], ndigits=3), fmt="%Y%m%d%H%M%S%f")[:-3]  # type: ignore
         file_name = "erg_pwe_wfc_" + start_time_str + "_" + end_time_str + ".eps"  # type: ignore
         file_path, _ = QtWidgets.QFileDialog.getSaveFileName(
             parent=self._view, dir=file_name, filter="*.eps"
@@ -751,8 +751,8 @@ class WFCViewController(WFCViewControllerTlimitInterface):
             )
             return
 
-        start_time_str = time_string(round_down(trange[0]), fmt="%Y%m%d%H%M%S")  # type: ignore
-        end_time_str = time_string(round_up(trange[1]), fmt="%Y%m%d%H%M%S")  # type: ignore
+        start_time_str = time_string(round_down(trange[0], ndigits=3), fmt="%Y%m%d%H%M%S%f")[:-3]  # type: ignore
+        end_time_str = time_string(round_up(trange[1], ndigits=3), fmt="%Y%m%d%H%M%S%f")[:-3]  # type: ignore
         file_name = "erg_pwe_wfc_" + start_time_str + "_" + end_time_str + ".png"  # type: ignore
         file_path, _ = QtWidgets.QFileDialog.getSaveFileName(
             parent=self._view, dir=file_name, filter="*.png"
@@ -783,8 +783,8 @@ class WFCViewController(WFCViewControllerTlimitInterface):
             return
         data_names = [name.value for name in DataName]
 
-        start_time_str = time_string(round_down(trange[0]), fmt="%Y%m%d%H%M%S")  # type: ignore
-        end_time_str = time_string(round_up(trange[1]), fmt="%Y%m%d%H%M%S")  # type: ignore
+        start_time_str = time_string(round_down(trange[0], ndigits=3), fmt="%Y%m%d%H%M%S%f")[:-3]  # type: ignore
+        end_time_str = time_string(round_up(trange[1], ndigits=3), fmt="%Y%m%d%H%M%S%f")[:-3]  # type: ignore
         file_name = "erg_pwe_wfc_" + start_time_str + "_" + end_time_str + ".tplot"  # type: ignore
         file_path, _ = QtWidgets.QFileDialog.getSaveFileName(
             parent=self._view, dir=file_name, filter="*.tplot"

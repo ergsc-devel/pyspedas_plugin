@@ -884,40 +884,9 @@ def erg_calc_pwe_wna(
     b_waveform = get_data("B_waveform_sgi")
     store_data("B_waveform_sgi", delete=True)
 
-    # NOTE: Use this code to get analysis result from IDL version, if analysis part is not yet implemented
-    # (
-    #     ts_e,
-    #     powspec_e,
-    #     freq,
-    #     ts_b,
-    #     powspec_b,
-    #     wna,
-    #     polarization,
-    #     planarity,
-    #     theta,
-    #     scwlim,
-    # ) = analysis_impl_dummy()
-
-    # # TODO: NU implement here
-    ret = analysis_impl(
-        uname1,
-        passwd1,
-        trange,
-        no_update,
-        win,
-        nfft,
-        stride,
-        n_average,
-        e_waveform,
-        b_waveform,
-        cancel_callback,
-        update_callback,
-    )
-    # This case ret is tuple of succeeded flag and message
-    if len(ret) == 2:
-        return ret
-    # This case ret is data
-    else:
+    use_dummy = True
+    if use_dummy:
+        # NOTE: Use this code to get analysis result from IDL version, if analysis part is not yet implemented
         (
             ts_e,
             powspec_e,
@@ -929,7 +898,40 @@ def erg_calc_pwe_wna(
             planarity,
             theta,
             scwlim,
-        ) = ret
+        ) = analysis_impl_dummy()
+    else:
+        # TODO: NU implement here
+        ret = analysis_impl(
+            uname1,
+            passwd1,
+            trange,
+            no_update,
+            win,
+            nfft,
+            stride,
+            n_average,
+            e_waveform,
+            b_waveform,
+            cancel_callback,
+            update_callback,
+        )
+        # This case ret is tuple of succeeded flag and message
+        if len(ret) == 2:
+            return ret
+        # This case ret is data
+        else:
+            (
+                ts_e,
+                powspec_e,
+                freq,
+                ts_b,
+                powspec_b,
+                wna,
+                polarization,
+                planarity,
+                theta,
+                scwlim,
+            ) = ret
 
     if cancel_callback():
         return (
