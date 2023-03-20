@@ -224,13 +224,13 @@ def pwe_wfc(trange=['2017-04-01/12:00:00', '2017-04-01/13:00:00'],
             time_array = get_data_vars[0]
             if not all_time_range_flag:
                 if time_array[0] <= trange_in_float[0]:
-                    t_ge_indices = np.where(time_array <= trange_in_float[0])
-                    t_min_index = t_ge_indices[0][-1]
+                    t_ge_indices = np.where(time_array >= trange_in_float[0])
+                    t_min_index = t_ge_indices[0][0]
                 else:
                     t_min_index = 0
                 if trange_in_float[1] <= time_array[-1]:
-                    t_le_indices = np.where(trange_in_float[1] <= time_array)
-                    t_max_index = t_le_indices[0][0]
+                    t_le_indices = np.where(time_array <= trange_in_float[1])
+                    t_max_index = t_le_indices[0][-1]
                 else:
                     t_max_index = -1
                 if t_min_index == t_max_index:
