@@ -1,6 +1,6 @@
 import pandas as pd
 from pyspedas.utilities.time_double import time_float
-from pytplot import store_data
+from pytplot import store_data, data_quants
 
 from ..load import load
 
@@ -101,5 +101,14 @@ def att(trange=['2017-04-01', '2017-04-02'],
             'x': time_float_array, 'y': GZ_Alpha_float_array})
         store_data('erg_att_gzdec', data={
             'x': time_float_array, 'y': GZ_Delta_float_array})
+
+        ## Temporarily inserted the following lines to prevent
+        ## ert_interpolate_att from crashing. (T.H.)
+        ## The below is disabled as erg_interpolate_att.py and dsi2j2000.py are modified accordingly.
+        #for nm in ['sprate', 'spphase', 'izras', 'izdec', 'gxras', 'gxdec', 'gzras', 'gzdec']:
+        #  vn = 'erg_att_' + nm
+        #  tr = data_quants[vn].attrs['plot_options']['trange']
+        #  data_quants[vn].attrs['plot_options']['trange'] = [ time_float(str(t)) for t in tr ]
+        
 
     return None

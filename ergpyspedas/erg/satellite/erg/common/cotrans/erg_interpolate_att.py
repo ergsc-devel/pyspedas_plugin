@@ -1,9 +1,10 @@
 import numpy as np
-from pyspedas import tnames
+from pyspedas import tnames, time_double
 from pyspedas.analysis.tcrossp import tcrossp
 from pyspedas.utilities.time_string import time_string
 from pytplot import get_data, get_timespan
-from pytplot.tplot_math.degap import degap
+#from pytplot.tplot_math.degap import degap
+from .degap import degap
 from scipy import interpolate
 
 from ...att.att import att
@@ -46,12 +47,14 @@ def erg_interpolate_att(erg_xxx_in=None, noload=False):
         sprate = get_data('erg_att_sprate')
         if sprate[0].min() > time_array.min() + 8. or sprate[0].max() < time_array.max() - 8.:
             tr = get_timespan(erg_xxx_in)
+            tr_dbl = [ time_double(str(t)) for t in tr ]
             if reload:
-                att(trange=time_string([tr[0] - 60., tr[1] + 60.]))
+                att(trange=time_string([tr_dbl[0] - 60., tr_dbl[1] + 60.]))
     else:
         tr = get_timespan(erg_xxx_in)
+        tr_dbl = [ time_double(str(t)) for t in tr ]
         if reload:
-            att(trange=time_string([tr[0] - 60., tr[1] + 60.]))
+            att(trange=time_string([tr_dbl[0] - 60., tr_dbl[1] + 60.]))
 
     # Interpolate spin period
     if reload:

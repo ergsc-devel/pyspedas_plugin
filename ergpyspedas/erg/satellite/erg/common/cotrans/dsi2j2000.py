@@ -1,5 +1,5 @@
 import numpy as np
-from pyspedas import tinterpol
+from pyspedas import tinterpol, time_double
 from pyspedas.analysis.tcrossp import tcrossp
 from pyspedas.analysis.tnormalize import tnormalize
 from pyspedas.cotrans.cotrans import cotrans
@@ -62,7 +62,8 @@ def dsi2j2000(name_in=None,
     else:  # Calculate the sun directions from the instantaneous satellite locations
         if reload:
             tr = get_timespan(name_in)
-            orb(trange=time_string([tr[0] - 60., tr[1] + 60.]))
+            tr_dbl = [ time_double(str(t)) for t in tr ] 
+            orb(trange=time_string([tr_dbl[0] - 60., tr_dbl[1] + 60.]))
             tinterpol('erg_orb_l2_pos_gse', time_array)
             scpos = get_data('erg_orb_l2_pos_gse-itrp')[1]
             sunpos = np.array([[1.496e+08, 0., 0.]]*time_length)
