@@ -44,9 +44,9 @@ def _get_min_max(z: np.ndarray, zlog: bool) -> Tuple[float, float]:
         if len(z_pos) == 0:
             return float("nan"), float("nan")
         else:
-            return z_pos.min(), z_pos.max()
+            return np.nanmin(z_pos), np.nanmax(z_pos)
     else:
-        return z_real.min(), z_real.max()
+        return np.nanmin(z_real), np.nanmax(z_real)
 
 
 def _get_mask(z: np.ndarray, threshold: float, zlog: bool) -> np.ndarray:
