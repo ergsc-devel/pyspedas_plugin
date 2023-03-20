@@ -347,13 +347,8 @@ def analysis_impl(
     )
     split_vec("erg_mgf_l2_mag_8sec_sgi_b")
 
-    if False:
-        return (
-            False,
-            Message("Spacecraft attitude data not found.", MessageKind.information),
-        )
-
-    if False:
+    data = get_data("erg_mgf_l2_mag_8sec_sgi_e_x")
+    if np.isnan(data.y[0]) and np.isnan(data.y[-1]):
         return (
             False,
             Message("Spacecraft attitude data not found.", MessageKind.information),
@@ -768,6 +763,7 @@ def analysis_impl(
     scwlim = {"spec": 1, "zlog": 1, "ylog": 1, "yrange": [0, fsamp / 2], "ystyle": 1}
 
     # temp
+    # NOTE: This has no meaning; Should be x = np.nan_to_num(x) if needed
     np.nan_to_num(powspec_e)
     np.nan_to_num(powspec_b)
     np.nan_to_num(wna)
