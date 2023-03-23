@@ -8,7 +8,7 @@ from pytplot import get_data, store_data
 from ..ofa.add_orb import add_orb
 from ..options.data_option import DataName
 from ..options.orbital_info_option import OrbitalInfoName
-from ..utils.progress_manager import ProgressManagerInterface
+from ..utils.progress_manager import ProgressManagerInterface, WorkerInterface
 from .erg_calc_pwe_wna import MessageKind, erg_calc_pwe_wna
 from .search_pwe_wfc_wf import search_pwe_wfc_wf
 
@@ -23,31 +23,39 @@ def load_wfc(
     stride: int = 2048,
     n_average: int = 3,
     no_update: bool = False,
+    worker: Optional[WorkerInterface] = None,
     progress_manager: Optional[ProgressManagerInterface] = None,
 ) -> Optional[Tuple[Dict[OrbitalInfoName, str], Tuple[float, float]]]:
     trange_actual = search_pwe_wfc_wf(
         trange=trange, no_update=no_update, progress_manager=progress_manager  # type: ignore
     )
     if trange_actual is None:
-        if progress_manager is not None and not progress_manager.was_canceled():
-            progress_manager.confirm_cancel(
+        if progress_manager is not None and not progress_manager.canceled():
+            progress_manager.ask_message(
                 "No waveform data is available in the specified time interval.",
                 MessageKind.information,
             )
-        return None
-    if (
-        trange_actual[1] - trange_actual[0] > 150
-        and progress_manager is not None
-        and not progress_manager.was_canceled()
-    ):
-        if not progress_manager.confirm_cancel(
-            "Too long time interval was specified. Do you want to continue anyway?",
-            MessageKind.question,
-        ):
-            return None
+        if worker is not None:
+            worker.fail()
+        return
+    if trange_actual[1] - trange_actual[0] > 150:
+        if progress_manager is not None and not progress_manager.canceled():
+            answer = progress_manager.ask_message(
+                "Too long time interval was specified. Do you want to continue anyway?",
+                MessageKind.question,
+            )
+            if not answer:
+                if worker is not None:
+                    worker.fail()
+                return
+        # If user has no chance to stop, let it stop by default because it takes time
+        else:
+            if worker is not None:
+                worker.fail()
+            return
 
     # TODO: Need merge with analysis
-    succeeded, message = erg_calc_pwe_wna(
+    succeeded = erg_calc_pwe_wna(
         trange=trange_actual,  # type: ignore
         w=w,
         nfft=nfft,
@@ -55,7 +63,12 @@ def load_wfc(
         n_average=n_average,
         reload=~no_update,  # type: ignore
         no_update=no_update,
+        progress_manager=progress_manager,
     )
+    if not succeeded:
+        if worker is not None:
+            worker.fail()
+        return
 
     # Reset mask and plot tplot variables
     for name in DataName:
@@ -95,4 +108,6 @@ def load_wfc(
         no_update=no_update,
     )
 
+    if worker is not None:
+        worker.success()
     return var_label_dict, trange_actual

@@ -1,9 +1,10 @@
 from typing import Optional, Sequence, Tuple
 
-# Use bugfixed below now instead of: from pyspedas.erg.satellite.erg.pwe.pwe_wfc import pwe_wfc
-from ergpyspedas.erg import pwe_wfc
 from pyspedas.utilities.time_double import time_double
 from pytplot import get_data, store_data
+
+# Use bugfixed below now instead of: from pyspedas.erg.satellite.erg.pwe.pwe_wfc import pwe_wfc
+from ergpyspedas.erg import pwe_wfc
 
 from ..utils.get_uname_passwd import get_uname_passwd
 from ..utils.progress_manager import ProgressManagerInterface
@@ -23,6 +24,7 @@ def search_pwe_wfc_wf(
     # Set progress manager a label if exists
     if progress_manager is not None:
         progress_manager.set_label_text("Downloading...")
+        progress_manager.set_value(0)
 
     uname, passwd = get_uname_passwd()
 
@@ -38,11 +40,11 @@ def search_pwe_wfc_wf(
 
     if progress_manager is not None:
         # If cancel is triggered by user, show message
-        if progress_manager.was_cancel_triggered():
-            if progress_manager.confirm_cancel(
+        if progress_manager.canceled():
+            progress_manager.ask_message(
                 "The user cancelled operation.", MessageKind.information
-            ):
-                return None
+            )
+            return None
         # Set progress
         progress_manager.set_value(50)
 
@@ -77,12 +79,12 @@ def search_pwe_wfc_wf(
             return (start, end)
 
     if progress_manager is not None:
-        if progress_manager.was_cancel_triggered():
-            if progress_manager.confirm_cancel(
+        if progress_manager.canceled():
+            progress_manager.ask_message(
                 "The user cancelled operation.", MessageKind.information
-            ):
-                return None
-        progress_manager.set_value(90)
+            )
+            return None
+        progress_manager.set_value(100)
 
     return None
 

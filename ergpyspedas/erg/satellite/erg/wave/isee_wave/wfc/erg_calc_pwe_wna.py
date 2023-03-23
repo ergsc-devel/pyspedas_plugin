@@ -1,9 +1,9 @@
 import gc
 import math
-from enum import Enum, auto
 from typing import Callable, List, Optional, Tuple
 
 import numpy as np
+from click import Option
 from pyspedas.analysis.tinterpol import tinterpol
 from pyspedas.erg.satellite.erg.mgf.mgf import mgf
 from pyspedas.utilities.tnames import tnames
@@ -16,14 +16,8 @@ from ergpyspedas.erg import pwe_wfc
 from ergpyspedas.erg.satellite.erg.common.cotrans.erg_cotrans import erg_cotrans
 
 from ..utils.get_uname_passwd import get_uname_passwd
+from ..utils.progress_manager import MessageKind, ProgressManagerInterface
 from .add_fc import add_fc
-
-
-class MessageKind(Enum):
-    error = auto()
-    information = auto()
-    question = auto()
-    warning = auto()
 
 
 class Message:
@@ -203,20 +197,22 @@ def analysis_impl(
     n_average,
     e_waveform,
     b_waveform,
-    cancel_callback,
-    update_callback,
+    progress_manager: Optional[ProgressManagerInterface] = None,
 ):
     # TODO: NU implement this function
     # Please add necessary arguments
 
     if not b_waveform:
-        return (False, Message("No data found.", MessageKind.warning))
+        if progress_manager is not None:
+            progress_manager.ask_message("No data found.", MessageKind.warning)
+        return
 
-    if cancel_callback():
-        return (
-            False,
-            Message("The user cancelled operation.", MessageKind.information),
-        )
+    if progress_manager is not None:
+        if progress_manager.canceled():
+            progress_manager.ask_message(
+                "The user cancelled operation.", MessageKind.information
+            )
+            return
 
     if not e_waveform:
         start_time = b_waveform.times[0]
@@ -308,8 +304,8 @@ def analysis_impl(
     freq = np.arange(nfft / 2) * fsamp / nfft
     bw = fsamp / nfft
 
-    update_callback(30)
-
+    if progress_manager is not None:
+        progress_manager.set_value(30)
     # *****************
     # load MGF L2 CDF
     # *****************
@@ -349,16 +345,18 @@ def analysis_impl(
 
     data = get_data("erg_mgf_l2_mag_8sec_sgi_e_x")
     if np.isnan(data.y[0]) and np.isnan(data.y[-1]):
-        return (
-            False,
-            Message("Spacecraft attitude data not found.", MessageKind.information),
-        )
+        if progress_manager is not None:
+            progress_manager.ask_message(
+                "Spacecraft attitude data not found.", MessageKind.information
+            )
+        return
 
-    if cancel_callback():
-        return (
-            False,
-            Message("The user cancelled operation.", MessageKind.information),
-        )
+    if progress_manager is not None:
+        if progress_manager.canceled():
+            progress_manager.ask_message(
+                "The user cancelled operation.", MessageKind.information
+            )
+            return
 
     store_data("erg_mgf_l2_mag_8sec_dsi_interp_?", delete=True)
     store_data("erg_att_*", delete=True)
@@ -443,13 +441,13 @@ def analysis_impl(
     del eueu, evev
     gc.collect()
 
-    update_callback(40)
-
-    if cancel_callback():
-        return (
-            False,
-            Message("The user cancelled operation.", MessageKind.information),
-        )
+    if progress_manager is not None:
+        progress_manager.set_value(40)
+        if progress_manager.canceled():
+            progress_manager.ask_message(
+                "The user cancelled operation.", MessageKind.information
+            )
+            return
 
     # *****************
     # Calc. spectral matrix
@@ -531,13 +529,13 @@ def analysis_impl(
     del bubu, bubv, bubw, bvbu, bvbv, bvbw, bwbu, bwbv, bwbw
     gc.collect()
 
-    update_callback(50)
-
-    if cancel_callback():
-        return (
-            False,
-            Message("The user cancelled operation.", MessageKind.information),
-        )
+    if progress_manager is not None:
+        progress_manager.set_value(50)
+        if progress_manager.canceled():
+            progress_manager.ask_message(
+                "The user cancelled operation.", MessageKind.information
+            )
+            return
 
     # *****************
     # Calc. rotation matrix
@@ -585,13 +583,13 @@ def analysis_impl(
     del rotmat, rotmat_t
     gc.collect()
 
-    update_callback(60)
-
-    if cancel_callback():
-        return (
-            False,
-            Message("The user cancelled operation.", MessageKind.information),
-        )
+    if progress_manager is not None:
+        progress_manager.set_value(60)
+        if progress_manager.canceled():
+            progress_manager.ask_message(
+                "The user cancelled operation.", MessageKind.information
+            )
+            return
 
     # *****************
     # SVD analysis
@@ -644,13 +642,13 @@ def analysis_impl(
                 W_SORT[k, i, j] = W2[W_ORDER[k], i, j]
                 V_SORT[k, :, i, j] = V2[W_ORDER[k], :, i, j]
 
-    update_callback(70)
-
-    if cancel_callback():
-        return (
-            False,
-            Message("The user cancelled operation.", MessageKind.information),
-        )
+    if progress_manager is not None:
+        progress_manager.set_value(70)
+        if progress_manager.canceled():
+            progress_manager.ask_message(
+                "The user cancelled operation.", MessageKind.information
+            )
+            return
 
     # *****************
     # Calc. WNA & Polarization
@@ -694,13 +692,13 @@ def analysis_impl(
     del A, W2, V2, W_SORT, V_SORT
     gc.collect()
 
-    update_callback(80)
-
-    if cancel_callback():
-        return (
-            False,
-            Message("The user cancelled operation.", MessageKind.information),
-        )
+    if progress_manager is not None:
+        progress_manager.set_value(80)
+        if progress_manager.canceled():
+            progress_manager.ask_message(
+                "The user cancelled operation.", MessageKind.information
+            )
+            return
 
     # *****************
     # Poynting vector calculation
@@ -746,7 +744,8 @@ def analysis_impl(
     del Sx, Sy, Sz, rotmat
     gc.collect()
 
-    update_callback(90)
+    if progress_manager is not None:
+        progress_manager.set_value(90)
 
     # TODO: must return those results
     # Please change the following dummy values to real values
@@ -791,11 +790,14 @@ def erg_calc_pwe_wna(
     nfft: int = 4096,  # TODO: This value is the default of app, while 1024 is the real default of the corresponding function.
     stride: int = 2048,  # TODO: This value is the default of app, while 512 is the real default of the corresponding function.
     n_average: int = 3,
-    cancel_callback: Callable[[], bool] = lambda: False,
-    update_callback: Callable[[int], None] = lambda x: None,
     reload: bool = False,
     no_update: bool = False,
-) -> Tuple[bool, Optional[Message]]:
+    progress_manager: Optional[ProgressManagerInterface] = None,
+) -> bool:
+    if progress_manager is not None:
+        progress_manager.set_label_text("Calculating...")
+        progress_manager.set_value(0)
+
     bw = 65536 / nfft
 
     if w == "Hamming":
@@ -812,12 +814,13 @@ def erg_calc_pwe_wna(
     if reload:
         pwe_wfc(uname=uname1, passwd=passwd1, trange=trange, no_update=no_update)
 
-    if cancel_callback():
-        return (
-            False,
-            Message("The user cancelled operation.", MessageKind.information),
-        )
-    update_callback(10)
+    if progress_manager is not None:
+        if progress_manager.canceled():
+            progress_manager.ask_message(
+                "The user cancelled operation.", MessageKind.information
+            )
+            return False
+        progress_manager.set_value(10)
 
     if tnames("erg_pwe_wfc_l2_b_65khz_Bx_waveform"):
         data = get_data("erg_pwe_wfc_l2_b_65khz_Bx_waveform")
@@ -844,12 +847,13 @@ def erg_calc_pwe_wna(
                 no_update=no_update,
             )
 
-        if cancel_callback():
-            return (
-                False,
-                Message("The user cancelled operation.", MessageKind.information),
-            )
-        update_callback(15)
+        if progress_manager is not None:
+            if progress_manager.canceled():
+                progress_manager.ask_message(
+                    "The user cancelled operation.", MessageKind.information
+                )
+                return False
+            progress_manager.set_value(15)
 
         if tnames("erg_pwe_wfc_l2_b_wp65khz_Bx_waveform"):
             data = get_data("erg_pwe_wfc_l2_b_wp65khz_Bx_waveform")
@@ -869,12 +873,13 @@ def erg_calc_pwe_wna(
                     "B_waveform_sgi",
                 )
 
-    if cancel_callback():
-        return (
-            False,
-            Message("The user cancelled operation.", MessageKind.information),
-        )
-    update_callback(20)
+    if progress_manager is not None:
+        if progress_manager.canceled():
+            progress_manager.ask_message(
+                "The user cancelled operation.", MessageKind.information
+            )
+            return False
+        progress_manager.set_value(20)
 
     store_data("erg_pwe_wfc_l2_*65khz_??_waveform", delete=True)
 
@@ -912,13 +917,10 @@ def erg_calc_pwe_wna(
             n_average,
             e_waveform,
             b_waveform,
-            cancel_callback,
-            update_callback,
+            progress_manager,
         )
-        # This case ret is tuple of succeeded flag and message
-        if len(ret) == 2:
-            return ret
-        # This case ret is data
+        if ret is None:
+            return False
         else:
             (
                 ts_e,
@@ -933,12 +935,12 @@ def erg_calc_pwe_wna(
                 scwlim,
             ) = ret
 
-    if cancel_callback():
-        return (
-            False,
-            Message("The user cancelled operation.", MessageKind.information),
-        )
-    update_callback(100)
+    if progress_manager is not None:
+        if progress_manager.canceled():
+            progress_manager.ask_message(
+                "The user cancelled operation.", MessageKind.information
+            )
+        progress_manager.set_value(100)
 
     # tplot settings
     store_data("espec", data={"x": ts_e, "y": powspec_e, "v": freq})
@@ -1096,7 +1098,7 @@ def erg_calc_pwe_wna(
     # options, "planarity*", "ztickinterval", 0.2
     # options, "poyntingvec*", "ztickinterval", 30.0
 
-    return (True, None)
+    return True
 
 
 if __name__ == "__main__":
