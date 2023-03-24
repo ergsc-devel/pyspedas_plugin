@@ -737,6 +737,6 @@ class WFCView(QtWidgets.QWidget):
                 self._fft_window_box.addItem(text)
             if text == "Hanning":
                 self._fft_window_box.setCurrentIndex(index)
-        self._window_size_line_edit.setText("4096")
-        self._stride_line_edit.setText("2048")
+        self._window_size_line_edit.setText("2048")
+        self._stride_line_edit.setText("512")
         self._n_average_line_edit.setText("3")

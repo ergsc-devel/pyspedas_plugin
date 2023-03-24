@@ -787,8 +787,8 @@ def analysis_impl(
 def erg_calc_pwe_wna(
     trange: List[str] = ["2017-04-01/13:57:45", "2017-04-01/13:57:53"],
     w: str = "Hanning",
-    nfft: int = 4096,  # TODO: This value is the default of app, while 1024 is the real default of the corresponding function.
-    stride: int = 2048,  # TODO: This value is the default of app, while 512 is the real default of the corresponding function.
+    nfft: int = 2048,
+    stride: int = 512,
     n_average: int = 3,
     reload: bool = False,
     no_update: bool = False,

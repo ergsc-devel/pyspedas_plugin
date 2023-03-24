@@ -19,8 +19,8 @@ def load_wfc(
         "2017-04-01/13:57:53",
     ],
     w: str = "Hanning",
-    nfft: int = 4096,
-    stride: int = 2048,
+    nfft: int = 2048,
+    stride: int = 512,
     n_average: int = 3,
     no_update: bool = False,
     worker: Optional[WorkerInterface] = None,
@@ -54,7 +54,6 @@ def load_wfc(
                 worker.fail()
             return
 
-    # TODO: Need merge with analysis
     succeeded = erg_calc_pwe_wna(
         trange=trange_actual,  # type: ignore
         w=w,
