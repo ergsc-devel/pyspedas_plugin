@@ -39,100 +39,98 @@ class ProgressManagerInterface(ABC):
         pass
 
 
-# ProgressManager
+class ProgressManager(ProgressManagerInterface):
+    def __init__(self, parent: Optional[QtWidgets.QWidget] = None) -> None:
+        """Proress manager for single thread (running long task and GUI in same single thread)."""
+        super().__init__()
+        # States
+        self._canceled = False
+
+        self._progress_dialog = ProgressDialogWithoutImmediateHiding(
+            labelText="",
+            minimum=0,
+            maximum=100,
+            cancelButtonText="Cancel",
+            parent=parent,
+        )
+        self._progress_dialog.setWindowTitle("Operation in Progress...")
+        self._progress_dialog.setWindowModality(
+            QtCore.Qt.WindowModality.ApplicationModal
+        )
+        self._progress_dialog.canceled.connect(self.on_progress_dialog_canceled)
+        self._progress_dialog.show()
+
+    def canceled(self) -> bool:
+        # In single thread with a long running task,
+        # the result of GUI events are not obtained immediately.
+        # Therefore you need to processEvents to get the result
+        # when you need inside the program.
+        # HACK: Process event must be done at least twice to get real value somehow
+        QtWidgets.QApplication.processEvents()
+        QtWidgets.QApplication.processEvents()
+        return self._canceled
+
+    def set_canceled(self, canceled: bool) -> None:
+        self._canceled = canceled
+
+    def set_answer(self, answer: bool) -> None:
+        # Unused but needed to implement interface
+        pass
+
+    def ask_message(self, message: str, message_kind: MessageKind) -> bool:
+        answer = self._show_message_box(message, message_kind)
+        return answer
+
+    def set_label_text(self, text: str) -> None:
+        self._progress_dialog.setLabelText(text)
+        # Update view immediately
+        QtWidgets.QApplication.processEvents()
+
+    def set_value(self, value: int) -> None:
+        self._progress_dialog.setValue(value)
+        # Update view immediately
+        QtWidgets.QApplication.processEvents()
+
+    def _show_message_box(self, message: str, message_kind: MessageKind) -> bool:
+        if message_kind == MessageKind.question:
+            button = QtWidgets.QMessageBox.question(
+                self._progress_dialog, "Question", message
+            )
+            if button == QtWidgets.QMessageBox.StandardButton.No:
+                return False
+        elif message_kind == MessageKind.information:
+            QtWidgets.QMessageBox.information(
+                self._progress_dialog, "Information", message
+            )
+        elif message_kind == MessageKind.warning:
+            QtWidgets.QMessageBox.warning(self._progress_dialog, "Warning", message)
+        elif message_kind == MessageKind.error:
+            QtWidgets.QMessageBox.critical(self._progress_dialog, "Error", message)
+        else:
+            ValueError(f"message_kind: {message_kind} is invalid.")
+        return True
+
+    def on_progress_dialog_canceled(self) -> None:
+        # In single thread with a long running task,
+        # the result of GUI events are not reflected immediately.
+        # Show that cancel step is started
+        self._progress_dialog.button.setEnabled(False)
+        self._progress_dialog.setLabelText("Cancelling...")
+        self._progress_dialog.progress_bar.hide()
+        self.set_canceled(True)
+        QtWidgets.QApplication.processEvents()
+
+    def hide(self) -> None:
+        self._progress_dialog.hide()
+
+
 class QObjectABCMeta(type(QtCore.QObject), ABCMeta):
+    # Needed to inherit both QtCore.Qbject and custom abstract base class
     # NOTE: Does not work if base class order is otherwise
     pass
 
 
-class ProgressManager(ProgressManagerInterface):
-    def __init__(self, parent: Optional[QtWidgets.QWidget] = None) -> None:
-        """Progress dialog with additional function."""
-        self._minimum = 0
-        self._maximum = 100
-        self._progress = QtWidgets.QProgressDialog(
-            labelText="",
-            minimum=self._minimum,
-            maximum=self._maximum,
-            cancelButtonText="Cancel",
-            flags=QtCore.Qt.WindowType.WindowTitleHint,  # Disable close button
-            parent=parent,
-        )
-        self._progress.setWindowTitle("Operation in Progress...")
-        self._progress.setWindowModality(QtCore.Qt.WindowModality.ApplicationModal)
-        # If not specified the dialog will not show until a several tens of percent reached
-        self._progress.setMinimumDuration(0)
-        self._progress.forceShow()
-        self._progress.setValue(0)
-        # State
-        self._canceled = False
-
-    def set_label_text(self, text: str) -> None:
-        if self._progress is None:
-            raise ValueError("Progress dialog does not exist anymore.")
-
-        self._progress.setLabelText(text)
-
-    def was_cancel_triggered(self) -> bool:
-        if self._progress is None:
-            raise ValueError("Progress dialog does not exist anymore.")
-
-        # HACK: Process event must be done at least twice to get real wasCanceled
-        QtWidgets.QApplication.processEvents()
-        QtWidgets.QApplication.processEvents()
-
-        # Note that this is different from self.was_canceled
-        return self._progress.wasCanceled()
-
-    def complete(self) -> None:
-        if self._progress is None:
-            raise ValueError("Progress dialog does not exist anymore.")
-
-        # When set, the dialog immediately closes
-        self._progress.setValue(self._maximum)
-
-    def close(self) -> None:
-        # Close gracefully
-        if self._progress is None:
-            return
-
-        self._progress.deleteLater()
-        self._progress = None
-
-    def ask_message(self, message: str, message_kind: MessageKind) -> bool:
-        if self._progress is None:
-            raise ValueError("Progress dialog does not exist anymore.")
-
-        if message_kind == MessageKind.question:
-            button = QtWidgets.QMessageBox.question(self._progress, "Question", message)
-            if button == QtWidgets.QMessageBox.StandardButton.No:
-                return False
-        elif message_kind == MessageKind.information:
-            QtWidgets.QMessageBox.information(self._progress, "Information", message)
-        elif message_kind == MessageKind.warning:
-            QtWidgets.QMessageBox.warning(self._progress, "Warning", message)
-        elif message_kind == MessageKind.error:
-            QtWidgets.QMessageBox.critical(self._progress, "Error", message)
-        else:
-            ValueError(f"message_kind: {message_kind} is invalid.")
-
-        self.close()
-
-        # Admit cancel
-        self._canceled = True
-        return True
-
-    def canceled(self) -> bool:
-        return self._canceled
-
-    def set_value(self, value: int) -> None:
-        if self._progress is None:
-            raise ValueError("Progress dialog does not exist anymore.")
-        self._progress.setValue(value)
-
-
-# class ProgressManager(QtCore.QObject):
-class ProgressManagerForThread(
+class ProgressManagerForWorkerThread(
     ProgressManagerInterface, QtCore.QObject, metaclass=QObjectABCMeta
 ):
     # Signals
@@ -140,16 +138,17 @@ class ProgressManagerForThread(
     set_value_signal = QtCore.Signal(int)
     ask_message_signal = QtCore.Signal(str, int)
 
-    # States
-    _canceled = False
-    _answer = False
-
-    # Threading
-    mutex = QtCore.QMutex()
-    answer_wait_condition = QtCore.QWaitCondition()
-
     def __init__(self) -> None:
+        """Progress manager for worker thread."""
         super().__init__()
+
+        # States
+        self._canceled = False
+        self._answer = False
+
+        # Threading
+        self.mutex = QtCore.QMutex()
+        self.answer_wait_condition = QtCore.QWaitCondition()
 
     def canceled(self) -> bool:
         return self._canceled
@@ -191,13 +190,20 @@ class WorkerInterface(QtCore.QObject):
     failed = QtCore.Signal()
 
     def __init__(self) -> None:
+        """Interface for thread worker that can be monitored by progress manager.
+
+        Subclass and implement self.run() to use it.
+        Also can overwrite any methods if needed.
+        """
         super().__init__()
         self.progress_manager = None
 
-    def set_progress_manager(self, progress_manager: ProgressManagerForThread) -> None:
+    def set_progress_manager(
+        self, progress_manager: ProgressManagerForWorkerThread
+    ) -> None:
         self.progress_manager = progress_manager
 
-    def run(self):
+    def run(self) -> None:
         raise NotImplementedError()
 
     def success(self) -> None:
@@ -208,6 +214,8 @@ class WorkerInterface(QtCore.QObject):
 
 
 class ThreadController:
+    """View controller interface when use thread worker."""
+
     def _setup_worker(self, worker: WorkerInterface) -> None:
         self.worker = worker
 
@@ -308,6 +316,8 @@ class ProgressDialogWithoutImmediateHiding(QtWidgets.QDialog):
 
 
 class ProgressManagerForThreadController(ThreadController):
+    """View controller interface when use thread worker with progress manager."""
+
     def _setup_progress_manager(
         self, parent: Optional[QtWidgets.QWidget] = None
     ) -> None:
@@ -327,7 +337,7 @@ class ProgressManagerForThreadController(ThreadController):
         )
         self._progress_dialog.show()
 
-        self.progress_manager = ProgressManagerForThread()
+        self.progress_manager = ProgressManagerForWorkerThread()
         self.worker.set_progress_manager(self.progress_manager)
         self.worker.succeeded.connect(self.progress_manager.deleteLater)
         self.worker.failed.connect(self.progress_manager.deleteLater)
@@ -390,5 +400,5 @@ class ProgressManagerForThreadController(ThreadController):
         if getattr(self, "progress_manager") and self.progress_manager is not None:
             self.progress_manager.set_canceled(True)
 
-    def on_worker_failed(self):
+    def on_worker_failed(self) -> None:
         self._progress_dialog.hide()

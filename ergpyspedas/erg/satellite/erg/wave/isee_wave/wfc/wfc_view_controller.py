@@ -36,43 +36,6 @@ if TYPE_CHECKING:
     from ..ofa.ofa_view_controller import OFAViewControllerTlimitInterface
 
 
-class Worker(WorkerInterface):
-    def __init__(
-        self,
-        queue: Queue,
-        trange: Union[Sequence[str], Sequence[float], Sequence[datetime]] = [
-            "2017-04-01/13:57:45",
-            "2017-04-01/13:57:53",
-        ],
-        w: str = "Hanning",
-        nfft: int = 4096,
-        stride: int = 2048,
-        n_average: int = 3,
-        no_update: bool = False,
-    ) -> None:
-        super().__init__()
-        self.queue = queue
-        self.trange = trange
-        self.w = w
-        self.nfft = nfft
-        self.stride = stride
-        self.n_average = n_average
-        self.no_update = no_update
-
-    def run(self) -> None:
-        result = load_wfc(
-            trange=self.trange,
-            w=self.w,
-            nfft=self.nfft,
-            stride=self.stride,
-            n_average=self.n_average,
-            no_update=self.no_update,
-            worker=self,
-            progress_manager=self.progress_manager,
-        )
-        self.queue.put(result)
-
-
 class WFCViewControllerTlimitInterface(ABC):
     @abstractmethod
     def is_visible(self) -> bool:
@@ -291,106 +254,6 @@ class WFCViewController(
     def on_fft_revert_button_clicked(self) -> None:
         self._view.setup_fft_options()
 
-    # def on_fft_calc_button_clicked_single_thread(self) -> None:
-    #     # Input
-    #     trange = self._get_trange_from_line_edit_text()
-    #     if trange is None:
-    #         return
-
-    #     fft_window = self._view._fft_window_box.currentText()
-
-    #     window_size_text = self._view._window_size_line_edit.text()
-    #     window_size = str_to_int_or_none(window_size_text)
-    #     if window_size is None or window_size <= 0:
-    #         QtWidgets.QMessageBox.warning(
-    #             self._view,
-    #             "Warning",
-    #             "Invalid FFT window size was specified. FFT window size should be a positive value.",
-    #         )
-    #         return
-    #     elif window_size >= 32768:
-    #         ret = QtWidgets.QMessageBox.warning(
-    #             self._view,
-    #             "Question",
-    #             "Too large FFT window size was specified. Do you want to continue anyway?",
-    #             QtWidgets.QMessageBox.StandardButton.Yes,
-    #             QtWidgets.QMessageBox.StandardButton.No,
-    #         )
-    #         if ret != QtWidgets.QMessageBox.StandardButton.Yes:
-    #             return
-
-    #     stride_text = self._view._stride_line_edit.text()
-    #     stride = str_to_int_or_none(stride_text)
-    #     if stride is None or stride <= 0:
-    #         QtWidgets.QMessageBox.warning(
-    #             self._view,
-    #             "Warning",
-    #             "Invalid stride size was specified. Stride size should be a positive value.",
-    #         )
-    #         return
-    #     elif stride >= window_size:
-    #         QtWidgets.QMessageBox.warning(
-    #             self._view,
-    #             "Warning",
-    #             "Invalid stride size was specified. Stride size should be equal to or less than FFT window size.",
-    #         )
-    #         return
-    #     elif stride < 128:
-    #         ret = QtWidgets.QMessageBox.warning(
-    #             self._view,
-    #             "Question",
-    #             "Too small stride size was specified. Do you want to continue anyway?",
-    #             QtWidgets.QMessageBox.StandardButton.Yes,
-    #             QtWidgets.QMessageBox.StandardButton.No,
-    #         )
-    #         if ret != QtWidgets.QMessageBox.StandardButton.Yes:
-    #             return
-
-    #     n_average_text = self._view._n_average_line_edit.text()
-    #     n_average = str_to_int_or_none(n_average_text)
-    #     if n_average is None or n_average <= 0:
-    #         QtWidgets.QMessageBox.warning(
-    #             self._view,
-    #             "Warning",
-    #             "Invalid N_average was specified. N_average should be a positive value.",
-    #         )
-    #         return
-
-    #     progress_manager = ProgressManager(self._view)
-
-    #     # Model
-    #     ret = load_wfc(
-    #         trange=trange,
-    #         w=fft_window,
-    #         nfft=window_size,
-    #         stride=stride,
-    #         n_average=n_average,
-    #         progress_manager=progress_manager,
-    #     )
-    #     if ret is None:
-    #         progress_manager.close()
-    #         return
-    #     (
-    #         self._orbital_infos,
-    #         self._trange,
-    #     ) = ret
-    #     self._mask_managers = MaskManagers(self._data_options)
-    #     self._plot()
-
-    #     # View
-    #     self._view._start_line_edit.setText(
-    #         time_string(round_down(self._trange[0], ndigits=3), fmt="%Y-%m-%d/%H:%M:%S.%f")[:-3]  # type: ignore
-    #     )
-    #     self._view._end_line_edit.setText(
-    #         time_string(round_up(self._trange[1], ndigits=3), fmt="%Y-%m-%d/%H:%M:%S.%f")[:-3]  # type: ignore
-    #     )
-    #     self._update_mask_tab()
-    #     for group in self._view._mask_tab._slider_groups.values():
-    #         group._slider.setEnabled(True)
-    #         group._line_edit.setEnabled(True)
-
-    #     progress_manager.complete()
-
     def on_fft_calc_button_clicked(self) -> None:
         # Input
         trange = self._get_trange_from_line_edit_text()
@@ -456,45 +319,133 @@ class WFCViewController(
             )
             return
 
-        # To save result of calculation
-        self.queue = Queue()
-        # Setup worker thread with progress dialog for calculation
-        worker = Worker(
-            queue=self.queue,
+        # By default True, but False is useful when it is difficult to debug using thread
+        # If single thread, if you click any button more than one time,
+        # window will freeze for a few seconds, though it does not harm the calculation.
+        # If use worker thread, user experience is smoother.
+        use_worker_thread = True
+        if use_worker_thread:
+            self._load_by_worker_thread_and_plot(
+                trange, fft_window, window_size, stride, n_average
+            )
+        else:
+            self._load_and_plot_by_single_thread(
+                trange, fft_window, window_size, stride, n_average
+            )
+
+    def _load_and_plot_by_single_thread(
+        self,
+        trange: Tuple[float, float],
+        fft_window: str,
+        window_size: int,
+        stride: int,
+        n_average: int,
+    ) -> None:
+        # Progress manager for single thread
+        progress_manager = ProgressManager(self._view)
+
+        # Model
+        ret = load_wfc(
             trange=trange,
             w=fft_window,
             nfft=window_size,
             stride=stride,
             n_average=n_average,
+            progress_manager=progress_manager,
         )
+        if ret is None:
+            progress_manager.hide()
+            return
+        progress_manager.set_label_text("Plotting...")
+        progress_manager.set_value(0)
+        (
+            self._orbital_infos,
+            self._trange,
+        ) = ret
+        self._mask_managers = MaskManagers(self._data_options)
+        self._plot()
+
+        # View
+        self._view._start_line_edit.setText(
+            time_string(round_down(self._trange[0], ndigits=3), fmt="%Y-%m-%d/%H:%M:%S.%f")[:-3]  # type: ignore
+        )
+        self._view._end_line_edit.setText(
+            time_string(round_up(self._trange[1], ndigits=3), fmt="%Y-%m-%d/%H:%M:%S.%f")[:-3]  # type: ignore
+        )
+        self._update_mask_tab()
+        for group in self._view._mask_tab._slider_groups.values():
+            group._slider.setEnabled(True)
+            group._line_edit.setEnabled(True)
+
+        progress_manager.set_value(100)
+        progress_manager.hide()
+
+    def _load_by_worker_thread_and_plot(
+        self,
+        trange: Tuple[float, float],
+        fft_window: str,
+        window_size: int,
+        stride: int,
+        n_average: int,
+    ) -> None:
+        # Worker thread
+        # Wrap the function by worker class and also enable to get result by queue
+        class Worker(WorkerInterface):
+            def __init__(
+                self,
+                queue: Queue,
+            ) -> None:
+                super().__init__()
+                self.queue = queue
+
+            def run(self) -> None:
+                # Need to pass worker and progress manager to the function
+                result = load_wfc(
+                    trange=trange,
+                    w=fft_window,
+                    nfft=window_size,
+                    stride=stride,
+                    n_average=n_average,
+                    no_update=False,
+                    worker=self,
+                    progress_manager=self.progress_manager,
+                )
+                self.queue.put(result)
+
+        # Instantiate outside worker thread to save result of calculation
+        self.queue = Queue()
+        # Setup worker thread with progress dialog for calculation
+        worker = Worker(self.queue)
         self._setup_worker(worker)
         self._setup_thread()
         self._setup_progress_manager(self._view)
         # Start calculation in worker thread
-        # If calculation ended successfully, self.on_worker_succeeded succeeds this function
+        # If calculation ended successfully, self.on_worker_succeeded is invoked
+        # in GUI main event loop.
         # Note that self.on_worker_succeeded is done in GUI main thread because
         # plotting is related to GUI
         self._start_thread()
 
     def on_worker_succeeded(self) -> None:
+        # Only called if thread worker is used and calculation succeeds.
         # Overwrite super method
         # We want to keep the progress dialog open while plotting to
         # prohibit user input
-        self._progress_dialog.setLabelText("Plotting...")
-        self._progress_dialog.setValue(0)
+
         # Get result from calculation
-        try:
-            result = self.queue.get(block=False)
-        except Empty:
-            result = None
-        if result is None:
-            return
+        result = self.queue.get(block=False)
+        # If worker succeeded, result should be not None
+        assert result is not None
         self._orbital_infos: Dict[OrbitalInfoName, str] = result[0]
         self._trange: Optional[Tuple[float, float]] = result[1]
         assert self._trange is not None
+
+        # Start plots
+        self._progress_dialog.setLabelText("Plotting...")
+        self._progress_dialog.setValue(0)
         # Setup mask manager
         self._mask_managers = MaskManagers(self._data_options)
-        # Plot
+        # Do plot
         self._plot()
 
         # View
