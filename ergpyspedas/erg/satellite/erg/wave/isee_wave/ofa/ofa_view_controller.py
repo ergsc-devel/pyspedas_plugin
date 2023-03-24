@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
+from abc import ABC, ABCMeta, abstractmethod
 from enum import Enum, auto
 from typing import TYPE_CHECKING, List, Optional, Tuple
 
@@ -12,6 +12,7 @@ from matplotlib.backend_tools import Cursors
 from PySide6 import QtCore, QtWidgets
 from pyspedas import time_double, time_string
 
+from ..utils.progress_manager import ProgressDialogLabelOnly
 from .load_ofa import load_ofa
 from .ofa_view import OFAView, OFAViewOption
 from .plot_ofa import plot_ofa
@@ -47,7 +48,19 @@ class OFAViewControllerTlimitInterface(ABC):
         pass
 
 
-class OFAViewController(OFAViewControllerTlimitInterface):
+class QObjectABCMeta(type(QtCore.QObject), ABCMeta):
+    # Needed to inherit both QtCore.Qbject and custom abstract base class
+    # NOTE: Does not work if base class order is otherwise
+    pass
+
+
+class OFAViewController(
+    OFAViewControllerTlimitInterface, QtCore.QObject, metaclass=QObjectABCMeta
+):
+    # Signals
+    load_and_plot_with_dialog_finished = QtCore.Signal(bool)
+    load_and_plot_with_dialog_2_finished = QtCore.Signal()
+
     def __init__(self, options: OFAViewOption = OFAViewOption()) -> None:
         super().__init__()
         # View
@@ -68,6 +81,13 @@ class OFAViewController(OFAViewControllerTlimitInterface):
             self.on_one_day_after_button_clicked
         )
         self._view._tlimit_button.clicked.connect(self.on_tlimit_button_clicked)  # type: ignore
+        self.load_and_plot_with_dialog_finished.connect(
+            self.on_load_and_plot_with_dialog_2, QtCore.Qt.ConnectionType.QueuedConnection  # type: ignore
+        )
+        self.load_and_plot_with_dialog_2_finished.connect(
+            self.on_load_and_plot_with_dialog_3, QtCore.Qt.ConnectionType.QueuedConnection  # type: ignore
+        )
+
         # States
         self._has_plotted = False
         self._tlimit_mode = _TlimitMode.no_data
@@ -171,30 +191,36 @@ class OFAViewController(OFAViewControllerTlimitInterface):
         self._scroll_time_button_clicked(diff_sec)
 
     def _load_and_plot_with_dialog(self, load: bool) -> None:
-        # Dialog similar to IDL version
-        dialog = QtWidgets.QDialog(self._view)
-        dialog.setWindowTitle("OFA process")
-        layout = QtWidgets.QVBoxLayout(dialog)
-        label = QtWidgets.QLabel("Downloading/Importing data...")
-        layout.addWidget(label)
-        layout.addStretch()
-        dialog.setWindowModality(QtCore.Qt.WindowModality.ApplicationModal)
-        dialog.setWindowFlag(QtCore.Qt.WindowType.WindowMinimizeButtonHint, on=False)
-        dialog.setWindowFlag(QtCore.Qt.WindowType.WindowMaximizeButtonHint, on=False)
-        dialog.setWindowFlag(QtCore.Qt.WindowType.WindowCloseButtonHint, on=False)
-        dialog.show()
+        # load and plot with dialog must be split into GUI and non-GUI parts,
+        # and execute all in sequential way in main event loop
+        # to make GUI part effective before non-GUI part starts.
+        self._progress_dialog = ProgressDialogLabelOnly(
+            labelText="Downloading/Importing data...", parent=self._view
+        )
+        self._progress_dialog.setWindowTitle("OFA process")
+        self._progress_dialog.setWindowModality(
+            QtCore.Qt.WindowModality.ApplicationModal
+        )
+        self._progress_dialog.setWindowFlag(
+            QtCore.Qt.WindowType.WindowMinimizeButtonHint, on=False
+        )
+        self._progress_dialog.setWindowFlag(
+            QtCore.Qt.WindowType.WindowMaximizeButtonHint, on=False
+        )
+        self._progress_dialog.setWindowFlag(
+            QtCore.Qt.WindowType.WindowCloseButtonHint, on=False
+        )
+        self._progress_dialog.show()
+        self.load_and_plot_with_dialog_finished.emit(load)
 
-        # You need to setEnabled(False)to realize modality for this dialog
-        self._view.setEnabled(False)
-        # Need to directly process event to show the dialog immediately
-        QtWidgets.QApplication.processEvents()
-
+    def on_load_and_plot_with_dialog_2(self, load: bool) -> None:
         if load:
             self._load()
         self._plot()
+        self.load_and_plot_with_dialog_2_finished.emit()
 
-        dialog.close()
-        self._view.setEnabled(True)
+    def on_load_and_plot_with_dialog_3(self) -> None:
+        self._progress_dialog.hide()
 
     def _load(self) -> None:
         if self._trange is None:
@@ -232,14 +258,7 @@ class OFAViewController(OFAViewControllerTlimitInterface):
 
         self._tlimit_mode = _TlimitMode.ofa
         # Disable some GUIs
-        self._view._start_line_edit.setEnabled(False)
-        self._view._end_line_edit.setEnabled(False)
-        self._view._display_button.setEnabled(False)
-        self._view._one_day_before_button.setEnabled(False)
-        self._view._one_hour_before_button.setEnabled(False)
-        self._view._one_hour_after_button.setEnabled(False)
-        self._view._one_day_after_button.setEnabled(False)
-        self._view._tlimit_button.setEnabled(False)
+        self._view.widgets_set_enabled(False)
 
     def can_use_wfc_tlimit(self) -> bool:
         return self._tlimit_mode == _TlimitMode.closed
@@ -257,14 +276,7 @@ class OFAViewController(OFAViewControllerTlimitInterface):
 
         self._tlimit_mode = _TlimitMode.wfc
         # Disable some GUIs
-        self._view._start_line_edit.setEnabled(False)
-        self._view._end_line_edit.setEnabled(False)
-        self._view._display_button.setEnabled(False)
-        self._view._one_day_before_button.setEnabled(False)
-        self._view._one_hour_before_button.setEnabled(False)
-        self._view._one_hour_after_button.setEnabled(False)
-        self._view._one_day_after_button.setEnabled(False)
-        self._view._tlimit_button.setEnabled(False)
+        self._view.widgets_set_enabled(False)
 
     def _initialize_crosshair(self) -> None:
         # Initialize horizontal and vertical line of crosshair for all data plot
@@ -437,14 +449,7 @@ class OFAViewController(OFAViewControllerTlimitInterface):
     ) -> None:
         self._draw_tlimit_lines_background(x, False)
         self._load_and_plot_with_dialog(needs_load)
-        self._view._start_line_edit.setEnabled(True)
-        self._view._end_line_edit.setEnabled(True)
-        self._view._display_button.setEnabled(True)
-        self._view._one_day_before_button.setEnabled(True)
-        self._view._one_hour_before_button.setEnabled(True)
-        self._view._one_hour_after_button.setEnabled(True)
-        self._view._one_day_after_button.setEnabled(True)
-        self._view._tlimit_button.setEnabled(True)
+        self._view.widgets_set_enabled(True)
         self._view._start_line_edit.setText(
             time_string(trange[0], fmt="%Y-%m-%d/%H:%M:%S")  # type: ignore
         )
@@ -458,14 +463,7 @@ class OFAViewController(OFAViewControllerTlimitInterface):
     def _on_tlimit_wfc_second_pressed(self, x: float) -> None:
         self._draw_tlimit_lines_background(x, False)
         self._plot()
-        self._view._start_line_edit.setEnabled(True)
-        self._view._end_line_edit.setEnabled(True)
-        self._view._display_button.setEnabled(True)
-        self._view._one_day_before_button.setEnabled(True)
-        self._view._one_hour_before_button.setEnabled(True)
-        self._view._one_hour_after_button.setEnabled(True)
-        self._view._one_day_after_button.setEnabled(True)
-        self._view._tlimit_button.setEnabled(True)
+        self._view.widgets_set_enabled(True)
 
     def _on_tlimit_ofa_pressed(
         self,

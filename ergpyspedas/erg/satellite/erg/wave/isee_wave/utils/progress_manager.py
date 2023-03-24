@@ -242,6 +242,24 @@ class ThreadController:
         pass
 
 
+class ProgressDialogLabelOnly(QtWidgets.QDialog):
+    def __init__(
+        self,
+        labelText: str,
+        parent: Optional[QtWidgets.QWidget] = None,
+        flags: Optional[QtCore.Qt.WindowType] = None,
+    ) -> None:
+        super().__init__(parent=parent)
+        if flags is not None:
+            self.setWindowFlags(flags)
+
+        self.label = QtWidgets.QLabel(labelText)
+
+        layout = QtWidgets.QVBoxLayout(self)
+        layout.addWidget(self.label)
+        layout.addStretch()
+
+
 class ProgressDialogWithoutImmediateHiding(QtWidgets.QDialog):
     # Signal
     canceled = QtCore.Signal()

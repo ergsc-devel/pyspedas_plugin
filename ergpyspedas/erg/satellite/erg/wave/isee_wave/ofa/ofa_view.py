@@ -58,3 +58,13 @@ class OFAView(QtWidgets.QWidget):
     def closeEvent(self, event: QtGui.QCloseEvent) -> None:
         plt.clf()
         plt.close()
+
+    def widgets_set_enabled(self, enabled: bool) -> None:
+        self._start_line_edit.setEnabled(enabled)
+        self._end_line_edit.setEnabled(enabled)
+        self._display_button.setEnabled(enabled)
+        self._one_day_before_button.setEnabled(enabled)
+        self._one_hour_before_button.setEnabled(enabled)
+        self._one_hour_after_button.setEnabled(enabled)
+        self._one_day_after_button.setEnabled(enabled)
+        self._tlimit_button.setEnabled(enabled)
