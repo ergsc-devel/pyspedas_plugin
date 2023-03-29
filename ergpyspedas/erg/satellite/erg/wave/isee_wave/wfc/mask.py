@@ -35,14 +35,12 @@ def _get_min_max(z: np.ndarray, zlog: bool) -> Tuple[float, float]:
     (-2.0, 1.0)
     >>> _get_min_max(np.array([1, -2]), True)
     (1.0, 1.0)
-    >>> _get_min_max(np.array([-1, -2]), True)
-    (nan, nan)
     """
     z_real = z.real.astype(float)
     if zlog:
         z_pos = z_real[z_real > 0]
         if len(z_pos) == 0:
-            return float("nan"), float("nan")
+            return epsilon, epsilon
         else:
             return np.nanmin(z_pos), np.nanmax(z_pos)
     else:
