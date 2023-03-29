@@ -1,6 +1,6 @@
 # Python版ISEE_Wave プログラム実行手順書
 
-最終更新: 2023/03/20
+最終更新: 2023/03/30
 
 ## 前提事項・諸注意
 
@@ -111,16 +111,6 @@ pip install git+https://github.com/ergsc-devel/pyspedas_plugin.git@enh_iseewave
 ```python
 from ergpyspedas.erg import isee_wave
 isee_wave()
-```
-
-### WFC画面について
-
-現時点では、WFC画面は一部未実装である。したがって、時刻をデフォルトにした状態で、現在のディレクトリにIDL版のISEE_Waveで同時刻分をWFC解析して得られた解析結果のtplot変数のファイル(`espec.tplot`、`bspec.tplot`、`wna.tplot`、`polarization.tplot`、`planarity.tplot`、`poyntingvec.tplot`)が格納されている場合のみ、ボタン`Start calculation`を押下すると、WFC解析を行う代わりにその結果を読み取ることで、WFCプロットを行うことができる。WFCプロットを行うことができれば、プロットの調整機能や出力機能を使用することができる。
-
-ファイルが存在しない場合、以下のようなエラーメッセージがコンソールに表示されるはずである。
-
-```
-FileNotFoundError: Dummy data files does not exist
 ```
 
 以上
