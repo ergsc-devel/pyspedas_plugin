@@ -52,7 +52,14 @@ def erg_interpolate_att(erg_xxx_in=None, noload=False):
                 att(trange=time_string([tr_dbl[0] - 60., tr_dbl[1] + 60.]))
     else:
         tr = get_timespan(erg_xxx_in)
-        tr_dbl = [ time_double(str(t)) for t in tr ]
+        tr_dbl = []
+        for t in tr:
+            # NOTE: t is float in Python 3.8, but t is datetime in Python 3.10.
+            # Use as is only if t is float and else keep original code 
+            if isinstance(t, float) or isinstance(t, int):
+                tr_dbl.append(time_double(t))
+            else:
+                tr_dbl.append(time_double(str(t))) 
         if reload:
             att(trange=time_string([tr_dbl[0] - 60., tr_dbl[1] + 60.]))
 
