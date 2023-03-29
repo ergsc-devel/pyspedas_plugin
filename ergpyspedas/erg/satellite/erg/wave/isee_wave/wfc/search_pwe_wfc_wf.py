@@ -1,5 +1,6 @@
-from typing import Optional, Sequence, Tuple
+from typing import List, Optional, Sequence, Tuple
 
+import numpy as np
 from pyspedas.utilities.time_double import time_double
 from pytplot import get_data, store_data
 
@@ -7,8 +8,7 @@ from pytplot import get_data, store_data
 from ergpyspedas.erg import pwe_wfc
 
 from ..utils.get_uname_passwd import get_uname_passwd
-from ..utils.progress_manager import ProgressManagerInterface
-from .erg_calc_pwe_wna import MessageKind
+from ..utils.progress_manager import MessageKind, ProgressManagerInterface
 
 
 def search_pwe_wfc_wf(
@@ -32,11 +32,7 @@ def search_pwe_wfc_wf(
     trange = (time_double(trange[0]), time_double(trange[1]))  # type: ignore
 
     # Try search 65khz data
-    try:
-        pwe_wfc(trange=trange, uname=uname, passwd=passwd, no_update=no_update)
-    # May fail due to bug so print exception w/o system one
-    except Exception as e:
-        print(f"Error ignored in search_pwe_wfc_wf: {e}")
+    pwe_wfc(trange=trange, uname=uname, passwd=passwd, no_update=no_update)
 
     if progress_manager is not None:
         # If cancel is triggered by user, show message
@@ -48,35 +44,85 @@ def search_pwe_wfc_wf(
         # Set progress
         progress_manager.set_value(50)
 
+    # If 65khz data exists
+    # Use Bx data for calculating the representive of actual trange
     data = get_data("erg_pwe_wfc_l2_b_65khz_Bx_waveform")
     if data is not None:
-        start = data.times[0]
-        end = data.times[-1]
-        if trange[0] < end and trange[1] > start:
+        indices = np.where((data.times >= trange[0]) & (data.times <= trange[1]))[0]
+        if len(indices) >= 1:
+            # Actual trange
+            start, end = data.times[indices[0]], data.times[indices[-1]]
+            # Delete wp65khz data
             store_data("erg_pwe_wfc_l2_?_wp65khz_??_waveform", delete=True)
-            return (start, end)
+            # Also tlimit other data
+            # NOTE: Time range of data from pwe_wfc is slightly different and
+            # usually wider than that of IDL. It seems difficult which is better.
+            # Therefore the difference is compensated here instead of inside pwe_wfc.
+            tplot_names = [
+                "erg_pwe_wfc_l2_b_65khz_Bx_waveform",
+                "erg_pwe_wfc_l2_b_65khz_By_waveform",
+                "erg_pwe_wfc_l2_b_65khz_Bz_waveform",
+                "erg_pwe_wfc_l2_e_65khz_Ex_waveform",
+                "erg_pwe_wfc_l2_e_65khz_Ey_waveform",
+            ]
+            for tplot_name in tplot_names:
+                data = get_data(tplot_name)
+                indices = np.where(
+                    (data.times >= trange[0]) & (data.times <= trange[1])  # type: ignore
+                )[0]
+                if len(indices) >= 1:
+                    dlim = get_data(tplot_name, metadata=True)
+                    store_data(
+                        tplot_name,
+                        data={"x": data.times[indices], "y": data.y[indices]},  # type: ignore
+                        attr_dict=dlim,
+                    )
+            return start, end
 
     # Try search wp65khz data if 65khz data does not exist
     # NOTE: Not tested in real data
-    try:
-        pwe_wfc(
-            trange=trange,
-            uname=uname,
-            passwd=passwd,
-            no_update=no_update,
-            mode="wp65khz",
-        )
-    # May fail due to bug so print exception w/o system one
-    except Exception as e:
-        print(f"Error ignored in search_pwe_wfc_wf: {e}")
+    pwe_wfc(
+        trange=trange,
+        uname=uname,
+        passwd=passwd,
+        no_update=no_update,
+        mode="wp65khz",
+    )
 
+    # If wp65khz data exists
+    # Use Bx data for calculating the representive of actual trange
     data = get_data("erg_pwe_wfc_l2_b_wp65khz_Bx_waveform")
     if data is not None:
-        start = data.times[0]
-        end = data.times[-1]
-        if trange[0] < end and trange[1] > start:
+        indices = np.where((data.times >= trange[0]) & (data.times <= trange[1]))[0]
+        if len(indices) >= 1:
+            # Actual trange
+            start, end = data.times[indices[0]], data.times[indices[-1]]
+            # Delete 65khz data
             store_data("erg_pwe_wfc_l2_?_65khz_??_waveform", delete=True)
-            return (start, end)
+            # Also tlimit other data
+            # NOTE: Time range of data from pwe_wfc is slightly different and
+            # usually wider than that of IDL. It seems difficult which is better.
+            # Therefore the difference is compensated here instead of inside pwe_wfc.
+            tplot_names = [
+                "erg_pwe_wfc_l2_b_wp65khz_Bx_waveform",
+                "erg_pwe_wfc_l2_b_wp65khz_By_waveform",
+                "erg_pwe_wfc_l2_b_wp65khz_Bz_waveform",
+                "erg_pwe_wfc_l2_e_wp65khz_Ex_waveform",
+                "erg_pwe_wfc_l2_e_wp65khz_Ey_waveform",
+            ]
+            for tplot_name in tplot_names:
+                data = get_data(tplot_name)
+                indices = np.where(
+                    (data.times >= trange[0]) & (data.times <= trange[1])  # type: ignore
+                )[0]
+                if len(indices) >= 1:
+                    dlim = get_data(tplot_name, metadata=True)
+                    store_data(
+                        tplot_name,
+                        data={"x": data.times[indices], "y": data.y[indices]},  # type: ignore
+                        attr_dict=dlim,
+                    )
+            return start, end
 
     if progress_manager is not None:
         if progress_manager.canceled():
