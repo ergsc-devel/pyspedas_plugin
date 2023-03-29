@@ -8,8 +8,12 @@ from pytplot import get_data, store_data
 from ..ofa.add_orb import add_orb
 from ..options.data_option import DataName
 from ..options.orbital_info_option import OrbitalInfoName
-from ..utils.progress_manager import ProgressManagerInterface, WorkerInterface
-from .erg_calc_pwe_wna import MessageKind, erg_calc_pwe_wna
+from ..utils.progress_manager import (
+    MessageKind,
+    ProgressManagerInterface,
+    WorkerInterface,
+)
+from .erg_calc_pwe_wna import erg_calc_pwe_wna
 from .search_pwe_wfc_wf import search_pwe_wfc_wf
 
 
@@ -60,7 +64,7 @@ def load_wfc(
         nfft=nfft,
         stride=stride,
         n_average=n_average,
-        reload=~no_update,  # type: ignore
+        reload=no_update,  # type: ignore
         no_update=no_update,
         progress_manager=progress_manager,
     )

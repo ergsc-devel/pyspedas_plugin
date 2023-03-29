@@ -1,9 +1,8 @@
 import gc
 import math
-from typing import Callable, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
-from click import Option
 from pyspedas.analysis.tinterpol import tinterpol
 from pyspedas.erg.satellite.erg.mgf.mgf import mgf
 from pyspedas.utilities.tnames import tnames
@@ -18,12 +17,6 @@ from ergpyspedas.erg.satellite.erg.common.cotrans.erg_cotrans import erg_cotrans
 from ..utils.get_uname_passwd import get_uname_passwd
 from ..utils.progress_manager import MessageKind, ProgressManagerInterface
 from .add_fc import add_fc
-
-
-class Message:
-    def __init__(self, content: str, kind: MessageKind) -> None:
-        self.content = content
-        self.kind = kind
 
 
 def hanning(n: int, alpha: float = 0.5) -> np.ndarray:
@@ -65,25 +58,6 @@ def hanning(n: int, alpha: float = 0.5) -> np.ndarray:
         raise ValueError("It must be alpha >= 0.5 and alpha <= 1")
     k = np.arange(0, n)
     return alpha - (1 - alpha) * np.cos(2 * np.pi * k / n)
-
-
-def test_hanning():
-    # results of hanning(12, /DOUBLE) in IDL
-    result_idl = [
-        0.0000000000000000,
-        0.066987298107780646,
-        0.24999999999999994,
-        0.49999999999999994,
-        0.74999999999999989,
-        0.93301270189221919,
-        1.0000000000000000,
-        0.93301270189221941,
-        0.75000000000000022,
-        0.50000000000000011,
-        0.25000000000000033,
-        0.066987298107780813,
-    ]
-    assert np.allclose(result_idl, hanning(12))
 
 
 def value_locate(refx, x):
@@ -168,8 +142,6 @@ def analysis_impl_dummy():
     theta = poyntingvec.y
 
     fsamp = 65536
-    # TODO: "ystyle": 1 but not in python
-    # This stands for decimal format (1, 10, ...) (vs scienfic notation (10^0, 10^1, ...))
     scwlim = {"spec": 1, "zlog": 1, "ylog": 1, "yrange": [0, fsamp / 2], "ystyle": 1}
 
     return (
@@ -187,8 +159,8 @@ def analysis_impl_dummy():
 
 
 def analysis_impl(
-    uname1,
-    passwd1,
+    uname,
+    passwd,
     trange,
     no_update,
     win,
@@ -198,10 +170,20 @@ def analysis_impl(
     e_waveform,
     b_waveform,
     progress_manager: Optional[ProgressManagerInterface] = None,
-):
-    # TODO: NU implement this function
-    # Please add necessary arguments
-
+) -> Optional[
+    Tuple[
+        np.ndarray,
+        np.ndarray,
+        np.ndarray,
+        np.ndarray,
+        np.ndarray,
+        np.ndarray,
+        np.ndarray,
+        np.ndarray,
+        np.ndarray,
+        Dict[str, Any],
+    ]
+]:
     if not b_waveform:
         if progress_manager is not None:
             progress_manager.ask_message("No data found.", MessageKind.warning)
@@ -216,8 +198,7 @@ def analysis_impl(
 
     if not e_waveform:
         start_time = b_waveform.times[0]
-        end_time = b_waveform.x[-1]
-        # return (False, Message("No data found.", MessageKind.warning))
+        end_time = b_waveform.times[-1]
     else:
         if e_waveform.times[0] >= b_waveform.times[0]:
             start_time = b_waveform.times[0]
@@ -257,6 +238,7 @@ def analysis_impl(
     ts_b = ts_e
 
     n = e_waveform.times.size - nfft - 1
+    # NOTE: offset_e seems to be not existing if not e_waveform
     for j in range(int(-offset_e), ndata - nfft, stride):
         if j < 0:
             continue
@@ -279,6 +261,7 @@ def analysis_impl(
         e_waveform_t[i] = e_waveform.times[j]
 
     n = b_waveform.times.size - nfft - 1
+    # NOTE: offset_b seems to be not existing if not e_waveform
     for j in range(int(-offset_b), ndata - nfft, stride):
         if j < 0:
             continue
@@ -309,7 +292,7 @@ def analysis_impl(
     # *****************
     # load MGF L2 CDF
     # *****************
-    mgf(uname=uname1, passwd=passwd1, trange=trange, no_update=no_update)
+    mgf(uname=uname, passwd=passwd, trange=trange, no_update=no_update)
 
     tinterpol(
         "erg_mgf_l2_mag_8sec_dsi",
@@ -747,22 +730,10 @@ def analysis_impl(
     if progress_manager is not None:
         progress_manager.set_value(90)
 
-    # TODO: must return those results
-    # Please change the following dummy values to real values
-    # ts_e = np.zeros((252,))
-    # powspec_e = np.zeros((252, 2048))
-    # freq = np.zeros((2048,))
-    # ts_b = np.zeros((252,))
-    # powspec_b = np.zeros((252, 2048))
-    # wna = np.zeros((252, 2048))
-    # polarization = np.zeros((252, 2048))
-    # planarity = np.zeros((252, 2048))
-    # theta = np.zeros((252, 2048))
-    # fsamp = 65536
     scwlim = {"spec": 1, "zlog": 1, "ylog": 1, "yrange": [0, fsamp / 2], "ystyle": 1}
 
     # temp
-    # NOTE: This has no meaning; Should be x = np.nan_to_num(x) if needed
+    # NOTE: This seems to have no meaning; Should be x = np.nan_to_num(x) if needed
     np.nan_to_num(powspec_e)
     np.nan_to_num(powspec_b)
     np.nan_to_num(wna)
@@ -809,10 +780,10 @@ def erg_calc_pwe_wna(
 
     win = hanning(nfft, alpha=alpha) * 2
 
-    uname1, passwd1 = get_uname_passwd()
+    uname, passwd = get_uname_passwd()
 
     if reload:
-        pwe_wfc(uname=uname1, passwd=passwd1, trange=trange, no_update=no_update)
+        pwe_wfc(uname=uname, passwd=passwd, trange=trange, no_update=no_update)
 
     if progress_manager is not None:
         if progress_manager.canceled():
@@ -838,10 +809,9 @@ def erg_calc_pwe_wna(
             )
     else:
         if reload:
-            # TODO: mode wp65khz is not yet available in python pwe_wfc
             pwe_wfc(
-                uname=uname1,
-                passwd=passwd1,
+                uname=uname,
+                passwd=passwd,
                 mode="wp65khz",
                 trange=trange,
                 no_update=no_update,
@@ -892,6 +862,7 @@ def erg_calc_pwe_wna(
     use_dummy = False
     if use_dummy:
         # NOTE: Use this code to get analysis result from IDL version, if analysis part is not yet implemented
+        # One can remove this code to simplify source
         (
             ts_e,
             powspec_e,
@@ -905,10 +876,9 @@ def erg_calc_pwe_wna(
             scwlim,
         ) = analysis_impl_dummy()
     else:
-        # TODO: NU implement here
         ret = analysis_impl(
-            uname1,
-            passwd1,
+            uname,
+            passwd,
             trange,
             no_update,
             win,
@@ -1030,10 +1000,6 @@ def erg_calc_pwe_wna(
     options("planarity_mask", "ztitle", "")
     options("poyntingvec_mask", "ztitle", "[degree]")
 
-    # TODO: not in python yet
-    # options, "espec*", "ztickunits", "scientific"
-    # options, "bspec*", "ztickunits", "scientific"
-
     # ylim
     ylim("espec", 32, 20000)
     ylim("bspec", 32, 20000)
@@ -1088,22 +1054,12 @@ def erg_calc_pwe_wna(
     options("planarity_mask", "zlog", 0)
     options("poyntingvec_mask", "zlog", 0)
 
-    # TODO: not in python yet
-    # ct
-    # options, "polarization*", "color_table", 33
-    # options, "planarity*", "color_table", 33
-
-    # options, "wna*", "ztickinterval", 30.0
-    # options, "polarization*", "ztickinterval", 0.5
-    # options, "planarity*", "ztickinterval", 0.2
-    # options, "poyntingvec*", "ztickinterval", 30.0
-
     return True
 
 
 if __name__ == "__main__":
     # Usage example of erg_calc_pwe_wna
-    succeeded, message = erg_calc_pwe_wna(
+    ret = erg_calc_pwe_wna(
         trange=["2017-04-01/13:57:45", "2017-04-01/13:57:53"],
         w="Hanning",
         nfft=4096,
@@ -1112,4 +1068,4 @@ if __name__ == "__main__":
         reload=True,
         no_update=False,
     )
-    print(f"{succeeded}")
+    print(f"{ret}")

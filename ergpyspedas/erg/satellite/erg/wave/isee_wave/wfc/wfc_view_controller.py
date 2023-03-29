@@ -5,10 +5,9 @@ import json
 import os
 from abc import ABC, abstractmethod
 from dataclasses import asdict
-from datetime import datetime
 from functools import partial
-from queue import Empty, Queue
-from typing import TYPE_CHECKING, Dict, List, Optional, Sequence, Tuple, Union
+from queue import Queue
+from typing import TYPE_CHECKING, Dict, List, Optional, Tuple
 
 from PySide6 import QtCore, QtWidgets
 from pyspedas import time_double, time_string
@@ -322,7 +321,7 @@ class WFCViewController(
         # By default True, but False is useful when it is difficult to debug using thread
         # If single thread, if you click any button more than one time,
         # window will freeze for a few seconds, though it does not harm the calculation.
-        # If use worker thread, user experience is smoother.
+        # If use worker thread, GUI response is smoother.
         use_worker_thread = True
         if use_worker_thread:
             self._load_by_worker_thread_and_plot(
@@ -344,18 +343,28 @@ class WFCViewController(
         # Progress manager for single thread
         progress_manager = ProgressManager(self._view)
 
-        # Model
-        ret = load_wfc(
-            trange=trange,
-            w=fft_window,
-            nfft=window_size,
-            stride=stride,
-            n_average=n_average,
-            progress_manager=progress_manager,
-        )
+        # Close progress dialog if unexpected error occurs
+        try:
+            ret = load_wfc(
+                trange=trange,
+                w=fft_window,
+                nfft=window_size,
+                stride=stride,
+                n_average=n_average,
+                no_update=False,
+                progress_manager=progress_manager,
+            )
+        # Catch base exception only
+        except Exception as e:
+            import traceback
+
+            traceback.print_exc()
+            ret = None
+
         if ret is None:
             progress_manager.hide()
             return
+
         progress_manager.set_label_text("Plotting...")
         progress_manager.set_value(0)
         (
@@ -399,18 +408,27 @@ class WFCViewController(
                 self.queue = queue
 
             def run(self) -> None:
-                # Need to pass worker and progress manager to the function
-                result = load_wfc(
-                    trange=trange,
-                    w=fft_window,
-                    nfft=window_size,
-                    stride=stride,
-                    n_average=n_average,
-                    no_update=False,
-                    worker=self,
-                    progress_manager=self.progress_manager,
-                )
-                self.queue.put(result)
+                # Need try-except especially for worker thread
+                try:
+                    # Need to pass worker and progress manager to the function
+                    result = load_wfc(
+                        trange=trange,
+                        w=fft_window,
+                        nfft=window_size,
+                        stride=stride,
+                        n_average=n_average,
+                        no_update=False,
+                        worker=self,
+                        progress_manager=self.progress_manager,
+                    )
+                    self.queue.put(result)
+                # Catch base exception only
+                except Exception as e:
+                    import traceback
+
+                    traceback.print_exc()
+                    result = None
+                    self.fail()
 
         # Instantiate outside worker thread to save result of calculation
         self.queue = Queue()
