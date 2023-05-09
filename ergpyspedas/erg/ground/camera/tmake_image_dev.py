@@ -7,9 +7,9 @@ def tmake_image_dev(
     width=3600.
     ):
     """
-    Calculates the deviation of image data from 1-hour verage data and store tplot variable.
+    Calculates the deviation of image data from 1-hour average data and store tplot variable.
     
-    @vname: tplot variable of image data
+    @v_name: tplot variable of image data
     @width: Period of data window to calculate the average value. The default is 3600 sec.
     """
     # ---Get data from tplot variable with image data:
@@ -47,7 +47,7 @@ def tmake_image_dev(
             avg /= len(idx)
 
             # ---Replace zero value of average data by 1.0 to use normalization:
-            den_avg = avg
+            den_avg = np.copy(avg)
             idx_avg = np.where(den_avg == 0.)
             den_avg[idx_avg] = 1.
 

@@ -21,7 +21,7 @@ def plot_omti_image(
     """
     Create the two-dimensional map of image data.
     
-    @vname: tplot variable of image data
+    @v_name: tplot variable of image data
     @time: plot time. The default is start time of tplot variable
     @x_min: minimum value of x range. The default is the minimum value of image size
     @x_max: maximum value of x range. The default is the maximum value of image size
@@ -113,7 +113,7 @@ def plot_omti_image(
     # ---Plot the image:
     fig, ax = plt.subplots()
     im = ax.pcolormesh(x_range, y_range, z_range,
-                       clim=(z_min, z_max), cmap=cmap)
+                       clim=(z_min, z_max), cmap=cmap, shading='auto')
     plt.xlabel(x_title)
     plt.ylabel(y_title)
 

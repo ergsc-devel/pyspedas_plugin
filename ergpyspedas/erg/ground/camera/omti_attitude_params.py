@@ -1,4 +1,3 @@
-
 import datetime
 import numpy as np
 from collections import namedtuple
@@ -28,7 +27,10 @@ def omti_attitude_params(
 
     if not isinstance(date, datetime.datetime):
         if isinstance(date, str):
-            date = datetime.datetime.fromisoformat(date)
+            try:
+                date = datetime.datetime.fromisoformat(date)
+            except ValueError:
+                date = datetime.datetime.utcfromtimestamp(float(date))
         elif isinstance(date, (int, float, np.integer, np.float64)):
             date = datetime.datetime.utcfromtimestamp(date)
 

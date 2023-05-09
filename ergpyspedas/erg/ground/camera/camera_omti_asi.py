@@ -27,7 +27,7 @@ def camera_omti_asi(
 
     @trange: time range of interest (2 element array)
     @suffix:
-    @site: Observatory name, example, erg_load_camera_omti_asi, site='sgk'. The default is 'all', i.e., load all available stations. This can be an array of strings, e.g., ['sgk', 'sta'] or a single string delimited by spaces, e.g., 'sgk sta'. Sites: abu ath drw eur gak hlk hus isg ist ith kap ktb mgd nai nyr ptk rik rsb sgk sta syo trs yng
+    @site: Observatory name, example. The default is 'all', i.e., load all available stations. This can be an array of strings, e.g., ['sgk', 'sta'] or a single string delimited by spaces, e.g., 'sgk sta'. Sites: abu ath drw eur gak hlk hus isg ist ith kap ktb mgd nai nyr ptk rik rsb sgk sta syo trs yng
     @wavelength: Wavelength in Angstrom, i.e., 5577, 6300, 7200, 7774, 5893, etc. The default is 5577. This can be an array of integers, e.g., [5577, 6300] or strings, e.g., '5577', '5577 6300', and ['5577', '6300'].
     @get_support_data:
     @varformat:
@@ -36,7 +36,7 @@ def camera_omti_asi(
     @no_update:
     @uname:
     @passwd:
-    @time_clip:
+    @time_clip: if set, then data are clipped to the time range set by timespan
     @ror:
     '''
 
@@ -65,7 +65,6 @@ def camera_omti_asi(
         site_code = site_code_all
     
     site_code = list(set(site_code).intersection(site_code_all))
-
     
     if notplot:
         loaded_data = {}

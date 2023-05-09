@@ -11,8 +11,8 @@ def tasi2gmap(
     """
     Create the image data in geographic coordinates, and store tplot variable.
 
-    @vname1: tplot variable of airgrow data
-    @vname2: tplot variable of map table data
+    @v_name1: tplot variable of airgrow data
+    @v_name2: tplot variable of map table data
     """
 
     # ---Get data from two tplot variables:

@@ -6,7 +6,11 @@ def keogram_image(v_name,
                   lat=60.0,
                   lon=240.0):
     """
-    Create the keogram of image data at a spesific location.
+    Create the keogram of image data at a specific location.
+
+    @v_name: tplot variable of image data
+    @lat: latitude to create a longitude-time plot of image data
+    @lon: longitude to create a latitude-time plot of image data
     """
     # ---Get data from tplot variable
     if v_name not in tplot_names():
@@ -53,7 +57,7 @@ def keogram_image(v_name,
             f'Station: {site.upper()}\nWavelength: {wavelength}\nSlice GLON: {sg_lon} [deg]\nGLAT [deg]'
         y_title_lon = \
             f'Station: {site.upper()}\nWavelength: {wavelength}\nSlice GLAT: {sg_lat} [deg]\nGLON [deg]'
-    elif var_attrs['z_title'] == 'deg':
+    elif var_attrs['z_title'] == 'km':
         y_title_lat = \
             f'Station: {site.upper()}\nWavelength: {wavelength}\nZonal [km]'
         y_title_lon = \

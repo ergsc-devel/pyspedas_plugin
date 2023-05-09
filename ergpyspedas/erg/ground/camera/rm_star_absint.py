@@ -10,7 +10,7 @@ def rm_star_absint(
     Remove star lights with a median filter.
     
     @img0: input the image data
-    @img_size: imput image size (512 or 256)
+    @img_size: input image size (512 or 256)
     @return: output the image data that remove the star lights
     """
     # ---Median filter size:
@@ -23,6 +23,7 @@ def rm_star_absint(
             width += 1
 
     # ---Calculate the image data median values:
+    img0 = img0.astype(float)
     med_img = median(img0, width)
 
     # ---Deviation of the raw image from the median value:

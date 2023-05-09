@@ -14,10 +14,10 @@ def tmake_map_table(
     """
     Create the mapping table in geographic coordinates, and store tplot variable.
     
-    @vname: tplot variable of airgrow data
-    @mapping_alt_km: Mapping altitude. The default is 110 km
+    @v_name: tplot variable of airgrow data
+    @mapping_alt: Mapping altitude. The default is 110 km
     @grid: grid size
-    @mapsize: map size. The default is an original image size
+    @map_size: map size. The default is an original image size
     @in_km: if True, unit is km
     """
     # ---Get data from tplot variable with image data:

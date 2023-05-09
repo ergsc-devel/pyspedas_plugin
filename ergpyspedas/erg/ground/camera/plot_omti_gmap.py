@@ -21,14 +21,16 @@ def plot_omti_gmap(
     """
     Create the two-dimensional map of image data in geographic coordinates.
     
-    @vname: tplot variable of image data
+    @v_name: tplot variable of image data
     @time: plot time. The default is start time of tplot variable
     @x_min: minimum value of x range. The default is the minimum value of image size
     @x_max: maximum value of x range. The default is the maximum value of image size
     @y_min: minimum value of y range. The default is the minimum value of image size
     @y_max: maximum value of y range. The default is the maximum value of image size
     @z_min: minimum value of z range. The default is the minimum value of image data
-    @z_max: maximum value of z range. The default is the maximum value of image data   
+    @z_max: maximum value of z range. The default is the maximum value of image data
+    @cmap: color map. If None, SPEDAS color map is used
+    @factor: factor for rescaling the figure
     """
 
     # ---Get data from tplot variable
