@@ -60,7 +60,7 @@ def plot_omti_image(
     if time is None:
         time = str(times[0])
 
-    condition = abs((times - float(time)) == min(abs(times - float(time)))
+    condition = abs(times - float(time)) == min(abs(times - float(time)))
     idx = np.asarray(condition).nonzero()[0]
 
     if len(idx) == 0:
