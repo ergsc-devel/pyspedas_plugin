@@ -2,8 +2,6 @@ import cdflib
 import numpy as np
 
 from pytplot import get_data, store_data, options, clip, ylim
-
-from .satellite.erg.load import load
 from .satellite.erg.get_gatt_ror import get_gatt_ror
 
 from typing import List, Union, Optional
