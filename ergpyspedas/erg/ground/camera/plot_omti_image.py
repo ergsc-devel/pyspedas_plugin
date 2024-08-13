@@ -1,4 +1,4 @@
-from pytplot import get_data, tplot_names, spedas_colorbar, time_double
+from pytplot import get_data, tplot_names, spedas_colorbar
 from datetime import datetime
 import numpy as np
 import matplotlib.pyplot as plt
@@ -60,7 +60,7 @@ def plot_omti_image(
     if time is None:
         time = str(times[0])
 
-    condition = abs(times - time_double(time)) == min(abs(times - time_double(time)))
+    condition = abs((times - float(time)) == min(abs(times - float(time)))
     idx = np.asarray(condition).nonzero()[0]
 
     if len(idx) == 0:
