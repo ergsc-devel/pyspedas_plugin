@@ -86,9 +86,8 @@ def gmag_nipr(
     ror: bool
             If set, print PI info and rules of the road. Default: True
 
-    force_download: bool
-        Download file even if local version is more recent than server version
-        Default: False
+    fproton: str
+        Download proton magnetometer data. Default: False
 
     Returns
     -------
