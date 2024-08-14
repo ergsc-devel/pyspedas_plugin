@@ -1,33 +1,35 @@
 import cdflib
 import numpy as np
 
-from pyspedas.utilities.time_double import time_double
-from pyspedas.analysis.time_clip import time_clip as tclip
+from pytplot import time_double
+from pytplot import time_clip as tclip
 from pyspedas.utilities.dailynames import dailynames
 from pyspedas.utilities.download import download
 
 from pytplot import get_data, store_data, options, clip, ylim, cdf_to_tplot
 
 from ...satellite.erg.load import load
-
+from ...satellite.erg.get_gatt_ror import get_gatt_ror
+from typing import List, Union, Optional, Dict, Any
 
 def gmag_nipr(
-    trange=['2020-08-01', '2020-08-02'],
-    suffix='',
-    site='all',
-    datatype='all',
-    get_support_data=False,
-    varformat=None,
-    varnames=[],
-    downloadonly=False,
-    notplot=False,
-    no_update=False,
-    uname=None,
-    passwd=None,
-    time_clip=False,
-    ror=True,
-    fproton=False
-):
+    trange: List[str] = ['2020-08-01', '2020-08-02'],
+    suffix: str = '',
+    site: Union[str, List[str]] = 'all',
+    datatype: Union[str, List[str]] = 'all',
+    get_support_data: bool = False,
+    varformat: Optional[str] = None,
+    varnames: List[str] = [],
+    downloadonly: bool = False,
+    notplot: bool = False,
+    no_update: bool = False,
+    uname: Optional[str] = None,
+    passwd: Optional[str] = None,
+    time_clip: bool = False,
+    ror: bool = True,
+    fproton=False,
+) -> Union[Dict, None, List[Union[str, Any]]]:
+
 
     site_code_all = ['syo', 'hus', 'tjo', 'aed', 'isa', 'h57', 'amb', 'srm', 'ihd', 'skl', 'h68']
     tres_all=['1sec']
