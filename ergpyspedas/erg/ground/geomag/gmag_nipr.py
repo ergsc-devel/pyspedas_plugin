@@ -164,8 +164,8 @@ def gmag_nipr(
                     print(f'Affiliations: {gatt["PI_affiliation"]}')
                     print('')
                     print('Rules of the Road for NIPR Fluxgate Magnetometer Data:')
-                    print('')
-                    print(gatt["TEXT"])
+                    for gatt_text in gatt["TEXT"]:
+                        print(gatt_text)
                     print(f'{gatt["LINK_TEXT"]} {gatt["HTTP_LINK"]}')
                     print('**************************************************************************')
                 except:
