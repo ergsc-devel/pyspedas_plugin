@@ -173,31 +173,28 @@ def gmag_mm210(
                 loaded_data += loaded_data_temp
             if (len(loaded_data_temp) > 0) and ror:
                 try:
-                    if isinstance(loaded_data_temp, list):
-                        if downloadonly:
-                            cdf_file = cdflib.CDF(loaded_data_temp[-1])
-                            gatt = cdf_file.globalattsget()
-                        else:
-                            gatt = get_data(loaded_data_temp[-1], metadata=True)['CDF']['GATT']
-                    elif isinstance(loaded_data_temp, dict):
-                        gatt = loaded_data_temp[list(loaded_data_temp.keys())[-1]]['CDF']['GATT']
-                    print('**************************************************************************')
+                    gatt = get_gatt_ror(downloadonly, loaded_data)
+                    print(
+                        "**************************************************************************"
+                    )
                     print(gatt["Logical_source_description"])
-                    print('')
+                    print("")
                     print(f'Information about {gatt["Station_code"]}')
-                    print('PI and Host PI(s):')
+                    print("PI and Host PI(s):")
                     print(gatt["PI_name"])
-                    print('')
-                    print('Affiliations: ')
+                    print("")
+                    print("Affiliations: ")
                     print(gatt["PI_affiliation"])
-                    print('')
-                    print('Rules of the Road for 210 MM Data Use:')
+                    print("")
+                    print("Rules of the Road for 210 MM Data Use:")
                     for gatt_text in gatt["TEXT"]:
                         print(gatt_text)
                     print(f'{gatt["LINK_TEXT"]} {gatt["HTTP_LINK"]}')
-                    print('**************************************************************************')
+                    print(
+                        "**************************************************************************"
+                    )
                 except:
-                    print('printing PI info and rules of the road was failed')
+                    print("printing PI info and rules of the road was failed")
                 
             if (not downloadonly) and (not notplot):
                 if fres == '1min':
