@@ -8,7 +8,6 @@ from pyspedas.utilities.download import download
 
 from pytplot import get_data, store_data, options, clip, ylim, cdf_to_tplot
 
-from ...satellite.erg.load import load
 from ...satellite.erg.get_gatt_ror import get_gatt_ror
 from typing import List, Union, Optional, Dict, Any
 
