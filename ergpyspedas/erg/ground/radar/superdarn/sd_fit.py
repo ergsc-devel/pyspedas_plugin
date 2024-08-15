@@ -10,6 +10,7 @@ from pyspedas import tnames
 from ....satellite.erg.load import load
 from ....satellite.erg.get_gatt_ror import get_gatt_ror
 from .get_sphcntr import get_sphcntr
+from typing import List, Optional
 
 """
 ;Internal routine to get the table of the pixel
