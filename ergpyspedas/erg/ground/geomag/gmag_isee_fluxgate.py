@@ -158,8 +158,7 @@ def gmag_isee_fluxgate(
             
             loaded_data_temp = load(pathformat=pathformat, file_res=file_res, trange=trange, datatype=datatype, prefix=prefix,
                 suffix="_" + site_input + suffix, get_support_data=get_support_data, varformat=varformat, downloadonly=downloadonly,
-                notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd, force_download=force_download,
-            )
+                notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd, force_download=force_download)
             
             if notplot:
                 loaded_data.update(loaded_data_temp)
