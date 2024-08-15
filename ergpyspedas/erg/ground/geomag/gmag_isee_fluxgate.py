@@ -97,7 +97,7 @@ def gmag_isee_fluxgate(
     """
     
     site_code_all = ['msr', 'rik', 'kag', 'ktb', 'lcl', 'mdm', 'tew']
-    tres_all=['64hz', '1sec', '1min', '1h']
+    tres_all = ['64hz', '1sec', '1min', '1h']
     if isinstance(datatype, str):
         datatype = datatype.lower()
         datatype = datatype.split(' ')
@@ -156,8 +156,10 @@ def gmag_isee_fluxgate(
                 pathformat = 'ground/geomag/isee/fluxgate/'+fres+'/'+site_input\
                                 +'/%Y/isee_fluxgate_'+fres+'_'+site_input+'_%Y%m%d_v??.cdf'
             
-            loaded_data_temp = load(pathformat=pathformat, file_res=file_res, trange=trange, datatype=datatype, prefix=prefix, suffix='_'+site_input+suffix, get_support_data=get_support_data,
-                            varformat=varformat, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
+            loaded_data_temp = load(pathformat=pathformat, file_res=file_res, trange=trange, datatype=datatype, prefix=prefix,
+                suffix="_" + site_input + suffix, get_support_data=get_support_data, varformat=varformat, downloadonly=downloadonly,
+                notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd, force_download=force_download,
+            )
             
             if notplot:
                 loaded_data.update(loaded_data_temp)
