@@ -40,9 +40,9 @@ def camera_omti_asi(
 
     site: str or list of str
             The site or list of sites to load.
-            Valid values: 'abu', 'ath', 'drw', 'eur', 'gak', 'hlk', 'hus', 'isg',
+            Valid values: 'abu', 'ath', 'cmu', 'cpn', 'drw', 'eur', 'gak', 'hlk', 'hus', 'isg',
             'ist', 'ith', 'kap', 'ktb','mgd', 'nai', 'nyr', 'ptk', 'rik', 'rsb',
-            'sgk', 'sta', 'syo', 'trs', 'yng', 'all'
+            'sgk', 'skb', 'sta', 'syo', 'trs', 'yng', 'all'
             Default: 'all'
 
     wavelength: str, int, list of str, or list of int
@@ -99,10 +99,10 @@ def camera_omti_asi(
 
     '''
 
-    site_code_all = ['abu', 'ath', 'drw', 'eur', 'gak', 'hlk',
+    site_code_all = ['abu', 'ath', 'cmu', 'cpn', 'drw', 'eur', 'gak', 'hlk',
                      'hus', 'isg', 'ist', 'ith', 'kap', 'ktb',
                      'mgd', 'nai', 'nyr', 'ptk', 'rik', 'rsb',
-                     'sgk', 'sta', 'syo', 'trs', 'yng']
+                     'sgk', 'skb', 'sta', 'syo', 'trs', 'yng']
 
     if isinstance(wavelength, str):
         wavelengthc = wavelength.split(' ')
