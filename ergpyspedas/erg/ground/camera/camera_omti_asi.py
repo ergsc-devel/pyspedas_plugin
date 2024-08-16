@@ -93,8 +93,8 @@ def camera_omti_asi(
     Examples
     ________
 
-    >>> import pyspedas
-    >>> omti_vars=pyspedas.erg.camera_omti_asi(site='ath', trange=['2020-01-20','2020-01-21'])
+    >>> import ergpyspedas
+    >>> omti_vars = ergpyspedas.erg.camera_omti_asi(site='ath', trange=['2020-01-20','2020-01-21'])
     >>> print(omti_vars)
 
     '''
