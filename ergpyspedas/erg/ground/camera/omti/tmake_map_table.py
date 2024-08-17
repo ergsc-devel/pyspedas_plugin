@@ -1,7 +1,7 @@
 from pytplot import tplot_names, get_data, store_data
 import numpy as np
 
-from ....ground.camera.omti_attitude_params import omti_attitude_params
+from ....ground.camera.omti.omti_attitude_params import omti_attitude_params
 
 def tmake_map_table(
     v_name,
