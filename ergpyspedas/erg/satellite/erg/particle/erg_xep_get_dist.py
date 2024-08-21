@@ -3,7 +3,7 @@ import logging
 
 import numpy as np
 from copy import deepcopy
-from pyspedas import tnames
+from pytplot import tnames
 from pytplot import time_double
 from pytplot import time_string
 from pytplot import get_data
@@ -45,6 +45,12 @@ def erg_xep_get_dist(tname,
     else:
         print(f'ERROR: given an invalid tplot variable: {input_name}')
         return 0
+
+    #  If index is provided, ensure it's a list
+
+    if index is not None and not isinstance(index, list) and not isinstance(index, np.ndarray):
+        index = [index]
+
 
     # ;; Get a reference to data and metadata
 
@@ -200,7 +206,7 @@ def erg_xep_get_dist(tname,
 
     dist['n_energy'] = dim_array[0]
 
-    dist['n_bins'] = np.product(dim_array[1:])  #   # phis
+    dist['n_bins'] = np.prod(dim_array[1:])  #   # phis
    
     #  ;; azimuthal angle in spin direction
 
