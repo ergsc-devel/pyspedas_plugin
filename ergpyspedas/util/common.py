@@ -162,12 +162,17 @@ def _postprocess_var_label_panel(
                 #print('label ', label)
                 label_data = pytplot.get_data(label, xarray=True, dt=True)
                 y_label = label_data.attrs["plot_options"]["yaxis_opt"]["axis_label"]  # type: ignore
-                #print( 'type(label_data)', type(label_data) )
-                #print( 'type(xaxis_ticks_dt)', type(xaxis_ticks_dt) )
-                #print( 'type(xaxis_ticks_dt[0])', type(xaxis_ticks_dt[0]) )
-                xaxis_labels = get_var_label_ticks(
-                    label_data, xaxis_ticks_dt_str
-                )  # type] ignore
+                
+                # Switch the type of the time array according to the version of numpy
+                if np.__version__ >= "2.0.0":
+                    xaxis_labels = get_var_label_ticks(
+                        label_data, xaxis_ticks_dt_str
+                    )  
+                else:
+                    xaxis_labels = get_var_label_ticks(
+                        label_data, xaxis_ticks_dt
+                    )
+                    # type] ignore
 
             for xaxis_tick, xaxis_label in zip(xaxis_ticks, xaxis_labels):  # type: ignore
                 # Sometimes ticks produced by locator can be outside xlim, so let exclude them
@@ -242,12 +247,11 @@ def tplot_with_var_label_panel(
     return_plot_objects: bool = True,
     font_size: float = 10,
 ):
-    tplot_list
-    var_label_list
+    1
     # Enhanced tplot changing var label from axis to panel
     # Preprocess var panels
     fig, axs = _preprocess_var_label_panel(fig, tplot_list, var_label_list)
-    fig, axs
+    
     # Then tplot
     fig, axs = tplot(
         tplot_list,
