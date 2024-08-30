@@ -1,4 +1,4 @@
-import matplotlib.pyplot as plt
+
 from ergpyspedas.erg import mgf, orb
 mgf()
 orb()
