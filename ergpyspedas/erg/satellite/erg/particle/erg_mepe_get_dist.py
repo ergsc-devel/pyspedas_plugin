@@ -96,7 +96,8 @@ def erg_mepe_get_dist(tname,
                 index = np.arange(n_times)
         else:
             n_times = np.array([index]).size
-
+    if isinstance(index, int):
+        index = np.array([index])
     """
     ;; --------------------------------------------------------------
 
