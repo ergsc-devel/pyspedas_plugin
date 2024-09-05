@@ -24,3 +24,4 @@ tmp
 .ipynb_checkpoints
 __pycache__/
 erg_data/
+ergpyspedas/erg/ground/camera/search_omti_calibration_file.py

@@ -2,9 +2,9 @@
 import logging
 
 import numpy as np
-from pyspedas import tnames
-from pyspedas.utilities.time_double import time_double
-from pyspedas.utilities.time_string import time_string
+from pytplot import tnames
+from pytplot import time_double
+from pytplot import time_string
 from pytplot import get_data
 from scipy import interpolate
 
@@ -46,6 +46,11 @@ def erg_mepe_get_dist(tname,
     else:
         print(f'ERROR: given an invalid tplot variable: {input_name}')
         return 0
+
+    #  If index is provided, ensure it's a list
+
+    if index is not None and not isinstance(index, list) and not isinstance(index, np.ndarray):
+        index = [index]
 
     # ;; Get a reference to data and metadata
 

@@ -4,25 +4,106 @@ import numpy as np
 from pytplot import get_data, store_data, options, clip, ylim
 
 from ...satellite.erg.load import load
-
+from ...satellite.erg.get_gatt_ror import get_gatt_ror
+from typing import List, Optional, Union
 
 def gmag_mm210(
-    trange=['2020-08-01', '2020-08-02'],
-    suffix='',
-    site='all',
-    datatype='all',
-    get_support_data=False,
-    varformat=None,
-    varnames=[],
-    downloadonly=False,
-    notplot=False,
-    no_update=False,
-    uname=None,
-    passwd=None,
-    time_clip=False,
-    ror=True
-):
+    trange: List[str] = ["2020-08-01", "2020-08-02"],
+    suffix: str = "",
+    site: Union[str, List[str]] = "all",
+    datatype: Union[str, List[str]] = "all",
+    get_support_data: bool = False,
+    varformat: Optional[str] = None,
+    varnames: List[str] = [],
+    downloadonly: bool = False,
+    notplot: bool = False,
+    no_update: bool = False,
+    uname: Optional[str] = None,
+    passwd: Optional[str] = None,
+    time_clip: bool = False,
+    ror: bool = True,
+    force_download: bool = False,
+) -> List[str]:
+    """
+    Load mm210 data from the ERG-SC website.
 
+    Parameters
+    ----------
+    trange: list of str
+            time range of interest [starttime, endtime] with the format
+            'YYYY-MM-DD','YYYY-MM-DD'] or to specify more or less than a day
+            ['YYYY-MM-DD/hh:mm:ss','YYYY-MM-DD/hh:mm:ss']
+            Default: ['2020-08-01', '2020-08-02']
+
+    suffix: str
+            The tplot variable names will be given this suffix.  Default: ''
+
+    site: str or list of str
+            The site or list of sites to load.
+            Valid values:
+
+                    'tik', 'zgn', 'yak', 'irt', 'ppi', 'bji',
+                    'lnp', 'mut', 'ptn', 'wtk', 'lmt', 'kat',
+                    'ktn', 'chd', 'zyk', 'mgd', 'ptk', 'msr',
+                    'rik', 'onw', 'kag', 'ymk', 'cbi', 'gua',
+                    'yap', 'kor', 'ktb', 'bik', 'wew', 'daw',
+                    'wep', 'bsv', 'dal', 'can', 'adl', 'kot',
+                    'cst', 'ewa', 'asa', 'mcq', 'all'
+
+            Default: ['all']
+
+    datatype: str or list of str
+            The data types to load. Valid values: '1s', '1sec', '1m', '1min', '1h', '1hr', 'all'
+            Default: 'all'
+
+    get_support_data: bool
+            If true, data with an attribute "VAR_TYPE" with a value of "support_data"
+            or 'data' will be loaded into tplot. Default: False
+
+    varformat: str
+            The CDF file variable formats to load into tplot.  Wildcard character
+            "*" is accepted.  Default: None (all variables will be loaded).
+
+    varnames: list of str
+            List of variable names to load. Default: [] (all variables will be loaded)
+
+    downloadonly: bool
+            Set this flag to download the CDF files, but not load them into
+            tplot variables. Default: False
+
+    notplot: bool
+            Return the data in hash tables instead of creating tplot variables. Default: False
+
+    no_update: bool
+            If set, only load data from your local cache. Default: False
+
+    uname: str
+            User name.  Default: None
+
+    passwd: str
+            Password. Default: None
+
+    time_clip: bool
+            Time clip the variables to exactly the range specified in the trange keyword. Default: False
+
+    ror: bool
+            If set, print PI info and rules of the road. Default: True
+
+    force_download: bool
+        Download file even if local version is more recent than server version
+        Default: False
+
+    Returns
+    -------
+
+    Examples
+    ________
+    >>> import ergpyspedas
+    >>> from pytplot import tplot
+    >>> mm210_vars = ergpyspedas.erg.gmag_mm210(trange=["2005-01-01", "2005-01-02"],site='adl',datatype='1min')
+    >>> tplot('mm210_mag_adl_1min_hdz')
+
+    """
     site_code_all = ['tik', 'zgn', 'yak', 'irt', 'ppi', 'bji',
                     'lnp', 'mut', 'ptn', 'wtk', 'lmt', 'kat',
                     'ktn', 'chd', 'zyk', 'mgd', 'ptk', 'msr',
@@ -84,7 +165,7 @@ def gmag_mm210(
                             +'/%Y/mm210_'+fres+'_'+site_input+'_%Y%m%d_v??.cdf'
             
             loaded_data_temp = load(pathformat=pathformat, file_res=file_res, trange=trange, datatype=datatype, prefix=prefix, suffix='_'+site_input+suffix, get_support_data=get_support_data,
-                            varformat=varformat, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
+                            varformat=varformat, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd, force_download=force_download)
             
             if notplot:
                 loaded_data.update(loaded_data_temp)
@@ -92,31 +173,28 @@ def gmag_mm210(
                 loaded_data += loaded_data_temp
             if (len(loaded_data_temp) > 0) and ror:
                 try:
-                    if isinstance(loaded_data_temp, list):
-                        if downloadonly:
-                            cdf_file = cdflib.CDF(loaded_data_temp[-1])
-                            gatt = cdf_file.globalattsget()
-                        else:
-                            gatt = get_data(loaded_data_temp[-1], metadata=True)['CDF']['GATT']
-                    elif isinstance(loaded_data_temp, dict):
-                        gatt = loaded_data_temp[list(loaded_data_temp.keys())[-1]]['CDF']['GATT']
-                    print('**************************************************************************')
+                    gatt = get_gatt_ror(downloadonly, loaded_data)
+                    print(
+                        "**************************************************************************"
+                    )
                     print(gatt["Logical_source_description"])
-                    print('')
+                    print("")
                     print(f'Information about {gatt["Station_code"]}')
-                    print('PI and Host PI(s):')
+                    print("PI and Host PI(s):")
                     print(gatt["PI_name"])
-                    print('')
-                    print('Affiliations: ')
+                    print("")
+                    print("Affiliations: ")
                     print(gatt["PI_affiliation"])
-                    print('')
-                    print('Rules of the Road for 210 MM Data Use:')
+                    print("")
+                    print("Rules of the Road for 210 MM Data Use:")
                     for gatt_text in gatt["TEXT"]:
                         print(gatt_text)
                     print(f'{gatt["LINK_TEXT"]} {gatt["HTTP_LINK"]}')
-                    print('**************************************************************************')
+                    print(
+                        "**************************************************************************"
+                    )
                 except:
-                    print('printing PI info and rules of the road was failed')
+                    print("printing PI info and rules of the road was failed")
                 
             if (not downloadonly) and (not notplot):
                 if fres == '1min':

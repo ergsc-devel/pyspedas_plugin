@@ -1,90 +1,121 @@
 
-import cdflib
 import numpy as np
 from pytplot import clip, get_data, options, store_data, ylim, zlim
 
-from pyspedas.utilities.time_double import time_double
+from pytplot import time_double
 
 
 from ..load import load
+from ..get_gatt_ror import get_gatt_ror
 
 
-def lepe(trange=['2017-04-04', '2017-04-05'],
-         datatype='omniflux',
-         level='l2',
-         suffix='',
-         get_support_data=False,
-         varformat=None,
-         varnames=[],
-         downloadonly=False,
-         notplot=False,
-         no_update=False,
-         uname=None,
-         passwd=None,
-         time_clip=False,
-         ror=True,
-         version=None,
-         only_fedu=False,
-         et_diagram=False):
+from typing import List, Optional
+
+def lepe(
+    trange: List[str] = ['2017-04-04', '2017-04-05'],
+    datatype: str = 'omniflux',
+    level: str = 'l2',
+    suffix: str = '',
+    get_support_data: bool = False,
+    varformat: Optional[str] = None,
+    varnames: List[str] = [],
+    downloadonly: bool = False,
+    notplot: bool = False,
+    no_update: bool = False,
+    uname: Optional[str] = None,
+    passwd: Optional[str] = None,
+    time_clip: bool = False,
+    ror: bool = True,
+    version: Optional[str] = None,
+    only_fedu: bool = False,
+    et_diagram: bool = False,
+    force_download: bool = False,
+) -> List[str]:
     """
     This function loads data from the LEP-e experiment from the Arase mission
 
-    Parameters:
+    Parameters
+    ----------
         trange : list of str
             time range of interest [starttime, endtime] with the format
             'YYYY-MM-DD','YYYY-MM-DD'] or to specify more or less than a day
             ['YYYY-MM-DD/hh:mm:ss','YYYY-MM-DD/hh:mm:ss']
+            Default: ['2017-04-04','2017-04-05']
 
         datatype: str
-            Data type; Valid options:
+            Data type; Valid 'l1' options: None
+            Valid 'l2' options: 'omniflux', '3dflux', '3dflux_finech'
+            Valid 'l3' options: 'pa'
+            Default: 'omniflux'
 
         level: str
-            Data level; Valid options:
+            Data level; Valid options: 'l1','l2','l3'   Default: 'l2'
 
         suffix: str
-            The tplot variable names will be given this suffix.  By default,
-            no suffix is added.
+            The tplot variable names will be given this suffix.  Default: None
 
         get_support_data: bool
             Data with an attribute "VAR_TYPE" with a value of "support_data"
-            will be loaded into tplot.  By default, only loads in data with a
-            "VAR_TYPE" attribute of "data".
+            will be loaded into tplot.  Default: False
 
         varformat: str
             The file variable formats to load into tplot.  Wildcard character
-            "*" is accepted.  By default, all variables are loaded in.
+            "*" is accepted.  Default: None (all variables are loaded)
 
         varnames: list of str
-            List of variable names to load (if not specified,
-            all data variables are loaded)
+            List of variable names to load
+            Default: [] (all data variables are loaded)
 
         downloadonly: bool
             Set this flag to download the CDF files, but not load them into
-            tplot variables
+            tplot variables. Default: False
 
         notplot: bool
-            Return the data in hash tables instead of creating tplot variables
+            Return the data in hash tables instead of creating tplot variables. Default: False
 
         no_update: bool
-            If set, only load data from your local cache
+            If set, only load data from your local cache. Default: False
 
         time_clip: bool
-            Time clip the variables to exactly the range specified in the trange keyword
+            Time clip the variables to exactly the range specified in the trange keyword. Default: False
 
         ror: bool
-            If set, print PI info and rules of the road
+            If set, print PI info and rules of the road. Default: True
 
         version: str
             Set this value to specify the version of cdf files (such as "v02_02")
+            Default: None
 
         only_fedu: bool
-            If set, not make erg_lepe_l3_pa_enech_??(??:01,01,..32)_FEDU Tplot Variables
+            If set, not make erg_lepe_l3_pa_enech ??(??:01,01,..32)_FEDU Tplot Variables
+            Default: False
 
         et_diagram: bool
-            If set, make erg_lepe_l3_pa_pabin_??(??:01,01,..16)_FEDU Tplot Variables
+            If set, make erg_lepe_l3_pa_pabin ??(??:01,01,..16)_FEDU Tplot Variables
+            Default: False
 
-    Returns:
+        uname: str
+            User name.  Default: None
+
+        passwd: str
+            Password.  Default: None
+
+        force_download: bool
+            Download file even if local version is more recent than server version
+            Default: False
+
+
+    Returns
+    -------
         List of tplot variables created.
+
+    Examples
+    --------
+    >>> import pyspedas
+    >>> from pytplot import tplot
+    >>> lepe_vars = pyspedas.erg.lepe(trange=['2017-03-27', '2017-03-28'])
+    >>> tplot('erg_lepe_l2_omniflux_FEDO')
+
 
     """
 
@@ -101,6 +132,9 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
         # to avoid failure of creation plot variables (at store_data.py) of lepe
         notplot = True
 
+    dataname = 'FEDU'  # data name for 3dflux and pa
+    if (datatype == 'omniflux'): dataname = 'FEDO'  # data name for omniflux
+    
     file_res = 3600. * 24
     prefix = 'erg_lepe_'+level+'_' + datatype + '_'
     pathformat = 'satellite/erg/lepe/'+level+'/'+datatype + \
@@ -112,20 +146,13 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
         pathformat += version + '.cdf'
 
     loaded_data = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype, file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
-                       varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
+                       varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd, force_download=force_download)
 
 
     if (len(loaded_data) > 0) and ror:
 
         try:
-            if isinstance(loaded_data, list):
-                if downloadonly:
-                    cdf_file = cdflib.CDF(loaded_data[-1])
-                    gatt = cdf_file.globalattsget()
-                else:
-                    gatt = get_data(loaded_data[-1], metadata=True)['CDF']['GATT']
-            elif isinstance(loaded_data, dict):
-                gatt = loaded_data[list(loaded_data.keys())[-1]]['CDF']['GATT']
+            gatt = get_gatt_ror(downloadonly, loaded_data)
 
             # --- print PI info and rules of the road
 
@@ -137,7 +164,7 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
             print('Information about ERG LEPe')
             print('')
             print('PI: ', gatt['PI_NAME'])
-            print("Affiliation: "+gatt["PI_AFFILIATION"])
+            print("Affiliation: ",gatt["PI_AFFILIATION"])
             print('')
             print('RoR of ERG project common: https://ergsc.isee.nagoya-u.ac.jp/data_info/rules_of_the_road.shtml.en')
             if level == 'l2':
@@ -159,21 +186,63 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
         return loaded_data
 
     if (isinstance(loaded_data, dict)) and (len(loaded_data) > 0):
+        # Identify the time range
+        file_name = loaded_data[prefix + dataname + suffix]['CDF']['FILENAME']
+        file_date=[np.array(time_double(file_name[0].split('_')[-3]))]
+        i=0
+        while i < len(file_name):
+            file_date.append(np.array(time_double(file_name[i].split('_')[-3])))
+            i +=1
+        file_date[-1]= file_date[-1]+86400.
+        time_range = np.array([min(file_date),max(file_date)])
+        
         if (level == 'l2') and (datatype == 'omniflux'):
             tplot_variables = []
-            v_array = (loaded_data[prefix + 'FEDO' + suffix]['v'][:, 0, :] +
-                       loaded_data[prefix + 'FEDO' + suffix]['v'][:, 1, :]) / 2.
+            v_keyname = 'v'
+            if v_keyname not in loaded_data[prefix + 'FEDO' + suffix]:
+                v_keyname = 'v1'
+            v_array = (loaded_data[prefix + dataname + suffix][v_keyname][:, 0, :] +
+                        loaded_data[prefix + dataname + suffix][v_keyname][:, 1, :]) / 2.
+            
+            trange_dt64 = (time_range*1.0e6).astype('datetime64[us]')
+            time_array = np.array(loaded_data[prefix + dataname + suffix]['x'])
+
             # change minus values to NaN
             v_array = np.where(v_array < 0., np.nan, v_array)
-            all_nan_v_indices_array = np.where(
-                np.all(np.isnan(v_array), axis=1))[0]
+            all_nan_v_indices_array = np.where(np.all(np.isnan(v_array), axis=1) | (trange_dt64[0] > time_array) | (trange_dt64[1] < time_array))[0]
+            
+            # Discard uncorrected data interval
             store_data(prefix + 'FEDO' + suffix,
-                       data={'x': np.delete(loaded_data[prefix + 'FEDO' + suffix]['x'], all_nan_v_indices_array, axis=0),
-                             'y': np.delete(loaded_data[prefix + 'FEDO' + suffix]['y'], all_nan_v_indices_array, axis=0),
-                             'v': np.delete(v_array, all_nan_v_indices_array, 0)},
-                       attr_dict={'CDF':loaded_data[prefix + 'FEDO' + suffix]['CDF']})
+                        data={'x': np.delete(loaded_data[prefix + 'FEDO' + suffix]['x'], all_nan_v_indices_array, axis=0),
+                                'y': np.delete(loaded_data[prefix + 'FEDO' + suffix]['y'], all_nan_v_indices_array, axis=0),
+                                'v': np.delete(v_array, all_nan_v_indices_array, 0)},
+                        attr_dict={'CDF':loaded_data[prefix + 'FEDO' + suffix]['CDF']})
             tplot_variables.append(prefix + 'FEDO' + suffix)
+            
+            tplot_data = get_data(prefix + 'FEDO' + suffix)
+            time = tplot_data.times
+            energy_array = tplot_data.v
+            y_data = tplot_data.y
+            energy_array = np.where(np.isfinite(energy_array),energy_array,0)
+            sort_energy_index = np.argsort(energy_array)
 
+            sort_energy = np.sort(energy_array)
+            sort_energy_1d = sort_energy[0]
+            sort_energy_1d[2:-1] = np.unique(sort_energy)
+            
+            sorted_y_data= []
+            for ii in range(0, len(time)):
+                sel_data = y_data[ii,:]
+                sorted_y_data.append(sel_data[sort_energy_index[ii,:]])
+            sorted_y_data = np.array(sorted_y_data)
+            
+            # Store the sorted FEDO and energy array
+            store_data(prefix + 'FEDO' + suffix,
+                        data={'x': time,
+                                'y': sorted_y_data,
+                                'v': sort_energy},
+                        attr_dict={'CDF':loaded_data[prefix + 'FEDO' + suffix]['CDF']})
+            
             # set spectrogram plot option
             options(prefix + 'FEDO' + suffix, 'Spec', 1)
             # change minus values to NaN in y array
@@ -211,20 +280,23 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
             tplot_variables = []
             other_variables_dict = {}
             if prefix + 'FEDU' + suffix in loaded_data:
-                
-                from dateutil import parser
-                start_time = parser.parse(trange[0])
-                end_time = parser.parse(trange[1])
-                
-                time_array = np.array(loaded_data[prefix + 'FEDU' + suffix]['x'])
-                inside_indices_array = np.argwhere( (start_time <= time_array)
-                             & (end_time >= time_array))
-                inside_indices_list = inside_indices_array[:, 0].tolist()
+                v_keyname = 'v'
+                if v_keyname not in loaded_data[prefix + 'FEDU' + suffix]:
+                    v_keyname = 'v1'
+                trange_dt64 = (time_range*1.0e6).astype('datetime64[us]')
+                time_array = np.array(loaded_data[prefix + dataname + suffix]['x'])
+
+                # change minus values to NaN
+                v_array = (loaded_data[prefix + 'FEDU' + suffix][v_keyname][:, 0, :] +
+                       loaded_data[prefix + 'FEDU' + suffix][v_keyname][:, 1, :]) / 2. # arithmetic mean
+                v_array = np.where(v_array < 0., np.nan, v_array)
+                all_nan_v_indices_array = np.where(np.all(np.isnan(v_array), axis=1) | (trange_dt64[0] > time_array) | (trange_dt64[1] < time_array))[0]
+
+                    # Discard uncorrected data interval
                 store_data(prefix + 'FEDU' + suffix,
-                           data={'x': time_array[inside_indices_list],
-                                 'y': loaded_data[prefix + 'FEDU' + suffix]['y'][inside_indices_list],
-                                 'v1': (loaded_data[prefix + 'FEDU' + suffix]['v'][inside_indices_list][:, 0, :]
-                                        + loaded_data[prefix + 'FEDU' + suffix]['v'][inside_indices_list][:, 1, :]) / 2.,  # arithmetic mean
+                           data={'x': np.delete(loaded_data[prefix + 'FEDU' + suffix]['x'], all_nan_v_indices_array, axis=0),
+                                 'y': np.delete(loaded_data[prefix + 'FEDU' + suffix]['y'], all_nan_v_indices_array, axis=0),
+                                 'v1': np.delete(v_array, all_nan_v_indices_array, 0),  
                                  'v2': ['01', '02', '03', '04', '05', 'A', 'B', '18', '19', '20', '21', '22'],
                                  'v3': [i for i in range(16)]},
                        attr_dict={'CDF':loaded_data[prefix + 'FEDU' + suffix]['CDF']})
@@ -253,11 +325,23 @@ def lepe(trange=['2017-04-04', '2017-04-05'],
             tplot_variables = []
 
             if prefix + 'FEDU' + suffix in loaded_data:
+                v_keyname = 'v'
+                if v_keyname not in loaded_data[prefix + 'FEDU' + suffix]:
+                    v_keyname = 'v1'
+                trange_dt64 = (time_range*1.0e6).astype('datetime64[us]')
+                time_array = np.array(loaded_data[prefix + dataname + suffix]['x'])
+
+                # change minus values to NaN
+                v_array = (loaded_data[prefix + 'FEDU' + suffix][v_keyname][:, 0, :] +
+                       loaded_data[prefix + 'FEDU' + suffix][v_keyname][:, 1, :]) / 2. # arithmetic mean
+                v_array = np.where(v_array < 0., np.nan, v_array)
+                all_nan_v_indices_array = np.where(np.all(np.isnan(v_array), axis=1) | (trange_dt64[0] > time_array) | (trange_dt64[1] < time_array))[0]
+
+                # Discard uncorrected data interval
                 store_data(prefix + 'FEDU' + suffix,
-                           data={'x': loaded_data[prefix + 'FEDU' + suffix]['x'],
-                                 'y': loaded_data[prefix + 'FEDU' + suffix]['y'],
-                                 'v1': (loaded_data[prefix + 'FEDU' + suffix]['v1'][:, 0, :]
-                                        + loaded_data[prefix + 'FEDU' + suffix]['v1'][:, 1, :]) / 2.,  # arithmetic mean
+                           data={'x': np.delete(loaded_data[prefix + 'FEDU' + suffix]['x'], all_nan_v_indices_array, axis=0),
+                                 'y': np.delete(loaded_data[prefix + 'FEDU' + suffix]['y'], all_nan_v_indices_array, axis=0),
+                                 'v1': np.delete(v_array, all_nan_v_indices_array, 0),  
                                  'v2': loaded_data[prefix + 'FEDU' + suffix]['v2']},
                        attr_dict={'CDF':loaded_data[prefix + 'FEDU' + suffix]['CDF']})
                 tplot_variables.append(prefix + 'FEDU' + suffix)
