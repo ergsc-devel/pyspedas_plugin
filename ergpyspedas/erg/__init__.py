@@ -40,4 +40,4 @@ from .ground.radar.superdarn.sd_fit import sd_fit
 from .ground.riometer.isee_brio import isee_brio
 from .ground.vlf.isee_vlf import isee_vlf
 
-from .satellite.erg.particle.isee3d.isee3d import isee3d
+#from .satellite.erg.particle.isee3d.isee3d import isee3d
