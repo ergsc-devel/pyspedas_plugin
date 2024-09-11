@@ -11,7 +11,7 @@ options('erg_orb_l2_pos_rmlatmlt_y', 'ytitle', 'Mlat')
 options('erg_orb_l2_pos_rmlatmlt_z', 'ytitle', 'MLT')
 
 var_label=['erg_orb_l2_pos_Lm_x', 'erg_orb_l2_pos_rmlatmlt_x','erg_orb_l2_pos_rmlatmlt_y','erg_orb_l2_pos_rmlatmlt_z']
-tplot_options('var_label', var_label)
+#tplot_options('var_label', var_label)
 
 plot_vars=['erg_mgf_l2_mag_8sec_sm','erg_mgf_l2_igrf_8sec_sm','erg_orb_l2_pos_Lm_x']
 

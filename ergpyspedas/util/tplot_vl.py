@@ -16,6 +16,7 @@ def tplot_vl(
         fig: Optional[Figure] = None, 
         font_size: float = 10, 
         display = True,
+        var_label=[],
 ) -> Figure: 
     
 
@@ -23,10 +24,10 @@ def tplot_vl(
         fig = plt.figure()
         #fig = plot_init(xsize=1280, ysize=600, dpi=80, fig=fig)
     
-    var_label_tmp = None
-    if 'var_label' in tplot_opt_glob.keys():
-        var_label_tmp = tplot_opt_glob.get('var_label')
-        tplot_options('var_label', None)  # Removed temporarily
+    var_label_tmp = var_label
+    #if 'var_label' in tplot_opt_glob.keys():
+    #    var_label_tmp = tplot_opt_glob.get('var_label')
+    #    tplot_options('var_label', None)  # Removed temporarily
     
     #print(plot_vars)
     #print(var_label_tmp)
@@ -48,8 +49,8 @@ def tplot_vl(
     ##fig.subplots_adjust(left=0.11, righ=0.87)
 
     # Restore the original var_label
-    if var_label_tmp != None:
-        tplot_options('var_label', var_label_tmp)
+    #if var_label_tmp != None:
+    #    tplot_options('var_label', var_label_tmp)
 
     return fig
 
