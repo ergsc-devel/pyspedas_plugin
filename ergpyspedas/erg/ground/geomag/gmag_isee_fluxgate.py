@@ -39,7 +39,7 @@ def gmag_isee_fluxgate(
 
     site: str or list of str
             The site or list of sites to load.
-            Valid values: 'msr', 'rik', 'kag', 'ktb', 'lcl', 'mdm', 'tew', 'all'
+            Valid values: 'msr', 'rik', 'kag', 'ktb', 'lcl', 'mdm', 'tew', 'wai', 'all'
             Default: ['all']
 
     datatype: str or list of str
@@ -96,7 +96,7 @@ def gmag_isee_fluxgate(
 
     """
     
-    site_code_all = ['msr', 'rik', 'kag', 'ktb', 'lcl', 'mdm', 'tew']
+    site_code_all = ['msr', 'rik', 'kag', 'ktb', 'lcl', 'mdm', 'tew', 'wai']
     tres_all = ['64hz', '1sec', '1min', '1h']
     if isinstance(datatype, str):
         datatype = datatype.lower()
