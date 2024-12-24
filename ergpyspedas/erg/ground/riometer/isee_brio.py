@@ -39,7 +39,7 @@ def isee_brio(
             The tplot variable names will be given this suffix.  Default: ''
 
     site: str or list of str
-            The site or list of sites to load. Valid values: 'ath', 'kap', 'gak', 'hus', 'zgn', 'ist', 'all'
+            The site or list of sites to load. Valid values: 'ang', 'ath', 'kap', 'gak', 'hus', 'zgn', 'ist', 'all'
             Default: ['all']
 
     get_support_data: bool
@@ -96,7 +96,7 @@ def isee_brio(
     instr='brio'
     freq='30'
     
-    site_code_all = ['ath', 'kap', 'gak', 'hus', 'zgn', 'ist']
+    site_code_all = ['ang', 'ath', 'kap', 'gak', 'hus', 'zgn', 'ist']
     if isinstance(site, str):
         site_code = site.lower()
         site_code = site_code.split(' ')
