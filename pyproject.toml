@@ -35,4 +35,4 @@ include-package-data = true
 "*"=["*.md","LICENSE.txt"]
 
 [tool.poetry.dependencies]
-package_name = { git = "https://github.com/ergsc-devel/pyspedas_plugin.git" }
+package_name = { git = "https://github.com/ergsc-devel/pyspedas_plugin.git", branch = "devel" }
