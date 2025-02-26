@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ergpyspedas"
+version = "0.0"
+description = "ERG SC plug-in for pySPEDAS"
+readme = {file = "README.md", content-type = "text/markdown"}
+requires-python = ">=3.9"
+license = {text = "ISEE"}
+
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Topic :: Scientific/Engineering :: Astronomy",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Operating System :: OS Independent",
+]
+
+dependencies = ["pyspedas>=1.2.8", "vtk>=9.2.2", "pyside6>=6.4.1"]
+
+[tool.setuptools]
+packages = {find = {exclude = ["contrib", "docs", "tests*"]}}
+include-package-data = true
+
+[tool.setuptools.package-data]
+"*"=["*.md","LICENSE.txt"]
+
+[tool.poetry.dependencies]
+package_name = { git = "https://github.com/ergsc-devel/pyspedas_plugin.git", branch = "devel" }
