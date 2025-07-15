@@ -40,7 +40,7 @@ def gmag_isee_induction(
             The tplot variable names will be given this suffix.  Default: ''
 
     site: str or list of str
-            The site or list of sites to load. Valid values: "ath", "gak", "hus", "ist", "kag", "kap", "kng", "kdu", "lcl", "mgd", "msr",
+            The site or list of sites to load. Valid values: "ath", "cng", "gak", "hus", "ist", "kag", "kap", "kng", "kdu", "lcl", "mgd", "msr",
             "mut", "nai", "ptk", "rik", "sta", "zgn", "all"
             Default: ['all']
 
@@ -96,7 +96,7 @@ def gmag_isee_induction(
     >>> ind_vars=pyspedas.erg.gmag_isee_induction(trange=['2020-08-01','2020-08-02'], site='all')
     >>> tplot('isee_induction_db_dt_msr')
     """
-    site_code_all = ['ath', 'gak', 'hus', 'ist', 'kag', 'kap', 'kng', 'kdu', 'lcl', 'mgd', 'msr', 'mut', 'nai', 'ptk', 'rik', 'sta', 'zgn']
+    site_code_all = ['ath', 'cng', 'gak', 'hus', 'ist', 'kag', 'kap', 'kng', 'kdu', 'lcl', 'mgd', 'msr', 'mut', 'nai', 'ptk', 'rik', 'sta', 'zgn']
 
     if isinstance(site, str):
         site_code = site.lower()
@@ -116,9 +116,9 @@ def gmag_isee_induction(
             frequency_dependent_structure[site_input] = {
                 'site_code':'',
                 'nfreq':0,
-                'frequency':np.zeros(shape=(64)),
-                'sensitivity':np.zeros(shape=(64,3)),
-                'phase_difference':np.zeros(shape=(64,3))
+                'frequency':np.zeros(shape=(256)),
+                'sensitivity':np.zeros(shape=(256,3)),
+                'phase_difference':np.zeros(shape=(256,3))
             }
 
     prefix = 'isee_induction_'
