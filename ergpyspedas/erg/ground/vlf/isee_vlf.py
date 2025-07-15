@@ -41,7 +41,7 @@ def isee_vlf(
             The tplot variable names will be given this suffix.  Default: ''
 
     site: str or list of str
-            The site or list of sites to load. Valid values: 'ath', 'gak', 'hus', 'ist', 'kap', 'mam', 'mos', 'nai', 'ouj', 'all'
+            The site or list of sites to load. Valid values: 'ang', 'ath', 'gak', 'hus', 'ist', 'kap', 'mam', 'mos', 'nai', 'ouj', 'all'
             Default: ['all']
 
     get_support_data: bool
@@ -96,7 +96,7 @@ def isee_vlf(
 
     """
 
-    site_code_all = ["ath", "gak", "hus", "ist", "kap", "mam", "mos", "nai", "ouj"]
+    site_code_all = ["ang", "ath", "gak", "hus", "ist", "kap", "mam", "mos", "nai", "ouj"]
 
     if isinstance(site, str):
         site_code = site.lower()
