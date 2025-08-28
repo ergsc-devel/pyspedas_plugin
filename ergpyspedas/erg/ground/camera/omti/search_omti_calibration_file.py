@@ -109,7 +109,7 @@ def search_omti_calibration_file(
             ch = 6
 
         # calibration file for each observation period:
-        if date >= datetime.datetime.fromisoformat('2009-01-11T00:00:00'):
+        if datetime.datetime.fromisoformat('2009-01-11T00:00:00') <= date <= datetime.datetime.fromisoformat('2023-05-01T00:00:00'):
             frest = '0001'
 
     elif site == 'hus':  # Husafell (hus)
@@ -147,7 +147,7 @@ def search_omti_calibration_file(
             ch = 4
 
         # calibration file for each observation period:
-        if date >= datetime.datetime.fromisoformat('2018-09-11T00:00:00'):
+        if datetime.datetime.fromisoformat('2018-09-11T00:00:00') <= date <= datetime.datetime.fromisoformat('2020-01-30T00:00:00'):
             frest = '0001'
 
     elif site == 'ath':  # Athabasca (ath)
@@ -170,10 +170,12 @@ def search_omti_calibration_file(
             ch = 7
 
         # calibration file for each observation period:
-        if date >= datetime.datetime.fromisoformat('2014-11-18T00:00:00'):
-            frest = '0002'
-        else:
+        if date <= datetime.datetime.fromisoformat('2014-11-17T23:59:59'):
             frest = '2456'
+        elif datetime.datetime.fromisoformat('2014-11-18T00:00:00') <= date <= datetime.datetime.fromisoformat('2024-06-10T23:59:59'):  
+            frest = '0002'
+        elif date >= datetime.datetime.fromisoformat('2024-06-11T00:00:00'):
+            frest = '0003'
 
     elif site == 'zgn':  # Zhigansk (zgn)
         # camera number:
@@ -368,9 +370,11 @@ def search_omti_calibration_file(
             frest = '0004'
         elif datetime.datetime.fromisoformat('2007-02-27T00:00:00') <= date <= datetime.datetime.fromisoformat('2012-04-18T23:59:59'):
             frest = '0005'
-        elif date >= datetime.datetime.fromisoformat('2012-04-19T00:00:00'):
+        elif datetime.datetime.fromisoformat('2012-04-19T00:00:00') <= date <= datetime.datetime.fromisoformat('2023-07-30T23:59:59'):
             frest = '0006'
-
+        elif date >= datetime.datetime.fromisoformat('2023-07-31T00:00:00'):
+            frest = '0007'
+            
     elif site == 'sta':  # Sata (sta)
         # camera number:
         if datetime.datetime.fromisoformat('2000-07-01T00:00:00') <= date <= datetime.datetime.fromisoformat('2009-07-15T23:59:59'):
@@ -482,9 +486,10 @@ def search_omti_calibration_file(
             ch = 4
 
         # calibration file for each observation period:
-        if date >= datetime.datetime.fromisoformat('2018-08-16T00:00:00'):
+        if datetime.datetime.fromisoformat('2018-08-16T00:00:00') <= date <= datetime.datetime.fromisoformat('2025-01-16T23:59:59'):
             frest = '0005'
-
+        elif date >= datetime.datetime.fromisoformat('2025-01-17T00:00:00'):
+            frest = '0006'
     elif site == 'cpn':  # Chumphon (cpn)
         # camera number:
         if date >= datetime.datetime.fromisoformat('2020-01-15T00:00:00'):
@@ -598,6 +603,32 @@ def search_omti_calibration_file(
         if datetime.datetime.fromisoformat('2011-03-01T00:00:00') <= date <= datetime.datetime.fromisoformat('2011-10-01T23:59:59'):
             frest = '0002'
 
+    elif site == 'syo':  # Skibotn Station (skb)
+         # camera number:
+        if date >= datetime.datetime.fromisoformat('2023-10-11T00:00:00'):
+            im = 'C'
+
+        # no 2x2 binning pixels:
+        wid0 = wid_cdf
+
+        # observed wavelength of airglow data:
+        if wavelength == 5577:
+            ch = 1
+            wid0 = wid_cdf * 2  # 2x2 binning pixels
+        elif wavelength == 6300:
+            ch = 2
+            wid0 = wid_cdf * 2  # 2x2 binning pixels
+        elif wavelength == 5893:
+            ch = 4
+            wid0 = wid_cdf * 2  # 2x2 binning pixels
+        elif wavelength == 7320:
+            ch = 6
+            wid0 = wid_cdf * 2  # 2x2 binning pixels
+            
+        # calibration file for each observation period:
+        if date >= datetime.datetime.fromisoformat('2023-10-11T00:00:00'):
+            frest = '0001'
+            
     filename_ch = f'M{im}C{ch}{frest}.OUT'
     filename_5 = f'M{im}C5{frest}.OUT'
     return Calibration(filename_ch, filename_5, wid0)
