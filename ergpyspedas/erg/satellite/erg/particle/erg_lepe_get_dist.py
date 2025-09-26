@@ -143,19 +143,26 @@ def erg_lepe_get_dist(tname,
     ;; Default unit of v in F?DU tplot variables [keV/q] should be
     ;; converted to [eV] by multiplying (1000 * charge number).
     """
-    e0_array_raw = data_in[2][index]# ;; [time, 32]
-    e0_array = e0_array_raw.T
-    energy_reform = np.reshape(e0_array, [dim_array[0], 1, 1, n_times])
-    energy_rebin1 = np.repeat(energy_reform, dim_array[2],
-                             axis=2)  # repeated across apd(elevation)
-    dist['energy'] = np.repeat(energy_rebin1, dim_array[1],
-                              axis=1)  # repeated across spin phase(azimuth)
+    e0_array_raw = data_in.v1[index].T# ;; [32, time]
+    energy_reform = np.reshape(e0_array_raw, [dim_array[0], 1, 1, n_times])
 
+    energy_rebin1 = np.repeat(energy_reform, dim_array[2],
+                                axis=2)  # repeated spin phase
+
+    e0_array = np.repeat(energy_rebin1, dim_array[1],
+                                axis=1)  # repeated across apd(elevation)
+    dist['energy'] = e0_array
+    #energy_reform = np.reshape(e0_array, [dim_array[0], 1, 1, n_times])
+    #energy_rebin1 = np.repeat(energy_reform, dim_array[2],
+    #                         axis=2)  # repeated across apd(elevation)
+    #dist['energy'] = np.repeat(energy_rebin1, dim_array[1],
+    #                          axis=1)  # repeated across spin phase(azimuth)
+    
     # denergy member
     
-    de_array = e0_array + np.nan  #  ;; initialized as [ time, 32 ]  
+    de_array = e0_array_raw + np.nan  #  ;; initialized as [ time, 32 ]  
     for i in range(n_times):
-        enec0_array = deepcopy(e0_array[:, i])
+        enec0_array = deepcopy(e0_array_raw[:, i])
         id_array = np.argwhere(np.isfinite(enec0_array))
         if len(id_array) < 2:
             continue
@@ -200,7 +207,7 @@ def erg_lepe_get_dist(tname,
                                1,0)
     
     #  ;; azimuthal angle in spin direction
-    angarr = cdf_file.varget('FEDU_Angle_SGA') # ;;[elev/phi, (anode)] in SGA  (looking dir)
+    angarr = cdf_file.varget('fedu_angle_sga') # ;;[elev/phi, (anode)] in SGA  (looking dir)
 
     # ;; Flip the looking dirs to the flux dirs
     n_anode = angarr[0].size

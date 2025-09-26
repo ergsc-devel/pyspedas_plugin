@@ -1,6 +1,7 @@
 import numpy as np
+import pytplot
 from pyspedas import tplot_rename
-from pytplot import clip, get_data, options, store_data, ylim, zlim
+from pytplot import clip, get_data, options, store_data, del_data, ylim, zlim
 
 from pytplot import time_double
 
@@ -186,7 +187,8 @@ def lepe(
 
     if datatype == 'omniflux':
         tplot_rename(prefix + 'fedo' + suffix,prefix + 'FEDO' + suffix)
-
+        tplot_variables = []
+        tplot_variables.append(prefix + 'FEDO' + suffix)
         # set spectrogram plot option
         options(prefix + 'FEDO' + suffix, 'Spec', 1)
         # set y axis to logscale
@@ -207,11 +209,28 @@ def lepe(
         # change colormap option
         options(prefix + 'FEDO' + suffix, 'Colormap', 'jet')
 
-        return loaded_data
+        return tplot_variables
 
         
-    elif (datatype == '3dflux') or (datatype == '3dflux_finech') and (level == 'l2'):
-        tplot_rename(prefix + 'fedu' + suffix,prefix + 'FEDU' + suffix)
+    if (datatype == '3dflux') or (datatype == '3dflux_finech') and (level == 'l2'):
+        #tplot_rename(prefix + 'fedu' + suffix,prefix + 'FEDU' + suffix)
+        data_in = get_data(prefix + 'fedu' + suffix)
+        data_in_metadata = get_data(prefix + 'fedu' + suffix, metadata=True)
+        del_data(prefix + 'fedu' + suffix)
+        if (datatype == '3dflux_finech'): channel = np.array(['06','07','08','09','10','11','12','13','14','15','16','17'])
+        if (datatype == '3dflux'): channel = np.array(['01','02','03','04','05','A','B','18','19','20','21','22'])
+
+        sector = np.arange(16)
+        # l2 3dflux FEDU in CDF = [time,sector (v1),energy (v2),channel (v3)]
+        # l2 3dflux FEDU for tplot = [time,energy,channel,sector]
+
+        reformed_flux = data_in[1].transpose([0, 2, 3, 1])
+        store_data(prefix + 'FEDU' + suffix, data={'x': data_in[0],
+                                        'y' : reformed_flux,
+                                        'v1' : data_in.v2,
+                                        'v2' : channel,
+                                        'v3' : sector},
+                                        attr_dict = data_in_metadata)
 
         tplot_variables = []
 
@@ -254,7 +273,7 @@ def lepe(
 
         return tplot_variables
 
-    elif (level == 'l3'):
+    if (level == 'l3'):
         tplot_rename(prefix + 'fedu' + suffix,prefix + 'FEDU' + suffix)
         # set spectrogram plot option
         options(prefix + 'FEDU' + suffix, 'Spec', 1)
