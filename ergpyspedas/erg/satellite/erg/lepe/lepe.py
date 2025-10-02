@@ -308,7 +308,7 @@ def lepe(
             ytitle_pa_array = np.round(np.nan_to_num(get_data_vars[3]), 2)
             for i in range(get_data_vars[1].shape[1]):
                 tplot_name = prefix + 'pabin_' + \
-                    str(i).zfill(2) + '_FPDU' + suffix
+                    str(i).zfill(2) + '_FEDU' + suffix
                 store_data(tplot_name, data={'x': get_data_vars[0],
                                                 'y': get_data_vars[1][:, :, i],
                                                 'v': get_data_vars[2]})
@@ -343,6 +343,4 @@ def lepe(
                 options(tplot_name, 'ytitle', 'ERG LEP-i P\n' +
                         str(ytitle_eV_array[i]) + ' eV\nPitch angle')
                 tplot_variables.append(tplot_name)
-            return tplot_variables
-
-    
+            return tplot_variables    
