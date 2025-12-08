@@ -102,7 +102,7 @@ def omti_attitude_params(
             ym = 125.3363562
             a_val = 80.96082512
             rotation = -29.12566205
-        elif date >= datetime.datetime.fromisoformat('2018-09-16T00:00:00'):
+        elif datetime.datetime.fromisoformat('2018-09-16T00:00:00') <= date <= datetime.datetime.fromisoformat('2023-08-31T23:59:59'):
             xm = 123.904463
             ym = 126.0769982
             a_val = 81.73187528
@@ -347,5 +347,14 @@ def omti_attitude_params(
             ym = 241
             a_val = 148.6508424
             rotation = 44.2998
-
+    elif site == 'sto':  # Sto Station (STO) : (69.01N, 15.14E)
+        lon_obs = 15.14
+        lat_obs = 69.01
+        alt_obs = 0.811
+        if date >= datetime.datetime.fromisoformat('2025-09-08T00:00:00'):
+            xm = 253.687
+            ym = 257.844
+            a_val = 161.3617
+            rotation = -136.9606
+            
     return Attitude(lon_obs, lat_obs, alt_obs, xm, ym, a_val, rotation)
