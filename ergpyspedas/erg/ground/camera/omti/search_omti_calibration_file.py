@@ -551,10 +551,12 @@ def search_omti_calibration_file(
         # calibration file for each observation period:
         if datetime.datetime.fromisoformat('2001-10-09T00:00:00') <= date <= datetime.datetime.fromisoformat('2006-04-30T23:59:59'):
             frest = '0001'
-        elif datetime.datetime.fromisoformat('2006-05-01T00:00:00') <= date <= datetime.datetime.fromisoformat('2007-03-19T23:59:59'):
+        elif datetime.datetime.fromisoformat('2006-05-01T00:00:00') <= date <= datetime.datetime.fromisoformat('2010-02-28T23:59:59'):
             frest = '0003'
-        elif date >= datetime.datetime.fromisoformat('2011-03-19T00:00:00'):
+        elif datetime.datetime.fromisoformat('2010-03-01T00:00:00') <= date <= datetime.datetime.fromisoformat('2011-02-07T23:59:59'):
             frest = '0004'
+        elif date >= datetime.datetime.fromisoformat('2011-02-08T00:00:00'):
+            frest = '0005'
 
     elif site == 'ktb':  # Kototabang (ktb)
         # camera number:
@@ -603,7 +605,7 @@ def search_omti_calibration_file(
         if datetime.datetime.fromisoformat('2011-03-01T00:00:00') <= date <= datetime.datetime.fromisoformat('2011-10-01T23:59:59'):
             frest = '0002'
 
-    elif site == 'syo':  # Skibotn Station (skb)
+    elif site == 'skb':  # Skibotn Station (skb)
          # camera number:
         if date >= datetime.datetime.fromisoformat('2023-10-11T00:00:00'):
             im = 'C'
@@ -628,6 +630,29 @@ def search_omti_calibration_file(
         # calibration file for each observation period:
         if date >= datetime.datetime.fromisoformat('2023-10-11T00:00:00'):
             frest = '0001'
+            
+    elif site == 'sto':  # Sto Station (sto)
+         # camera number:
+        if date >= datetime.datetime.fromisoformat('2025-09-08T00:00:00'):
+            im = 'H'
+
+        # no 2x2 binning pixels:
+        wid0 = wid_cdf
+
+        # observed wavelength of airglow data:
+        if wavelength == 5577:
+            ch = 1
+            wid0 = wid_cdf * 2  # 2x2 binning pixels
+        elif wavelength == 6300:
+            ch = 2
+            wid0 = wid_cdf * 2  # 2x2 binning pixels
+        elif wavelength == 4861:
+            ch = 4
+            wid0 = wid_cdf * 2  # 2x2 binning pixels
+            
+        # calibration file for each observation period:
+        if date >= datetime.datetime.fromisoformat('2025-09-08T00:00:00'):
+            frest = '0002'
             
     filename_ch = f'M{im}C{ch}{frest}.OUT'
     filename_5 = f'M{im}C5{frest}.OUT'
