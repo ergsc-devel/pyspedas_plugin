@@ -40,7 +40,7 @@ def camera_zwo_asi(
 
     site: str or list of str
             The site or list of sites to load.
-            Valid values: 'sta', 'zug', 'all'
+            Valid values: ['alx', 'sta', 'sto', 'zug', 'all']
             Default: 'all'
 
     wavelength: str, int, list of str, or list of int
@@ -99,7 +99,7 @@ def camera_zwo_asi(
 
     '''
 
-    site_code_all = ['sta', 'zug']
+    site_code_all = ['alx', 'sta', 'sto', 'zug']
 
     if isinstance(wavelength, str):
         wavelengthc = wavelength.split(' ')
@@ -237,3 +237,4 @@ def camera_zwo_asi(
                                    attr_dict=get_metadata_vars)
 
     return loaded_data
+
