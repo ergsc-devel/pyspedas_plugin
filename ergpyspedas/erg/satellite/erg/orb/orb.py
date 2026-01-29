@@ -1,7 +1,7 @@
 import cdflib
 import numpy as np
 from pyspedas import tnames
-from pytplot import clip, get_data, options, ylim
+from pyspedas import clip, get_data, options, ylim
 
 from ..load import load
 from .remove_duplicated_tframe import remove_duplicated_tframe

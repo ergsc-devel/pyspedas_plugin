@@ -1,9 +1,9 @@
 import numpy as np
-import pytplot
+#import pytplot
 from pyspedas import tplot_rename
-from pytplot import clip, get_data, options, store_data, del_data, ylim, zlim
+from pyspedas import clip, get_data, options, store_data, del_data, ylim, zlim
 
-from pytplot import time_double
+from pyspedas import time_double
 
 
 from ..load import load

@@ -6,9 +6,9 @@ import numpy as np
 from copy import deepcopy
 from scipy.spatial import KDTree
 from pyspedas import tnames
-from pytplot import time_double
-from pytplot import time_string
-from pytplot import get_data
+from pyspedas import time_double
+from pyspedas import time_string
+from pyspedas import get_data
 from scipy import interpolate
 
 from astropy.coordinates import spherical_to_cartesian, cartesian_to_spherical

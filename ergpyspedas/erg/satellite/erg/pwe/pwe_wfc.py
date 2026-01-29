@@ -1,8 +1,8 @@
 import cdflib
 import numpy as np
 from pyspedas import tnames
-from pytplot import time_float
-from pytplot import clip, get_data, options, store_data, ylim, zlim
+from pyspedas import time_float
+from pyspedas import clip, get_data, options, store_data, ylim, zlim
 
 from ..load import load
 
