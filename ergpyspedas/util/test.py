@@ -2,7 +2,8 @@
 from ergpyspedas.erg import mgf, orb
 mgf()
 orb()
-from pytplot import tplot_options, options, tplot_names, split_vec, get_data, tplot_opt_glob, tnames
+from pyspedas import tplot_options, options, tplot_names, split_vec, get_data, tnames
+from pyspedas.tplot_tools import tplot_opt_glob
 
 split_vec('erg_orb_l2_pos_rmlatmlt')
 split_vec('erg_orb_l2_pos_Lm')
