@@ -3,7 +3,7 @@ import zipfile
 from pytplot import tplot_names, get_data, store_data
 from pyspedas.utilities.download import download
 from pytplot import time_string
-from pyspedas.erg.config import CONFIG
+from pyspedas.projects.erg.config import CONFIG
 from ....ground.camera.omti.search_omti_calibration_file import search_omti_calibration_file
 from ....ground.camera.omti.rm_star_absint import rm_star_absint
 
