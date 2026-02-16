@@ -1,4 +1,5 @@
-from pyspedas import get_data, tplot_names, spedas_colorbar
+from pyspedas import get_data, tplot_names
+from pyspedas.tplot_tools import spedas_colorbar
 import numpy as np
 from datetime import datetime
 import matplotlib.pyplot as plt
