@@ -92,7 +92,7 @@ def pwe_hfa(
     Examples
     --------
     >>> import pyspedas
-    >>> from pytplot import tplot
+    >>> from pyspedas import tplot
     >>> pwe_hfa_vars = pyspedas.erg.pwe_hfa(trange=['2017-03-27', '2017-03-28'])
     >>> tplot('erg_pwe_hfa_l2_low_spectra_eu')
 
