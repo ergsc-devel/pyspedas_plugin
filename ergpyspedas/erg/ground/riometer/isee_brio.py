@@ -86,7 +86,7 @@ def isee_brio(
     Examples
     ________
     >>> import ergpyspedas
-    >>> brio_vars = ergpyspedas.erg.isee_brio(trange=['2020-08-01', '2020-08-02'],site='ath')
+    >>> brio_vars = ergpyspedas.projects.erg.isee_brio(trange=['2020-08-01', '2020-08-02'],site='ath')
     >>> print(brio_vars)
 
     """

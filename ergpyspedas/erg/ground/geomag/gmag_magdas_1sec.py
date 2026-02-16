@@ -92,7 +92,7 @@ def gmag_magdas_1sec(
     ________
     >>> import ergpyspedas
     >>> from pytplot import tplot
-    >>> magdas_vars = ergpyspedas.erg.gmag_magdas_1sec(trange=["2010-01-01", "2010-01-02"],site='ama')
+    >>> magdas_vars = ergpyspedas.project.erg.gmag_magdas_1sec(trange=["2010-01-01", "2010-01-02"],site='ama')
     >>> tplot('magdas_mag_ama_1sec_hdz')
 
     """

@@ -100,7 +100,7 @@ def gmag_mm210(
     ________
     >>> import ergpyspedas
     >>> from pytplot import tplot
-    >>> mm210_vars = ergpyspedas.erg.gmag_mm210(trange=["2005-01-01", "2005-01-02"],site='adl',datatype='1min')
+    >>> mm210_vars = ergpyspedas.projects.erg.gmag_mm210(trange=["2005-01-01", "2005-01-02"],site='adl',datatype='1min')
     >>> tplot('mm210_mag_adl_1min_hdz')
 
     """

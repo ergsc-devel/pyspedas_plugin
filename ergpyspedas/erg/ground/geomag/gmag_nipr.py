@@ -96,7 +96,7 @@ def gmag_nipr(
 
     >>> import ergpyspedas
     >>> from pytplot import tplot
-    >>> fluxgate_vars = ergpyspedas.erg.gmag_nipr(trange=['2020-08-01','2020-08-02'], site='hus')
+    >>> fluxgate_vars = ergpyspedas.projects.erg.gmag_nipr(trange=['2020-08-01','2020-08-02'], site='hus')
     >>> tplot('nipr_mag_hus_02hz')
 
     """

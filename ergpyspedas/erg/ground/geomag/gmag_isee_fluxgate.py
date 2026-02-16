@@ -91,7 +91,7 @@ def gmag_isee_fluxgate(
 
     >>> import pyspedas
     >>> from pytplot import tplot
-    >>> fluxgate_vars=ergpyspedas.erg.gmag_isee_fluxgate(trange=['2020-08-01','2020-08-02'], site='all')
+    >>> fluxgate_vars=ergpyspedas.projects.erg.gmag_isee_fluxgate(trange=['2020-08-01','2020-08-02'], site='all')
     >>> tplot('isee_fluxgate_mag_ktb_1min_hdz')
 
     """
