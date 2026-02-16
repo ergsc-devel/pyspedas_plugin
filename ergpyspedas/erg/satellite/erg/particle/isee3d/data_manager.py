@@ -9,7 +9,7 @@ import vtk
 from vtkmodules.numpy_interface import dataset_adapter as dsa
 
 import pyspedas
-import pytplot
+#####import pytplot
 from pyspedas import get_data
 from pyspedas.utilities.time_double import time_double
 from pyspedas.utilities.time_string import time_string

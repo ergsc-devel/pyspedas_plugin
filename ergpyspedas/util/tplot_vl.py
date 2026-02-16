@@ -7,7 +7,7 @@ from matplotlib.figure import Figure
 from pyspedas import tplot_options, xlim
 from pyspedas.tplot_tools import tplot_opt_glob 
 #####from pytplot.options import options
-from pytplot import options
+from pyspedas import options
 
 from .common import plot_init, tplot_with_var_label_panel 
 

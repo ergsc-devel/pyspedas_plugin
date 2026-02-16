@@ -155,7 +155,7 @@ def pwe_efd(trange=['2017-04-01', '2017-04-02'],
             t_plot_name = prefix + elem + '_dsi'
             options(t_plot_name, 'ytitle', elem + ' vector in DSI')
             options(t_plot_name, 'legend_names', labels)
-            # ylim settings because pytplot.timespan() doesn't affect in ylim.
+            # ylim settings because pyspedas.timespan() doesn't affect in ylim.
             # May be it will be no need in future.
             get_data_vars = get_data(t_plot_name)
             if get_data_vars[0][0] < time_min_max[0]:
@@ -190,7 +190,7 @@ def pwe_efd(trange=['2017-04-01', '2017-04-02'],
             store_data(t_plot_name, data={
                        'x': time_new, 'y': data_new}, attr_dict=dl_in)
             options(t_plot_name, 'ytitle', '\n'.join(t_plot_name.split('_')))
-            # ylim settings because pytplot.timespan() doesn't affect in ylim.
+            # ylim settings because pyspedas.timespan() doesn't affect in ylim.
             # May be it will be no need in future.
             if time_new[0] < time_min_max[0]:
                 min_time_index = np.where((time_new <= time_min_max[0]))[0][-1]

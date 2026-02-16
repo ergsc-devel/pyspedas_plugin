@@ -92,7 +92,6 @@ def camera_zwo_asi(
     ________
 
     >>> import pyspedas
-    >>> import pytplot
     >>> import ergpyspedas
     >>> zwo_vars = ergpyspedas.projects.erg.camera_zwo_asi(site='sta', trange=['2023-11-21','2023-11-22'], wavelength =['5577', '5725'])
     >>> print(zwo_vars)
