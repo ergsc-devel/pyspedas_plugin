@@ -170,7 +170,6 @@ def gmag_isee_induction(
         if (not downloadonly) and (not notplot):
 
             tplot_name = prefix+'db_dt_' + site_input+suffix
-            print(prefix,site_input,suffix)
 
             if tplot_name in loaded_data:
                 clip(tplot_name, -1e+4, 1e+4)
