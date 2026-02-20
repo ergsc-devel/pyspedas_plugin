@@ -121,7 +121,7 @@ def tmake_map_table(
                 x_img = (i - map_size / 2.0) * grid
 
                 # ---Conversion from a distance to a degree:
-                lon_img = lon_obs + np.rad2deg(x_img / (r + mapping_alt))
+                lon_img = lon_obs + np.rad2deg(x_img / ((r + mapping_alt)* np.cos(np.deg2rad(lat_img))))
 
                 # ---Input the position data (zonal direction):
                 img_pos[0, i] = x_img
