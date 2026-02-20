@@ -3,11 +3,10 @@ from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 import matplotlib.dates
 import numpy as np
-#####import pytplot
+import pyspedas
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
 from pyspedas import get_data, tplot
-#####from pytplot.MPLPlotter.tplot import get_var_label_ticks
 from pyspedas.tplot_tools.MPLPlotter.tplot import get_var_label_ticks
 
 
