@@ -2,7 +2,7 @@ import cdflib
 import numpy as np
 
 from copy import deepcopy
-from pytplot import get_data, store_data, options, clip, ylim
+from pyspedas import get_data, store_data, options, clip, ylim
 
 from ...satellite.erg.load import load
 from ...satellite.erg.get_gatt_ror import get_gatt_ror
@@ -92,8 +92,8 @@ def gmag_isee_induction(
     ________
 
     >>> import pyspedas
-    >>> from pytplot import tplot
-    >>> ind_vars=pyspedas.erg.gmag_isee_induction(trange=['2020-08-01','2020-08-02'], site='all')
+    >>> from pyspedas import tplot
+    >>> ind_vars=pyspedas.projects.erg.gmag_isee_induction(trange=['2020-08-01','2020-08-02'], site='all')
     >>> tplot('isee_induction_db_dt_msr')
     """
     site_code_all = ['ath', 'cng', 'gak', 'hus', 'ist', 'kag', 'kap', 'kng', 'kdu', 'lcl', 'mgd', 'msr', 'mut', 'nai', 'ptk', 'rik', 'sta', 'zgn']
@@ -170,6 +170,7 @@ def gmag_isee_induction(
         if (not downloadonly) and (not notplot):
 
             tplot_name = prefix+'db_dt_' + site_input+suffix
+
             if tplot_name in loaded_data:
                 clip(tplot_name, -1e+4, 1e+4)
                 get_data_vars = get_data(tplot_name)

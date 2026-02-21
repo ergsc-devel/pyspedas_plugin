@@ -1,4 +1,4 @@
-from pytplot import options, ylim, get_data
+from pyspedas import options, ylim, get_data
 
 from ..load import load
 from ..get_gatt_ror import get_gatt_ror
@@ -96,7 +96,7 @@ def mepi_tof(
     Examples
     --------
     >>> import pyspedas
-    >>> from pytplot import tplot
+    >>> from pyspedas import tplot
     >>> mepi_tof_vars = pyspedas.erg.mepi_tof(trange=['2017-03-27', '2017-03-28'])
 
     """

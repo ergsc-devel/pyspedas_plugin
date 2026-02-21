@@ -1,7 +1,7 @@
 import cdflib
 import numpy as np
 
-from pytplot import get_data, store_data, options, clip, ylim
+from pyspedas import get_data, store_data, options, clip, ylim
 
 from ...satellite.erg.load import load
 from ...satellite.erg.get_gatt_ror import get_gatt_ror
@@ -91,8 +91,8 @@ def gmag_magdas_1sec(
     Examples
     ________
     >>> import ergpyspedas
-    >>> from pytplot import tplot
-    >>> magdas_vars = ergpyspedas.erg.gmag_magdas_1sec(trange=["2010-01-01", "2010-01-02"],site='ama')
+    >>> from pyspedas import tplot
+    >>> magdas_vars = ergpyspedas.project.erg.gmag_magdas_1sec(trange=["2010-01-01", "2010-01-02"],site='ama')
     >>> tplot('magdas_mag_ama_1sec_hdz')
 
     """

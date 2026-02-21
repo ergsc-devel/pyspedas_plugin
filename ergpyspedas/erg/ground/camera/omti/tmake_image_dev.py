@@ -1,4 +1,4 @@
-from pytplot import tplot_names, get_data, store_data
+from pyspedas import tplot_names, get_data, store_data
 import numpy as np
 
 

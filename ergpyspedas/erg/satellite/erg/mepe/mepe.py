@@ -1,5 +1,5 @@
 
-from pytplot import options, ylim, get_data
+from pyspedas import options, ylim, get_data
 
 from ..load import load
 from ..get_gatt_ror import get_gatt_ror
@@ -95,7 +95,7 @@ def mepe(
     Examples
     --------
     >>> import pyspedas
-    >>> from pytplot import tplot
+    >>> from pyspedas import tplot
     >>> mepe_vars = pyspedas.erg.mepe(trange=['2017-03-27', '2017-03-28'])
     >>> tplot('erg_mepe_l2_omniflux_FEDO')
 
@@ -104,8 +104,8 @@ def mepe(
     if notplot:
         initial_notplot_flag = True
 
-    if level == 'l3':
-        datatype = '3dflux'
+    if level == 'l3' and datatype not in ['3dflux', 'pa']:
+        datatype = 'pa'
 
     file_res = 3600. * 24
     prefix = 'erg_mepe_'+level + '_' + datatype + '_'

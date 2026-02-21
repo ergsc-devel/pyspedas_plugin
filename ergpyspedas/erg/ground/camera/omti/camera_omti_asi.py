@@ -1,7 +1,7 @@
 import cdflib
 import numpy as np
 
-from pytplot import get_data, store_data, options, clip, ylim
+from pyspedas import get_data, store_data, options, clip, ylim
 from ....satellite.erg.load import load
 from ....satellite.erg.get_gatt_ror import get_gatt_ror
 
@@ -94,7 +94,7 @@ def camera_omti_asi(
     ________
 
     >>> import ergpyspedas
-    >>> omti_vars = ergpyspedas.erg.camera_omti_asi(site='ath', trange=['2020-01-20','2020-01-21'])
+    >>> omti_vars = ergpyspedas.projects.erg.camera_omti_asi(site='ath', trange=['2020-01-20','2020-01-21'])
     >>> print(omti_vars)
 
     '''

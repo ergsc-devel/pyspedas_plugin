@@ -1,4 +1,4 @@
-from pytplot import store_data, options
+from pyspedas import store_data, options
 
 def erg_pgs_moments_tplot(
     moments,

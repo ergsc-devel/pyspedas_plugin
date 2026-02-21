@@ -1,4 +1,4 @@
-from pytplot import options, ylim, zlim, get_data
+from pyspedas import options, ylim, zlim, get_data
 from ..load import load
 from ..get_gatt_ror import get_gatt_ror
 from typing import List, Optional
@@ -92,7 +92,7 @@ def pwe_ofa(
     Examples
     --------
     >>> import pyspedas
-    >>> from pytplot import tplot
+    >>> from pyspedas import tplot
     >>> pwe_ofa_vars = pyspedas.erg.pwe_ofa(trange=['2017-03-27', '2017-03-28'])
     >>> tplot('erg_pwe_ofa_l2_spec_E_spectra_132')
 

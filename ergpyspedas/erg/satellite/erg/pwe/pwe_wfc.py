@@ -1,8 +1,8 @@
 import cdflib
 import numpy as np
 from pyspedas import tnames
-from pytplot import time_float
-from pytplot import clip, get_data, options, store_data, ylim, zlim
+from pyspedas import time_float
+from pyspedas import clip, get_data, options, store_data, ylim, zlim
 
 from ..load import load
 
@@ -245,7 +245,7 @@ def pwe_wfc(trange=['2017-04-01/12:00:00', '2017-04-01/13:00:00'],
             store_data(t_plot_name, data={
                        'x': time_new, 'y': data_new}, attr_dict=dl_in)
             options(t_plot_name, 'ytitle', '\n'.join(t_plot_name.split('_')))
-            # ylim settings because pytplot.timespan() doesn't affect in ylim.
+            # ylim settings because pyspedas.timespan() doesn't affect in ylim.
             # May be it will be no need in future.
             if not all_time_range_flag:
                 if time_new[0] <= trange_in_float[0]:

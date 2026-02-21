@@ -1,5 +1,5 @@
 import numpy as np
-from pytplot import clip, get_data, options, ylim
+from pyspedas import clip, get_data, options, ylim
 
 from ..load import load
 from ..get_gatt_ror import get_gatt_ror
@@ -98,7 +98,7 @@ def mgf(
     Examples
     --------
     >>> import pyspedas
-    >>> from pytplot import tplot
+    >>> from pyspedas import tplot
     >>> mgf_vars = pyspedas.erg.mgf(trange=['2017-03-27', '2017-03-28'])
     >>> tplot('erg_mgf_l2_mag_8sec_sm')
 

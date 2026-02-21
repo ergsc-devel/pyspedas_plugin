@@ -1,12 +1,12 @@
 import cdflib
 import numpy as np
 
-from pytplot import time_double
-from pytplot import time_clip as tclip
+from pyspedas import time_double
+from pyspedas import time_clip as tclip
 from pyspedas.utilities.dailynames import dailynames
 from pyspedas.utilities.download import download
 
-from pytplot import get_data, store_data, options, clip, ylim, cdf_to_tplot
+from pyspedas import get_data, store_data, options, clip, ylim, cdf_to_tplot
 
 from ...satellite.erg.get_gatt_ror import get_gatt_ror
 from typing import List, Union, Optional, Dict, Any
@@ -95,8 +95,8 @@ def gmag_nipr(
     ________
 
     >>> import ergpyspedas
-    >>> from pytplot import tplot
-    >>> fluxgate_vars = ergpyspedas.erg.gmag_nipr(trange=['2020-08-01','2020-08-02'], site='hus')
+    >>> from pyspedas import tplot
+    >>> fluxgate_vars = ergpyspedas.projects.erg.gmag_nipr(trange=['2020-08-01','2020-08-02'], site='hus')
     >>> tplot('nipr_mag_hus_02hz')
 
     """
