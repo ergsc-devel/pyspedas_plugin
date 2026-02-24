@@ -56,9 +56,6 @@ def tzwo_absint_nobg(
     # calibration image width
     wid0 = calibration.width
 
-    # calibration image width
-    wid0 = calibration.width
-
     # definition of absolute image data array from time and cdf image size
     abs_img_ag_int = np.zeros((len(times_ag), wid_cdf, wid_cdf), dtype=float)
 
@@ -70,8 +67,8 @@ def tzwo_absint_nobg(
 
     airglow_cal_data = np.array([[float(c) for c in line.split()] for line in file_data[1:] if line])
     data_length = airglow_cal_data.shape[0]
-    if data_length < int(wid0) * int(wid0) // 4:
-        wid0 /= 2
+    if data_length < wid_cdf * wid_cdf:
+        wid0 = wid_cdf
 
     # calibration image (A [cnt/R/s]) airglow filter
     cal_ag = np.zeros((wid_cdf, wid_cdf), dtype=float)
@@ -141,6 +138,7 @@ def tzwo_absint_nobg(
 
     # storing data to several plots
     store_data(f'{v_name1[:24]}abs', data={'x': times_ag, 'y': abs_img_ag_int}, attr_dict=var_attrs)
+
 
 
 
