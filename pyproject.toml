@@ -26,7 +26,9 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 
-dependencies = ["pyspedas>=2.0.0", "vtk>=9.2.2", "pyside6>=6.10.1"]
+# dependencies = ["pyspedas>=2.0.0", "vtk>=9.2.2", "pyside6>=6.10.1"]
+dependencies = ["pyspedas>=2.0.0"]
+
 
 [tool.setuptools]
 packages = {find = {exclude = ["contrib", "docs", "tests*"]}}
