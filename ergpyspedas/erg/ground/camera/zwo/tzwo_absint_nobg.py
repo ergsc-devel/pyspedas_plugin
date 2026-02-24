@@ -75,7 +75,7 @@ def tzwo_absint_nobg(
 
     # calibration image (A [cnt/R/s]) airglow filter
     cal_ag = np.zeros((wid_cdf, wid_cdf), dtype=float)
-    cal_ag0 = airglow_cal_data.reshape(wid0, wid0)
+    cal_ag0 = airglow_cal_data.reshape(int(wid0), int(wid0))
 
     if site == 'zug':
         cal_ag0 = np.roll(cal_ag0, 60, axis=0)
@@ -141,6 +141,7 @@ def tzwo_absint_nobg(
 
     # storing data to several plots
     store_data(f'{v_name1[:24]}abs', data={'x': times_ag, 'y': abs_img_ag_int}, attr_dict=var_attrs)
+
 
 
 
