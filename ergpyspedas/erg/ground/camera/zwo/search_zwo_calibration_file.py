@@ -83,7 +83,7 @@ def search_zwo_calibration_file(
             # camera number:
             im = '011'
         elif wavelength == 6300:
-            ch = '01'
+            ch = '02'
             # camera number:
             im = '010'
 
@@ -113,3 +113,4 @@ def search_zwo_calibration_file(
     filename_ch = f'Z{im}{ch}{frest}.OUT'
     filename_5 = f'Z{im}05{frest}.OUT'
     return Calibration(filename_ch, filename_5, wid0)
+
