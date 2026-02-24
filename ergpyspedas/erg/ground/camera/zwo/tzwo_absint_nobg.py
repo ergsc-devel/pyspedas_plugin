@@ -56,23 +56,25 @@ def tzwo_absint_nobg(
     # calibration image width
     wid0 = calibration.width
 
+    # calibration image width
+    wid0 = calibration.width
+
     # definition of absolute image data array from time and cdf image size
     abs_img_ag_int = np.zeros((len(times_ag), wid_cdf, wid_cdf), dtype=float)
 
     with zipfile.ZipFile(local_data_dir + file_name, mode='r') as archive:
         file_data = [s.decode() for s in archive.read(calibration.filename_ch).split(b'\n')][1:]
 
-    # bandwidth of airglow filter and transmission at wl(airglow)
+    # bandwidth of airglow filter and transmission at wl (airglow)
     _, bandwidth_airglow, transmission_airglow = [float(c) for c in file_data[0].split()]
 
     airglow_cal_data = np.array([[float(c) for c in line.split()] for line in file_data[1:] if line])
     data_length = airglow_cal_data.shape[0]
-    if data_length < int(wid0)*int(wid0)//4:
+    if data_length < int(wid0) * int(wid0) // 4:
         wid0 /= 2
 
     # calibration image (A [cnt/R/s]) airglow filter
     cal_ag = np.zeros((wid_cdf, wid_cdf), dtype=float)
-
     cal_ag0 = airglow_cal_data.reshape(wid0, wid0)
 
     if site == 'zug':
@@ -139,6 +141,7 @@ def tzwo_absint_nobg(
 
     # storing data to several plots
     store_data(f'{v_name1[:24]}abs', data={'x': times_ag, 'y': abs_img_ag_int}, attr_dict=var_attrs)
+
 
 
 
