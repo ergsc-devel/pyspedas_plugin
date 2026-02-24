@@ -6,7 +6,7 @@ from collections import namedtuple
 def zwo_attitude_params(
     date='2025-09-08T00:00:00', 
     site='sto',
-    wavelength,
+    wavelength
     ):
     """
     Output the ZWO camera for Coordinate Transformation.
@@ -86,3 +86,4 @@ def zwo_attitude_params(
                 rotation = 3.288370199
             
     return Attitude(lon_obs, lat_obs, alt_obs, xm, ym, a_val, rotation)
+
