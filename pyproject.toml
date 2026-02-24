@@ -7,7 +7,7 @@ name = "ergpyspedas"
 version = "2.0"
 description = "ERG SC plug-in for pySPEDAS"
 readme = {file = "README.md", content-type = "text/markdown"}
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 license = {text = "ISEE"}
 
 classifiers = [
@@ -17,7 +17,6 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Physics",
     "Topic :: Scientific/Engineering :: Astronomy",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
@@ -26,8 +25,7 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 
-# dependencies = ["pyspedas>=1.2.8", "vtk>=9.2.2", "pyside6>=6.4.1"]
-dependencies = ["pyspedas>=1.2.8"]
+dependencies = ["pyspedas>=1.2.8", "vtk>=9.2.2", "pyside6>=6.4.1"]
 
 [tool.setuptools]
 packages = {find = {exclude = ["contrib", "docs", "tests*"]}}
