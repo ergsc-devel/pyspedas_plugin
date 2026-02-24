@@ -355,6 +355,6 @@ def omti_attitude_params(
             xm = 253.687
             ym = 257.844
             a_val = 161.3617
-            rotation = -136.9606
+            rotation = 136.9606
             
     return Attitude(lon_obs, lat_obs, alt_obs, xm, ym, a_val, rotation)
