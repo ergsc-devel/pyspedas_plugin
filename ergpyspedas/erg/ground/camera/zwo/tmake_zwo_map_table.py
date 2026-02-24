@@ -62,7 +62,7 @@ def tmake_zwo_map_table(
     width_lat = map_size * grid_lat
 
     # ----Get the OMTI Imager Attitude Parameters for Coordinate Transformation:
-    result = omti_attitude_params(date=date, site=site)
+    result = zwo_attitude_params(date=date, site=site)
     lon_obs, lat_obs, alt_obs, x_cent, y_cent, a_val, rot_d = result
     # lon_obs is longitude of observation site [deg];
     # lat_obs is latitude of observation site [deg];
@@ -175,3 +175,4 @@ def tmake_zwo_map_table(
     gmap_table_name = f'zwo_asi_{site}_{wavelength}_gmap_table_{int(mapping_alt)}'
     store_data(gmap_table_name,
                data={'y': {'map': img_map, 'pos': img_pos, 'z_title': map_unit}})
+
