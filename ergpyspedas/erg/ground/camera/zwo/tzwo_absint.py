@@ -255,5 +255,6 @@ def tzwo_absint(
         print('now converting...:', time_string(times_ag[i]))
 
     # storing data to several plots
-    store_data(f'{v_name1[:24]}abs', data={'x': times_ag, 'y': abs_img_ag_int}, attr_dict=var_attrs)
+    store_data(f'{v_name1[:23]}abs', data={'x': times_ag, 'y': abs_img_ag_int}, attr_dict=var_attrs)
+
 
