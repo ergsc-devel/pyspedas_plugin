@@ -1,4 +1,4 @@
-from pytplot import clip, options, ylim, zlim, get_data
+from pyspedas import clip, options, ylim, zlim, get_data
 from ..load import load
 from ..get_gatt_ror import get_gatt_ror
 from typing import List, Optional
@@ -92,7 +92,7 @@ def pwe_hfa(
     Examples
     --------
     >>> import pyspedas
-    >>> from pytplot import tplot
+    >>> from pyspedas import tplot
     >>> pwe_hfa_vars = pyspedas.erg.pwe_hfa(trange=['2017-03-27', '2017-03-28'])
     >>> tplot('erg_pwe_hfa_l2_low_spectra_eu')
 

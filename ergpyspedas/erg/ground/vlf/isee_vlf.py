@@ -1,8 +1,8 @@
 import cdflib
 import numpy as np
 
-from pytplot import tnames
-from pytplot import get_data, store_data, options, clip, ylim, zlim
+from pyspedas import tnames
+from pyspedas import get_data, store_data, options, clip, ylim, zlim
 
 from ...satellite.erg.load import load
 from ...satellite.erg.get_gatt_ror import get_gatt_ror
@@ -91,7 +91,7 @@ def isee_vlf(
     Examples
     ________
     >>> import ergpyspedas
-    >>> vlf_vars = ergpyspedas.erg.isee_vlf(trange=['2017-03-30/12:00:00', '2017-03-30/15:00:00'],site='ath')
+    >>> vlf_vars = ergpyspedas.projects.erg.isee_vlf(trange=['2017-03-30/12:00:00', '2017-03-30/15:00:00'],site='ath')
     >>> print(vlf_vars)
 
     """

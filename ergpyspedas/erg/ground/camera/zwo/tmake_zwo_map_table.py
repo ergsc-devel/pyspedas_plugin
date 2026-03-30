@@ -1,9 +1,9 @@
 from pyspedas import tplot_names, get_data, store_data
 import numpy as np
 
-from ....ground.camera.omti.omti_attitude_params import omti_attitude_params
+from ....ground.camera.zwo.zwo_attitude_params import zwo_attitude_params
 
-def tmake_map_table(
+def tmake_zwo_map_table(
     v_name,
     mapping_alt='110',
     grid=None, 
@@ -62,7 +62,7 @@ def tmake_map_table(
     width_lat = map_size * grid_lat
 
     # ----Get the OMTI Imager Attitude Parameters for Coordinate Transformation:
-    result = omti_attitude_params(date=date, site=site)
+    result = zwo_attitude_params(date=date, site=site)
     lon_obs, lat_obs, alt_obs, x_cent, y_cent, a_val, rot_d = result
     # lon_obs is longitude of observation site [deg];
     # lat_obs is latitude of observation site [deg];
@@ -172,6 +172,7 @@ def tmake_map_table(
                 img_map[1, i, j] = round(y)
 
     # ---Store tplot variable:
-    gmap_table_name = f'omti_asi_{site}_{wavelength}_gmap_table_{int(mapping_alt)}'
+    gmap_table_name = f'zwo_asi_{site}_{wavelength}_gmap_table_{int(mapping_alt)}'
     store_data(gmap_table_name,
                data={'y': {'map': img_map, 'pos': img_pos, 'z_title': map_unit}})
+

@@ -2,7 +2,7 @@ import cdflib
 import numpy as np
 
 from copy import deepcopy
-from pytplot import get_data, store_data, options, clip, ylim
+from pyspedas import get_data, store_data, options, clip, ylim
 
 from ...satellite.erg.load import load
 from ...satellite.erg.get_gatt_ror import get_gatt_ror
@@ -86,7 +86,7 @@ def isee_brio(
     Examples
     ________
     >>> import ergpyspedas
-    >>> brio_vars = ergpyspedas.erg.isee_brio(trange=['2020-08-01', '2020-08-02'],site='ath')
+    >>> brio_vars = ergpyspedas.projects.erg.isee_brio(trange=['2020-08-01', '2020-08-02'],site='ath')
     >>> print(brio_vars)
 
     """

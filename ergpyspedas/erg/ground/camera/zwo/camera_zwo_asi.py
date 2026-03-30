@@ -1,7 +1,7 @@
 import cdflib
 import numpy as np
 
-from pytplot import get_data, store_data, options, clip, ylim
+from pyspedas import get_data, store_data, options, clip, ylim
 from ....satellite.erg.load import load
 from ....satellite.erg.get_gatt_ror import get_gatt_ror
 
@@ -92,9 +92,8 @@ def camera_zwo_asi(
     ________
 
     >>> import pyspedas
-    >>> import pytplot
     >>> import ergpyspedas
-    >>> zwo_vars = ergpyspedas.erg.camera_zwo_asi(site='sta', trange=['2023-11-21','2023-11-22'], wavelength =['5577', '5725'])
+    >>> zwo_vars = ergpyspedas.projects.erg.camera_zwo_asi(site='sta', trange=['2023-11-21','2023-11-22'], wavelength =['5577', '5725'])
     >>> print(zwo_vars)
 
     '''

@@ -3,11 +3,11 @@ from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 import matplotlib.dates
 import numpy as np
-import pytplot
+import pyspedas
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
-from pytplot import get_data, tplot
-from pytplot.MPLPlotter.tplot import get_var_label_ticks
+from pyspedas import get_data, tplot
+from pyspedas.tplot_tools.MPLPlotter.tplot import get_var_label_ticks
 
 
 def plot_init(
@@ -49,10 +49,10 @@ def _preprocess_var_label_panel(
     num_panels = len(variables) + 1
     panel_sizes = [1] * len(variables) + [0.1 * (len(var_label_list) + 2)]
     for var_idx, variable in enumerate(variables):
-        if pytplot.data_quants.get(variable) is None:
+        if pyspedas.tplot_tools.data_quants.get(variable) is None:
             continue
         panel_size = (
-            pytplot.data_quants[variable]
+            pyspedas.tplot_tools.data_quants[variable]
             .attrs["plot_options"]["extras"]
             .get("panel_size")
         )
@@ -72,7 +72,7 @@ def _postprocess_var_label_panel(
     font_size: float,
 ) -> None:
     # PyTplot's tplot does not apply xlim if there is no data, so apply here
-    x_range = pytplot.tplot_opt_glob.get("x_range")
+    x_range = pyspedas.tplot_tools.tplot_opt_glob.get("x_range")
     if x_range is not None:
         x_range_start = x_range[0]  # type: ignore
         x_range_stop = x_range[1]  # type: ignore
@@ -160,7 +160,7 @@ def _postprocess_var_label_panel(
             else:
                 label = var_label_list[i]
                 #print('label ', label)
-                label_data = pytplot.get_data(label, xarray=True, dt=True)
+                label_data = pyspedas.get_data(label, xarray=True, dt=True)
                 y_label = label_data.attrs["plot_options"]["yaxis_opt"]["axis_label"]  # type: ignore
                 
                 # Switch the type of the time array according to the version of numpy

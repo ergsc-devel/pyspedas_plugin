@@ -1,6 +1,6 @@
 
 import logging
-import pytplot
+#####import pytplot
 import numpy
 
 
@@ -43,9 +43,9 @@ def subtract_average(
 
     Examples
     --------
-        >>> pytplot.store_data('a', data={'x':[0,4,8,12,16], 'y':[1,2,3,4,5]})
-        >>> pytplot.subtract_average('a')
-        >>> pytplot.tplot(['a','a-d'])
+        >>> pyspedas.store_data('a', data={'x':[0,4,8,12,16], 'y':[1,2,3,4,5]})
+        >>> pyspedas.subtract_average('a')
+        >>> pyspedas.tplot(['a','a-d'])
 
     """
 
@@ -54,7 +54,7 @@ def subtract_average(
         logging.info("subtract_average: The new_names parameter is deprecated. Please use newname instead.")
         newname = new_names
 
-    old_names = pytplot.tnames(names)
+    old_names = pyspedas.tnames(names)
 
     if len(old_names) < 1:
         logging.error('Subtract Average error: No pytplot names were provided.')
@@ -79,15 +79,15 @@ def subtract_average(
     if len(n_names) != len(old_names):
         n_names = [s + suffix for s in old_names]
 
-    old_names = pytplot.tnames(names)
+    old_names = pyspedas.tnames(names)
 
     for old_idx, old in enumerate(old_names):
         new = n_names[old_idx]
 
         if new != old:
-            pytplot.tplot_copy(old, new)
+            pyspedas.tplot_copy(old, new)
 
-        data = pytplot.data_quants[new].values
+        data = pyspedas.data_quants[new].values
         # Subtracting the average will fail if data is not a floating point type
         if data.dtype.kind != 'f':
             data=numpy.float64(data)
@@ -107,7 +107,7 @@ def subtract_average(
                     data[:, i] -= numpy.nanmean(data[:, i], axis=0)
             ptype = 'Mean'
 
-        pytplot.data_quants[new].values = data
+        pyspedas.data_quants[new].values = data
 
         logging.info('Subtract ' + ptype + ' was applied to: ' + new)
 

@@ -1,7 +1,7 @@
 import cdflib
 import numpy as np
 
-from pytplot import get_data, store_data, options, clip, ylim
+from pyspedas import get_data, store_data, options, clip, ylim
 from ...satellite.erg.load import load
 from ...satellite.erg.get_gatt_ror import get_gatt_ror
 from typing import List, Union, Optional, Dict, Any
@@ -90,8 +90,8 @@ def gmag_isee_fluxgate(
     ________
 
     >>> import pyspedas
-    >>> from pytplot import tplot
-    >>> fluxgate_vars=ergpyspedas.erg.gmag_isee_fluxgate(trange=['2020-08-01','2020-08-02'], site='all')
+    >>> from pyspedas import tplot
+    >>> fluxgate_vars=ergpyspedas.projects.erg.gmag_isee_fluxgate(trange=['2020-08-01','2020-08-02'], site='all')
     >>> tplot('isee_fluxgate_mag_ktb_1min_hdz')
 
     """

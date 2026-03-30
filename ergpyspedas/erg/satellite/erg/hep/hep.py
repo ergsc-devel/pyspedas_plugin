@@ -1,5 +1,5 @@
 import numpy as np
-from pytplot import clip, options, store_data, ylim, zlim, get_data
+from pyspedas import clip, options, store_data, ylim, zlim, get_data
 
 from ..load import load
 from ..get_gatt_ror import get_gatt_ror
@@ -96,7 +96,7 @@ def hep(
     Examples
     --------
     >>> import pyspedas
-    >>> from pytplot import tplot
+    >>> from pyspedas import tplot
     >>> hep_vars = pyspedas.erg.hep(trange=['2017-03-27', '2017-03-28'])
     >>> tplot('erg_hep_l2_FEDO_L')
 

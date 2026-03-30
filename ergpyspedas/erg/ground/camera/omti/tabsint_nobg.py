@@ -1,9 +1,9 @@
 import numpy as np
 import zipfile
-from pytplot import tplot_names, get_data, store_data
+from pyspedas import tplot_names, get_data, store_data
 from pyspedas.utilities.download import download
-from pytplot import time_string
-from pyspedas.erg.config import CONFIG
+from pyspedas import time_string
+from pyspedas.projects.erg.config import CONFIG
 from ....ground.camera.omti.search_omti_calibration_file import search_omti_calibration_file
 from ....ground.camera.omti.rm_star_absint import rm_star_absint
 
@@ -57,7 +57,7 @@ def tabsint_nobg(
     wid0 = calibration.width
 
     # definition of absolute image data array from time and cdf image size
-    abs_img_ag_int = np.zeros((ag_data.shape[0], wid_cdf, wid_cdf), dtype=float)
+    abs_img_ag_int = np.zeros((len(times_ag), wid_cdf, wid_cdf), dtype=float)
 
     with zipfile.ZipFile(local_data_dir + file_name, mode='r') as archive:
         file_data = [s.decode() for s in archive.read(calibration.filename_ch).split(b'\n')][1:]
