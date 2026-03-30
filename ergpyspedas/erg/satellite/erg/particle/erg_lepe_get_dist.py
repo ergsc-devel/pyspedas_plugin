@@ -5,10 +5,7 @@ import numpy as np
 
 from copy import deepcopy
 from scipy.spatial import KDTree
-from pyspedas import tnames
-from pytplot import time_double
-from pytplot import time_string
-from pytplot import get_data
+from pyspedas import tnames, time_double, time_string, get_data
 from scipy import interpolate
 
 from astropy.coordinates import spherical_to_cartesian, cartesian_to_spherical
@@ -124,7 +121,7 @@ def erg_lepe_get_dist(tname,
     ;; Shuffle the original data array [time,energy, anode, spin phase] to
     ;; be energy-azimuth(spin phase)-elevation-time.
     """
-    dist['data'] = data_in[1][index].transpose([1, 3, 2, 0])
+    data_arr = data_in[1][index].transpose([1, 3, 2, 0])
     dist['bins'] = np.ones(shape=np.insert(dim_array, dim_array.shape[0],
                                            n_times), dtype='int8')
     # must be set or data will be consider invalid
@@ -138,12 +135,22 @@ def erg_lepe_get_dist(tname,
 
     cdf_file = cdflib.CDF(cdf_path)
 
+    #  ;; Energy channel information
+    eng_info = cdf_file.varget('energy_index') #
+
+
     #  ;; Energy ch
     """
     ;; Default unit of v in F?DU tplot variables [keV/q] should be
     ;; converted to [eV] by multiplying (1000 * charge number).
     """
     e0_array_raw = data_in.v1[index].T# ;; [32, time]
+    for i in range(n_times):
+        err_ad = np.where(eng_info[i,:] < -1)
+        e0_array_raw[err_ad,i]= np.nan
+        data_arr[err_ad,:,:,i] = np.nan
+    dist['data'] = data_arr
+    
     energy_reform = np.reshape(e0_array_raw, [dim_array[0], 1, 1, n_times])
 
     energy_rebin1 = np.repeat(energy_reform, dim_array[2],

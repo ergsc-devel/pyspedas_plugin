@@ -1,10 +1,6 @@
 import numpy as np
-import pytplot
-from pyspedas import tplot_rename
-from pytplot import clip, get_data, options, store_data, del_data, ylim, zlim
-
-from pytplot import time_double
-
+import pyspedas
+from pyspedas import tplot_rename, clip, get_data, options, store_data, del_data, ylim, zlim, time_double
 
 from ..load import load
 from ..get_gatt_ror import get_gatt_ror
