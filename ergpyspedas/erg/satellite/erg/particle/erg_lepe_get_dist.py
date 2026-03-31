@@ -136,8 +136,8 @@ def erg_lepe_get_dist(tname,
     cdf_file = cdflib.CDF(cdf_path)
 
     #  ;; Energy channel information
-    eng_info = cdf_file.varget('energy_index') #
-
+    eng_data = get_data('erg_lepe_l2_3dflux_energy_index')
+    eng_info = eng_data.y #
 
     #  ;; Energy ch
     """

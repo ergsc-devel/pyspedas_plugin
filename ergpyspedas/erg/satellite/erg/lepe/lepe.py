@@ -143,7 +143,11 @@ def lepe(
         pathformat += 'v??_??.cdf'
     else:
         pathformat += version + '.cdf'
-
+    if (datatype == '3dflux') or (datatype == '3dflux_finech'):
+        varformat = ['*fedu','*count_rate','*count_rate_bg','*energy_index']
+    else:
+        varformat = varformat
+        
     loaded_data = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype, file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
                        varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd, force_download=force_download)
 
