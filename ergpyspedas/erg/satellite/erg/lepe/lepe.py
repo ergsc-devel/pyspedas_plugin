@@ -154,6 +154,10 @@ def lepe(
     
     loaded_data = load_lepe(pathformat=pathformat, trange=trange, level=level, datatype=datatype, file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
                        varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd, force_download=force_download)
+    
+    if (len(loaded_data) < 1):
+        print('There is no valid LEPe data.')
+        return loaded_data
 
     if (len(loaded_data) > 0) and ror:
 
