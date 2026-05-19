@@ -60,6 +60,7 @@ def att(trange=['2017-04-01', '2017-04-02'],
     Phase_float_array = concat_frame_for_tplot.iloc[:, 9].astype(float)
     I_Alpha_float_array = concat_frame_for_tplot.iloc[:, 2].astype(float)
     I_Delta_float_array = concat_frame_for_tplot.iloc[:, 3].astype(float)
+    I_ThetaS_float_array = concat_frame_for_tplot.iloc[:, 5].astype(float)
     GX_Alpha_float_array = concat_frame_for_tplot.iloc[:, 10].astype(float)
     GX_Delta_float_array = concat_frame_for_tplot.iloc[:, 11].astype(float)
     GZ_Alpha_float_array = concat_frame_for_tplot.iloc[:, 12].astype(float)
@@ -75,6 +76,8 @@ def att(trange=['2017-04-01', '2017-04-02'],
             'x': time_float_array, 'y': I_Alpha_float_array}
         output_dictionary['erg_att_izdec'] = {
             'x': time_float_array, 'y': I_Delta_float_array}
+        output_dictionary['erg_att_thetas'] = {
+            'x': time_float_array, 'y': I_ThetaS_float_array}
         output_dictionary['erg_att_gxras'] = {
             'x': time_float_array, 'y': GX_Alpha_float_array}
         output_dictionary['erg_att_gxdec'] = {
@@ -93,6 +96,8 @@ def att(trange=['2017-04-01', '2017-04-02'],
             'x': time_float_array, 'y': I_Alpha_float_array})
         store_data('erg_att_izdec', data={
             'x': time_float_array, 'y': I_Delta_float_array})
+        store_data('erg_att_thetas', data={
+            'x': time_float_array, 'y': I_ThetaS_float_array})
         store_data('erg_att_gxras', data={
             'x': time_float_array, 'y': GX_Alpha_float_array})
         store_data('erg_att_gxdec', data={
