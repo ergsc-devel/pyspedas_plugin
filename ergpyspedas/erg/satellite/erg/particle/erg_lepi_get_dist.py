@@ -3,9 +3,9 @@ import logging
 
 import numpy as np
 from pyspedas import tnames
-from pyspedas import time_double
-from pyspedas import time_string
-from pyspedas import get_data
+from pyspedas.tplot_tools import time_double
+from pyspedas.tplot_tools import time_string
+from pyspedas.tplot_tools import get_data
 from scipy import interpolate
 
 from .get_lepi_flux_angle_in_sga import get_lepi_flux_angle_in_sga
@@ -52,6 +52,16 @@ def erg_lepi_get_dist(tname,
         else:
             print(f'ERROR: given an invalid tplot variable: {input_name}')
 
+    #  If index is provided, ensure it's a list or ndarray so that
+    #  array indexing preserves the time dimension (avoids 3D slice).
+    #  A scalar index (e.g. np.int64) would reduce data_in[1][index]
+    #  from 4D to 3D, causing transpose([1,3,2,0]) to fail with
+    #  "ValueError: axes don't match array".
+
+    if index is not None and not isinstance(index, (list, np.ndarray)):
+        index = [index]
+
+
     # ;; Get a reference to data and metadata
 
     data_in = get_data(input_name)
@@ -96,8 +106,7 @@ def erg_lepi_get_dist(tname,
                 index = np.arange(n_times)
         else:
             n_times = np.array([index]).size
-    if isinstance(index, int):
-        index = np.array([index])
+
     """
     ;; --------------------------------------------------------------
 
@@ -161,7 +170,14 @@ def erg_lepi_get_dist(tname,
     ;; be energy-azimuth(spin phase)-elevation(anod)-time.
     ;; The factor 1e-3/charge is to convert [/keV/q-s-sr-cm2] (default
     ;; unit of LEP-i Lv2 flux data) to [eV-s-sr-cm2].
+    ;;
+    ;; FIX: index must be a list or ndarray here so that data_in[1][index]
+    ;; remains 4D [n_times, energy, anode, spin_phase]. A bare scalar would
+    ;; collapse the time dimension to 3D and cause
+    ;; "ValueError: axes don't match array" in transpose().
     """
+    if not isinstance(index, (list, np.ndarray)):
+        index = [index]
     dist['data'] = data_in[1][index].transpose([1, 3, 2, 0]) * 1e-3 / abs(charge)
 
     dist['bins'] = np.ones(shape=np.insert(dim_array, dim_array.shape[0],
