@@ -10,7 +10,7 @@ from .satellite.erg.pwe.pwe_efd import pwe_efd
 from .satellite.erg.pwe.pwe_hfa import pwe_hfa
 from .satellite.erg.pwe.pwe_ofa import pwe_ofa
 from .satellite.erg.pwe.pwe_wfc import pwe_wfc
-from .satellite.erg.pwe.pwe_wfc import pwe_wfc_monopole
+from .satellite.erg.pwe.pwe_wfc_monopole import pwe_wfc_monopole
 from .satellite.erg.xep.xep import xep
 from .satellite.erg.particle.erg_xep_part_products import erg_xep_part_products
 from .satellite.erg.particle.erg_hep_part_products import erg_hep_part_products
