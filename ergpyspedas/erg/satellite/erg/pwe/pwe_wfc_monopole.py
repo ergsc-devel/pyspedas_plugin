@@ -96,7 +96,7 @@ def pwe_wfc_monopole(trange=['2017-04-01/12:00:00', '2017-04-01/13:00:00'],
         elif datatype == 'spec':
             prefix_list = []
             component_suffix_list = []
-            prefix = 'erg_pwe_wfc_'+level+'_e_' + datatype + '_monopole_' + mode + '_'
+            prefix = 'erg_pwe_wfc_'+level+'_e_monopole_' + mode + '_'
             pathformat = 'satellite/erg/pwe/wfc/'+level+'/'+datatype+'/%Y/%m/erg_pwe_wfc_' + level+'_e_'+datatype+'_monopole_'+mode+'_%Y%m%d%H_v??_??.cdf'
             loaded_data.append(load(pathformat=pathformat, trange=trange, level=level, datatype=datatype, file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
                                    varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd))
