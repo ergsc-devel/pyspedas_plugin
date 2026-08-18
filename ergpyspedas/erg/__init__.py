@@ -17,6 +17,7 @@ from .satellite.erg.particle.erg_hep_part_products import erg_hep_part_products
 from .satellite.erg.particle.erg_mep_part_products import erg_mep_part_products
 from .satellite.erg.particle.erg_lep_part_products import erg_lep_part_products
 
+from .ground.camera.emccd.camera_emccd_asf import camera_emccd_asf
 from .ground.camera.omti.camera_omti_asi import camera_omti_asi
 from .ground.camera.omti.omti_attitude_params import omti_attitude_params
 from .ground.camera.omti.plot_omti_image import plot_omti_image
