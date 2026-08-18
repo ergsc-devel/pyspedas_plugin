@@ -204,5 +204,5 @@ def camera_emccd_asf(
                                 mapping_table_structure[site_input]['glat'] = cdfcont['max_records'] + 1
                                 mapping_table_structure[site_input]['glon'] = cdfcont['max_records'] + 1
                                 mapping_table_structure[site_input]['altitude'] = cdfcont['max_records'] + 1
-
+                                store_data('emccd_asf_' + site_input + '_mapping_table', data = {'glat':glat, 'glon':glon, 'alt':altitude}, attr_dict=get_metadata_vars)
     return loaded_data
