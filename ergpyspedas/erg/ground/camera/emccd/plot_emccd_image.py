@@ -119,7 +119,7 @@ def plot_emccd_image(
 
     # ---Add the plot legends:
     print(time_string(current_time))
-    fig.text(x=0.5, y=0.825, s=time_string(current_time), ha='center')
+    fig.text(x=0.5, y=0.825, s=title, ha='center')
     fig.text(x=0.5, y=0.865, s=title, ha='center')
     fig.text(x=0.5, y=0.905, s=f'Station: {site.upper()}', ha='center')
 
