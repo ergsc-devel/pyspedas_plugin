@@ -110,6 +110,16 @@ def camera_emccd_asf(
     
     site_code = list(set(site_code).intersection(site_code_all))
 
+    if mapping_table:
+        mapping_table_structure = {}
+        for site_input in site_code:
+            mapping_table_structure[site_input] = {
+                'site_code':'',
+                'glat':np.zeros(shape=(256,256)),
+                'glon':np.zeros(shape=(256,256)),
+                'altitude':np.zeros(shape=(15))
+            }
+    
     new_cdflib = False
     if cdflib.__version__ > "0.4.9":
         new_cdflib = True
