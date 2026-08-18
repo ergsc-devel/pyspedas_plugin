@@ -190,19 +190,19 @@ def camera_emccd_asf(
                     get_metadata_vars = get_data(current_tplot_name, metadata=True)
                     store_data(current_tplot_name, data={'x':get_data_vars[0], 'y':get_data_vars[1]}, attr_dict=get_metadata_vars)
 
-                    if mapping_table:
+                if mapping_table:
                     
-                        meta_data_var = get_data(tplot_name,metadata=True)
+                    meta_data_var = get_data(tplot_name,metadata=True)
 
-                            if meta_data_var is not None:
-                                cdf_file = cdflib.CDF(meta_data_var['CDF']['FILENAME'])
-                                cdfcont = cdf_file.varget('glat', inq=True)
-                                glat = cdf_file.varget('glat')
-                                glon = cdf_file.varget('glon')
-                                altitude =cdf_file.varget('altitude')
-                                mapping_table_structure[site_input]['site_code'] = site_input
-                                mapping_table_structure[site_input]['glat'] = cdfcont['max_records'] + 1
-                                mapping_table_structure[site_input]['glon'] = cdfcont['max_records'] + 1
-                                mapping_table_structure[site_input]['altitude'] = cdfcont['max_records'] + 1
-                                store_data('emccd_asf_' + site_input + '_mapping_table', data = {'glat':glat, 'glon':glon, 'alt':altitude}, attr_dict=get_metadata_vars)
+                    if meta_data_var is not None:
+                        cdf_file = cdflib.CDF(meta_data_var['CDF']['FILENAME'])
+                        cdfcont = cdf_file.varget('glat', inq=True)
+                        glat = cdf_file.varget('glat')
+                        glon = cdf_file.varget('glon')
+                        altitude =cdf_file.varget('altitude')
+                        mapping_table_structure[site_input]['site_code'] = site_input
+                        mapping_table_structure[site_input]['glat'] = cdfcont['max_records'] + 1
+                        mapping_table_structure[site_input]['glon'] = cdfcont['max_records'] + 1
+                        mapping_table_structure[site_input]['altitude'] = cdfcont['max_records'] + 1
+                        store_data('emccd_asf_' + site_input + '_mapping_table', data = {'glat':glat, 'glon':glon, 'alt':altitude}, attr_dict=get_metadata_vars)
     return loaded_data
