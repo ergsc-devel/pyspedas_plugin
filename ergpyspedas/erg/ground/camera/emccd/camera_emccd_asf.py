@@ -2,7 +2,7 @@ import cdflib
 import numpy as np
 
 from pyspedas import get_data, store_data, options, clip, ylim
-from ....satellite.erg.load import load
+from ....ground.camera.load_emccd import load_emccd
 from ....satellite.erg.get_gatt_ror import get_gatt_ror
 
 from typing import List, Union, Optional
