@@ -115,8 +115,8 @@ def camera_emccd_asf(
         for site_input in site_code:
             mapping_table_structure[site_input] = {
                 'site_code':'',
-                'glat':np.zeros(shape=(256,256)),
-                'glon':np.zeros(shape=(256,256)),
+                'glat':np.zeros(shape=(256,256,15)),
+                'glon':np.zeros(shape=(256,256,15)),
                 'altitude':np.zeros(shape=(15))
             }
     
@@ -214,8 +214,8 @@ def camera_emccd_asf(
                         glon = cdf_file.varget('glon')
                         altitude =cdf_file.varget('altitude')
                         mapping_table_structure[site_input]['site_code'] = site_input
-                        mapping_table_structure[site_input]['glat'] = cdfcont.max_rec + 1
-                        mapping_table_structure[site_input]['glon'] = cdfcont.max_rec + 1
-                        mapping_table_structure[site_input]['altitude'] = cdfcont.max_rec + 1
+                        mapping_table_structure[site_input]['glat'] = cdfcont.Last_Rec + 1
+                        mapping_table_structure[site_input]['glon'] = cdfcont.Last_Rec + 1
+                        mapping_table_structure[site_input]['altitude'] = cdfcont.Last_Rec + 1
                         store_data('emccd_asf_' + site_input + '_mapping_table', data = {'glat':glat, 'glon':glon, 'alt':altitude}, attr_dict=get_metadata_vars)
     return loaded_data
