@@ -142,7 +142,7 @@ def camera_emccd_asf(
                 print('')
                 print(f'Affiliations: {gatt["PI_affiliation"]}')
                 print('')
-                print('Rules of the Road for OMTI ASI Data Use:')
+                print('Rules of the Road for EMCCD ASF Data Use:')
                 for gatt_text in gatt["TEXT"]:
                     print(gatt_text)
                 print(f'{gatt["LINK_TEXT"]}')
