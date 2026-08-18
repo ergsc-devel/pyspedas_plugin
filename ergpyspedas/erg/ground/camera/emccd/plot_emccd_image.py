@@ -1,4 +1,4 @@
-from pyspedas import get_data, tplot_names
+from pyspedas import get_data, tplot_names, time_string, time_double
 from pyspedas.tplot_tools import spedas_colorbar
 from datetime import datetime
 import numpy as np
@@ -58,7 +58,7 @@ def plot_emccd_image(
     if time is None:
         time = str(times[0])
 
-    condition = abs(times - float(time)) == min(abs(times - float(time)))
+    condition = abs(times - time_double(time)) == min(abs(times - time_double(time)))
     idx = np.asarray(condition).nonzero()[0]
 
     if len(idx) == 0:
@@ -84,7 +84,7 @@ def plot_emccd_image(
     x_range, y_range = np.mgrid[x_min:x_max, y_min:y_max]
     z_values = np.flip(raw_data[idx[0]], 0)
     z_range = np.transpose(z_values[y_min:y_max, x_min:x_max])
-    current_time = datetime.utcfromtimestamp(times[idx[0]]).strftime('%Y-%m-%d / %H:%M:%S')
+    current_time = time_string(times[idx[0]])
 
     # ---Set each axis and plot titles:
     z_title = title = ''
