@@ -118,10 +118,9 @@ def plot_emccd_image(
     fig.subplots_adjust(top=0.85)
 
     # ---Add the plot legends:
-    fig.text(x=0.5, y=0.86, s=str(current_time), ha='center')
-    fig.text(x=0.5, y=0.895, s=title, ha='center')
-    fig.text(x=0.5, y=0.93, s=f'Wavelength: {wavelength} [nm]', ha='center')
-    fig.text(x=0.5, y=0.965, s=f'Station: {site.upper()}', ha='center')
+    fig.text(x=0.5, y=0.825, s=str(current_time), ha='center')
+    fig.text(x=0.5, y=0.865, s=title, ha='center')
+    fig.text(x=0.5, y=0.905, s=f'Station: {site.upper()}', ha='center')
 
     # --- Rescale the figure (if any)
     if factor != 1:
