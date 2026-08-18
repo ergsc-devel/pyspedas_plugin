@@ -196,7 +196,7 @@ def camera_emccd_asf(
 
                     if meta_data_var is not None:
                         cdf_file = cdflib.CDF(meta_data_var['CDF']['FILENAME'])
-                        cdfcont = cdf_file.varget('glat', inq=True)
+                        cdfcont = cdf_file.varinq('glat')
                         glat = cdf_file.varget('glat')
                         glon = cdf_file.varget('glon')
                         altitude =cdf_file.varget('altitude')
