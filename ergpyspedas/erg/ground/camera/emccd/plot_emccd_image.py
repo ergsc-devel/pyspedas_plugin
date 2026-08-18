@@ -76,10 +76,10 @@ def plot_emccd_image(
         y_max = image_size
 
     if z_min is None:
-        z_min = np.amin(ag_data[idx[0]][:][:])
+        z_min = np.amin(raw_data[idx[0]][:][:])
 
     if z_max is None:
-        z_max = np.amax(ag_data[idx[0]][:][:])
+        z_max = np.amax(raw_data[idx[0]][:][:])
 
     x_range, y_range = np.mgrid[x_min:x_max, y_min:y_max]
     z_values = np.flip(raw_data[idx[0]], 0)
