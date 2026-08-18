@@ -192,7 +192,7 @@ def camera_emccd_asf(
 
                 if mapping_table:
                     
-                    meta_data_var = get_data(tplot_name,metadata=True)
+                    meta_data_var = get_data(current_tplot_name,metadata=True)
 
                     if meta_data_var is not None:
                         cdf_file = cdflib.CDF(meta_data_var['CDF']['FILENAME'])
