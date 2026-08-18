@@ -171,26 +171,23 @@ def camera_emccd_asf(
                     if isinstance(file_name, list):
                         if len(file_name) > 0:
                             file_name = file_name[0]
-                        cdf_file = cdflib.CDF(file_name)
-                        cdf_info = cdf_file.cdf_info()
+                    cdf_file = cdflib.CDF(file_name)
+                    cdf_info = cdf_file.cdf_info()
 
                     if new_cdflib:
-                            all_cdf_variables = cdf_info.rVariables + cdf_info.zVariables
+                        all_cdf_variables = cdf_info.rVariables + cdf_info.zVariables
+                    else:
+                        all_cdf_variables = cdf_info["rVariables"] + cdf_info["zVariables"]
+
+                    if 'image_raw' in all_cdf_variables:
+                        var_string = 'image_raw'
+                        var_properties = cdf_file.varinq(var_string)
+                        if new_cdflib:
+                            original_datatype_string = var_properties.Data_Type_Description
                         else:
-                            all_cdf_variables = cdf_info["rVariables"] + cdf_info["zVariables"]
+                            original_datatype_string = var_properties["Data_Type_Description"]
 
-                        if 'image_raw' in all_cdf_variables:
-                            var_string = 'image_raw'
-                            var_properties = cdf_file.varinq(var_string)
-                            if new_cdflib:
-                                original_datatype_string = var_properties.Data_Type_Description
-                            else:
-                                original_datatype_string = var_properties["Data_Type_Description"]
-
-                        get_metadata_vars = get_data(current_tplot_name, metadata=True)
-                        store_data(current_tplot_name,
-                                   data={'x':get_data_vars[0],
-                                         'y':get_data_vars[1]},
-                                   attr_dict=get_metadata_vars)
+                    get_metadata_vars = get_data(current_tplot_name, metadata=True)
+                    store_data(current_tplot_name, data={'x':get_data_vars[0], 'y':get_data_vars[1]}, attr_dict=get_metadata_vars)
 
     return loaded_data
