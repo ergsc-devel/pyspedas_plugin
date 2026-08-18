@@ -5,9 +5,9 @@ from pyspedas.utilities.dailynames import dailynames
 from pyspedas.utilities.download import download
 from pyspedas import cdf_to_tplot
 
-from ergpyspedas.erg.satellite.erg.config import CONFIG
+from ergpyspedas.erg.ground.camera.config_psa_pwing import CONFIG_PSA_PWING
 
-def load(trange=['2017-03-27', '2017-03-28'],
+def load_emccd(trange=['2017-03-27', '2017-03-28'],
          pathformat=None,
          instrument='mgf',
          datatype='8sec',
@@ -50,7 +50,7 @@ def load(trange=['2017-03-27', '2017-03-28'],
 
     out_files = []
 
-    files = download(remote_file=remote_names, remote_path=CONFIG['remote_data_dir'], local_path=CONFIG[
+    files = download(remote_file=remote_names, remote_path=CONFIG_PSA_PWING['remote_data_dir'], local_path=CONFIG_PSA_PWING[
                      'local_data_dir'], no_download=no_update, last_version=True, username=uname, password=passwd, force_download=force_download)
     if files is not None:
         for file in files:
