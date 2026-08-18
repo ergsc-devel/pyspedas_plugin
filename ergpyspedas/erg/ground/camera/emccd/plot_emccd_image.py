@@ -84,7 +84,7 @@ def plot_emccd_image(
     x_range, y_range = np.mgrid[x_min:x_max, y_min:y_max]
     z_values = np.flip(raw_data[idx[0]], 0)
     z_range = np.transpose(z_values[y_min:y_max, x_min:x_max])
-    current_time = time_string(times[idx[0]])
+    current_time = times[idx[0]]
 
     # ---Set each axis and plot titles:
     z_title = title = ''
@@ -118,7 +118,7 @@ def plot_emccd_image(
     fig.subplots_adjust(top=0.85)
 
     # ---Add the plot legends:
-    fig.text(x=0.5, y=0.825, s=str(current_time), ha='center')
+    fig.text(x=0.5, y=0.825, s=time_string(current_time), ha='center')
     fig.text(x=0.5, y=0.865, s=title, ha='center')
     fig.text(x=0.5, y=0.905, s=f'Station: {site.upper()}', ha='center')
 
