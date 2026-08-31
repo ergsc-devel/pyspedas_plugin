@@ -1,20 +1,33 @@
+import logging
+from typing import Dict, List, Optional, Tuple, Union
+
 import cdflib
 import numpy as np
+from pyspedas import clip, get_data, store_data
 
-from pyspedas import get_data, store_data, options, clip, ylim
 from ....ground.camera.load_emccd import load_emccd
 from ....satellite.erg.get_gatt_ror import get_gatt_ror
 
-from typing import List, Union, Optional
+
+VALID_SITES = [
+    "gak",
+    "kev",
+    "mag",
+    "pok",
+    "sod",
+    "tja",
+    "tro",
+]
+
 
 def camera_emccd_asf(
-    trange: List[str] = ['2018-03-15/01:00:00', '2018-03-15/01:05:00'],
-    suffix: str = '',
-    site: Union[str, List[str]] = 'all',
+    trange: Optional[List[str]] = None,
+    suffix: str = "",
+    site: Union[str, List[str]] = "all",
     get_support_data: bool = False,
-    mapping_table: bool = False, 
+    mapping_table: bool = False,
     varformat: Optional[str] = None,
-    varnames: List[str] = [],
+    varnames: Optional[List[str]] = None,
     downloadonly: bool = False,
     notplot: bool = False,
     no_update: bool = False,
@@ -23,196 +36,433 @@ def camera_emccd_asf(
     time_clip: bool = False,
     ror: bool = True,
     force_download: bool = False,
-) -> List[str]:
-    '''
-    Load the EMCCD ASF data from the ISEE ERG-SC site.
+):
+    """
+    Load EMCCD ASF data from the ISEE ERG-SC data repository.
 
     Parameters
     ----------
-    trange: list of str
-            time range of interest [starttime, endtime] with the format
-            'YYYY-MM-DD','YYYY-MM-DD'] or to specify more or less than a day
-            ['YYYY-MM-DD/hh:mm:ss','YYYY-MM-DD/hh:mm:ss']
-            Default: ['2018-03-15/01:00:00', '2018-03-15/01:05:00']
+    trange : list of str, optional
+        Time range [start_time, end_time].
 
-    suffix: str
-            The tplot variable names will be given this suffix.  Default: ''
+    suffix : str
+        Suffix added to tplot variable names.
 
-    site: str or list of str
-            The site or list of sites to load.
-            Valid values: 'gak','kev','mag','pok','sod','tja','tro', 'all'
-            Default: 'all'
+    site : str or list of str
+        Observation site or list of sites.
+        Available sites are:
+        gak, kev, mag, pok, sod, tja and tro.
+        Use "all" to load all sites.
 
-    get_support_data: bool
-            If true, data with an attribute "VAR_TYPE" with a value of "support_data"
-            or 'data' will be loaded into tplot. Default: False
+    get_support_data : bool
+        Load CDF support-data variables.
 
-    mapping_table: bool
-            If true, mapping table will be loaded into tplot. Default: False
+    mapping_table : bool
+        If True, read glat, glon and altitude from the CDF and
+        return them as a Python dictionary.
 
-    varformat: str
-            The CDF file variable formats to load into tplot.  Wildcard character
-            "*" is accepted.  Default: None (all variables will be loaded).
+    varformat : str, optional
+        Wildcard selecting CDF variables.
 
-    varnames: list of str
-            List of variable names to load. Default: [] (all variables will be loaded)
+    varnames : list of str, optional
+        CDF variable names to load.
 
-    downloadonly: bool
-            Set this flag to download the CDF files, but not load them into
-            tplot variables. Default: False
+    downloadonly : bool
+        Download CDF files without creating tplot variables.
 
-    notplot: bool
-            Return the data in hash tables instead of creating tplot variables. Default: False
+    notplot : bool
+        Return data dictionaries instead of tplot variables.
 
-    no_update: bool
-            If set, only load data from your local cache. Default: False
+    no_update : bool
+        Use only locally cached files.
 
-    uname: str
-            User name.  Default: None
+    uname, passwd : str, optional
+        Authentication information.
 
-    passwd: str
-            Password. Default: None
+    time_clip : bool
+        Clip loaded data to the requested time range.
 
-    time_clip: bool
-            Time clip the variables to exactly the range specified in the trange keyword. Default: False
+    ror : bool
+        Print PI information and Rules of the Road.
 
-    ror: bool
-            If set, print PI info and rules of the road. Default: True
-
-    force_download: bool
-        Download file even if local version is more recent than server version
-        Default: False
+    force_download : bool
+        Force downloading files.
 
     Returns
     -------
-    None
+    list or dict
+        If mapping_table=False, returns loaded_data.
 
-    Examples
-    ________
+    tuple
+        If mapping_table=True, returns:
 
-    >>> import ergpyspedas
-    >>> emccd_vars = ergpyspedas.projects.erg.camera_emccd_asf(site='tja', trange=['2018-03-15/01:00:00', '2018-03-15/01:05:00'])
-    >>> print(emccd_vars)
+            loaded_data, mapping_table_structure
 
-    '''
+        The mapping-table dictionary has the form:
 
-    site_code_all = ['gak','kev','mag','pok','sod','tja','tro']
-
-    if isinstance(site, str):
-        site_code = site.lower()
-        site_code = site_code.split(' ')
-    elif isinstance(site, list):
-        site_code = []
-        for i in range(len(site)):
-            site_code.append(site[i].lower())
-    if 'all' in site_code:
-        site_code = site_code_all
-    
-    site_code = list(set(site_code).intersection(site_code_all))
-
-    if mapping_table:
-        mapping_table_structure = {}
-        for site_input in site_code:
-            mapping_table_structure[site_input] = {
-                'site_code':'',
-                'glat':np.zeros(shape=(256,256,15)),
-                'glon':np.zeros(shape=(256,256,15)),
-                'altitude':np.zeros(shape=(15))
+            {
+                site_code: {
+                    "site_code": str,
+                    "glat": ndarray,
+                    "glon": ndarray,
+                    "altitude": ndarray,
+                }
             }
-    
-    new_cdflib = False
-    if cdflib.__version__ > "0.4.9":
-        new_cdflib = True
-    else:
-        new_cdflib = False
-    
+    """
+
+    if trange is None:
+        trange = [
+            "2018-03-15/01:00:00",
+            "2018-03-15/01:05:00",
+        ]
+
+    if varnames is None:
+        varnames = []
+
+    site_codes = _normalize_sites(site)
+
+    if not site_codes:
+        logging.error(
+            "No valid sites were specified. Valid sites: %s",
+            VALID_SITES,
+        )
+
+        if mapping_table:
+            return [], {}
+
+        return []
+
     if notplot:
         loaded_data = {}
     else:
         loaded_data = []
-    for site_input in site_code:
-        prefix = 'emccd_asf_'+site_input+'_'
-        file_res = 60.
-        pathformat = site_input+'/%Y/%m/%d/*_asf_'+ site_input +'_%Y%m%d%H%M_v??.cdf'
-        loaded_data_temp = load_emccd(pathformat=pathformat, file_res=file_res, trange=trange, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
-                            varformat=varformat, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd)
-            
+
+    mapping_table_structure = {}
+
+    for site_input in site_codes:
+        prefix = f"emccd_asf_{site_input}_"
+        file_res = 60.0
+
+        pathformat = (
+            f"{site_input}/%Y/%m/%d/"
+            f"*_asf_{site_input}_"
+            "%Y%m%d%H%M_v??.cdf"
+        )
+
+        loaded_data_temp = load_emccd(
+            pathformat=pathformat,
+            file_res=file_res,
+            trange=trange,
+            prefix=prefix,
+            suffix=suffix,
+            get_support_data=get_support_data,
+            varformat=varformat,
+            varnames=varnames,
+            downloadonly=downloadonly,
+            notplot=notplot,
+            time_clip=time_clip,
+            no_update=no_update,
+            uname=uname,
+            passwd=passwd,
+            force_download=force_download,
+        )
+
+        if loaded_data_temp is None:
+            logging.warning(
+                "No data were loaded for site %s.",
+                site_input,
+            )
+            continue
+
         if notplot:
-            loaded_data.update(loaded_data_temp)
+            if isinstance(loaded_data_temp, dict):
+                loaded_data.update(loaded_data_temp)
         else:
-            loaded_data += loaded_data_temp
-        if (len(loaded_data_temp) > 0) and ror:
-            try:
-                gatt = get_gatt_ror(downloadonly, loaded_data)
-                print('**************************************************************************')
-                print(gatt["Logical_source_description"])
-                print('')
-                print(f'Information about {gatt["Station_code"]}')
-                print(f'PI: {gatt["PI_name"]}')
-                print('')
-                print(f'Affiliations: {gatt["PI_affiliation"]}')
-                print('')
-                print('Rules of the Road for EMCCD ASF Data Use:')
-                for gatt_text in gatt["TEXT"]:
-                    print(gatt_text)
-                print(f'{gatt["LINK_TEXT"]}')
-                print('**************************************************************************')
-            except:
-                print('printing PI info and rules of the road was failed')
-                
-        if (not downloadonly) and (not notplot):
-            current_tplot_name = prefix+'image_raw'
-            if current_tplot_name in loaded_data:
-                get_data_vars = get_data(current_tplot_name)
-                if get_data_vars is None:
-                    store_data(current_tplot_name, delete=True)
-                else:
-                    #;--- Missing data -1.e+31 --> NaN
-                    clip(current_tplot_name, -1e+6, 1e+6)
-                    get_data_vars = get_data(current_tplot_name)
+            loaded_data.extend(loaded_data_temp)
 
-                    """
-                    Try to get 'Data_Type_Description' from CDF file.
-                    In order to adjust the data type of y element into original one.
-                    (After clip, data type of y element may become float.)
-                    This may be need for saving figure correctly.
-                    """
-                    file_name = get_data(current_tplot_name, metadata=True)['CDF']['FILENAME']
-                    if isinstance(file_name, list):
-                        if len(file_name) > 0:
-                            file_name = file_name[0]
-                    cdf_file = cdflib.CDF(file_name)
-                    cdf_info = cdf_file.cdf_info()
+        if len(loaded_data_temp) > 0 and ror:
+            _print_ror(
+                downloadonly=downloadonly,
+                loaded_data_temp=loaded_data_temp,
+                site_input=site_input,
+            )
 
-                    if new_cdflib:
-                        all_cdf_variables = cdf_info.rVariables + cdf_info.zVariables
-                    else:
-                        all_cdf_variables = cdf_info["rVariables"] + cdf_info["zVariables"]
+        # No tplot variables exist in these modes.
+        if downloadonly or notplot:
+            continue
 
-                    if 'image_raw' in all_cdf_variables:
-                        var_string = 'image_raw'
-                        var_properties = cdf_file.varinq(var_string)
-                        if new_cdflib:
-                            original_datatype_string = var_properties.Data_Type_Description
-                        else:
-                            original_datatype_string = var_properties["Data_Type_Description"]
+        current_tplot_name = (
+            f"{prefix}image_raw{suffix}"
+        )
 
-                    get_metadata_vars = get_data(current_tplot_name, metadata=True)
-                    store_data(current_tplot_name, data={'x':get_data_vars[0], 'y':get_data_vars[1]}, attr_dict=get_metadata_vars)
+        if current_tplot_name not in loaded_data:
+            logging.warning(
+                "Image variable was not loaded: %s",
+                current_tplot_name,
+            )
+            continue
 
-                if mapping_table:
-                    
-                    meta_data_var = get_data(current_tplot_name,metadata=True)
+        image_data = get_data(current_tplot_name)
 
-                    if meta_data_var is not None:
-                        cdf_file = cdflib.CDF(meta_data_var['CDF']['FILENAME'])
-                        cdfcont = cdf_file.varinq('glat')
-                        glat = cdf_file.varget('glat')
-                        glon = cdf_file.varget('glon')
-                        altitude =cdf_file.varget('altitude')
-                        mapping_table_structure[site_input]['site_code'] = site_input
-                        mapping_table_structure[site_input]['glat'] = cdfcont.Last_Rec + 1
-                        mapping_table_structure[site_input]['glon'] = cdfcont.Last_Rec + 1
-                        mapping_table_structure[site_input]['altitude'] = cdfcont.Last_Rec + 1
-                        store_data('emccd_asf_' + site_input + '_mapping_table', data = {'y':mapping_table_structure}, attr_dict=get_metadata_vars)
+        if image_data is None:
+            store_data(
+                current_tplot_name,
+                delete=True,
+            )
+            continue
+
+        # Replace values outside the valid range with NaN.
+        clip(
+            current_tplot_name,
+            -1.0e6,
+            1.0e6,
+        )
+
+        # Re-read data after clipping.
+        image_data = get_data(current_tplot_name)
+        metadata = get_data(
+            current_tplot_name,
+            metadata=True,
+        )
+
+        if image_data is None:
+            continue
+
+        # Store clipped image while preserving metadata.
+        store_data(
+            current_tplot_name,
+            data={
+                "x": image_data.times,
+                "y": image_data.y,
+            },
+            attr_dict=metadata,
+        )
+
+        if mapping_table:
+            site_mapping = _read_mapping_table(
+                metadata=metadata,
+                site_code=site_input,
+            )
+
+            if site_mapping is not None:
+                mapping_table_structure[
+                    site_input
+                ] = site_mapping
+
+    if mapping_table:
+        return loaded_data, mapping_table_structure
+
     return loaded_data
+
+
+def _normalize_sites(
+    site: Union[str, List[str]],
+) -> List"""
+    Normalize and validate the requested site codes.
+    """
+
+    if isinstance(site, str):
+        requested_sites = site.lower().split()
+
+    elif isinstance(site, list):
+        requested_sites = [
+            str(item).lower()
+            for item in site
+        ]
+
+    else:
+        raise TypeError(
+            "site must be a string or a list of strings."
+        )
+
+    if "all" in requested_sites:
+        return VALID_SITES.copy()
+
+    # Preserve input order while removing duplicates.
+    normalized_sites = []
+
+    for site_code in requested_sites:
+        if (
+            site_code in VALID_SITES
+            and site_code not in normalized_sites
+        ):
+            normalized_sites.append(site_code)
+
+    invalid_sites = [
+        value
+        for value in requested_sites
+        if value not in VALID_SITES
+    ]
+
+    if invalid_sites:
+        logging.warning(
+            "Ignoring invalid site codes: %s",
+            invalid_sites,
+        )
+
+    return normalized_sites
+
+
+def _get_cdf_filename(
+    metadata: Optional[dict],
+) -> Optional"""
+    Extract one CDF filename from tplot metadata.
+    """
+
+    if not metadata:
+        return None
+
+    cdf_metadata = metadata.get("CDF", {})
+
+    filename = cdf_metadata.get("FILENAME")
+
+    if filename is None:
+        return None
+
+    if isinstance(filename, (list, tuple, np.ndarray)):
+        if len(filename) == 0:
+            return None
+
+        filename = filename[0]
+
+    return str(filename)
+
+
+def _read_mapping_table(
+    metadata: Optional[dict],
+    site_code: str,
+) -> Optional[Dict[str, object]]:
+    """
+    Read glat, glon and altitude from the source CDF file.
+    """
+
+    filename = _get_cdf_filename(metadata)
+
+    if filename is None:
+        logging.warning(
+            "CDF filename was not found for site %s.",
+            site_code,
+        )
+        return None
+
+    try:
+        cdf_file = cdflib.CDF(filename)
+
+    except Exception as error:
+        logging.warning(
+            "Could not open CDF file %s: %s",
+            filename,
+            error,
+        )
+        return None
+
+    try:
+        glat = np.asarray(
+            cdf_file.varget("glat"),
+            dtype=np.float32,
+        ).copy()
+
+        glon = np.asarray(
+            cdf_file.varget("glon"),
+            dtype=np.float32,
+        ).copy()
+
+        altitude = np.asarray(
+            cdf_file.varget("altitude"),
+            dtype=np.float32,
+        ).copy()
+
+    except Exception as error:
+        logging.warning(
+            "Could not read the mapping table "
+            "from %s: %s",
+            filename,
+            error,
+        )
+        return None
+
+    finally:
+        cdf_file.close()
+
+    # Convert mapped-coordinate fill values to NaN.
+    glat[np.isclose(glat, -999.0)] = np.nan
+    glon[np.isclose(glon, -999.0)] = np.nan
+
+    mapping_data = {
+        "site_code": site_code,
+        "glat": glat,
+        "glon": glon,
+        "altitude": altitude,
+    }
+
+    logging.info(
+        "Mapping table for %s: "
+        "glat=%s, glon=%s, altitude=%s",
+        site_code,
+        glat.shape,
+        glon.shape,
+        altitude.shape,
+    )
+
+    return mapping_data
+
+
+def _print_ror(
+    downloadonly: bool,
+    loaded_data_temp,
+    site_input: str,
+) -> None:
+    """
+    Print PI information and Rules of the Road.
+    """
+
+    try:
+        gatt = get_gatt_ror(
+            downloadonly,
+            loaded_data_temp,
+        )
+
+        print("*" * 78)
+        print(
+            gatt.get(
+                "Logical_source_description",
+                "",
+            )
+        )
+        print()
+        print(
+            "Information about "
+            f"{gatt.get('Station_code', site_input)}"
+        )
+        print(
+            f"PI: {gatt.get('PI_name', '')}"
+        )
+        print()
+        print(
+            "Affiliations: "
+            f"{gatt.get('PI_affiliation', '')}"
+        )
+        print()
+        print(
+            "Rules of the Road for "
+            "EMCCD ASF Data Use:"
+        )
+
+        rules = gatt.get("TEXT", [])
+
+        if isinstance(rules, str):
+            rules = [rules]
+
+        for text in rules:
+            print(text)
+
+        print(gatt.get("LINK_TEXT", ""))
+        print("*" * 78)
+
+    except Exception as error:
+        logging.warning(
+            "Printing PI information and Rules "
+            "of the Road failed for %s: %s",
+            site_input,
+            error,
+        )
