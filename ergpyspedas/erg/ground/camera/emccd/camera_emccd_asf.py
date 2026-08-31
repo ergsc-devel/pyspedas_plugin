@@ -302,8 +302,9 @@ def _read_mapping_table(
         return None
 
     finally:
-        if cdf_file is not None:
-            cdf_file.close()
+        close_method = getattr(cdf_file, "close", None)
+        if callable(close_method):
+            close_method()
 
     glat[np.isclose(glat, -999.0)] = np.nan
     glon[np.isclose(glon, -999.0)] = np.nan
