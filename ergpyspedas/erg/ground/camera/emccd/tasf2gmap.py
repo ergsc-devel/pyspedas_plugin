@@ -267,4 +267,36 @@ def tasf2gmap(
 
             print(
                 "now converting... : "
-                + date.strftime
+                + date.strftime("%Y-%m-%d/%H:%M:%S.%f")[:-3]
+            )
+
+    # =========================================
+    # Store output tplot variable
+    # =========================================
+    output_name = (
+        f"{raw_name}_gmap_{int(selected_altitude)}"
+    )
+
+    success = pyspedas.store_data(
+        output_name,
+        data={
+            "x": times,
+            "y": image_gmap,
+            "v1": x_glon,
+            "v2": y_glat,
+        },
+        attr_dict={
+            "site": site.upper(),
+            "mapping_altitude_km": selected_altitude,
+            "grid_longitude_degree": float(grid_x),
+            "grid_latitude_degree": float(grid_y),
+        },
+    )
+
+    if not success:
+        print(f"Failed to store: {output_name}")
+        return None
+
+    print(f"Created tplot variable: {output_name}")
+
+    return output_name
