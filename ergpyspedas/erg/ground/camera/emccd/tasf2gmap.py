@@ -1,6 +1,70 @@
+from datetime import datetime, timezone
+
 import numpy as np
 import pyspedas
-from datetime import datetime, timezone
+from scipy.ndimage import distance_transform_edt
+
+
+def fill_empty_cells(
+    image,
+    valid_mask,
+    max_distance=None,
+):
+    """
+    Fill empty cells using values from the nearest valid cell.
+
+    Parameters
+    ----------
+    image : ndarray
+        Two-dimensional gridded image.
+
+    valid_mask : ndarray of bool
+        True for cells containing observation data.
+
+    max_distance : float or None
+        Maximum filling distance in grid cells.
+        None fills all empty cells.
+
+    Returns
+    -------
+    ndarray
+        Filled image.
+    """
+
+    image = np.asarray(image)
+    valid_mask = np.asarray(valid_mask, dtype=bool)
+
+    if image.shape != valid_mask.shape:
+        raise ValueError(
+            "image and valid_mask must have the same shape: "
+            f"{image.shape} != {valid_mask.shape}"
+        )
+
+    if not np.any(valid_mask):
+        return image.copy()
+
+    distances, nearest_indices = distance_transform_edt(
+        ~valid_mask,
+        return_indices=True,
+    )
+
+    nearest_values = image[
+        nearest_indices[0],
+        nearest_indices[1],
+    ]
+
+    if max_distance is None:
+        fill_mask = ~valid_mask
+    else:
+        fill_mask = (
+            (~valid_mask)
+            & (distances <= float(max_distance))
+        )
+
+    filled_image = image.copy()
+    filled_image[fill_mask] = nearest_values[fill_mask]
+
+    return filled_image
 
 
 def tasf2gmap(
@@ -9,6 +73,8 @@ def tasf2gmap(
     grid_x=0.05,
     grid_y=0.05,
     altitude=120.0,
+    fill_empty=True,
+    max_fill_distance=3.0,
 ):
     """
     Convert all-sky image data to geographic coordinates.
@@ -17,26 +83,49 @@ def tasf2gmap(
     ----------
     vname1 : str
         Airglow image tplot variable.
-        Expected data shape: (time, image_x, image_y)
+        Expected shape is (time, image_x, image_y).
 
     vname2 : str
-        Mapping-table tplot variable containing:
-        alt, glat and glon.
+        Mapping-table tplot variable containing glat, glon,
+        and altitude in its attributes.
 
-    grid_x : float, optional
-        Longitude resolution [degree].
+    grid_x : float
+        Longitude resolution in degrees.
 
-    grid_y : float, optional
-        Latitude resolution [degree].
+    grid_y : float
+        Latitude resolution in degrees.
 
-    altitude : float, optional
-        Requested mapping altitude [km].
+    altitude : float
+        Requested mapping altitude in kilometres.
+
+    fill_empty : bool
+        Fill empty grid cells using nearest-neighbour values.
+
+    max_fill_distance : float or None
+        Maximum filling distance in grid cells.
+        None fills every empty cell.
 
     Returns
     -------
     str or None
         Created tplot variable name.
     """
+
+    grid_x = float(grid_x)
+    grid_y = float(grid_y)
+
+    if grid_x <= 0.0 or grid_y <= 0.0:
+        raise ValueError(
+            "grid_x and grid_y must be greater than zero."
+        )
+
+    if (
+        max_fill_distance is not None
+        and float(max_fill_distance) < 0.0
+    ):
+        raise ValueError(
+            "max_fill_distance must be zero or greater."
+        )
 
     # =========================================
     # Check tplot variables
@@ -55,36 +144,55 @@ def tasf2gmap(
     # Get tplot data
     # =========================================
     raw_data = pyspedas.get_data(raw_name)
-    map_data = pyspedas.get_data(map_name, xarray=True)
+
+    map_data = pyspedas.get_data(
+        map_name,
+        xarray=True,
+    )
 
     if raw_data is None or map_data is None:
         print("Cannot retrieve the tplot data.")
         return None
 
-    times = np.asarray(raw_data[0])
-    images = np.asarray(raw_data[1], dtype=np.float32)
+    times = np.asarray(
+        raw_data[0],
+        dtype=np.float64,
+    )
+
+    images = np.asarray(
+        raw_data[1],
+        dtype=np.float32,
+    )
 
     if images.ndim != 3:
         raise ValueError(
-            "The image data must have shape "
-            "(time, image_x, image_y). "
-            f"Current shape: {images.shape}"
+            "Image data must have shape "
+            "(time, image_x, image_y): "
+            f"{images.shape}"
+        )
+
+    if times.size != images.shape[0]:
+        raise ValueError(
+            "Time and image dimensions do not match: "
+            f"time={times.size}, images={images.shape[0]}"
         )
 
     # =========================================
-    # Extract mapping-table coordinates
+    # Read mapping-table components
     # =========================================
     def get_map_component(data, name):
-        """Extract a coordinate or variable from xarray data."""
-
         if name in data.coords:
-            return np.asarray(data.coords[name].values)
+            return np.asarray(
+                data.coords[name].values
+            )
 
         if hasattr(data, name):
             value = getattr(data, name)
-            return np.asarray(
-                value.values if hasattr(value, "values") else value
-            )
+
+            if hasattr(value, "values"):
+                value = value.values
+
+            return np.asarray(value)
 
         attrs = getattr(data, "attrs", {})
 
@@ -92,46 +200,98 @@ def tasf2gmap(
             return np.asarray(attrs[name])
 
         raise KeyError(
-            f"'{name}' was not found in mapping variable '{map_name}'. "
-            f"Available coordinates: {list(data.coords)}"
+            f"'{name}' was not found in '{map_name}'. "
+            f"Coordinates={list(data.coords)}, "
+            f"attributes={list(attrs.keys())}"
         )
 
-    altitudes = get_map_component(map_data, "altitude")
-    glat_all = get_map_component(map_data, "glat")
-    glon_all = get_map_component(map_data, "glon")
-
-    altitudes = np.ravel(altitudes)
-
-    # Nearest altitude, equivalent to IDL nn()
-    alt_index = int(
-        np.nanargmin(np.abs(altitudes - float(altitude)))
+    altitudes = get_map_component(
+        map_data,
+        "altitude",
     )
 
-    selected_altitude = float(altitudes[alt_index])
+    glat_all = get_map_component(
+        map_data,
+        "glat",
+    )
 
-    # Assumed shape: (image_x, image_y, altitude)
-    glat = np.asarray(
-        glat_all[:, :, alt_index],
-        dtype=np.float64
-    ).copy()
+    glon_all = get_map_component(
+        map_data,
+        "glon",
+    )
 
-    glon = np.asarray(
-        glon_all[:, :, alt_index],
-        dtype=np.float64
-    ).copy()
+    altitudes = np.asarray(
+        altitudes,
+        dtype=np.float64,
+    ).reshape(-1)
 
-    # Replace fill values
-    glat[glat == -999.0] = np.nan
-    glon[glon == -999.0] = np.nan
+    glat_all = np.asarray(
+        glat_all,
+        dtype=np.float64,
+    )
 
-    if images.shape[1:] != glat.shape:
+    glon_all = np.asarray(
+        glon_all,
+        dtype=np.float64,
+    )
+
+    if altitudes.size == 0:
+        raise ValueError("The altitude array is empty.")
+
+    if not np.any(np.isfinite(altitudes)):
         raise ValueError(
-            "Image and mapping-table dimensions do not match: "
-            f"image={images.shape[1:]}, map={glat.shape}"
+            "The altitude array has no finite values."
+        )
+
+    if glat_all.ndim != 3 or glon_all.ndim != 3:
+        raise ValueError(
+            "glat and glon must be three-dimensional: "
+            f"glat={glat_all.shape}, "
+            f"glon={glon_all.shape}"
+        )
+
+    if glat_all.shape != glon_all.shape:
+        raise ValueError(
+            "glat and glon shapes do not match: "
+            f"{glat_all.shape} != {glon_all.shape}"
+        )
+
+    if glat_all.shape[-1] != altitudes.size:
+        raise ValueError(
+            "Altitude dimension does not match: "
+            f"mapping={glat_all.shape[-1]}, "
+            f"altitude={altitudes.size}"
         )
 
     # =========================================
-    # Get site code from tplot variable name
+    # Select nearest mapping altitude
+    # =========================================
+    alt_index = int(
+        np.nanargmin(
+            np.abs(altitudes - float(altitude))
+        )
+    )
+
+    selected_altitude = float(
+        altitudes[alt_index]
+    )
+
+    glat = glat_all[:, :, alt_index].copy()
+    glon = glon_all[:, :, alt_index].copy()
+
+    glat[np.isclose(glat, -999.0)] = np.nan
+    glon[np.isclose(glon, -999.0)] = np.nan
+
+    if images.shape[1:] != glat.shape:
+        raise ValueError(
+            "Image and mapping-table dimensions "
+            "do not match: "
+            f"image={images.shape[1:]}, "
+            f"mapping={glat.shape}"
+        )
+
+    # =========================================
+    # Get site code
     # =========================================
     name_parts = raw_name.split("_")
 
@@ -143,65 +303,109 @@ def tasf2gmap(
     site = name_parts[2]
 
     # =========================================
-    # Geographic range
+    # Determine geographic range
     # =========================================
     center_x = min(127, glat.shape[0] - 1)
     center_y = min(127, glat.shape[1] - 1)
 
-    min_glat = np.nanmin(glat[center_x, :])
-    max_glat = np.nanmax(glat[center_x, :])
+    center_glat = glat[center_x, :]
+    center_glon = glon[:, center_y]
 
-    min_glon = np.nanmin(glon[:, center_y])
-    max_glon = np.nanmax(glon[:, center_y])
+    if not np.any(np.isfinite(center_glat)):
+        raise ValueError(
+            "No finite latitude values were found "
+            "on the center line."
+        )
 
-    nx = int((max_glon - min_glon) / grid_x)
-    ny = int((max_glat - min_glat) / grid_y)
+    if not np.any(np.isfinite(center_glon)):
+        raise ValueError(
+            "No finite longitude values were found "
+            "on the center line."
+        )
+
+    min_glat = float(np.nanmin(center_glat))
+    max_glat = float(np.nanmax(center_glat))
+    min_glon = float(np.nanmin(center_glon))
+    max_glon = float(np.nanmax(center_glon))
+
+    nx = int(
+        np.floor(
+            (max_glon - min_glon) / grid_x
+        )
+    )
+
+    ny = int(
+        np.floor(
+            (max_glat - min_glat) / grid_y
+        )
+    )
 
     if nx <= 0 or ny <= 0:
         raise ValueError(
-            f"Invalid geographic grid size: nx={nx}, ny={ny}"
+            f"Invalid geographic grid: nx={nx}, ny={ny}"
         )
 
     x_glon = (
         min_glon
-        + float(grid_x) * np.arange(nx, dtype=np.float32)
+        + grid_x * np.arange(nx, dtype=np.float32)
     )
 
     y_glat = (
         min_glat
-        + float(grid_y) * np.arange(ny, dtype=np.float32)
+        + grid_y * np.arange(ny, dtype=np.float32)
     )
 
-    n_times = len(times)
+    n_times = times.size
     n_bins = nx * ny
 
-    image_gmap = np.zeros(
+    image_gmap = np.full(
         (n_times, nx, ny),
-        dtype=np.float32
+        np.nan,
+        dtype=np.float32,
     )
 
     # =========================================
     # Create fixed pixel-grid correspondence
     # =========================================
-    #
-    # order="F" reproduces IDL's column-major
-    # one-dimensional indexing.
-    #
     flat_glon = glon.ravel(order="F")
     flat_glat = glat.ravel(order="F")
     raw0 = images[0].ravel(order="F")
 
-    ix = np.floor(
-        (flat_glon - min_glon) / grid_x
+    coordinate_valid = (
+        np.isfinite(flat_glon)
+        & np.isfinite(flat_glat)
+    )
+
+    ix = np.full(
+        flat_glon.shape,
+        -1,
+        dtype=np.int64,
+    )
+
+    iy = np.full(
+        flat_glat.shape,
+        -1,
+        dtype=np.int64,
+    )
+
+    ix[coordinate_valid] = np.floor(
+        (
+            flat_glon[coordinate_valid]
+            - min_glon
+        )
+        / grid_x
     ).astype(np.int64)
 
-    iy = np.floor(
-        (flat_glat - min_glat) / grid_y
+    iy[coordinate_valid] = np.floor(
+        (
+            flat_glat[coordinate_valid]
+            - min_glat
+        )
+        / grid_y
     ).astype(np.int64)
 
     valid = (
-        np.isfinite(flat_glon)
-        & np.isfinite(flat_glat)
+        coordinate_valid
         & np.isfinite(raw0)
         & (ix >= 0)
         & (ix < nx)
@@ -215,37 +419,41 @@ def tasf2gmap(
 
     valid_pixel_indices = np.flatnonzero(valid)
 
-    # IDL: bin = ix + nx * iy
+    # IDL-style flattened grid number
     bin_number = (
-        ix[valid] + np.int64(nx) * iy[valid]
+        ix[valid]
+        + np.int64(nx) * iy[valid]
     )
 
-    # Number of pixels in each geographic cell
     bin_count = np.bincount(
         bin_number,
-        minlength=n_bins
+        minlength=n_bins,
     )
 
     active_bins = bin_count > 0
+
+    valid_grid = active_bins.reshape(
+        (nx, ny),
+        order="F",
+    )
 
     # =========================================
     # Grid each time step
     # =========================================
     for i in range(n_times):
-
         raw = images[i].ravel(order="F")
         raw_valid = raw[valid_pixel_indices]
 
-        # Sum values belonging to each cell
         bin_sum = np.bincount(
             bin_number,
             weights=raw_valid,
-            minlength=n_bins
+            minlength=n_bins,
         )
 
-        output_flat = np.zeros(
+        output_flat = np.full(
             n_bins,
-            dtype=np.float32
+            np.nan,
+            dtype=np.float32,
         )
 
         output_flat[active_bins] = (
@@ -253,28 +461,62 @@ def tasf2gmap(
             / bin_count[active_bins]
         )
 
-        # Convert IDL-style flattened grid back to (nx, ny)
-        image_gmap[i] = output_flat.reshape(
+        map_image = output_flat.reshape(
             (nx, ny),
-            order="F"
+            order="F",
         )
+
+        if fill_empty:
+            map_image = fill_empty_cells(
+                image=map_image,
+                valid_mask=valid_grid,
+                max_distance=max_fill_distance,
+            )
+
+        image_gmap[i] = map_image
 
         if i % 10 == 0:
             date = datetime.fromtimestamp(
                 float(times[i]),
-                tz=timezone.utc
+                tz=timezone.utc,
             )
 
             print(
                 "now converting... : "
-                + date.strftime("%Y-%m-%d/%H:%M:%S.%f")[:-3]
+                + date.strftime(
+                    "%Y-%m-%d/%H:%M:%S.%f"
+                )[:-3]
             )
 
     # =========================================
     # Store output tplot variable
     # =========================================
     output_name = (
-        f"{raw_name}_gmap_{int(selected_altitude)}"
+        f"{raw_name}_gmap_"
+        f"{int(selected_altitude)}"
+    )
+
+    source_metadata = pyspedas.get_data(
+        raw_name,
+        metadata=True,
+    )
+
+    if source_metadata is None:
+        source_metadata = {}
+
+    output_metadata = dict(source_metadata)
+
+    output_metadata.update(
+        {
+            "site": site.upper(),
+            "mapping_altitude_km": selected_altitude,
+            "grid_longitude_degree": grid_x,
+            "grid_latitude_degree": grid_y,
+            "empty_cells_filled": bool(fill_empty),
+            "max_fill_distance_grid_cells": (
+                max_fill_distance
+            ),
+        }
     )
 
     success = pyspedas.store_data(
@@ -285,12 +527,7 @@ def tasf2gmap(
             "v1": x_glon,
             "v2": y_glat,
         },
-        attr_dict={
-            "site": site.upper(),
-            "mapping_altitude_km": selected_altitude,
-            "grid_longitude_degree": float(grid_x),
-            "grid_latitude_degree": float(grid_y),
-        },
+        attr_dict=output_metadata,
     )
 
     if not success:
