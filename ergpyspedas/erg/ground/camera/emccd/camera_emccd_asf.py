@@ -40,9 +40,58 @@ def camera_emccd_asf(
     """
     Load EMCCD ASF data from the ISEE ERG-SC repository.
 
-    When mapping_table is True, this function returns:
+    Parameters
+    ----------
+    trange : list of str, optional
+        Time range [start_time, end_time].
 
-        loaded_data, mapping_table_structure
+    suffix : str
+        Suffix added to tplot variable names.
+
+    site : str or list of str
+        Observation site code or list of site codes.
+        Valid values:
+        gak, kev, mag, pok, sod, tja, tro, all.
+
+    get_support_data : bool
+        Load CDF support-data variables.
+
+    mapping_table : bool
+        Create a mapping-table tplot variable containing
+        glat, glon and altitude in its attributes.
+
+    varformat : str, optional
+        Wildcard selecting CDF variables.
+
+    varnames : list of str, optional
+        CDF variable names to load.
+
+    downloadonly : bool
+        Download files without creating tplot variables.
+
+    notplot : bool
+        Return data dictionaries instead of tplot variables.
+
+    no_update : bool
+        Use only locally cached files.
+
+    uname, passwd : str, optional
+        Authentication credentials.
+
+    time_clip : bool
+        Clip variables to the requested time range.
+
+    ror : bool
+        Print PI information and Rules of the Road.
+
+    force_download : bool
+        Force downloading files.
+
+    Returns
+    -------
+    list or dict
+        Loaded tplot-variable names, downloaded files,
+        or notplot data.
     """
 
     if trange is None:
@@ -61,14 +110,9 @@ def camera_emccd_asf(
             "No valid sites were specified. Valid sites: %s",
             VALID_SITES,
         )
-
-        if mapping_table:
-            return [], {}
-
-        return []
+        return {} if notplot else []
 
     loaded_data = {} if notplot else []
-    mapping_table_structure = {}
 
     for site_input in site_codes:
         prefix = f"emccd_asf_{site_input}_"
@@ -87,14 +131,12 @@ def camera_emccd_asf(
             suffix=suffix,
             get_support_data=get_support_data,
             varformat=varformat,
-            varnames=varnames,
             downloadonly=downloadonly,
             notplot=notplot,
             time_clip=time_clip,
             no_update=no_update,
             uname=uname,
             passwd=passwd,
-            force_download=force_download,
         )
 
         if loaded_data_temp is None:
@@ -117,7 +159,7 @@ def camera_emccd_asf(
                 site_input=site_input,
             )
 
-        # downloadonly/notplotではtplot変数が存在しない。
+        # These modes do not create tplot variables.
         if downloadonly or notplot:
             continue
 
@@ -141,7 +183,7 @@ def camera_emccd_asf(
             )
             continue
 
-        # 有効範囲外をNaNへ変換
+        # Convert values outside the valid range to NaN.
         clip(
             current_tplot_name,
             -1.0e6,
@@ -149,47 +191,89 @@ def camera_emccd_asf(
         )
 
         image_data = get_data(current_tplot_name)
-        metadata = get_data(
+        image_metadata = get_data(
             current_tplot_name,
             metadata=True,
         )
 
-        if image_data is None or metadata is None:
+        if image_data is None or image_metadata is None:
+            logging.warning(
+                "Could not retrieve data or metadata: %s",
+                current_tplot_name,
+            )
             continue
 
-        # clip後のデータをメタデータ付きで再保存
+        # Store clipped data while preserving metadata.
         store_data(
             current_tplot_name,
             data={
                 "x": image_data[0],
                 "y": image_data[1],
             },
-            attr_dict=metadata,
+            attr_dict=image_metadata,
         )
 
         if not mapping_table:
             continue
 
         site_mapping = _read_mapping_table(
-            metadata=metadata,
+            metadata=image_metadata,
             site_code=site_input,
         )
 
-        if site_mapping is not None:
-            mapping_table_structure[site_input] = (
-                site_mapping
+        if site_mapping is None:
+            continue
+
+        mapping_table_name = (
+            f"{prefix}mapping_table{suffix}"
+        )
+
+        mapping_metadata = {
+            "site_code": site_mapping["site_code"],
+            "glat": site_mapping["glat"],
+            "glon": site_mapping["glon"],
+            "altitude": site_mapping["altitude"],
+            "source_file": site_mapping["source_file"],
+        }
+
+        # A scalar dummy dataset is used because the actual mapping
+        # arrays are stored in the tplot-variable attributes.
+        success = store_data(
+            mapping_table_name,
+            data={
+                "x": np.array(
+                    [0.0],
+                    dtype=np.float64,
+                ),
+                "y": np.array(
+                    [0.0],
+                    dtype=np.float32,
+                ),
+            },
+            attr_dict=mapping_metadata,
+        )
+
+        if success:
+            if mapping_table_name not in loaded_data:
+                loaded_data.append(mapping_table_name)
+
+            logging.info(
+                "Created mapping-table tplot variable: %s",
+                mapping_table_name,
             )
 
-    if mapping_table:
-        return loaded_data, mapping_table_structure
+        else:
+            logging.warning(
+                "Failed to create mapping-table variable: %s",
+                mapping_table_name,
+            )
 
     return loaded_data
 
 
 def _normalize_sites(
     site: Union[str, List[str]],
-) -> List:
-    """Normalize and validate site codes."""
+) -> List"""Normalize and validate observation-site codes."""
 
     if isinstance(site, str):
         requested_sites = site.lower().split()
@@ -234,8 +318,7 @@ def _normalize_sites(
 
 def _get_cdf_filename(
     metadata: Optional[dict],
-) -> Optional:
-    """Extract one CDF filename from tplot metadata."""
+) -> Optional"""Extract one source-CDF filename from tplot metadata."""
 
     if not metadata:
         return None
@@ -262,7 +345,7 @@ def _read_mapping_table(
     metadata: Optional[dict],
     site_code: str,
 ) -> Optional[Dict[str, object]]:
-    """Read glat, glon and altitude from a CDF file."""
+    """Read glat, glon and altitude from the source CDF."""
 
     filename = _get_cdf_filename(metadata)
 
@@ -291,7 +374,7 @@ def _read_mapping_table(
         altitude = np.asarray(
             cdf_file.varget("altitude"),
             dtype=np.float32,
-        ).copy()
+        ).squeeze().copy()
 
     except Exception as error:
         logging.warning(
@@ -302,19 +385,44 @@ def _read_mapping_table(
         return None
 
     finally:
-        close_method = getattr(cdf_file, "close", None)
-        if callable(close_method):
-            close_method()
+        # Some cdflib Reader versions do not implement close().
+        if cdf_file is not None:
+            close_method = getattr(
+                cdf_file,
+                "close",
+                None,
+            )
+
+            if callable(close_method):
+                close_method()
 
     glat[np.isclose(glat, -999.0)] = np.nan
     glon[np.isclose(glon, -999.0)] = np.nan
 
-    mapping_data = {
-        "site_code": site_code,
-        "glat": glat,
-        "glon": glon,
-        "altitude": altitude,
-    }
+    if glat.ndim != 3 or glon.ndim != 3:
+        logging.warning(
+            "Unexpected mapping-table dimensions: "
+            "glat=%s, glon=%s",
+            glat.shape,
+            glon.shape,
+        )
+        return None
+
+    if glat.shape != glon.shape:
+        logging.warning(
+            "glat and glon shapes differ: %s != %s",
+            glat.shape,
+            glon.shape,
+        )
+        return None
+
+    if altitude.size != glat.shapelogging.warning(
+            "Altitude size does not match mapping table: "
+            "%s != %s",
+            altitude.size,
+            glat.shape[2],
+        )
+        return None
 
     logging.info(
         "Mapping table for %s: "
@@ -325,7 +433,13 @@ def _read_mapping_table(
         altitude.shape,
     )
 
-    return mapping_data
+    return {
+        "site_code": site_code,
+        "glat": glat,
+        "glon": glon,
+        "altitude": altitude,
+        "source_file": filename,
+    }
 
 
 def _print_ror(
@@ -353,7 +467,9 @@ def _print_ror(
             "Information about "
             f"{gatt.get('Station_code', site_input)}"
         )
-        print(f"PI: {gatt.get('PI_name', '')}")
+        print(
+            f"PI: {gatt.get('PI_name', '')}"
+        )
         print()
         print(
             "Affiliations: "
