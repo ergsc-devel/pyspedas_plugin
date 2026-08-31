@@ -188,7 +188,8 @@ def camera_emccd_asf(
 
 def _normalize_sites(
     site: Union[str, List[str]],
-) -> List"""Normalize and validate site codes."""
+) -> List:
+    """Normalize and validate site codes."""
 
     if isinstance(site, str):
         requested_sites = site.lower().split()
@@ -233,7 +234,8 @@ def _normalize_sites(
 
 def _get_cdf_filename(
     metadata: Optional[dict],
-) -> Optional"""Extract one CDF filename from tplot metadata."""
+) -> Optional:
+    """Extract one CDF filename from tplot metadata."""
 
     if not metadata:
         return None
