@@ -171,7 +171,8 @@ def tasf2gmap(
             f"{images.shape}"
         )
 
-    if times.size != images.shaperaise ValueError(
+    if times.size != images.shape:
+        raise ValueError(
             "Time and image dimensions do not match: "
             f"time={times.size}, images={images.shape[0]}"
         )
