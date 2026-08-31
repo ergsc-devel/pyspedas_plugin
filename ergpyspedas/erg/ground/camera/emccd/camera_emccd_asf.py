@@ -40,58 +40,17 @@ def camera_emccd_asf(
     """
     Load EMCCD ASF data from the ISEE ERG-SC repository.
 
-    Parameters
-    ----------
-    trange : list of str, optional
-        Time range [start_time, end_time].
+    If mapping_table=True, a mapping-table tplot variable is created:
 
-    suffix : str
-        Suffix added to tplot variable names.
+        emccd_asf_<site>_mapping_table<suffix>
 
-    site : str or list of str
-        Observation site code or list of site codes.
-        Valid values:
-        gak, kev, mag, pok, sod, tja, tro, all.
+    The geographic arrays are stored in its attributes as:
 
-    get_support_data : bool
-        Load CDF support-data variables.
-
-    mapping_table : bool
-        Create a mapping-table tplot variable containing
-        glat, glon and altitude in its attributes.
-
-    varformat : str, optional
-        Wildcard selecting CDF variables.
-
-    varnames : list of str, optional
-        CDF variable names to load.
-
-    downloadonly : bool
-        Download files without creating tplot variables.
-
-    notplot : bool
-        Return data dictionaries instead of tplot variables.
-
-    no_update : bool
-        Use only locally cached files.
-
-    uname, passwd : str, optional
-        Authentication credentials.
-
-    time_clip : bool
-        Clip variables to the requested time range.
-
-    ror : bool
-        Print PI information and Rules of the Road.
-
-    force_download : bool
-        Force downloading files.
-
-    Returns
-    -------
-    list or dict
-        Loaded tplot-variable names, downloaded files,
-        or notplot data.
+        glat
+        glon
+        altitude
+        site_code
+        source_file
     """
 
     if trange is None:
@@ -131,12 +90,14 @@ def camera_emccd_asf(
             suffix=suffix,
             get_support_data=get_support_data,
             varformat=varformat,
+            varnames=varnames,
             downloadonly=downloadonly,
             notplot=notplot,
             time_clip=time_clip,
             no_update=no_update,
             uname=uname,
             passwd=passwd,
+            force_download=force_download,
         )
 
         if loaded_data_temp is None:
@@ -203,7 +164,7 @@ def camera_emccd_asf(
             )
             continue
 
-        # Store clipped data while preserving metadata.
+        # Re-store clipped data while preserving metadata.
         store_data(
             current_tplot_name,
             data={
@@ -236,8 +197,7 @@ def camera_emccd_asf(
             "source_file": site_mapping["source_file"],
         }
 
-        # A scalar dummy dataset is used because the actual mapping
-        # arrays are stored in the tplot-variable attributes.
+        # The actual mapping arrays are stored as attributes.
         success = store_data(
             mapping_table_name,
             data={
@@ -320,7 +280,7 @@ def _normalize_sites(
 def _get_cdf_filename(
     metadata: Optional[dict],
 ) -> Optional:
-    """Extract one source-CDF filename from tplot metadata."""
+    """Extract one source-CDF filename from metadata."""
 
     if not metadata:
         return None
@@ -387,7 +347,7 @@ def _read_mapping_table(
         return None
 
     finally:
-        # Some cdflib Reader versions do not implement close().
+        # Some cdflib Reader versions have no close() method.
         if cdf_file is not None:
             close_method = getattr(
                 cdf_file,
@@ -418,12 +378,14 @@ def _read_mapping_table(
         )
         return None
 
-    if altitude.size != glat.shapelogging.warning(
+    # 修正箇所
+    if altitude.size != glat.shape:
+        logging.warning(
             "Altitude size does not match mapping table: "
             "%s != %s",
             altitude.size,
             glat.shape[2],
-        ):
+        )
         return None
 
     logging.info(
