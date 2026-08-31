@@ -423,7 +423,7 @@ def _read_mapping_table(
             "%s != %s",
             altitude.size,
             glat.shape[2],
-        )
+        ):
         return None
 
     logging.info(
