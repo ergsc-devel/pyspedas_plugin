@@ -128,8 +128,10 @@ def search_omti_calibration_file(
             ch = 4
 
         # calibration file for each observation period:
-        if date >= datetime.datetime.fromisoformat('2017-03-21T00:00:00'):
+        if datetime.datetime.fromisoformat('2017-01-11T00:00:00') <= date <= datetime.datetime.fromisoformat('2026-05-10T23:59:59'):
             frest = '0001'
+        if date >= datetime.datetime.fromisoformat('2026-05-11T00:00:00'):
+            frest = '0002'
 
     elif site == 'nai':  # Nain (nai)
         # camera number:
@@ -250,9 +252,11 @@ def search_omti_calibration_file(
             ch = 4
 
         # calibration file for each observation period:
-        if date >= datetime.datetime.fromisoformat('2017-02-25T00:00:00'):
+        if datetime.datetime.fromisoformat('2017-02-25T00:00:00') <= date <= datetime.datetime.fromisoformat('2026-05-10T23:59:59'):
             frest = '0001'
-
+        if date >= datetime.datetime.fromisoformat('2026-05-11T00:00:00'):
+            frest = '0002'
+            
     elif site == 'ith':  # Ithaca (ith)
         # camera number:
         im = '9'

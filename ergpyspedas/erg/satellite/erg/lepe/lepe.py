@@ -1,12 +1,10 @@
 import numpy as np
+
 #import pytplot
-from pyspedas import tplot_rename
-from pyspedas import clip, get_data, options, store_data, del_data, ylim, zlim
+import pyspedas
+from pyspedas import tplot_rename, clip, get_data, options, store_data, del_data, ylim, zlim, time_double
 
-from pyspedas import time_double
-
-
-from ..load import load
+from .load_lepe import load_lepe
 from ..get_gatt_ror import get_gatt_ror
 
 from typing import List, Optional
@@ -145,9 +143,21 @@ def lepe(
         pathformat += 'v??_??.cdf'
     else:
         pathformat += version + '.cdf'
-
-    loaded_data = load(pathformat=pathformat, trange=trange, level=level, datatype=datatype, file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
+    
+    if (datatype == '3dflux') or (datatype == '3dflux_finech'):
+        varnames = ['fedu','count_rate','count_rate_bg','energy_index']
+    else:
+        varnames = varnames
+    
+    if (get_support_data == True):
+        varnames=[]
+    
+    loaded_data = load_lepe(pathformat=pathformat, trange=trange, level=level, datatype=datatype, file_res=file_res, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
                        varformat=varformat, varnames=varnames, downloadonly=downloadonly, notplot=notplot, time_clip=time_clip, no_update=no_update, uname=uname, passwd=passwd, force_download=force_download)
+    
+    if (len(loaded_data) < 1):
+        print('There is no valid LEPe data.')
+        return loaded_data
 
     if (len(loaded_data) > 0) and ror:
 
