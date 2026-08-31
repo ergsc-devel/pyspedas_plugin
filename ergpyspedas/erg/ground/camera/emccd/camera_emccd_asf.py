@@ -378,16 +378,17 @@ def _read_mapping_table(
         )
         return None
 
-    # 修正箇所
-    if altitude.size != glat.shape:
+    expected_altitude_size = int(glat.shape[-1])
+    actual_altitude_size = int(altitude.size)
+
+    if actual_altitude_size != expected_altitude_size:
         logging.warning(
-            "Altitude size does not match mapping table: "
-            "%s != %s",
-            altitude.size,
-            glat.shape[2],
+            "Altitude size does not match mapping table: %d != %d",
+            actual_altitude_size,
+            expected_altitude_size,
         )
         return None
-
+        
     logging.info(
         "Mapping table for %s: "
         "glat=%s, glon=%s, altitude=%s",
