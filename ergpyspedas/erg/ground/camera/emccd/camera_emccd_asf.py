@@ -257,7 +257,8 @@ def camera_emccd_asf(
 
 def _normalize_sites(
     site: Union[str, List[str]],
-) -> List"""
+) -> List
+    """
     Normalize and validate the requested site codes.
     """
 
