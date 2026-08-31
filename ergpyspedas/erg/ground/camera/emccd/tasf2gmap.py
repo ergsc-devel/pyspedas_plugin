@@ -96,7 +96,7 @@ def tasf2gmap(
             f"Available coordinates: {list(data.coords)}"
         )
 
-    altitudes = get_map_component(map_data, "alt")
+    altitudes = get_map_component(map_data, "altitude")
     glat_all = get_map_component(map_data, "glat")
     glon_all = get_map_component(map_data, "glon")
 
