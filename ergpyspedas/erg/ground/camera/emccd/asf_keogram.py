@@ -44,7 +44,7 @@ def asf_keogram(vname, pixel_x=127, pixel_y=127, pixel=0):
 
     name_parts = resolved_vname.split("_")
 
-    # IDLコードでは strtnames[4] を参照するため、最低5要素必要
+    # The IDL code references `strtnames[4]`, so a minimum of 5 elements is required.
     if len(name_parts) < 5:
         print(f"Wrong tplot variable name: {resolved_vname}")
         return None
