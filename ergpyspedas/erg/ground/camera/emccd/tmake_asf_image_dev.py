@@ -104,7 +104,7 @@ def tmake_asf_image_dev(vname, width=30.0):
 
         average_image = sum_image / float(n_window)
 
-        # IDLコードと同様、平均が0の画素では分母を1にする
+        # As with the IDL code, the denominator is set to 1 for pixels with a mean of 0.
         denominator = average_image.copy()
         denominator[denominator == 0.0] = 1.0
 
