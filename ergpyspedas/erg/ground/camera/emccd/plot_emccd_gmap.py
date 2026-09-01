@@ -12,7 +12,7 @@ def plot_emccd_gmap(
     y_max=None,
     z_min=None,
     z_max=None,
-    cmap="viridis",
+    cmap=None,
     show=True,
 ):
     """
