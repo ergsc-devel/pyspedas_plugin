@@ -40,7 +40,7 @@ def camera_zwo_asi(
 
     site: str or list of str
             The site or list of sites to load.
-            Valid values: ['alx', 'sta', 'sto', 'zug', 'all']
+            Valid values: ['alx', 'and', 'sta', 'sto', 'zug', 'all']
             Default: 'all'
 
     wavelength: str, int, list of str, or list of int
@@ -98,7 +98,7 @@ def camera_zwo_asi(
 
     '''
 
-    site_code_all = ['alx', 'sta', 'sto', 'zug']
+    site_code_all = ['alx', 'and', 'sta', 'sto', 'zug']
 
     if isinstance(wavelength, str):
         wavelengthc = wavelength.split(' ')
