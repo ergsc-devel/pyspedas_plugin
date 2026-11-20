@@ -116,11 +116,7 @@ def search_zwo_calibration_file(
         wid0 = wid_cdf * 4
 
         # observed wavelength of airglow data:
-        if wavelength == 5577:
-            ch = '01'
-            # camera number:
-            im = '011'
-        elif wavelength == 6300:
+        if wavelength == 6300:
             ch = '02'
             # camera number:
             im = '010'
