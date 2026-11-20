@@ -88,7 +88,7 @@ def search_zwo_calibration_file(
             im = '010'
 
         # calibration file for each observation period:
-        if date >= datetime.datetime.fromisoformat('2017-10-29T00:00:00'):
+        if datetime.datetime.fromisoformat('2017-10-29T00:00:00') <= date and date <= datetime.datetime.fromisoformat('2026-08-01T00:00:00'):
             frest = '_20240611'
 
     elif site == 'alx':  # Alexiandria (alx)
@@ -109,7 +109,41 @@ def search_zwo_calibration_file(
         # calibration file for each observation period:
         if date >= datetime.datetime.fromisoformat('2025-10-12T00:00:00'):
             frest = '_20220107'
-            
+
+    elif site == 'and':  # Andenes (and)
+
+        # 4x4 binning pixels:   
+        wid0 = wid_cdf * 4
+
+        # observed wavelength of airglow data:
+        if wavelength == 5577:
+            ch = '01'
+            # camera number:
+            im = '011'
+        elif wavelength == 6300:
+            ch = '02'
+            # camera number:
+            im = '010'
+
+        # calibration file for each observation period:
+        if date >= datetime.datetime.fromisoformat('2026-08-07T00:00:00'):
+            frest = '_20240611.'
+
+    elif site == 'phf':  # APanhalla Fort (phf)
+
+        # 4x4 binning pixels:   
+        wid0 = wid_cdf * 4
+
+        # observed wavelength of airglow data:
+        if wavelength == 6300:
+            ch = '02'
+            # camera number:
+            im = '015'
+
+        # calibration file for each observation period:
+        if date >= datetime.datetime.fromisoformat('2026-11-04T00:00:00'):
+            frest = '_20260511'
+    
     filename_ch = f'Z{im}{ch}{frest}.OUT'
     filename_5 = f'Z{im}05{frest}.OUT'
     return Calibration(filename_ch, filename_5, wid0)
