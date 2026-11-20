@@ -88,7 +88,7 @@ def search_zwo_calibration_file(
             im = '010'
 
         # calibration file for each observation period:
-        if datetime.datetime.fromisoformat('2017-10-29T00:00:00') <= date and date <= datetime.datetime.fromisoformat('2026-08-01T00:00:00'):
+        if datetime.datetime.fromisoformat('2025-08-03T00:00:00') <= date and date <= datetime.datetime.fromisoformat('2026-08-01T00:00:00'):
             frest = '_20240611'
 
     elif site == 'alx':  # Alexiandria (alx)
